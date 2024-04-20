@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { Black, PrimaryRed, Red, White } from "../../../assets/Colors";
 
 const styles = StyleSheet.create({
+
     topcontainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -15,21 +15,47 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
 
-    button: {
-        borderRadius: 170,
-        width: 170,
-        height: 170,
+    backgroundImage: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 15,
+        resizeMode: 'cover',
+    },
+
+    overlay: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: "5%",
+        backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    },
+
+    datetime: {
+        fontSize: 16,
+        lineHeight: 21.28,
+        fontWeight: '600',
+        color: "#000",
+    },
+
+    button: {
+        borderRadius: 140,
+        width: 140,
+        height: 140,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "5%",
         elevation: 8,
     },
 
     buttontext: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: "bold",
-        color: White,
-        marginTop: "10%"
+        color: "#fff",
+        marginTop: "5%"
+    },
+
+    clockcontainer: {
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 20
     },
 
     clockCenter: {
@@ -41,116 +67,18 @@ const styles = StyleSheet.create({
     },
 
     timetext: {
-        fontWeight: '500',
-        color: Black,
+        fontWeight: '400',
+        color: "#000",
         fontSize: 14,
-        paddingTop: 5,
-        paddingBottom: 5
+        paddingTop: "5%",
+        lineHeight: 18.62,
+        paddingBottom: "5%",
     },
 
     timenumbertext: {
         fontWeight: '500',
-        color: Black,
+        color: "#000",
         fontSize: 16
-    },
-
-    backgroundImage: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        resizeMode: 'cover',
-
-    },
-
-    overlay: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.65)',
-    },
-
-    counterCards: {
-        borderRadius: 5,
-        marginTop: 5,
-        gap: 5,
-        backgroundColor: White,
-        justifyContent: 'center',
-        alignItems: "center",
-        shadowColor: Black,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        elevation: 8,
-        height: 70
-    },
-
-    numbers: {
-        fontWeight: '800',
-        fontSize: 20,
-        color: Black
-    },
-
-    cardContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        gap: 10,
-        padding: 3,
-    },
-
-    fontStyle: {
-        fontWeight: '500',
-    },
-
-    warningMessage: {
-        borderRadius: 15,
-        overflow: 'hidden',
-        backgroundColor: '#fff1f1',
-        padding: 15,
-        flexDirection: 'row',
-        borderColor: Red,
-        borderWidth: 0.5,
-    },
-
-    datetime: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: Black
-    },
-
-    clockcontainer: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: 20
-    },
-
-    firstname: {
-        fontWeight: '600',
-        fontSize: 16,
-        marginBottom: 3
-    },
-
-    viewAttendance: {
-        padding: 5,
-        width: 140,
-        borderColor: Red,
-        borderWidth: 1
-    },
-
-    viewAttendanceText: {
-        color: White,
-        textAlign: 'center',
-        color: Red,
-        fontWeight: '600',
-    },
-
-    activityIndicator: {
-        marginTop: '40%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
 
     CountContainer: {
@@ -159,23 +87,238 @@ const styles = StyleSheet.create({
         paddingTop: 20
     },
 
+    cardContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        padding: "1%",
+    },
+
     CountContainerWidth: {
         width: '49%'
     },
 
-    dashboardMonthlyContainer: {
-        padding: 20
+    counterCards: {
+        borderRadius: 5,
+        marginTop: "1%",
+        gap: 5,
+        backgroundColor: "#fff",
+        justifyContent: 'center',
+        alignItems: "center",
+        elevation: 5,
+        height: 78
     },
 
-    dashboardMonthlyAlert: {
-        width: '15%'
+    fontStyle: {
+        fontWeight: '400',
     },
 
-    dashboardMonthlyContent: {
-        width: '85%'
+    numbers: {
+        fontWeight: '700',
+        fontSize: 24,
+        color: "#000",
+        lineHeight: 31.92,
     },
 
+    EmployeeModeBoard: {
+        width: "90%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
+        borderRadius: 19,
+        backgroundColor: '#F4FDFF',
+        alignItems: 'center',
+    },
 
+    EmployeeModeBoardContainer: {
+        paddingTop: "5%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: "5%",
+    },
+
+    EmployeeModeBoardTitle: {
+        color: '#00275C',
+        fontWeight: '800',
+        fontSize: 18,
+        lineHeight: 23.94,
+    },
+
+    border: {
+        borderBottomColor: "#A2CCD6",
+        borderBottomWidth: 1,
+        width: "80%",
+        paddingTop: "5%",
+    },
+
+    textview: {
+        alignItems: 'flex-start',
+        width: "65%",
+    },
+
+    text: {
+        fontWeight: '400',
+        fontSize: 14,
+        lineHeight: 18.62,
+        color: "#000",
+        paddingTop: "5%",
+    },
+
+    Emo: {
+        flexDirection: 'row',
+        paddingTop: "5%",
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: "65%",
+    },
+
+    buttonContainer: {
+        flexDirection: 'row',
+        paddingTop: "5%",
+    },
+
+    buttonSubmit: {
+        backgroundColor: "#1772FF",
+        width: 94,
+        height: 31,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 4,
+    },
+
+    buttonCancel: {
+        backgroundColor: '#F4FDFF',
+        width: 94,
+        height: 31,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 4,
+    },
+
+    EmployeeModeBoardbuttonSubmitText: {
+        color: '#fff',
+        fontWeight: '700',
+        fontSize: 14,
+        lineHeight: 16.94,
+    },
+
+    EmployeeModeBoardbuttonCancelText: {
+        color: '#1772FF',
+        fontWeight: '400',
+        fontSize: 14,
+        lineHeight: 16.94,
+    },
+
+    EmployeeModeBoardListContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: "5%",
+    },
+
+    EmployeeListModeBoard: {
+        width: "90%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
+        borderRadius: 19,
+        backgroundColor: '#F4FDFF',
+        alignItems: 'center',
+    },
+
+    EmoCheck: {
+        flexDirection: 'row',
+        paddingTop: "5%",
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: "75%",
+    },
+
+    MoodBoardText: {
+        fontWeight: '400',
+        fontSize: 15,
+        lineHeight: 19.95,
+    },
+
+    EmoCheckList: {
+        paddingTop: '5%',
+        flexDirection: 'row',
+        width: '70%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
+    viewMore: {
+        color: '#0A60F1',
+        fontWeight: '400',
+        fontSize: 16,
+        lineHeight: 21.28,
+    },
+
+    viewMoreContainer: {
+        paddingTop: '5%',
+        alignItems: 'center'
+    },
+
+    AnnounceMentContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: "5%",
+    },
+
+    AnnounceMent: {
+        width: "90%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
+        borderRadius: 19,
+        backgroundColor: '#F4FDFF',
+        alignItems: 'center',
+    },
+
+    tittle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '90%'
+    },
+
+    tittleText: {
+        color: '#00275C',
+        lineHeight: 21.28,
+        fontSize: 16,
+        fontWeight: '700',
+    },
+
+    addbutton: {
+        borderColor: '#0A60F1',
+        borderWidth: 2,
+        borderRadius: 5,
+        width: 72,
+        height: 31,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    addbuttonText: {
+        color: '#000',
+        fontWeight: '400',
+        fontSize: 14,
+        lineHeight: 18.62,
+    },
+    emojiButton: {
+        padding: 10,
+        borderRadius: 20,
+        margin: 5,
+    },
+    selectedEmoji: {
+        backgroundColor: '#D0F6FF',
+    },
+    option: {
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+    },
+    selectedOption: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#000000',
+    }
 });
 
 export default styles;
+

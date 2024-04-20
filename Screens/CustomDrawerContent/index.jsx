@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View, } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import ProfileIcon from "../../assets/EPK CRM Icons/Profile.svg";
+// import ProfileIcon from "../../assets/EPK CRM Icons/Profile.svg";
 import styles from "./style";
-import HomeIcon from '../../assets/EPK CRM Icons/Home.svg';
-import MeetingIcon from "../../assets/EPK CRM Icons/Meeting.svg";
-import DropdownIcon from "../../assets/EPK CRM Icons/Dropdowndownarrow.svg";
-import DropupIcon from "../../assets/EPK CRM Icons/DropdownUparrow.svg";
-import AttendanceIcon from "../../assets/EPK CRM Icons/Attendance.svg";
-import RaiserequestIcon from '../../assets/EPK CRM Icons/RaiseRequest.svg';
-import PayrollIcon from "../../assets/EPK CRM Icons/Payroll.svg";
-import NotificationIcon from '../../assets/EPK CRM Icons/Notification.svg';
-import LogoutIcon from "../../assets/EPK CRM Icons/Logout.svg";
+// import HomeIcon from '../../assets/EPK CRM Icons/Home.svg';
+// import MeetingIcon from "../../assets/EPK CRM Icons/Meeting.svg";
+// import DropdownIcon from "../../assets/EPK CRM Icons/Dropdowndownarrow.svg";
+// import DropupIcon from "../../assets/EPK CRM Icons/DropdownUparrow.svg";
+// import AttendanceIcon from "../../assets/EPK CRM Icons/Attendance.svg";
+// import RaiserequestIcon from '../../assets/EPK CRM Icons/RaiseRequest.svg';
+// import PayrollIcon from "../../assets/EPK CRM Icons/Payroll.svg";
+// import NotificationIcon from '../../assets/EPK CRM Icons/Notification.svg';
+// import LogoutIcon from "../../assets/EPK CRM Icons/Logout.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import CustomAlert from '../../Components/CustomAlert/index';
-import { PrimaryPurple } from "../../assets/Colors";
 
 const CustomDrawerContent = ({ navigation }) => {
 
@@ -44,14 +43,24 @@ const CustomDrawerContent = ({ navigation }) => {
     // dropdowns for tabs
 
     const [dropdowns, setDropdowns] = useState({
-        attendance: false,
+        Logs: false,
+        Visitormanagement: false,
+        Payroll: false,
+        TeamTask: false,
+        Meeting: false,
+        Events: false,
+        Assets: false,
+        AttendancePolicy: false,
+        Attendance: false,
         raiseRequest: false,
-        employee: false,
+        Employee: false,
         hrsupport: false,
         PayRoll: false,
         meeting: false,
         accounts: false,
         TLapproval: false,
+        OrganisationStructure: false,
+        HRSupport: false,
     });
 
     const toggleDropdown = (dropdown) => {
@@ -66,90 +75,90 @@ const CustomDrawerContent = ({ navigation }) => {
 
     // API call
 
-    const [conditionDisplay, setConditionDisplay] = useState('')
+    // const [conditionDisplay, setConditionDisplay] = useState('')
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`https://officeinteriorschennai.com/api.php?userrolenavigation`);
-                setConditionDisplay(response.data.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData();
-    }, []);
-
-    // API call
-
-    const [conditionDisplayAdmin, setConditionDisplayAdmin] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`https://officeinteriorschennai.com/api.php?dashboardcountview`);
-                setConditionDisplayAdmin(response.data.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(`https://officeinteriorschennai.com/api.php?userrolenavigation`);
+    //             setConditionDisplay(response.data.data);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
     // API call
 
-    const [conditionDisplayMeeting, setConditionDisplayMeeting] = useState('')
+    // const [conditionDisplayAdmin, setConditionDisplayAdmin] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`https://officeinteriorschennai.com/api.php?userrolemeeting`);
-                setConditionDisplayMeeting(response.data.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData();
-    }, []);
-
-    // API call
-
-    const [conditionDisplayAccounts, setConditionDisplayAccounts] = useState('')
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`https://officeinteriorschennai.com/api.php?accountsrole`);
-                setConditionDisplayAccounts(response.data.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(`https://officeinteriorschennai.com/api.php?dashboardcountview`);
+    //             setConditionDisplayAdmin(response.data.data);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
     // API call
 
-    const [TLapproval, setTLapproval] = useState('');
+    // const [conditionDisplayMeeting, setConditionDisplayMeeting] = useState('')
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://officeinteriorschennai.com/api/public/api/teamlead_access', {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-                const supervisorsString = response.data.data[0].all_supervisors;
-                const supervisorsArray = supervisorsString.split(',');
-                setTLapproval(supervisorsArray);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData();
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(`https://officeinteriorschennai.com/api.php?userrolemeeting`);
+    //             setConditionDisplayMeeting(response.data.data);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
-    }, []);
+    // API call
+
+    // const [conditionDisplayAccounts, setConditionDisplayAccounts] = useState('')
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(`https://officeinteriorschennai.com/api.php?accountsrole`);
+    //             setConditionDisplayAccounts(response.data.data);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+
+    // API call
+
+    // const [TLapproval, setTLapproval] = useState('');
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('https://officeinteriorschennai.com/api/public/api/teamlead_access', {
+    //                 headers: {
+    //                     Authorization: `Bearer ${data.token}`
+    //                 }
+    //             });
+    //             const supervisorsString = response.data.data[0].all_supervisors;
+    //             const supervisorsArray = supervisorsString.split(',');
+    //             setTLapproval(supervisorsArray);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     };
+    //     fetchData();
+
+    // }, []);
 
     // Log out
 
@@ -203,54 +212,155 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <DrawerItem
                     style={styles.forSingle}
-                    label="Home"
+                    label="Dashboard"
                     labelStyle={styles.forsinglelable}
-                    icon={() => <HomeIcon width={20} height={20} color={PrimaryPurple} />}
-                    onPress={() => navigation.navigate('Home')}
+                    // icon={() => <HomeIcon width={20} height={20} color={PrimaryPurple} />}
+                    onPress={() => navigation.navigate('Dashboard')}
                 />
 
                 {/* Employee */}
 
-                {conditionDisplay.includes(data.userrole) ?
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('employee')}>
-                        <View style={styles.Tab}>
-                            <MeetingIcon width={20} height={20} color={PrimaryPurple} />
-                            <Text style={styles.dropdownText}>Employee</Text>
-                        </View>
-                        {
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('OrganisationStructure')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Organisation Structure</Text>
+                    </View>
+                    {/* {
                             dropdowns.employee ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
                                 <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                        }
-                    </TouchableOpacity>
-                    : null}
+                        } */}
+                </TouchableOpacity>
 
-                {dropdowns.employee && (
+                {dropdowns.OrganisationStructure && (
                     <View>
                         <DrawerItem
-                            label="Add Employee"
-                            onPress={() => navigation.navigate('Add Employee')}
+                            label="Add Role"
+                            onPress={() => navigation.navigate('Add Role')}
                         />
                         <DrawerItem
-                            label="Employee Detail"
-                            onPress={() => navigation.navigate('Employee Detail')}
+                            label="Roles List"
+                            onPress={() => navigation.navigate('Roles List')}
+                        />
+                        <DrawerItem
+                            label="Supervisor List"
+                            onPress={() => navigation.navigate('Supervisor List')}
+                        />
+                        <DrawerItem
+                            label="Employee Level Category"
+                            onPress={() => navigation.navigate('Employee Level Category')}
+                        />
+                        <DrawerItem
+                            label="Employee Document Type"
+                            onPress={() => navigation.navigate('Employee Document Type')}
+                        />
+                        <DrawerItem
+                            label="ORG chart"
+                            onPress={() => navigation.navigate('ORG chart')}
                         />
                     </View>
                 )}
 
                 {/* Attendance */}
 
-                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('attendance')}>
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
                     <View style={styles.Tab}>
-                        <AttendanceIcon width={22} height={22} color={PrimaryPurple} />
-                        <Text style={styles.dropdownText}>Attendance</Text>
+                        {/* <AttendanceIcon width={22} height={22} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Leave & Attendance Policy</Text>
                     </View>
-                    {
+                    {/* {
                         dropdowns.attendance ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
                             <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    }
+                    } */}
                 </TouchableOpacity>
 
-                {dropdowns.attendance && (
+                {dropdowns.AttendancePolicy && (
+                    <>
+                        <DrawerItem
+                            label="Add Shift slot"
+                            onPress={() => navigation.navigate('Add Shift slot')}
+                        />
+
+                        <DrawerItem
+                            label="Assign Employee shift"
+                            onPress={() => navigation.navigate('Assign Employee shift')}
+                        />
+
+                        <DrawerItem
+                            label="Attendance Policy"
+                            onPress={() => navigation.navigate('Attendance Policy')}
+                        />
+
+                        <DrawerItem
+                            label="Attendance Type"
+                            onPress={() => navigation.navigate('Attendance Type')}
+                        />
+
+                        <DrawerItem
+                            label="Attendance Location"
+                            onPress={() => navigation.navigate('Attendance Location')}
+                        />
+
+                        <DrawerItem
+                            label="Leave Policy Type"
+                            onPress={() => navigation.navigate('Leave Policy Type')}
+                        />
+
+                        <DrawerItem
+                            label="Leave policy category"
+                            onPress={() => navigation.navigate('Leave policy category')}
+                        />
+
+                    </>
+                )}
+
+                {/* Raise Request */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Employee')}>
+                    <View style={styles.Tab}>
+                        {/* <RaiserequestIcon width={22} height={22} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Employee</Text>
+                    </View>
+
+                    {/* {
+                            dropdowns.raiseRequest ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                                <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                        } */}
+                </TouchableOpacity>
+
+
+                {dropdowns.Employee && (
+                    <>
+                        <DrawerItem
+                            label="Add Employee"
+                            onPress={() => navigation.navigate('Add Employee')}
+                        />
+
+                        <DrawerItem
+                            label="Employee List"
+                            onPress={() => navigation.navigate('Employee List')}
+                        />
+
+                        <DrawerItem
+                            label="Employee Confirmation"
+                            onPress={() => navigation.navigate('Employee Confirmation')}
+                        />
+                    </>
+                )}
+
+                {/* Hr support */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Attendance')}>
+                    <View style={styles.Tab}>
+                        {/* <ProfileIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Attendance</Text>
+                    </View>
+                    {/* {
+                        dropdowns.hrsupport ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.Attendance && (
                     <>
                         <DrawerItem
                             label="Daily Attendance"
@@ -263,244 +373,320 @@ const CustomDrawerContent = ({ navigation }) => {
                         />
 
                         <DrawerItem
-                            label="Monthly Employee Calendar"
-                            onPress={() => navigation.navigate('Monthly Employee Calendar')}
-                        />
-
-                    </>
-                )}
-
-                {/* Raise Request */}
-
-                {conditionDisplayAdmin.includes(data.userrole) ? null :
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('raiseRequest')}>
-                        <View style={styles.Tab}>
-                            <RaiserequestIcon width={22} height={22} color={PrimaryPurple} />
-                            <Text style={styles.dropdownText}>Raise Request</Text>
-                        </View>
-
-                        {
-                            dropdowns.raiseRequest ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                                <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                        }
-                    </TouchableOpacity>}
-
-                {dropdowns.raiseRequest && (
-                    <>
-                        <DrawerItem
-                            label="Leave / Permission Request"
-                            onPress={() => navigation.navigate('Leave Request')}
+                            label="Monthly Attendance Calendar View"
+                            onPress={() => navigation.navigate('Monthly Attendance Calendar View')}
                         />
 
                         <DrawerItem
-                            label="Attendance Request"
-                            onPress={() => navigation.navigate('Attendance Request')}
+                            label="Monthly List"
+                            onPress={() => navigation.navigate('Monthly List')}
                         />
                     </>
                 )}
-
-                {/* Hr support */}
-
-                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('hrsupport')}>
-                    <View style={styles.Tab}>
-                        <ProfileIcon width={20} height={20} color={PrimaryPurple} />
-                        <Text style={styles.dropdownText}>HR Support</Text>
-                    </View>
-                    {
-                        dropdowns.hrsupport ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    }
-                </TouchableOpacity>
-
-                {dropdowns.hrsupport && (
-                    <>
-                        {conditionDisplay.includes(data.userrole) ?
-                            <>
-
-                                <DrawerItem
-                                    label="Add Leave/Permission"
-                                    onPress={() => navigation.navigate('Add Leave/Permission')}
-                                />
-
-
-                                <DrawerItem
-                                    label="Add Attendance"
-                                    onPress={() => navigation.navigate('Add Attendance')}
-                                />
-
-                            </> : null}
-
-                        <DrawerItem
-                            label="Leave Request List"
-                            onPress={() => navigation.navigate('Leave Request List')}
-                        />
-
-                        <DrawerItem
-                            label="Permission Request List"
-                            onPress={() => navigation.navigate('Permission Request List')}
-                        />
-
-                        <DrawerItem
-                            label="Half Day Request List"
-                            onPress={() => navigation.navigate('Half Day Request List')}
-                        />
-
-                        <DrawerItem
-                            label="Attendance Request List"
-                            onPress={() => navigation.navigate('Attendance Request List')}
-                        />
-
-                        {conditionDisplay.includes(data.userrole) ?
-                            <DrawerItem
-                                label="Add Event"
-                                onPress={() => navigation.navigate('Add Event')}
-                            /> : null}
-
-                        <DrawerItem
-                            label="Event List"
-                            onPress={() => navigation.navigate('Event List')}
-                        />
-
-                        <DrawerItem
-                            label="Holiday List"
-                            onPress={() => navigation.navigate('Holiday List')}
-                        />
-
-                    </>)}
 
                 {/* accounts */}
 
-                {
-                    conditionDisplayAccounts.includes(data.userrole) ?
-                        <TouchableOpacity style={styles.dropdown} onPress={() => navigation.navigate('Yearly Employee Calendar')}>
-                            <View style={styles.Tab}>
-                                <PayrollIcon width={20} height={20} color={PrimaryPurple} />
-                                <Text style={styles.dropdownText}>Accounts</Text>
-                            </View>
-                        </TouchableOpacity> : null
-                }
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('HRSupport')}>
+                    <View style={styles.Tab}>
+                        {/* <PayrollIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>HR Support</Text>
+                    </View>
+                </TouchableOpacity>
+
+                {dropdowns.HRSupport && (
+                    <>
+                        <DrawerItem
+                            label="Approvals List"
+                            onPress={() => navigation.navigate('Approvals List')}
+                        />
+
+                        <DrawerItem
+                            label="Templates"
+                            onPress={() => navigation.navigate('Templates')}
+                        />
+
+                        <DrawerItem
+                            label="Job Openings"
+                            onPress={() => navigation.navigate('Job Openings')}
+                        />
+
+                    </>
+                )}
+
 
                 {/* TLapproval  */}
 
-                {
-                    TLapproval.includes(data.userempid) ?
-                        <TouchableOpacity onPress={() => toggleDropdown('TLapproval')} style={styles.dropdown}>
-                            <View style={styles.Tab}>
-                                <ProfileIcon width={20} height={20} color={PrimaryPurple} />
-                                <Text style={styles.dropdownText}>TL Approval</Text>
-                            </View>
-                            {
+                <TouchableOpacity onPress={() => toggleDropdown('TLapproval')} style={styles.dropdown}>
+                    <View style={styles.Tab}>
+                        {/* <ProfileIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>TL Approval</Text>
+                    </View>
+                    {/* {
                                 dropdowns.TLapproval ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
                                     <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                            }
-                        </TouchableOpacity>
-                        : null
-                }
+                            } */}
+                </TouchableOpacity>
 
                 {dropdowns.TLapproval && (
 
                     <>
 
                         <DrawerItem
-                            label="Leave Request List"
-                            onPress={() => navigation.navigate('TLLeaveRequest')}
+                            label="Leave Approval"
+                            onPress={() => navigation.navigate('LeaveApproval')}
                         />
 
                         <DrawerItem
-                            label="Permission Request List"
-                            onPress={() => navigation.navigate('TLPermissionRequest')}
-                        />
-
-                        <DrawerItem
-                            label="Half Day Request List"
-                            onPress={() => navigation.navigate('TLHalfDayRequest')}
+                            label="OT Approval"
+                            onPress={() => navigation.navigate('OTApproval')}
                         />
 
                     </>
 
                 )}
 
+                <DrawerItem
+                    style={styles.forSingle}
+                    label="HelpDesk"
+                    labelStyle={styles.forsinglelable}
+                    // icon={() => <NotificationIcon width={20} height={20} color={PrimaryPurple} />}
+                    onPress={() => navigation.navigate('HelpDesk')}
+                />
+
                 {/* Payroll */}
 
-                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('PayRoll')}>
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Assets')}>
 
                     <View style={styles.Tab}>
-                        <PayrollIcon width={20} height={20} color={PrimaryPurple} />
-                        <Text style={styles.dropdownText}>Pay Roll</Text>
+                        {/* <PayrollIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Assets</Text>
                     </View>
 
-                    {
+                    {/* {
                         dropdowns.PayRoll ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
                             <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    }
+                    } */}
                 </TouchableOpacity>
 
-                {dropdowns.PayRoll && (
+                {dropdowns.Assets && (
                     <>
-                        {conditionDisplay.includes(data.userrole) ?
-                            <DrawerItem
-                                label="Generate Pay Slip"
-                                onPress={() => navigation.navigate('Generate Pay Slip')}
-                            />
-                            : null}
-
                         <DrawerItem
-                            label="Pay Roll"
-                            onPress={() => {
-                                if (conditionDisplay.includes(data.userrole)) {
-                                    navigation.navigate('Pay Roll');
-                                } else {
-                                    navigation.navigate('Pay Roll Detail', { id: data.userempid });
-                                }
-                            }}
+                            label="Assets Type"
+                            onPress={() => navigation.navigate('Assets Type')}
                         />
-
+                        <DrawerItem
+                            label="Add Asset"
+                            onPress={() => navigation.navigate('Add Asset')}
+                        />
+                        <DrawerItem
+                            label="Asset List"
+                            onPress={() => navigation.navigate('Asset List')}
+                        />
 
                     </>)}
 
                 {/* Meeting */}
 
-                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('meeting')}>
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Events')}>
                     <View style={styles.Tab}>
-                        <MeetingIcon width={20} height={20} color={PrimaryPurple} />
-                        <Text style={styles.dropdownText}>Meeting</Text>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Events</Text>
                     </View>
-                    {
+                    {/* {
                         dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
                             <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    }
+                    } */}
                 </TouchableOpacity>
 
-                {dropdowns.meeting && (
+                {dropdowns.Events && (
                     <>
 
-                        {conditionDisplayMeeting.includes(data.userdepartment) ?
-                            < DrawerItem
-                                label="Add Meeting"
-                                onPress={() => navigation.navigate('Add Meeting')}
-                            /> : null}
-
-                        <DrawerItem
-                            label="View Meeting"
-                            onPress={() => {
-                                if (conditionDisplay.includes(data.userrole)) {
-                                    navigation.navigate('View Meeting');
-                                } else {
-                                    navigation.navigate('View Meeting Employee', { id: data.userempid });
-                                }
-                            }}
+                        < DrawerItem
+                            label="Add Event"
+                            onPress={() => navigation.navigate('Add Event')}
                         />
+
+                        < DrawerItem
+                            label="Event List"
+                            onPress={() => navigation.navigate('Event List')}
+                        />
+
+                    </>)}
+
+                {/*  */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Meeting')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Meeting</Text>
+                    </View>
+                    {/* {
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.Meeting && (
+                    <>
+
+                        < DrawerItem
+                            label="Add Meeting"
+                            onPress={() => navigation.navigate('Add Meeting')}
+                        />
+
+                        < DrawerItem
+                            label="Meeting List"
+                            onPress={() => navigation.navigate('Meeting List')}
+                        />
+
+                    </>)}
+
+                {/*  */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('TeamTask')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Team Task</Text>
+                    </View>
+                    {/* {
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.TeamTask && (
+                    <>
+
+                        < DrawerItem
+                            label="Add Project"
+                            onPress={() => navigation.navigate('Add Project')}
+                        />
+
+                        < DrawerItem
+                            label="Projects List"
+                            onPress={() => navigation.navigate('Projects List')}
+                        />
+
+                        < DrawerItem
+                            label="Add Task"
+                            onPress={() => navigation.navigate('Add Task')}
+                        />
+
+                        < DrawerItem
+                            label="Tasks – Employee view"
+                            onPress={() => navigation.navigate('Tasks – Employee view')}
+                        />
+
+                        < DrawerItem
+                            label="Task List"
+                            onPress={() => navigation.navigate('Task List')}
+                        />
+
+                        < DrawerItem
+                            label="Task Progress"
+                            onPress={() => navigation.navigate('Task Progress')}
+                        />
+
+                    </>)}
+
+                {/*  */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Payroll')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Payroll</Text>
+                    </View>
+                    {/* {
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.Payroll && (
+                    <>
+
+                        < DrawerItem
+                            label="Salary Calculation"
+                            onPress={() => navigation.navigate('Salary Calculation')}
+                        />
+
+                        < DrawerItem
+                            label="Generate Payslip"
+                            onPress={() => navigation.navigate('Generate Payslip')}
+                        />
+
+                        < DrawerItem
+                            label="Payroll List"
+                            onPress={() => navigation.navigate('Payroll List')}
+                        />
+
                     </>)}
 
                 {/* Notification */}
 
                 <DrawerItem
                     style={styles.forSingle}
-                    label="Notification"
+                    label="Holiday"
                     labelStyle={styles.forsinglelable}
-                    icon={() => <NotificationIcon width={20} height={20} color={PrimaryPurple} />}
-                    onPress={() => navigation.navigate('Attendance Notification')}
+                    // icon={() => <NotificationIcon width={20} height={20} color={PrimaryPurple} />}
+                    onPress={() => navigation.navigate('Holiday')}
                 />
+
+                {/*  */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Visitormanagement')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Visitor management</Text>
+                    </View>
+                    {/* {
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.Visitormanagement && (
+                    <>
+
+                        < DrawerItem
+                            label="Add visitor"
+                            onPress={() => navigation.navigate('Add visitor')}
+                        />
+
+                        < DrawerItem
+                            label="Visitor log"
+                            onPress={() => navigation.navigate('Visitor log')}
+                        />
+
+                    </>)}
+
+                {/*  */}
+
+                <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Logs')}>
+                    <View style={styles.Tab}>
+                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        <Text style={styles.dropdownText}>Logs</Text>
+                    </View>
+                    {/* {
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
+                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                    } */}
+                </TouchableOpacity>
+
+                {dropdowns.Logs && (
+                    <>
+
+                        < DrawerItem
+                            label="Activity Log"
+                            onPress={() => navigation.navigate('Activity Log')}
+                        />
+
+                        < DrawerItem
+                            label="Employee Activity Log"
+                            onPress={() => navigation.navigate('Employee Activity Log')}
+                        />
+
+                    </>)}
 
                 {/* Logout */}
 
@@ -508,7 +694,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     style={styles.forSingle}
                     label="logout"
                     labelStyle={styles.forsinglelable}
-                    icon={() => <LogoutIcon width={20} height={20} color={PrimaryPurple} />}
+                    // icon={() => <LogoutIcon width={20} height={20} color={PrimaryPurple} />}
                     onPress={handleeLogout}
                 />
 

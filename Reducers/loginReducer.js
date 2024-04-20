@@ -1,5 +1,6 @@
 const initialState = {
-    data: null
+    data: null,
+    email: null
 }
 
 const LoginReducer = (state = initialState, action) => {
@@ -9,14 +10,18 @@ const LoginReducer = (state = initialState, action) => {
                 ...state,
                 data: action.payload
             }
+        case 'SET_EMAIL':
+            return {
+                ...state,
+                email: action.payload
+            }
         case 'REMOVE_USER_DATA':
             return {
-                data: null
+                data: null,
             }
         default:
             return state;
     }
-
 }
 
 export default LoginReducer;

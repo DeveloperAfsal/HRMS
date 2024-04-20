@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Ash, PrimaryPurple, White } from "../../assets/Colors";
+import { White } from "../../Assets/Colors";
 
 const styles = StyleSheet.create({
     modal: {
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cancelButton: {
-        backgroundColor: Ash,
+        backgroundColor: "#1772FF",
         marginRight: 10,
     },
     confirmButton: {
-        backgroundColor: PrimaryPurple,
+        backgroundColor: "#20DDFE",
     },
     pictureButton:{
         paddingVertical: 5,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent:'center',
-        backgroundColor: PrimaryPurple,
+        backgroundColor: "red",
     },
     buttonText: {
         color: White,

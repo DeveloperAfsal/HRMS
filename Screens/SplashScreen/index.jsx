@@ -7,7 +7,7 @@ const SplashScreen = () => {
         <View style={styles.Splashcontainer}>
             <View style={styles.SplashimageContainer}>
                 <Image
-                    source={require('../../assets/EPK_group_Logo.png')}
+                    source={require('../../Assets/Image/EnterOTP.png')}
                     style={styles.Splashimage}
                     resizeMode="contain"
                 />

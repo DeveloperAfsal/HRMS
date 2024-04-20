@@ -1,10 +1,10 @@
 import { Platform, StyleSheet } from "react-native";
-import { Black, PrimaryAshPurple, PrimaryPurple, White } from "../../assets/Colors";
+// import { Black, PrimaryAshPurple, PrimaryPurple, White } from "../../assets/Colors";
 
 const styles = StyleSheet.create({
     profileview: {
         flexDirection: 'row',
-        backgroundColor: PrimaryAshPurple,
+        // backgroundColor: PrimaryAshPurple,
         padding: 10,
         paddingTop: 30,
         alignItems: 'center'
@@ -25,20 +25,20 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 50,
         borderWidth: 0.5,
-        borderColor: PrimaryPurple
+        // borderColor: PrimaryPurple
     },
     dropdown: {
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: PrimaryAshPurple,
+        // backgroundColor: PrimaryAshPurple,
         marginHorizontal: 10,
         marginVertical: 5,
         borderRadius: 3,
         height: 48,
         elevation: Platform.OS === 'android' ? 2 : 0,
-        shadowColor: Black,
+        // shadowColor: Black,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     forSingle: {
-        backgroundColor: PrimaryAshPurple,
+        // backgroundColor: PrimaryAshPurple,
         height: 48,
         justifyContent: 'center',
         elevation: Platform.OS === 'android' ? 2 : 0,
-        shadowColor: Black,
+        // shadowColor: Black,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         gap: 30
     },
     DrawerContentScrollView: {
-        backgroundColor: White,
+        // backgroundColor: White,
         marginTop: -6
     }
 });
