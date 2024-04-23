@@ -1,25 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
-import EditIcon from "../../../../../Assets/Icons/Edit.svg";
-import DeleteIcon from "../../../../../Assets/Icons/Delete.svg"
-import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
+import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const AttendancePolicy = ({ navigation }) => {
+const EditPolicy = ({ route }) => {
+
+    // route
+
+    const SpecId = route.params.Id;
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
 
+    //  Api Call
+
+    useEffect(() => {
+        
+        const fetchData = async () => {
+            
+            try {
+                const apiUrl = `https://ocean21.in/api/public/api/editview_attendancepolicy/${SpecId}`;
+                
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+                setDatalist(responseData);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+
+    }, [SpecId]);
+
     // states
 
-    const [loadData, setLoadData] = useState(false);
     const [load, SetLoad] = useState(false);
-    const [Datalist, setDatalist] = useState([]);
+    const [datalist,setDatalist] =useState([]);
 
     // slotfromTime
 
@@ -242,7 +270,6 @@ const AttendancePolicy = ({ navigation }) => {
         setShowHPMToTimePicker(true);
     };
 
-
     const [late1, setLate1] = useState();
     const [lateDeduction1, setLateDeduction1] = useState();
     const [late2, setLate2] = useState();
@@ -254,36 +281,6 @@ const AttendancePolicy = ({ navigation }) => {
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
-
-    const [Reason, setReason] = useState('');
-    const [DelData, setDelData] = useState(false);
-    const [slotToDelete, setSlotToDelete] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [ReasonError, setReasonError] = useState('')
-
-    // Api call for list Shifts
-
-    const fetchData = async () => {
-        setLoadData(true)
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/view_attendancepolicy';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-            setLoadData(false)
-            const responseData = response.data.data;
-            setDatalist(responseData);
-        } catch (error) {
-            setLoadData(false)
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     // Api call for shift slot dropdown
 
@@ -316,64 +313,6 @@ const AttendancePolicy = ({ navigation }) => {
         setShowDropdown(false);
     };
 
-    // Api call for Delete
-
-    const HandleDelete = (slotId) => {
-        setSlotToDelete(slotId);
-        setModalVisible(true);
-    }
-
-    const cancelDelete = () => {
-        setSlotToDelete(null);
-        setModalVisible(false);
-        setReasonError('');
-        setReason('');
-        setDelData(false);
-    }
-
-    const confirmDelete = async () => {
-        setDelData(true)
-        if (slotToDelete) {
-
-            try {
-
-                if (!Reason) {
-                    setReasonError('Reason Required');
-                    setDelData(false);
-                    return;
-                } else {
-                    setReasonError('');
-                    setReason('');
-                }
-
-                const apiUrl = `https://ocean21.in/api/public/api/delete_attendancepolicy`;
-                const response = await axios.post(apiUrl, {
-                    id: slotToDelete,
-                    updated_by: data.userempid,
-                    reason: Reason,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-
-                if (response.data.status === "success") {
-                    const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
-                    setDatalist(updatedDataList);
-                    setDelData(false)
-                } else {
-                    Alert.alert("Failed", "Failed to delete shift slot");
-                    setDelData(false)
-                }
-            } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
-                console.error('Error deleting shift slot:', error);
-                setDelData(false)
-            }
-            setSlotToDelete(null);
-            setModalVisible(false);
-        }
-    }
 
     // Api call for Handle Submit
 
@@ -383,9 +322,10 @@ const AttendancePolicy = ({ navigation }) => {
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/attendancepolicyinsert';
+            const apiUrl = 'https://ocean21.in/api/public/api/update_attendancepolicy';
 
             const response = await axios.post(apiUrl, {
+                id: "2",
                 shift_slot: selectedShiftId,
                 form_time: slotfromTime,
                 to_time: slotToTime,
@@ -407,7 +347,7 @@ const AttendancePolicy = ({ navigation }) => {
                 late2_deduction: lateDeduction2,
                 late3_deduction: lateDeduction3,
                 policy_status: "Active",
-                created_by: data.userempid,
+                updated_by: data.userempid,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -433,18 +373,13 @@ const AttendancePolicy = ({ navigation }) => {
 
     }
 
-    // 
-
-    const handlenavigate = (item) => {
-        navigation.navigate("Edit Policy", { Id: item.id });
-    }
 
     return (
         <ScrollView>
             <View style={styles.PolicyContainer}>
 
                 <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Attendance Policy Form</Text>
+                    <Text style={styles.PolicyContainerTitleText}>Edit Attendance Policy Form</Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>
@@ -823,101 +758,9 @@ const AttendancePolicy = ({ navigation }) => {
                     </View>
                 </View>
 
-                {/*  */}
-
-                <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Attendance Policy List</Text>
-                </View>
-
-                <ScrollView horizontal={true}>
-
-                    <View style={styles.container}>
-                        {loadData ? (
-                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                        ) : (
-                            <View>
-
-                                <View style={[styles.row, styles.listHeader]}>
-                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                    <Text style={[styles.header, styles.cell, styles.shift]}>Shift</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Fromtime]}>From time</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Totime]}>To time</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
-                                </View>
-
-                                {Datalist.length === 0 ? (
-                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                                ) : (
-                                    Datalist.map((item, index) => (
-                                        <View key={index} style={[styles.row]}>
-                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                            <Text style={[styles.cell, styles.shift]}>{item.shift_slot}</Text>
-                                            <Text style={[styles.cell, styles.Fromtime]}>{item.form_time}</Text>
-                                            <Text style={[styles.cell, styles.Totime]}>{item.to_time}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
-                                            <View style={[styles.listcontentButtonview]}>
-                                                <TouchableOpacity style={[styles.listcontenteditbutton]} onPress={()=>handlenavigate(item)}>
-                                                    <EditIcon width={14} height={14} color="#000" />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                    style={[styles.listcontentdelbutton]}
-                                                    onPress={() => HandleDelete(item.id)}>
-                                                    <DeleteIcon width={14} height={14} color="#000" />
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                    ))
-                                )}
-
-                            </View>
-                        )
-                        }
-                    </View>
-
-                </ScrollView>
-
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                            <Text style={styles.modalText}>Reason:</Text>
-                            <TextInput
-                                value={Reason}
-                                onChangeText={(text) => setReason(text)}
-                                style={styles.Reason}
-                            />
-                            <Text style={styles.errorTextDelete}>
-                                {ReasonError}
-                            </Text>
-                            <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
-
-
-                                    {
-                                        DelData ?
-                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                    }
-
-
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-
             </View>
         </ScrollView>
     )
 }
 
-export default AttendancePolicy;
+export default EditPolicy;

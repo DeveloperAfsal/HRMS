@@ -60,7 +60,7 @@ const Otp = ({ navigation }) => {
                 otp: otp,
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setLoad(false);
                 navigation.navigate('Reset Password')
             } else {

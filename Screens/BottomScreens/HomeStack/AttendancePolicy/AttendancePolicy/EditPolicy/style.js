@@ -1,7 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
 
-const { width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
 
     PolicyContainer: {
@@ -165,24 +163,6 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
 
-    listHeader: {
-        backgroundColor: '#E1F1FC',
-        borderTopLeftRadius: 11,
-        borderTopRightRadius: 11,
-        flexDirection: 'row',
-        // width: '100%',
-        alignItems: 'center'
-    },
-
-    header: {
-        flex: 1,
-        padding: 10,
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95,
-    },
-
     listcontentButtonview: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -213,179 +193,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFE0E0'
     },
 
-    Tablecontainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: "#fff",
-        borderRadius: 11,
-        borderWidth: 1,
-        borderColor: '#A4CED8',
-        width: "90%",
-    },
-
-    ModalerrorText: {
-        color: "red",
-        paddingTop: 10,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-        width: '80%',
-    },
-    modalTextHeading: {
-        fontSize: 16,
-        fontWeight: '800',
-        textAlign: 'center',
-        color: "#000",
-        paddingBottom: '10%',
-    },
-    Heading: {
-        fontSize: 16,
-        fontWeight: '800',
-        textAlign: 'center',
-        color: "#000",
-    },
-    modalText: {
-        marginBottom: 5,
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    modalButtonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    buttoncontainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingTop: '10%'
-    },
-    modalCancelButton: {
-        backgroundColor: '#ccc',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 90,
-        height: 34,
-        borderRadius: 5,
-    },
-    modalCancelButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#fff',
-    },
-    modalDeleteButton: {
-        backgroundColor: '#0A62F1',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        width: 90,
-        height: 34,
-    },
-    modalDeleteButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#fff',
-    },
-    modalSubmitButton: {
-        backgroundColor: '#0A62F1',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        width: 90,
-        height: 34,
-    },
-    modalSubmitButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#fff',
-    },
-    Reason: {
-        marginBottom: "5%",
-        borderRadius: 5,
-        borderColor: '#515151',
-        borderWidth: 1,
-        paddingLeft: 20,
-    },
-    modalInput: {
-        paddingLeft: 20,
-        borderRadius: 7,
-        borderWidth: 0.5,
-        borderColor: "#515151",
-        height: 42,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingRight: "5%",
-        paddingLeft: "5%"
-
-    },
-    modalLabelText: {
-        paddingTop: '5%',
-        paddingBottom: '5%'
-    },
-    errorTextDelete: {
-        color: "red",
-        paddingBottom: 10,
-        width: "90%"
-    },
-
     Activeindicator: {
         height: 150,
         width: 400
     },
-
-    container: {
-        flexDirection: 'column',
-        flex: 1,
-        backgroundColor: "#fff",
-        borderRadius: 11,
-        borderWidth: 1,
-        borderColor: '#A4CED8',
-        width: "90%",
-        marginLeft: 20,
-        marginRight: 20,
-    },
-    row: {
-        flexDirection: 'row',
-        borderColor: '#ccc',
-    },
-
-    cell: {
-        flex: 1,
-        padding: 10,
-        textAlign: 'center',
-    },
-
-    sno: {
-        width: 100,
-    },
-
-    shift: {
-        width: 100
-    },
-
-    Fromtime: {
-        width: 100
-    },
-
-    Totime: {
-        width: 100
-    },
-
-    Status: {
-        width: 100
-    },
-
-    Action: {
-        width: 100
-    }
 })
 
 export default styles;

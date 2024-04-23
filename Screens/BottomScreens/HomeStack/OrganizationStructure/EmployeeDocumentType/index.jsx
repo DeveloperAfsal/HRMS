@@ -92,7 +92,7 @@ const DocumentType = () => {
                 },
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
                 setSelectedStatus('Selected Status');
@@ -185,8 +185,7 @@ const DocumentType = () => {
                     }
                 });
 
-
-                if (!response.ok) {
+                if (response.data.status === "success") {
                     const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false)
@@ -258,7 +257,7 @@ const DocumentType = () => {
                 },
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success" ) {
                 setEditLoad(false);
                 setEditedShiftSlot('');
                 setEditedStatus(null);
@@ -495,7 +494,7 @@ const DocumentType = () => {
                                         <Text style={styles.modalCancelButtonText}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit}>
-                                    {
+                                        {
                                             EditLoad ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
                                                 <Text style={styles.modalSubmitButtonText}>Submit</Text>

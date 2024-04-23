@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./style";
 import { ActivityIndicator, Alert, Image, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import EyeOpenIcon from '../../../Assets/Icons/eyeopen.svg';
+import EyeCloseIcon from '../../../Assets/Icons/EyeClose.svg';
 import { White } from "../../../Assets/Colors";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -53,7 +54,7 @@ const ResetPassword = ({ navigation }) => {
                 change_password: EmployeeId,
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setLoad(false);
                 navigation.navigate('Login Screen');
             } else {
@@ -100,7 +101,7 @@ const ResetPassword = ({ navigation }) => {
                             style={styles.iconsContainer}
                             onPress={() => setShowEmployeeId(!showEmployeeId)}
                         >
-                            {showEmployeeId ? <EyeOpenIcon color="black" /> : <EyeOpenIcon color="red" />}
+                            {showEmployeeId ? <EyeOpenIcon color="black" /> : <EyeCloseIcon color="black" />}
                         </TouchableOpacity>
 
                     </View>
@@ -123,7 +124,7 @@ const ResetPassword = ({ navigation }) => {
                             style={styles.iconsContainer}
                             onPress={() => setPasswordVisible(!passwordVisible)}
                         >
-                            {passwordVisible ? <EyeOpenIcon color="black" /> : <EyeOpenIcon color="red" />}
+                            {passwordVisible ? <EyeOpenIcon color="black" /> : <EyeCloseIcon color="black" />}
                         </TouchableOpacity>
 
                     </View>

@@ -91,7 +91,7 @@ const LevelCategory = () => {
                 },
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
                 setSelectedStatus('Selected Status');
@@ -183,8 +183,7 @@ const LevelCategory = () => {
                     }
                 });
 
-
-                if (!response.ok) {
+                if (response.data.status === "success") {
                     const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false)
@@ -257,7 +256,7 @@ const LevelCategory = () => {
                 },
             });
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setEditLoad(false);
                 setEditedShiftSlot('');
                 setEditedStatus(null);

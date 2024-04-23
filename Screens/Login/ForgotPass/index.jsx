@@ -33,9 +33,8 @@ const ForgotPassword = ({ navigation }) => {
             const response = await axios.post(apiUrl, {
                 email: email,
             });
-            console.log(response, "response")
 
-            if (!response.ok) {
+            if (response.data.status === "success") {
                 setLoad(false);
                 navigation.navigate('Otp')
             } else {

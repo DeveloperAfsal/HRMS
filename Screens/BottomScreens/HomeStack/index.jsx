@@ -12,6 +12,9 @@ import AddShiftSlot from "./AttendancePolicy/AddShiftSlot";
 import LevelCategory from "./OrganizationStructure/EmployeeLevelCategory";
 import DocumentType from "./OrganizationStructure/EmployeeDocumentType";
 import AttendancePolicy from "./AttendancePolicy/AttendancePolicy";
+import RoleList from "./OrganizationStructure/RolesList";
+import AddRole from "./OrganizationStructure/AddRole";
+import EditPolicy from "./AttendancePolicy/AttendancePolicy/EditPolicy";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +45,7 @@ const HomeStack = () => {
       }}>
 
       <Stack.Screen
-        name="Home1" component={HomeScreen} options={({ navigation }) => {
+        name="Dashboard" component={HomeScreen} options={({ navigation }) => {
           return {
             headerLeft: () => (
               <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={{ paddingLeft: 5 }}>
@@ -61,6 +64,8 @@ const HomeStack = () => {
 
       {/*  */}
 
+      <Stack.Screen name="Add Role" component={AddRole} />
+      <Stack.Screen name="Roles List" component={RoleList} />
       <Stack.Screen name="Employee Level Category" component={LevelCategory} />
       <Stack.Screen name="Employee Document Type" component={DocumentType} />
 
@@ -68,7 +73,8 @@ const HomeStack = () => {
 
       <Stack.Screen name="Add Shift slot" component={AddShiftSlot} />
       <Stack.Screen name="Attendance Policy" component={AttendancePolicy} />
-      
+      <Stack.Screen name="Edit Policy" component={EditPolicy} />
+
 
     </Stack.Navigator>
   );

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ActivityIndicator, Alert, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import EyeOpenIcon from '../../../Assets/Icons/eyeopen.svg';
+import EyeCloseIcon from '../../../Assets/Icons/EyeClose.svg';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
@@ -155,7 +156,7 @@ const LoginScreen = ({ navigation }) => {
                             style={styles.iconsContainer}
                             onPress={() => setPasswordVisible(!passwordVisible)}
                         >
-                            {passwordVisible ? <EyeOpenIcon color="black" /> : <EyeOpenIcon color="#20DDFE" />}
+                            {passwordVisible ? <EyeOpenIcon color="black" /> : <EyeCloseIcon color="black" />}
                         </TouchableOpacity>
                     </View>
 
