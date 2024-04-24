@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -7,7 +7,7 @@ import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const EditPolicy = ({ route }) => {
+const EditPolicy = ({ route, navigation }) => {
 
     // route
 
@@ -20,12 +20,12 @@ const EditPolicy = ({ route }) => {
     //  Api Call
 
     useEffect(() => {
-        
+
         const fetchData = async () => {
-            
+
             try {
                 const apiUrl = `https://ocean21.in/api/public/api/editview_attendancepolicy/${SpecId}`;
-                
+
                 const response = await axios.get(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${data.token}`
@@ -47,7 +47,9 @@ const EditPolicy = ({ route }) => {
     // states
 
     const [load, SetLoad] = useState(false);
-    const [datalist,setDatalist] =useState([]);
+    const [datalist, setDatalist] = useState([]);
+    const [selectedID, setSelectedID] = useState();
+    const [Activity, setActivity] = useState();
 
     // slotfromTime
 
@@ -309,10 +311,11 @@ const EditPolicy = ({ route }) => {
 
     const selectShift = (shift) => {
         setSelectedShift(shift.shift_slot);
+        console.log(shift.shift_slot);
         setSelectedShiftId(shift.id);
+        console.log(shift.id);
         setShowDropdown(false);
     };
-
 
     // Api call for Handle Submit
 
@@ -324,8 +327,8 @@ const EditPolicy = ({ route }) => {
 
             const apiUrl = 'https://ocean21.in/api/public/api/update_attendancepolicy';
 
-            const response = await axios.post(apiUrl, {
-                id: "2",
+            const response = await axios.put(apiUrl, {
+                id: selectedID,
                 shift_slot: selectedShiftId,
                 form_time: slotfromTime,
                 to_time: slotToTime,
@@ -346,7 +349,7 @@ const EditPolicy = ({ route }) => {
                 late1_deduction: lateDeduction1,
                 late2_deduction: lateDeduction2,
                 late3_deduction: lateDeduction3,
-                policy_status: "Active",
+                policy_status: Activity,
                 updated_by: data.userempid,
             }, {
                 headers: {
@@ -357,7 +360,7 @@ const EditPolicy = ({ route }) => {
             console.log(response.data, "response");
 
             if (response.data.status === "success") {
-                fetchData();
+                navigation.navigate('Attendance Policy')
                 SetLoad(false);
             } else {
                 Alert.alert("Failed To Add");
@@ -372,6 +375,34 @@ const EditPolicy = ({ route }) => {
         }
 
     }
+
+    // Declaring Data
+
+    useEffect(() => {
+        if (datalist) {
+            setSelectedID(datalist.id);
+            setActivity(datalist.status);
+            setSlotFromTime(datalist.form_time);
+            setSlotToTime(datalist.to_time);
+            setSlotTotalTime(datalist.total_hrs);
+            setLateFromTime(datalist.late_form_time);
+            setLateToTime(datalist.late_to_time);
+            setPAMFromTime(datalist.fp_form_time);
+            setPAMToTime(datalist.fp_to_time);
+            setPPMFromTime(datalist.ap_form_time);
+            setPPMToTime(datalist.ap_to_time);
+            setHAMFromTime(datalist.fhalf_day_form_time);
+            setHAMToTime(datalist.fhalf_day_to_time);
+            setHPMFromTime(datalist.ahalf_day_form_time);
+            setHPMToTime(datalist.ahalf_day_to_time);
+            setLate1(datalist.late1);
+            setLateDeduction1(datalist.late1_deduction);
+            setLate2(datalist.late2);
+            setLateDeduction2(datalist.late2_deduction);
+            setLate3(datalist.late3);
+            setLateDeduction3(datalist.late3_deduction);
+        }
+    }, [datalist]);
 
 
     return (
@@ -390,7 +421,7 @@ const EditPolicy = ({ route }) => {
 
                     <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
 
-                        <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
+                        <Text style={styles.TimeSlotTouchableText}>{selectedShift || "Select Shift"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import EditIcon from "../../../../../Assets/Icons/Edit.svg";
@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from '@react-navigation/native';
 
 const AttendancePolicy = ({ navigation }) => {
 
@@ -19,7 +20,8 @@ const AttendancePolicy = ({ navigation }) => {
 
     const [loadData, setLoadData] = useState(false);
     const [load, SetLoad] = useState(false);
-    const [Datalist, setDatalist] = useState([]);
+    const [datalist, setDatalist] = useState([]);
+    const [Activity, setActivity] = useState();
 
     // slotfromTime
 
@@ -281,9 +283,11 @@ const AttendancePolicy = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Api call for shift slot dropdown
 
@@ -358,7 +362,7 @@ const AttendancePolicy = ({ navigation }) => {
                 });
 
                 if (response.data.status === "success") {
-                    const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
+                    const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false)
                 } else {
@@ -419,6 +423,7 @@ const AttendancePolicy = ({ navigation }) => {
             if (response.data.status === "success") {
                 fetchData();
                 SetLoad(false);
+                Handlerefresh();
             } else {
                 Alert.alert("Failed To Add");
                 SetLoad(false);
@@ -437,6 +442,29 @@ const AttendancePolicy = ({ navigation }) => {
 
     const handlenavigate = (item) => {
         navigation.navigate("Edit Policy", { Id: item.id });
+    }
+
+    const Handlerefresh = () => {
+        setSelectedShift('Select Shift')
+        setSlotFromTime('00:00:00');
+        setSlotToTime('00:00:00');
+        setSlotTotalTime('00:00:00');
+        setLateFromTime('00:00:00');
+        setLateToTime('00:00:00');
+        setPAMFromTime('00:00:00');
+        setPAMToTime('00:00:00');
+        setPPMFromTime('00:00:00');
+        setPPMToTime('00:00:00');
+        setHAMFromTime('00:00:00');
+        setHAMToTime('00:00:00');
+        setHPMFromTime('00:00:00');
+        setHPMToTime('00:00:00');
+        setLate1('');
+        setLateDeduction1('');
+        setLate2('');
+        setLateDeduction2('');
+        setLate3('');
+        setLateDeduction3('');
     }
 
     return (
@@ -846,10 +874,10 @@ const AttendancePolicy = ({ navigation }) => {
                                     <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
                                 </View>
 
-                                {Datalist.length === 0 ? (
+                                {datalist.length === 0 ? (
                                     <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                 ) : (
-                                    Datalist.map((item, index) => (
+                                    datalist.map((item, index) => (
                                         <View key={index} style={[styles.row]}>
                                             <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.shift]}>{item.shift_slot}</Text>
@@ -857,7 +885,7 @@ const AttendancePolicy = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.Totime]}>{item.to_time}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
                                             <View style={[styles.listcontentButtonview]}>
-                                                <TouchableOpacity style={[styles.listcontenteditbutton]} onPress={()=>handlenavigate(item)}>
+                                                <TouchableOpacity style={[styles.listcontenteditbutton]} onPress={() => handlenavigate(item)}>
                                                     <EditIcon width={14} height={14} color="#000" />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity

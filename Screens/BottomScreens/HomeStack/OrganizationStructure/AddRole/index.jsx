@@ -1,13 +1,142 @@
 import React, { useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
-import CheckInOutField from "../../../../../Components/CheckBox";
+import { useSelector } from "react-redux";
+import CheckBox from '@react-native-community/checkbox';
+import axios from "axios";
+
+const AddRole = ({ navigation }) => {
+
+    const { data } = useSelector((state) => state.login)
+
+    const [load, setLoad] = useState(false);
+    const [roleName, setRoleName] = useState('');
+
+    const initialFieldsState = [
+        { name: 'Dashboard', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
+        { name: 'ORG Structure', isChecked: false, subheadings: ['Add Role', 'Roles List', 'Supervisor List', 'Employee Level Category', 'Employee Document Type', 'ORG Chart'], checkboxes: Array(6).fill(false) },
+        { name: 'Leave & Attendance Policy', isChecked: false, subheadings: ['Add Shift Slot', 'Assign Employee Shift', 'Attendance Policy', 'Attendance Type', 'Attendance Location', 'Leave Policy Type', 'Leave Policy Category'], checkboxes: Array(7).fill(false) },
+        { name: 'Employee', isChecked: false, subheadings: ['Add Employee', 'Employee List', 'Employee Confirmation'], checkboxes: Array(3).fill(false) },
+        { name: 'Attendance', isChecked: false, subheadings: ['Daily Attendance', 'Monthly Attendance', 'Monthly Attendance Calendar View', 'Monthly List'], checkboxes: Array(4).fill(false) },
+        { name: 'HR Support', isChecked: false, subheadings: ['Approvals Request', 'Templates', 'Job Openings'], checkboxes: Array(3).fill(false) },
+        { name: 'TL Approval', isChecked: false, subheadings: ['Leave Approval', 'OT Approval'], checkboxes: Array(2).fill(false) },
+        { name: 'Help Desk', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
+        { name: 'Assets', isChecked: false, subheadings: ['Assets Type', 'Add Asset', 'Asset List'], checkboxes: Array(3).fill(false) },
+        { name: 'Events', isChecked: false, subheadings: ['Add Event', 'Event List'], checkboxes: Array(2).fill(false) },
+        { name: 'Meetings', isChecked: false, subheadings: ['Add Meeting', 'Meeting List'], checkboxes: Array(2).fill(false) },
+        { name: 'Team Task', isChecked: false, subheadings: ['Add Project', 'Project List', 'Add Task', 'Tasks - Employee View', 'Tasks List', 'Tasks Progress'], checkboxes: Array(6).fill(false) },
+        { name: 'Pay Roll', isChecked: false, subheadings: ['Salary Calculation', 'Generate Payslip', 'Payroll List'], checkboxes: Array(3).fill(false) },
+        { name: 'Holiday', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
+        { name: 'Visitor Management', isChecked: false, subheadings: ['Add Visitors', 'Visitors Log'], checkboxes: Array(2).fill(false) },
+        { name: 'Logs', isChecked: false, subheadings: ['Activity Log', 'Employee Activity Log'], checkboxes: Array(2).fill(false) },
+
+    ];
+
+    const [fields, setFields] = useState(initialFieldsState);
+
+    const toggleFieldCheckBox = (fieldIndex) => {
+        const newFields = [...fields];
+        newFields[fieldIndex].isChecked = !newFields[fieldIndex].isChecked;
+        newFields[fieldIndex].checkboxes = newFields[fieldIndex].checkboxes.map(() => newFields[fieldIndex].isChecked);
+        setFields(newFields);
+        updateCheckedNames(fieldIndex, newFields[fieldIndex].isChecked);
+    };
+
+    const toggleSubheadingCheckBox = (fieldIndex, subheadingIndex) => {
+        const newFields = [...fields];
+        newFields[fieldIndex].checkboxes[subheadingIndex] = !newFields[fieldIndex].checkboxes[subheadingIndex]; // Toggle the subheading checkbox state
+        setFields(newFields);
+        updateCheckedNames(fieldIndex, newFields[fieldIndex].checkboxes[subheadingIndex], subheadingIndex);
+    };
+
+    // 
+
+    const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null) => {
+        const newCheckedNames = { ...checkedNames };
+        const fieldName = fields[fieldIndex].name;
+        if (isChecked) {
+            if (subheadingIndex !== null) {
+                if (!newCheckedNames[fieldName]) {
+                    newCheckedNames[fieldName] = []; // Initialize as array if it doesn't exist
+                }
+                newCheckedNames[fieldName].push(fields[fieldIndex].subheadings[subheadingIndex]);
+            } else {
+                // Add the field name directly to the array if it has no subheadings
+                newCheckedNames[fieldName] = [fieldName];
+            }
+        } else {
+            if (subheadingIndex !== null) {
+                if (newCheckedNames[fieldName]) { // Check if the array exists
+                    const index = newCheckedNames[fieldName].indexOf(fields[fieldIndex].subheadings[subheadingIndex]);
+                    if (index !== -1) {
+                        newCheckedNames[fieldName].splice(index, 1);
+                    }
+                }
+            } else {
+                // Remove the field name from the array if it has no subheadings
+                delete newCheckedNames[fieldName];
+            }
+        }
+        setCheckedNames(newCheckedNames);
+    };
 
 
+    const [checkedNames, setCheckedNames] = useState({
+        'Dashboard': [],
+        'ORGStructure': [],
+        'LeaveAndAttendancePolicy': [],
+        'Employee': [],
+        'Attendance': [],
+        'HRSupport': [],
+        'TLApproval': [],
+        'HelpDesk': [],
+        'Assets': [],
+        'Events': [],
+        'Meeting': [],
+        'TeamTask': [],
+        'Payroll': [],
+        'Holiday': [],
+        'Visitiormanagement': [],
+        'Logs': [],
+    });
 
-const AddRole = () => {
+    const HandleSubmit = async () => {
 
-    const [load, SetLoad] = useState(false);
+        setLoad(true);
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/addroleinsert';
+            const response = await axios.post(apiUrl, {
+                role_name: roleName,
+                permission: checkedNames,
+                created_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                },
+            });
+
+            console.log(response.data, "response.data")
+
+            if (response.data.status === "success") {
+                setLoad(false);
+                navigation.navigate('Roles List');
+            } else {
+                setLoad(false);
+                Alert.alert("Failed To Add");
+                console.error('Failed To Add:', response.data.error);
+            }
+
+        } catch (error) {
+            setLoad(false);
+            Alert.alert("Error during submit", "Failed to add role. Please try again later.");
+            console.error('Error during submit:', error);
+        }
+    }
+
+    const HandleCancel = () => {
+        setCheckedNames({});
+    };
 
     return (
         <ScrollView>
@@ -21,148 +150,46 @@ const AddRole = () => {
                             Add Role Name
                         </Text>
 
-                        <TextInput style={styles.TextInput} />
+                        <TextInput
+                            style={styles.TextInput}
+                            value={roleName}
+                            onChangeText={(txt) => setRoleName(txt)} />
 
                     </View>
 
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="Dashboard" />
-                    </View>
+                    {fields.map((field, fieldIndex) => (
+                        <View key={fieldIndex}>
+                            <View style={styles.checkView}>
+                                {['Dashboard', 'Help Desk', 'Holiday'].includes(field.name) && (
+                                    <CheckBox
+                                        disabled={false}
+                                        value={field.isChecked}
+                                        onValueChange={() => toggleFieldCheckBox(fieldIndex)}
+                                        tintColors={{ true: '#20DDFE' }}
+                                        style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
+                                    />
+                                )}
+                                <Text style={styles.FieldHeader}>{field.name}</Text>
+                            </View>
 
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="ORG Structure" />
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Role" />
-                            <CheckInOutField SubHeader="Roles List" />
-                            <CheckInOutField SubHeader="Supervisor List" />
-                            <CheckInOutField SubHeader="Employee Level Category" />
-                            <CheckInOutField SubHeader="Employee Document Type" />
-                            <CheckInOutField SubHeader="ORG Chart" />
+                            {field.subheadings.map((subheading, subheadingIndex) => (
+                                <View key={subheadingIndex} style={styles.checkView}>
+                                    <CheckBox
+                                        disabled={false}
+                                        value={field.checkboxes[subheadingIndex]}
+                                        onValueChange={() => toggleSubheadingCheckBox(fieldIndex, subheadingIndex)}
+                                        style={{ marginLeft: 20 }}
+                                        tintColors={{ true: '#20DDFE' }}
+                                    />
+                                    <Text style={styles.Subheading}>{subheading}</Text>
+                                </View>
+                            ))}
                         </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Leave & Attendance Policy</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Shift Slot" />
-                            <CheckInOutField SubHeader="Assign Employee Shift" />
-                            <CheckInOutField SubHeader="Attendance Policy" />
-                            <CheckInOutField SubHeader="Attendance Type" />
-                            <CheckInOutField SubHeader="Attendance Location" />
-                            <CheckInOutField SubHeader="Leave Policy Type" />
-                            <CheckInOutField SubHeader="Leave Policy Category" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Employee</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Employee" />
-                            <CheckInOutField SubHeader="Employee List" />
-                            <CheckInOutField SubHeader="Employee Confirmation" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Attendance</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Daily Attendance" />
-                            <CheckInOutField SubHeader="Monthly Attendance" />
-                            <CheckInOutField SubHeader="Monthly Attendance Calendar View" />
-                            <CheckInOutField SubHeader="Monthly List" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>HR Support</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Approvals Requeste" />
-                            <CheckInOutField SubHeader="Templates" />
-                            <CheckInOutField SubHeader="Job Openings" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>TL Approval</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Leave Approval" />
-                            <CheckInOutField SubHeader="OT Approval" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="Help Desk" />
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Assets</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Assets Type" />
-                            <CheckInOutField SubHeader="Add Asset" />
-                            <CheckInOutField SubHeader="Asset List" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Events</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Event" />
-                            <CheckInOutField SubHeader="Event List" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Meetings</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Meeting" />
-                            <CheckInOutField SubHeader="Meeting List" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Team Task</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Project" />
-                            <CheckInOutField SubHeader="Project List" />
-                            <CheckInOutField SubHeader="Add Task" />
-                            <CheckInOutField SubHeader="Tasks - Employee View" />
-                            <CheckInOutField SubHeader="Tasks List" />
-                            <CheckInOutField SubHeader="Tasks Progress" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <Text style={styles.Header}>Pay Roll</Text>
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Salary Calculation" />
-                            <CheckInOutField SubHeader="Generate Payslip" />
-                            <CheckInOutField SubHeader="Payroll List" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="Holiday" />
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="Visitor Management" />
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Add Visitors" />
-                            <CheckInOutField SubHeader="Visitors Log" />
-                        </View>
-                    </View>
-
-                    <View style={styles.checkView}>
-                        <CheckInOutField fieldName="Logs" />
-                        <View style={styles.SubHeaderView}>
-                            <CheckInOutField SubHeader="Activity Log" />
-                            <CheckInOutField SubHeader="Employee Activity Log" />
-                        </View>
-                    </View>
+                    ))}
 
                     <View style={styles.buttonview}>
 
-                        <TouchableOpacity style={styles.submitbutton}>
+                        <TouchableOpacity style={styles.submitbutton} onPress={HandleSubmit}>
                             {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
@@ -172,18 +199,20 @@ const AddRole = () => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={HandleCancel}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
                         </TouchableOpacity>
 
                     </View>
+
                 </View>
 
             </View>
         </ScrollView>
     )
 }
+
 
 export default AddRole;
