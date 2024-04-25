@@ -301,13 +301,13 @@ const CustomDrawerContent = ({ navigation }) => {
                         />
 
                         <DrawerItem
-                            label="Leave Policy Type"
-                            onPress={() => navigation.navigate('Leave Policy Type')}
+                            label="Leave Type"
+                            onPress={() => navigation.navigate('Leave Type')}
                         />
 
                         <DrawerItem
-                            label="Leave policy category"
-                            onPress={() => navigation.navigate('Leave policy category')}
+                            label="Leave category"
+                            onPress={() => navigation.navigate('Leave category')}
                         />
 
                     </>

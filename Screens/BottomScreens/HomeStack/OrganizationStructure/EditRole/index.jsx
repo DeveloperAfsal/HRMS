@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import { useSelector } from "react-redux";
 import CheckBox from '@react-native-community/checkbox';
 import axios from "axios";
 
-const AddRole = ({ navigation }) => {
 
-    // data from redux Store 
+const EditRole = ({ navigation, route }) => {
+
+    // data from redux store
 
     const { data } = useSelector((state) => state.login);
 
@@ -16,6 +17,25 @@ const AddRole = ({ navigation }) => {
     const [load, setLoad] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [nameError, setNameError] = useState('');
+
+    const [checkedNames, setCheckedNames] = useState({
+        'Dashboard': [],
+        'ORGStructure': [],
+        'LeaveAndAttendancePolicy': [],
+        'Employee': [],
+        'Attendance': [],
+        'HRSupport': [],
+        'TLApproval': [],
+        'HelpDesk': [],
+        'Assets': [],
+        'Events': [],
+        'Meeting': [],
+        'TeamTask': [],
+        'Payroll': [],
+        'Holiday': [],
+        'Visitiormanagement': [],
+        'Logs': [],
+    });
 
     const initialFieldsState = [
         { name: 'Dashboard', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
@@ -38,8 +58,10 @@ const AddRole = ({ navigation }) => {
     ];
 
     const [fields, setFields] = useState(initialFieldsState);
+    const [selectedID, setSelectedID] = useState();
+    const [Activity, setActivity] = useState();
 
-    // checkbox Handler
+    // 
 
     const toggleFieldCheckBox = (fieldIndex) => {
         const newFields = [...fields];
@@ -56,7 +78,7 @@ const AddRole = ({ navigation }) => {
         updateCheckedNames(fieldIndex, newFields[fieldIndex].checkboxes[subheadingIndex], subheadingIndex);
     };
 
-    // checkbox Handler
+    // 
 
     const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null) => {
         const newCheckedNames = { ...checkedNames };
@@ -87,46 +109,77 @@ const AddRole = ({ navigation }) => {
         setCheckedNames(newCheckedNames);
     };
 
-    const [checkedNames, setCheckedNames] = useState({
-        'Dashboard': [],
-        'ORGStructure': [],
-        'LeaveAndAttendancePolicy': [],
-        'Employee': [],
-        'Attendance': [],
-        'HRSupport': [],
-        'TLApproval': [],
-        'HelpDesk': [],
-        'Assets': [],
-        'Events': [],
-        'Meeting': [],
-        'TeamTask': [],
-        'Payroll': [],
-        'Holiday': [],
-        'Visitiormanagement': [],
-        'Logs': [],
-    });
+    // 
 
-    // HandleSubmit
+    const SpecId = route.params.Id;
+
+    //  
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            try {
+                const apiUrl = `https://ocean21.in/api/public/api/editview_role/${SpecId}`;
+
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+
+                if (responseData) {
+                    setRoleName(responseData.role_name);
+                    setActivity(responseData.status);
+                    setSelectedID(responseData.id);
+
+                    let parsedPermissions;
+                    try {
+                        parsedPermissions = JSON.parse(responseData.permission);
+                    } catch (error) {
+                        console.error('Error parsing permissions JSON:', error);
+                        parsedPermissions = {};
+                    }
+
+                    if (typeof parsedPermissions === 'string') {
+                        parsedPermissions = JSON.parse(parsedPermissions);
+                    }
+
+                    if (typeof parsedPermissions === 'object' && parsedPermissions !== null) {
+                        setCheckedNames(parsedPermissions);
+                    } else {
+                        console.error('Parsed permissions are not in the expected format:', parsedPermissions);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+
+    }, [SpecId]);
+
+    // 
 
     const HandleSubmit = async () => {
 
         setLoad(true);
 
+        if (!nameError) {
+            setNameError('Role Name Required');
+        }
+
         try {
-
-            if (!nameError) {
-                setNameError('Role Name Required');
-                setLoad(false);
-                return;
-            } else {
-                setNameError('');
-            }
-
-            const apiUrl = 'https://ocean21.in/api/public/api/addroleinsert';
-            const response = await axios.post(apiUrl, {
+            const apiUrl = 'https://ocean21.in/api/public/api/update_role';
+            const response = await axios.put(apiUrl, {
+                id: selectedID,
                 role_name: roleName,
                 permission: checkedNames,
-                created_by: data.userempid,
+                updated_by: data.userempid,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -138,29 +191,24 @@ const AddRole = ({ navigation }) => {
             if (response.data.status === "success") {
                 setLoad(false);
                 navigation.navigate('Roles List');
-                setFields(initialFieldsState);
-                setRoleName('');
             } else {
                 setLoad(false);
-                Alert.alert("Failed To Add");
-                console.error('Failed To Add:', response.data.error);
+                Alert.alert("Failed To Edit");
+                console.error('Failed To Edit:', response.data.error);
             }
 
         } catch (error) {
             setLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials.");
+            Alert.alert("Error during submit", "Check The Input Credentials");
             console.error('Error during submit:', error);
         }
     }
 
     const HandleCancel = () => {
-        setFields(initialFieldsState);
-        setRoleName('');
-        setNameError('');
+        setCheckedNames({});
     };
 
     return (
-
         <ScrollView>
 
             <View style={styles.AddroleContainer}>
@@ -184,15 +232,13 @@ const AddRole = ({ navigation }) => {
                         </View>
                     </View>
 
-
-
                     {fields.map((field, fieldIndex) => (
                         <View key={fieldIndex}>
                             <View style={styles.checkView}>
                                 {['Dashboard', 'Help Desk', 'Holiday'].includes(field.name) && (
                                     <CheckBox
                                         disabled={false}
-                                        value={field.isChecked}
+                                        value={checkedNames[field.name] ? true : false}
                                         onValueChange={() => toggleFieldCheckBox(fieldIndex)}
                                         tintColors={{ true: '#20DDFE' }}
                                         style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
@@ -205,7 +251,7 @@ const AddRole = ({ navigation }) => {
                                 <View key={subheadingIndex} style={styles.checkView}>
                                     <CheckBox
                                         disabled={false}
-                                        value={field.checkboxes[subheadingIndex]}
+                                        value={checkedNames[field.name] && checkedNames[field.name].includes(subheading)} // Check if subheading is included in checkedNames
                                         onValueChange={() => toggleSubheadingCheckBox(fieldIndex, subheadingIndex)}
                                         style={{ marginLeft: 20 }}
                                         tintColors={{ true: '#20DDFE' }}
@@ -215,6 +261,7 @@ const AddRole = ({ navigation }) => {
                             ))}
                         </View>
                     ))}
+
 
                     <View style={styles.buttonview}>
 
@@ -241,9 +288,7 @@ const AddRole = ({ navigation }) => {
             </View>
 
         </ScrollView>
-
     )
 }
 
-
-export default AddRole;
+export default EditRole;

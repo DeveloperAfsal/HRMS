@@ -31,18 +31,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cancelButton: {
-        backgroundColor: "#1772FF",
+        backgroundColor: "#20DDFE",
         marginRight: 10,
     },
     confirmButton: {
-        backgroundColor: "#20DDFE",
+        backgroundColor: "#1772FF",
     },
-    pictureButton:{
+    pictureButton: {
         paddingVertical: 5,
         paddingHorizontal: 10,
         borderRadius: 8,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         backgroundColor: "red",
     },
     buttonText: {

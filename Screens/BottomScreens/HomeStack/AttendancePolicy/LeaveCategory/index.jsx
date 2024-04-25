@@ -7,7 +7,7 @@ import styles from "./style";
 import axios from 'axios';
 import { useSelector } from "react-redux";
 
-const AddShiftSlot = () => {
+const LeaveCategory = () => {
 
     // data from redux store 
 
@@ -63,7 +63,7 @@ const AddShiftSlot = () => {
 
         try {
             if (!shiftSlot) {
-                setShiftError('Shift Slot is required');
+                setShiftError('Leave category is required');
                 setLoad(false);
                 return;
             } else {
@@ -78,11 +78,11 @@ const AddShiftSlot = () => {
                 setStatusError('');
             }
 
-            const apiUrl = 'https://ocean21.in/api/public/api/shiftslotinsert';
+            const apiUrl = 'https://ocean21.in/api/public/api/leavecategoryinsert';
 
             const response = await axios.post(apiUrl, {
-                shiftslot_name: shiftSlot,
-                shiftslot_status: selectedStatus,
+                category_name: shiftSlot,
+                category_status: selectedStatus,
                 created_by: data.userempid,
             }, {
                 headers: {
@@ -93,7 +93,7 @@ const AddShiftSlot = () => {
             if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
-                setSelectedStatus('Selected Status');
+                setSelectedStatus("Selected Status");
                 fetchData();
             } else {
                 setLoad(false);
@@ -122,7 +122,7 @@ const AddShiftSlot = () => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/view_shiftslot';
+            const apiUrl = 'https://ocean21.in/api/public/api/view_leavecategory';
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -140,7 +140,6 @@ const AddShiftSlot = () => {
     useEffect(() => {
         fetchData();
     }, []);
-
 
     // Api call for Delete
 
@@ -172,7 +171,7 @@ const AddShiftSlot = () => {
                     setReason('');
                 }
 
-                const apiUrl = `https://ocean21.in/api/public/api/delete_shiftslot`;
+                const apiUrl = `https://ocean21.in/api/public/api/delete_leavecategory`;
                 const response = await axios.post(apiUrl, {
                     id: slotToDelete,
                     updated_by: data.userempid,
@@ -206,7 +205,7 @@ const AddShiftSlot = () => {
     // Function to open edit modal and populate data
 
     const openEditModal = (slot) => {
-        setEditedShiftSlot(slot.shift_slot);
+        setEditedShiftSlot(slot.category_name);
         setEditedStatus(slot.status);
         setEditModalVisible(true);
         setSelectedSlotId(slot.id);
@@ -227,7 +226,7 @@ const AddShiftSlot = () => {
         setEditLoad(true);
         try {
             if (!editedShiftSlot) {
-                setEditedShiftError('Shift Slot is required');
+                setEditedShiftError('Leave category is required');
                 setEditLoad(false);
                 return;
             } else {
@@ -242,12 +241,12 @@ const AddShiftSlot = () => {
                 setEditedstatusError('');
             }
 
-            const apiUrl = 'https://ocean21.in/api/public/api/update_shiftslot';
+            const apiUrl = 'https://ocean21.in/api/public/api/update_leavecategory';
 
             const response = await axios.put(apiUrl, {
                 id: selectedSlotId,
-                shiftslot_name: editedShiftSlot,
-                shiftslot_status: editedStatus,
+                category_name: editedShiftSlot,
+                category_status: editedStatus,
                 updated_by: data.userempid,
             }, {
                 headers: {
@@ -278,17 +277,19 @@ const AddShiftSlot = () => {
 
     return (
         <ScrollView>
+
             <View style={styles.ShiftSlotContainer}>
 
                 <View style={styles.ShiftSlotContainerTitle}>
-                    <Text style={styles.ShiftSlotContainerTitleText}>Shift Slot Form</Text>
+                    <Text style={styles.ShiftSlotContainerTitleText}>Leave category Form</Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>
 
                     <Text style={styles.ShiftSlotText}>
-                        Shift Slot
+                        Leave category
                     </Text>
+
                     <TextInput
                         value={shiftSlot}
                         onChangeText={(text) => setShiftSlot(text)}
@@ -349,12 +350,12 @@ const AddShiftSlot = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
 
                 <>
-
                     <View style={styles.ShiftSlotContainerTitle}>
-                        <Text style={styles.ShiftSlotContainerTitleText}>Shift Slot List</Text>
+                        <Text style={styles.ShiftSlotContainerTitleText}>Leave category List</Text>
                     </View>
 
                     <View style={styles.listContainer}>
@@ -376,7 +377,7 @@ const AddShiftSlot = () => {
                                         Datalist.map((slot, index) => (
                                             <View style={styles.listcontent} key={index}>
                                                 <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                                <Text style={styles.listcontentShift}>{slot.shift_slot}</Text>
+                                                <Text style={styles.listcontentShift}>{slot.category_name}</Text>
                                                 <Text style={styles.listcontentstatus}>{slot.status}</Text>
 
                                                 <View style={styles.listcontentButtonview}>
@@ -446,8 +447,8 @@ const AddShiftSlot = () => {
 
                             <View style={styles.modalContent}>
 
-                                <Text style={styles.Heading}>Edit Shift Slot</Text>
-                                <Text style={styles.modalLabelText}>Shift Slot</Text>
+                                <Text style={styles.Heading}>Edit Request Type</Text>
+                                <Text style={styles.modalLabelText}>Request Type</Text>
 
                                 <TextInput
                                     value={editedShiftSlot}
@@ -509,13 +510,13 @@ const AddShiftSlot = () => {
                             </View>
                         </View>
                     </Modal>
+
                 </>
 
             </View>
 
         </ScrollView>
     )
-
 }
 
-export default AddShiftSlot;
+export default LeaveCategory;

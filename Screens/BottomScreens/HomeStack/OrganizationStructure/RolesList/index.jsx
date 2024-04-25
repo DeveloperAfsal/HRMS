@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Modal, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import EditIcon from "../../../../../Assets/Icons/Edit.svg";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg"
-import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import styles from "./style";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from '@react-navigation/native';
 
-
-const RoleList = () => {
+const RoleList = ({ navigation }) => {
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
 
-    // 
+    // states 
 
     const [loadData, setLoadData] = useState(false);
     const [Datalist, setDatalist] = useState([]);
@@ -23,6 +22,7 @@ const RoleList = () => {
     const [ReasonError, setReasonError] = useState('');
     const [DelData, setDelData] = useState(false);
     const [slotToDelete, setSlotToDelete] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
 
     // Api call for list Data
 
@@ -116,9 +116,26 @@ const RoleList = () => {
         }
     }
 
+    // Handlenavigate
+
+    const Handlenavigate = (slot) => {
+        navigation.navigate('Edit Role', { Id: slot.id })
+    }
+
+    // 
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData(); 
+        }, [])
+    );
+
     return (
-        <ScrollView>
+
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchData}/>}>
+
             <View style={styles.RolelistContainer}>
+
                 <View style={styles.listContainer}>
 
                     {
@@ -140,7 +157,7 @@ const RoleList = () => {
                                             <Text style={styles.listcontentRoleName}>{slot.role_name}</Text>
 
                                             <View style={styles.listcontentButtonview}>
-                                                <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => openEditModal(slot)}>
+                                                <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => Handlenavigate(slot)}>
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={styles.listcontentdelbutton} onPress={() => HandleDelete(slot.id)}>
@@ -153,8 +170,6 @@ const RoleList = () => {
 
                             </>
                     }
-
-
 
                 </View>
 
@@ -195,7 +210,9 @@ const RoleList = () => {
                         </View>
                     </View>
                 </Modal>
+
             </View>
+
         </ScrollView>
     )
 }

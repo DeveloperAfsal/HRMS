@@ -197,6 +197,12 @@ const styles = StyleSheet.create({
         height: 150,
         width: 400
     },
+
+    errorText: {
+        color: "red",
+        paddingTop: 10,
+        width:"90%"
+    },
 })
 
 export default styles;

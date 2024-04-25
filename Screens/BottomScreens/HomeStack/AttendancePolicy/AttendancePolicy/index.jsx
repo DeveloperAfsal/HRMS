@@ -246,16 +246,23 @@ const AttendancePolicy = ({ navigation }) => {
 
 
     const [late1, setLate1] = useState();
+    const [late1Error, setlate1Error] = useState();
     const [lateDeduction1, setLateDeduction1] = useState();
+    const [lateDeduction1Error, setLateDeduction1Error] = useState();
     const [late2, setLate2] = useState();
+    const [late2Error, setlate2Error] = useState();
     const [lateDeduction2, setLateDeduction2] = useState();
+    const [lateDeduction2Error, setLateDeduction2Error] = useState();
     const [late3, setLate3] = useState();
+    const [late3Error, setlate3Error] = useState();
     const [lateDeduction3, setLateDeduction3] = useState();
+    const [lateDeduction3Error, setLateDeduction3Error] = useState();
 
     const [shiftSlotList, setShiftSlotList] = useState([]);
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedShiftError, setSelectedShiftError] = useState('');
 
     const [Reason, setReason] = useState('');
     const [DelData, setDelData] = useState(false);
@@ -387,6 +394,62 @@ const AttendancePolicy = ({ navigation }) => {
 
         try {
 
+            if (!selectedShift) {
+                setSelectedShiftError('Shift is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedShiftError('');
+            }
+
+            if (!late1) {
+                setlate1Error('Late1 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setlate1Error('')
+            }
+
+            if (!late2) {
+                setlate2Error('Late2 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setlate2Error('');
+            }
+
+            if (!late3) {
+                setlate3Error('Late3 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setlate3Error('');
+            }
+
+            if (!lateDeduction1) {
+                setLateDeduction1Error('LateDeduction1 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setLateDeduction1Error('')
+            }
+
+            if (!lateDeduction2) {
+                setLateDeduction2Error('LateDeduction2 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setLateDeduction2Error('');
+            }
+
+            if (!lateDeduction3) {
+                setLateDeduction3Error('LateDeduction3 Field is Required');
+                SetLoad(false);
+                return;
+            } else {
+                setLateDeduction3Error('');
+            }
+
             const apiUrl = 'https://ocean21.in/api/public/api/attendancepolicyinsert';
 
             const response = await axios.post(apiUrl, {
@@ -418,8 +481,6 @@ const AttendancePolicy = ({ navigation }) => {
                 },
             });
 
-            console.log(response.data, "response");
-
             if (response.data.status === "success") {
                 fetchData();
                 SetLoad(false);
@@ -441,7 +502,7 @@ const AttendancePolicy = ({ navigation }) => {
     // 
 
     const handlenavigate = (item) => {
-        navigation.navigate("Edit Policy", { Id: item.id });
+        navigation.navigate("Edit Policy", { Id: item.id, name: item.shift_slot });
     }
 
     const Handlerefresh = () => {
@@ -499,6 +560,10 @@ const AttendancePolicy = ({ navigation }) => {
                             ))}
                         </View>
                     )}
+
+                    <Text style={styles.errorText}>
+                        {selectedShiftError}
+                    </Text>
 
                     <View style={styles.DoubleInputs}>
 
@@ -800,37 +865,92 @@ const AttendancePolicy = ({ navigation }) => {
                         <Text style={styles.TimeSlotText}>Late 1</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={late1} onChangeText={(val) => setLate1(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={late1}
+                        onChangeText={(val) => setLate1(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {late1Error}
+                    </Text>
 
                     <View style={styles.PolicyContainerTitle}>
                         <Text style={styles.TimeSlotText}>Late 1 Deduction</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={lateDeduction1} onChangeText={(val) => setLateDeduction1(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={lateDeduction1}
+                        onChangeText={(val) => setLateDeduction1(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {lateDeduction1Error}
+                    </Text>
 
                     <View style={styles.PolicyContainerTitle}>
                         <Text style={styles.TimeSlotText}>Late 2</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={late2} onChangeText={(val) => setLate2(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={late2}
+                        onChangeText={(val) => setLate2(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {late2Error}
+                    </Text>
 
                     <View style={styles.PolicyContainerTitle}>
                         <Text style={styles.TimeSlotText}>Late 2 Deduction</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={lateDeduction2} onChangeText={(val) => setLateDeduction2(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={lateDeduction2}
+                        onChangeText={(val) => setLateDeduction2(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {lateDeduction2Error}
+                    </Text>
+
 
                     <View style={styles.PolicyContainerTitle}>
                         <Text style={styles.TimeSlotText}>Late 3</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={late3} onChangeText={(val) => setLate3(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={late3}
+                        onChangeText={(val) => setLate3(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {late3Error}
+                    </Text>
 
                     <View style={styles.PolicyContainerTitle}>
                         <Text style={styles.TimeSlotText}>Late 3 Deduction</Text>
                     </View>
 
-                    <TextInput style={styles.inputs} keyboardType="number-pad" value={lateDeduction3} onChangeText={(val) => setLateDeduction3(val)} />
+                    <TextInput
+                        style={styles.inputs}
+                        keyboardType="number-pad"
+                        value={lateDeduction3}
+                        onChangeText={(val) => setLateDeduction3(val)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        {lateDeduction3Error}
+                    </Text>
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton} onPress={HandleSubmit}>

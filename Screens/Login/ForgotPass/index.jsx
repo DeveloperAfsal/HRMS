@@ -8,11 +8,17 @@ import { useDispatch } from "react-redux";
 
 const ForgotPassword = ({ navigation }) => {
 
+    // useDispatch
+
     const dispatch = useDispatch();
+
+    // states
 
     const [load, setLoad] = useState(false);
     const [email, setEmail] = useState('');
     const [employeeIdError, setEmployeeIdError] = useState('');
+
+    // handleSubmit
 
     const handleSubmit = async () => {
 
