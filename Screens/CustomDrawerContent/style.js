@@ -4,7 +4,7 @@ import { Platform, StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     profileview: {
         flexDirection: 'row',
-        // backgroundColor: PrimaryAshPurple,
+        backgroundColor: "#1FDAFD",
         padding: 10,
         paddingTop: 30,
         alignItems: 'center'
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // backgroundColor: PrimaryAshPurple,
+        // backgroundColor: 'red',
         marginHorizontal: 10,
         marginVertical: 5,
         borderRadius: 3,
@@ -42,10 +42,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
+        borderBottomColor: '#D8D8D8',
+        borderBottomWidth: 1,
     },
     dropdownText: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '400',
     },
     forSingle: {
         // backgroundColor: PrimaryAshPurple,
@@ -56,10 +58,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
+        borderBottomColor: '#D8D8D8',
+        borderBottomWidth: 1,
     },
     forsinglelable: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     Tab: {
         display: 'flex',

@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View, } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-// import ProfileIcon from "../../assets/EPK CRM Icons/Profile.svg";
 import styles from "./style";
-// import HomeIcon from '../../assets/EPK CRM Icons/Home.svg';
-// import MeetingIcon from "../../assets/EPK CRM Icons/Meeting.svg";
-// import DropdownIcon from "../../assets/EPK CRM Icons/Dropdowndownarrow.svg";
-// import DropupIcon from "../../assets/EPK CRM Icons/DropdownUparrow.svg";
-// import AttendanceIcon from "../../assets/EPK CRM Icons/Attendance.svg";
-// import RaiserequestIcon from '../../assets/EPK CRM Icons/RaiseRequest.svg';
-// import PayrollIcon from "../../assets/EPK CRM Icons/Payroll.svg";
-// import NotificationIcon from '../../assets/EPK CRM Icons/Notification.svg';
-// import LogoutIcon from "../../assets/EPK CRM Icons/Logout.svg";
+import DropdownIcon from "../../Assets/Icons/Dropdowndownarrow.svg";
+import DropupIcon from "../../Assets/Icons/DropdownUparrow.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -212,9 +204,9 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <DrawerItem
                     style={styles.forSingle}
-                    label="Dashboard"
+                    label="Home"
                     labelStyle={styles.forsinglelable}
-                    // icon={() => <HomeIcon width={20} height={20} color={PrimaryPurple} />}
+                    // icon={() => <HomeIcon width={20} height={20} color={'#000'} />}
                     onPress={() => navigation.navigate('Dashboard')}
                 />
 
@@ -222,13 +214,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('OrganisationStructure')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Organisation Structure</Text>
                     </View>
-                    {/* {
-                            dropdowns.employee ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                                <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                        } */}
+                    {
+                        dropdowns.OrganisationStructure ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.OrganisationStructure && (
@@ -264,13 +256,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
                     <View style={styles.Tab}>
-                        {/* <AttendanceIcon width={22} height={22} color={PrimaryPurple} /> */}
+                        {/* <AttendanceIcon width={22} height={22} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Leave & Attendance Policy</Text>
                     </View>
-                    {/* {
-                        dropdowns.attendance ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.AttendancePolicy ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.AttendancePolicy && (
@@ -317,14 +309,14 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Employee')}>
                     <View style={styles.Tab}>
-                        {/* <RaiserequestIcon width={22} height={22} color={PrimaryPurple} /> */}
+                        {/* <RaiserequestIcon width={22} height={22} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Employee</Text>
                     </View>
 
-                    {/* {
-                            dropdowns.raiseRequest ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                                <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                        } */}
+                    {
+                        dropdowns.Employee ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
 
@@ -351,13 +343,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Attendance')}>
                     <View style={styles.Tab}>
-                        {/* <ProfileIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <ProfileIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Attendance</Text>
                     </View>
-                    {/* {
-                        dropdowns.hrsupport ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Attendance ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Attendance && (
@@ -388,9 +380,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('HRSupport')}>
                     <View style={styles.Tab}>
-                        {/* <PayrollIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <PayrollIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>HR Support</Text>
                     </View>
+                    {
+                        dropdowns.HRSupport ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.HRSupport && (
@@ -418,13 +414,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity onPress={() => toggleDropdown('TLapproval')} style={styles.dropdown}>
                     <View style={styles.Tab}>
-                        {/* <ProfileIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <ProfileIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>TL Approval</Text>
                     </View>
-                    {/* {
-                                dropdowns.TLapproval ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                                    <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                            } */}
+                    {
+                        dropdowns.TLapproval ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.TLapproval && (
@@ -449,7 +445,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     style={styles.forSingle}
                     label="HelpDesk"
                     labelStyle={styles.forsinglelable}
-                    // icon={() => <NotificationIcon width={20} height={20} color={PrimaryPurple} />}
+                    // icon={() => <NotificationIcon width={20} height={20} color={'#000'} />}
                     onPress={() => navigation.navigate('HelpDesk')}
                 />
 
@@ -458,14 +454,14 @@ const CustomDrawerContent = ({ navigation }) => {
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Assets')}>
 
                     <View style={styles.Tab}>
-                        {/* <PayrollIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <PayrollIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Assets</Text>
                     </View>
 
-                    {/* {
-                        dropdowns.PayRoll ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Assets ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Assets && (
@@ -489,13 +485,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Events')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Events</Text>
                     </View>
-                    {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Events ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Events && (
@@ -517,13 +513,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Meeting')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Meeting</Text>
                     </View>
-                    {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Meeting ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Meeting && (
@@ -545,13 +541,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('TeamTask')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Team Task</Text>
                     </View>
-                    {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.TeamTask ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.TeamTask && (
@@ -593,13 +589,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Payroll')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Payroll</Text>
                     </View>
-                    {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Payroll ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Payroll && (
@@ -628,7 +624,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     style={styles.forSingle}
                     label="Holiday"
                     labelStyle={styles.forsinglelable}
-                    // icon={() => <NotificationIcon width={20} height={20} color={PrimaryPurple} />}
+                    // icon={() => <NotificationIcon width={20} height={20} color={'#000'} />}
                     onPress={() => navigation.navigate('Holiday')}
                 />
 
@@ -636,13 +632,13 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Visitormanagement')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Visitor management</Text>
                     </View>
-                    {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
-                    } */}
+                    {
+                        dropdowns.Visitormanagement ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
+                    }
                 </TouchableOpacity>
 
                 {dropdowns.Visitormanagement && (
@@ -664,12 +660,12 @@ const CustomDrawerContent = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Logs')}>
                     <View style={styles.Tab}>
-                        {/* <MeetingIcon width={20} height={20} color={PrimaryPurple} /> */}
+                        {/* <MeetingIcon width={20} height={20} color={'#000'} /> */}
                         <Text style={styles.dropdownText}>Logs</Text>
                     </View>
                     {/* {
-                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={PrimaryPurple} /> :
-                            <DropdownIcon width={15} height={15} color={PrimaryPurple} />
+                        dropdowns.meeting ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                            <DropdownIcon width={15} height={15} color={'#000'} />
                     } */}
                 </TouchableOpacity>
 
@@ -694,7 +690,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     style={styles.forSingle}
                     label="logout"
                     labelStyle={styles.forsinglelable}
-                    // icon={() => <LogoutIcon width={20} height={20} color={PrimaryPurple} />}
+                    // icon={() => <LogoutIcon width={20} height={20} color={'#000'} />}
                     onPress={handleeLogout}
                 />
 

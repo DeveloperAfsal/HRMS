@@ -20,6 +20,7 @@ import AttendanceType from "./AttendancePolicy/AttendanceType";
 import AttendanceLocation from "./AttendancePolicy/AttendanceLocation";
 import LeaveType from "./AttendancePolicy/LeaveType";
 import LeaveCategory from "./AttendancePolicy/LeaveCategory";
+import AddEmployeeShift from "./AttendancePolicy/AddEmployeeShift";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,13 +79,13 @@ const HomeStack = () => {
       {/*  */}
 
       <Stack.Screen name="Add Shift slot" component={AddShiftSlot} />
+      <Stack.Screen name="Assign Employee shift" component={AddEmployeeShift} />
       <Stack.Screen name="Attendance Policy" component={AttendancePolicy} />
       <Stack.Screen name="Edit Policy" component={EditPolicy} />
       <Stack.Screen name="Attendance Type" component={AttendanceType} />
       <Stack.Screen name="Attendance Location" component={AttendanceLocation} />
       <Stack.Screen name="Leave Type" component={LeaveType} />
       <Stack.Screen name="Leave category" component={LeaveCategory} />
-
 
     </Stack.Navigator>
   );

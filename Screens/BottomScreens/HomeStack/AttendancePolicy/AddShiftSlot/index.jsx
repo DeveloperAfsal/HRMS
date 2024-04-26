@@ -289,6 +289,7 @@ const AddShiftSlot = () => {
                     <Text style={styles.ShiftSlotText}>
                         Shift Slot
                     </Text>
+                    
                     <TextInput
                         value={shiftSlot}
                         onChangeText={(text) => setShiftSlot(text)}
