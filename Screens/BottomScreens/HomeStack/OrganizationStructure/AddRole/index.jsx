@@ -115,7 +115,7 @@ const AddRole = ({ navigation }) => {
         try {
 
             if (!nameError) {
-                setNameError('Role Name Required');
+                setNameError('Role Name Required ');
                 setLoad(false);
                 return;
             } else {
@@ -140,6 +140,9 @@ const AddRole = ({ navigation }) => {
                 navigation.navigate('Roles List');
                 setFields(initialFieldsState);
                 setRoleName('');
+            } else if (response.data.status === "error") {
+                setNameError(response.data.message);
+                setLoad(false);
             } else {
                 setLoad(false);
                 Alert.alert("Failed To Add");

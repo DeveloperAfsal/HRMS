@@ -3,10 +3,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Svg, { Path } from 'react-native-svg';
 import HomeScreen from "../HomeScreen/index";
-import LoginScreen from "../../Login/LoginScreen";
-import ForgotPassword from "../../Login/ForgotPass";
-import ResetPassword from "../../Login/ResetPass";
-import Otp from "../../Login/OtpScreen";
 import { White } from "../../../Assets/Colors";
 import AddShiftSlot from "./AttendancePolicy/AddShiftSlot";
 import LevelCategory from "./OrganizationStructure/EmployeeLevelCategory";
@@ -21,6 +17,7 @@ import AttendanceLocation from "./AttendancePolicy/AttendanceLocation";
 import LeaveType from "./AttendancePolicy/LeaveType";
 import LeaveCategory from "./AttendancePolicy/LeaveCategory";
 import AddEmployeeShift from "./AttendancePolicy/AddEmployeeShift";
+import EditEmployeeShift from "./AttendancePolicy/EditEmployeeShift";
 
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +77,7 @@ const HomeStack = () => {
 
       <Stack.Screen name="Add Shift slot" component={AddShiftSlot} />
       <Stack.Screen name="Assign Employee shift" component={AddEmployeeShift} />
+      <Stack.Screen name="Edit Employee shift" component={EditEmployeeShift} />
       <Stack.Screen name="Attendance Policy" component={AttendancePolicy} />
       <Stack.Screen name="Edit Policy" component={EditPolicy} />
       <Stack.Screen name="Attendance Type" component={AttendanceType} />

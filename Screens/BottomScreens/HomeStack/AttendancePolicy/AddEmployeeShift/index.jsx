@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Modal, Platform, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import EditIcon from "../../../../../Assets/Icons/Edit.svg";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg"
@@ -9,8 +9,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
 
-
-const AddEmployeeShift = () => {
+const AddEmployeeShift = ({ navigation }) => {
 
     // useRef
 
@@ -25,6 +24,7 @@ const AddEmployeeShift = () => {
     const [loadData, setLoadData] = useState(false);
     const [load, SetLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     const [shiftSlotList, setShiftSlotList] = useState([]);
     const [selectedShiftId, setSelectedShiftId] = useState(null);
@@ -42,34 +42,60 @@ const AddEmployeeShift = () => {
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
     const [statusError, setStatusError] = useState('');
 
+    const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
+    const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
+
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
-    const [selectedEmployee, setSelectedEmployee] = useState([]);
+
+    const handleToggleEmployee = (employeeName, employeeNameID) => {
+        if (selectedEmployees.includes(employeeName)) {
+            setSelectedEmployees(selectedEmployees.filter(selectedEmployee => selectedEmployee !== employeeName));
+            setSelectedEmployeesIds(selectedEmployeesIds.filter(id => id !== employeeNameID));
+        } else {
+            setSelectedEmployees([...selectedEmployees, employeeName]);
+            setSelectedEmployeesIds([...selectedEmployeesIds, employeeNameID]);
+        }
+    };
 
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
-    const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.map(id => parseInt(id, 10));
+    const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
-    const handleToggleDepartment = (departmentName, departmentId) => {
+    const handleToggleDepartment = async (departmentName, departmentId) => {
         if (selectedDepartments.includes(departmentName)) {
             setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
             setSelectedDepartmentIds(selectedDepartmentIds.filter(id => id !== departmentId));
+            // Clear selected employees when department is deselected
+            setSelectedEmployees([]);
         } else {
             setSelectedDepartments([...selectedDepartments, departmentName]);
             setSelectedDepartmentIds([...selectedDepartmentIds, departmentId]);
+            // Fetch employee dropdown when department is selected
+            setSelectedDepartmentIds(selectedDepartmentIds => {
+                const selectedIdsAsNumbers = selectedDepartmentIds.map(id => parseInt(id, 10));
+                fetchEmployeeDropdown(selectedIdsAsNumbers);
+                return selectedDepartmentIds;
+            });
         }
     };
 
     const [showWeekoff, setShowWeekoff] = useState(false);
     const [selectedDays, setSelectedDays] = useState([]);
+    const [selectedDaysIds, setSelectedDaysIds] = useState([]);
+    const selectedDaysIdsAsNumbers = selectedDaysIds.join(',');
 
-    const handleToggleDay = (day) => {
+
+    const handleToggleDay = (day, index) => {
         if (selectedDays.includes(day)) {
             setSelectedDays(selectedDays.filter(selectedDay => selectedDay !== day));
+            setSelectedDaysIds(selectedDaysIds.filter(id => id !== index));
         } else {
             setSelectedDays([...selectedDays, day]);
+            setSelectedDaysIds([...selectedDaysIds, index]);
         }
     };
 
@@ -215,7 +241,8 @@ const AddEmployeeShift = () => {
                 if (response.data.status === "success") {
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
-                    setDelData(false)
+                    setDelData(false);
+                    Alert.alert("Deleted", "Deleted Successfully");
                 } else {
                     Alert.alert("Failed", "Failed to delete shift slot");
                     setDelData(false)
@@ -248,6 +275,8 @@ const AddEmployeeShift = () => {
                 const responseData = response.data.data;
 
                 setDepartmentNameDropdown(responseData);
+
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -257,15 +286,141 @@ const AddEmployeeShift = () => {
 
     }, []);
 
+    // Api call for employeelist
+
+    const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
+
+        const apiUrl = `https://ocean21.in/api/public/api/employee_dropdown_list/${selectedDepartmentIdsAsNumbers}`;
+
+        try {
+
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+
+            setEmployeeDropdown(responseData);
+
+        } catch (error) {
+            console.error("Error fetching employee dropdown:", error);
+        }
+    };
+
+    // Date Formatter 
+
+    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+
+    // 
+
+    const Handlerefresh = () => {
+        setStartDate(new Date());
+        setEndDate(new Date());
+        setSelectedDepartments([]);
+        setSelectedEmployees([]);
+        setSelectedShift(null);
+        setSelectedDays([]);
+        setSelectedStatus("Selected Status");
+    }
+
+    // 
+
+    const mapNumberToWeekday = (numbers) => {
+        const numbersArray = numbers.split(',');
+        return numbersArray.map(number => {
+            switch (number) {
+                case '1':
+                    return 'Sunday';
+                case '2':
+                    return 'Monday';
+                case '3':
+                    return 'Tuesday';
+                case '4':
+                    return 'Wednesday';
+                case '5':
+                    return 'Thursday';
+                case '6':
+                    return 'Friday';
+                case '7':
+                    return 'Saturday';
+                default:
+                    return '';
+            }
+        }).join(', ');
+    };
+
+    console.log(
+
+    )
+
+    // Api call for Handle Submit
+
+    const HandleSubmit = async () => {
+
+        SetLoad(true);
+
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/employeeshiftinsert';
+
+            const response = await axios.post(apiUrl, {
+                department_id: selectedDepartmentIdsAsNumbers,
+                emp_id: selectedEmployeesIdsAsNumbers,
+                start_date: formattedStartDate,
+                end_date: formattedEndDate,
+                shift_slotid: selectedShiftId,
+                week_off: selectedDaysIdsAsNumbers,
+                shift_status: selectedStatus,
+                created_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                },
+            });
+
+            if (response.data.status === "success") {
+                fetchData();
+                SetLoad(false);
+                Handlerefresh();
+            } else {
+                Alert.alert("Failed To Add");
+                SetLoad(false);
+                console.error('Failed To Add:', response.data.error);
+            }
+
+        } catch (error) {
+            Alert.alert("Error during submit", "Check The Input Credentials");
+            console.error('Error during submit:', error);
+            SetLoad(false);
+        }
+
+    }
+
+    const handlenavigate = (item) => {
+        navigation.navigate('Edit Employee shift',
+            {
+                Id: item.id,
+                Slot: item.shift_slot,
+                SlotId: item.shift_slot_id,
+                DepartmentName: item.department_name,
+                DepartmentId: item.department_id,
+                Employee: item.first_name,
+                EmployeeId: item.emp_id,
+                WeekOffId: item.week_off,
+            })
+    }
 
     return (
 
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchData} />}>
 
             <View style={styles.PolicyContainer}>
 
                 <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Assign Employee Shift Form</Text>
+                    <Text style={styles.PolicyContainerTitleText}>Assign Employee Shift </Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>
@@ -309,10 +464,35 @@ const AddEmployeeShift = () => {
                         Employee Name
                     </Text>
 
-                    <TouchableOpacity style={styles.Input}>
-                        <Text>Select Employee Name</Text>
+                    <TouchableOpacity style={styles.Input} onPress={() => {
+                        setShowEmployeeDropdown(!showEmployeeDropdown);
+                    }}>
+                        <View style={styles.selectedDaysContainer}>
+                            {selectedEmployees.map(employee => (
+                                <Text key={employee} style={styles.selectedays}>{employee}</Text>
+                            ))}
+                            {selectedEmployees.length === 0 && <Text>Select Employees</Text>}
+                        </View>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
+
+                    {showEmployeeDropdown && (
+                        <View style={styles.dropdown}>
+                            {employeeDropdown.map((employee, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={[
+                                        styles.dropdownOption,
+                                        selectedEmployees.includes(employee.emp_name) && styles.selectedOption
+                                    ]}
+                                    onPress={() => handleToggleEmployee(employee.emp_name, employee.emp_id)}
+                                >
+                                    <Text style={styles.dropdownOptionText}>{employee.emp_name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
+
 
                     <Text style={styles.errorText}>
                         {selectedShiftError}
@@ -411,7 +591,7 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Sunday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Sunday')}
+                                onPress={() => handleToggleDay('Sunday', '1')}
                             >
                                 <Text style={styles.dropdownOptionText}>Sunday</Text>
                             </TouchableOpacity>
@@ -421,7 +601,7 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Monday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Monday')}>
+                                onPress={() => handleToggleDay('Monday', '2')}>
                                 <Text style={styles.dropdownOptionText}>Monday</Text>
                             </TouchableOpacity>
 
@@ -430,7 +610,7 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Tuesday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Tuesday')}>
+                                onPress={() => handleToggleDay('Tuesday', '3')}>
                                 <Text style={styles.dropdownOptionText}>Tuesday</Text>
                             </TouchableOpacity>
 
@@ -439,7 +619,7 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Wednesday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Wednesday')}>
+                                onPress={() => handleToggleDay('Wednesday', '4')}>
                                 <Text style={styles.dropdownOptionText}>Wednesday</Text>
                             </TouchableOpacity>
 
@@ -448,7 +628,7 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Thursday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Thursday')}>
+                                onPress={() => handleToggleDay('Thursday', '5')}>
                                 <Text style={styles.dropdownOptionText}>Thursday</Text>
                             </TouchableOpacity>
 
@@ -457,15 +637,16 @@ const AddEmployeeShift = () => {
                                     styles.dropdownOption,
                                     selectedDays.includes('Friday') && styles.selectedOption
                                 ]}
-                                onPress={() => handleToggleDay('Friday')}>
+                                onPress={() => handleToggleDay('Friday', '6')}>
                                 <Text style={styles.dropdownOptionText}>Friday</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[
-                                styles.dropdownOption,
-                                selectedDays.includes('Saturday') && styles.selectedOption
-                            ]}
-                                onPress={() => handleToggleDay('Saturday')}>
+                            <TouchableOpacity
+                                style={[
+                                    styles.dropdownOption,
+                                    selectedDays.includes('Saturday') && styles.selectedOption
+                                ]}
+                                onPress={() => handleToggleDay('Saturday', '7')}>
                                 <Text style={styles.dropdownOptionText}>Saturday</Text>
                             </TouchableOpacity>
 
@@ -511,7 +692,7 @@ const AddEmployeeShift = () => {
 
                     <View style={styles.buttonview}>
 
-                        <TouchableOpacity style={styles.submitbutton}>
+                        <TouchableOpacity style={styles.submitbutton} onPress={HandleSubmit}>
                             {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
@@ -521,7 +702,7 @@ const AddEmployeeShift = () => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={Handlerefresh}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
@@ -565,15 +746,15 @@ const AddEmployeeShift = () => {
                                     datalist.map((item, index) => (
                                         <View key={index} style={[styles.row]}>
                                             <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.shift_slot}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.department_name}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.first_name}</Text>
                                             <Text style={[styles.cell, styles.StartDate]}>{item.start_date}</Text>
                                             <Text style={[styles.cell, styles.EndDate]}>{item.end_date}</Text>
                                             <Text style={[styles.cell, styles.ShiftSlot]}>{item.shift_slot}</Text>
-                                            <Text style={[styles.cell, styles.WeekOff]}>{item.week_off}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{mapNumberToWeekday(item.week_off)}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
                                             <View style={[styles.listcontentButtonview]}>
-                                                <TouchableOpacity style={[styles.listcontenteditbutton]}>
+                                                <TouchableOpacity style={[styles.listcontenteditbutton]} onPress={() => handlenavigate(item)}>
                                                     <EditIcon width={14} height={14} color="#000" />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
@@ -634,7 +815,8 @@ const AddEmployeeShift = () => {
             </View>
 
         </ScrollView>
+
     )
 }
 
-export default AddEmployeeShift;
+export default AddEmployeeShift; 
