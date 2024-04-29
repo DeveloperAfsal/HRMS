@@ -352,10 +352,6 @@ const AddEmployeeShift = ({ navigation }) => {
         }).join(', ');
     };
 
-    console.log(
-
-    )
-
     // Api call for Handle Submit
 
     const HandleSubmit = async () => {

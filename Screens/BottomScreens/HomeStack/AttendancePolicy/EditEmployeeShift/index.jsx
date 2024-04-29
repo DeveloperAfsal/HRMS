@@ -148,6 +148,7 @@ const EditEmployeeShift = ({ navigation, route }) => {
 
     const HandleSubmit = async () => {
 
+        // console.log(selectedDaysIds.toString());
         SetLoad(true);
 
         try {
@@ -161,7 +162,7 @@ const EditEmployeeShift = ({ navigation, route }) => {
                 start_date: formattedStartDate,
                 end_date: formattedEndDate,
                 shift_slotid: selectedShiftId,
-                week_off: selectedDaysIdsAsNumbers,
+                week_off: selectedDaysIds.toString(),
                 shift_status: selectedStatus,
                 updated_by: data.userempid
             }, {
@@ -239,7 +240,8 @@ const EditEmployeeShift = ({ navigation, route }) => {
         setSelectedShiftId(SlotId);
         setSelectedDepartmentIds(DepartmentId);
         setSelectedEmployeesIds(EmployeeId);
-        setSelectedDaysIds(WeekOffId);
+        const WeekOffIds = WeekOffId.split(',');
+        setSelectedDaysIds(WeekOffIds);
 
         if (datalist) {
             setSelectedStatus(datalist.status);
