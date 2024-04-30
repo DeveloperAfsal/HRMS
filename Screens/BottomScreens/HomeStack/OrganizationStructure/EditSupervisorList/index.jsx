@@ -130,10 +130,11 @@ const EditSupervisorList = ({ navigation, route }) => {
         setSelectedStatus(st);
 
         if (datalist) {
-            // setSelectedDepartmentId(datalist.departmentrole_id);
-            // setSelectedNameId(datalist.supervisor_id)
+            setSelectedDepartmentId(datalist.departmentrole_id);
+            setSelectedNameId(datalist.supervisor_id);
         }
-    }, [])
+    }, [DepName, EmpName, st, datalist]); 
+
 
     console.log(
         selectedID,
