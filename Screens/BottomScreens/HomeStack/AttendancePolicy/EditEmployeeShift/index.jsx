@@ -55,7 +55,6 @@ const EditEmployeeShift = ({ navigation, route }) => {
     const [showWeekoff, setShowWeekoff] = useState(false);
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedDaysIds, setSelectedDaysIds] = useState([]);
-    console.log(selectedDaysIds,"selectedDaysIds")
 
     const handleToggleDay = (day, index) => {
         if (selectedDays.includes(day)) {
@@ -148,7 +147,6 @@ const EditEmployeeShift = ({ navigation, route }) => {
 
     const HandleSubmit = async () => {
 
-        // console.log(selectedDaysIds.toString());
         SetLoad(true);
 
         try {

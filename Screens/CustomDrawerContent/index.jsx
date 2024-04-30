@@ -302,6 +302,11 @@ const CustomDrawerContent = ({ navigation }) => {
                             onPress={() => navigation.navigate('Leave category')}
                         />
 
+                        <DrawerItem
+                            label="Leave Policy"
+                            onPress={() => navigation.navigate('Leave Policy')}
+                        />
+
                     </>
                 )}
 

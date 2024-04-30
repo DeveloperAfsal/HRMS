@@ -18,6 +18,10 @@ import LeaveType from "./AttendancePolicy/LeaveType";
 import LeaveCategory from "./AttendancePolicy/LeaveCategory";
 import AddEmployeeShift from "./AttendancePolicy/AddEmployeeShift";
 import EditEmployeeShift from "./AttendancePolicy/EditEmployeeShift";
+import SupervisorList from "./OrganizationStructure/SupervisorList";
+import LeavePolicy from "./AttendancePolicy/LeavePolicy";
+import EditSupervisorList from "./OrganizationStructure/EditSupervisorList";
+import EditLeavePolicy from "./AttendancePolicy/EditLeavePolicy";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +76,8 @@ const HomeStack = () => {
       <Stack.Screen name="Roles List" component={RoleList} />
       <Stack.Screen name="Employee Level Category" component={LevelCategory} />
       <Stack.Screen name="Employee Document Type" component={DocumentType} />
+      <Stack.Screen name="Supervisor List" component={SupervisorList} />
+      <Stack.Screen name="Edit Supervisor List" component={EditSupervisorList} />
 
       {/*  */}
 
@@ -84,6 +90,8 @@ const HomeStack = () => {
       <Stack.Screen name="Attendance Location" component={AttendanceLocation} />
       <Stack.Screen name="Leave Type" component={LeaveType} />
       <Stack.Screen name="Leave category" component={LeaveCategory} />
+      <Stack.Screen name="Leave Policy" component={LeavePolicy} />
+      <Stack.Screen name="Edit Leave Policy" component={EditLeavePolicy} />
 
     </Stack.Navigator>
   );

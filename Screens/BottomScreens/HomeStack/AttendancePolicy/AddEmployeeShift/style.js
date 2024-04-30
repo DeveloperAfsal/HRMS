@@ -468,8 +468,7 @@ const styles = StyleSheet.create({
         padding:7,
         borderRadius:7,
         color:'#fff',
-        fontWeight:'400',
-        
+        fontWeight:'400', 
     },
 
     selectedDaysContainer:{
