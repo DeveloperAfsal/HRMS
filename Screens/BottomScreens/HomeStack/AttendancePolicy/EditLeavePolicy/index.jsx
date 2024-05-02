@@ -1,20 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Modal, Platform, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
-import EditIcon from "../../../../../Assets/Icons/Edit.svg";
-import DeleteIcon from "../../../../../Assets/Icons/Delete.svg"
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useFocusEffect } from '@react-navigation/native';
 
 
 const EditLeavePolicy = ({ navigation, route }) => {
 
     // route
 
-    const { Id } = route.params;
+    const { Id, Name, Role, LeaveType, StartDate, EndDate, LeaveCount, MonthlyCount } = route.params;
 
     // data from redux store 
 
@@ -22,19 +19,17 @@ const EditLeavePolicy = ({ navigation, route }) => {
 
     // 
 
-    const [datalist, setDatalist] = useState([]);
     const [selectedID, setSelectedID] = useState();
-    const [selectedShiftError, setSelectedShiftError] = useState('');
-    console.log(datalist, "datalist")
 
     // 
 
     const [Leavecount, setLeavecount] = useState();
     const [Monthlycount, setMonthlycount] = useState();
+    const [LeavecountError, setLeavecountError] = useState('');
+    const [MonthlycountError, setMonthlycountError] = useState('');
 
     // 
 
-    const [loadData, setLoadData] = useState(false);
     const [load, setLoad] = useState(false);
 
     // handleDateChange
@@ -67,94 +62,15 @@ const EditLeavePolicy = ({ navigation, route }) => {
         setShowDatePicker1(true);
     };
 
-    // 
-
     // Date Formatter 
 
     const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
     const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
 
-    // 
-
-    const fetchData = async () => {
-        setLoadData(true)
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/view_leavepolicy';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-            setLoadData(false)
-            const responseData = response.data.data;
-            setDatalist(responseData);
-        } catch (error) {
-            setLoadData(false)
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            fetchData();
-        }, [])
-    );
-
     // Api call for userrolelist
 
-    const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
-    const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
-
-    const handleToggleDepartment = (departmentName, departmentId) => {
-        if (selectedDepartments.includes(departmentName)) {
-
-            // If department is already selected, remove it from the selected list
-            setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
-            setSelectedDepartmentIds(selectedDepartmentIds.filter(id => id !== departmentId));
-
-            // Clear selected employees when department is deselected
-            // setSelectedEmployees([]);
-
-        } else {
-
-            // If department is not selected, add it to the selected list
-            setSelectedDepartments([...selectedDepartments, departmentName]);
-            setSelectedDepartmentIds([...selectedDepartmentIds, departmentId]);
-
-            // Fetch employee dropdown when department is selected
-            const selectedIdsAsNumbers = selectedDepartmentIds.map(id => parseInt(id, 10));
-            fetchEmployeeDropdown([...selectedIdsAsNumbers, departmentId]);
-        }
-    };
-
-    useEffect(() => {
-
-        const apiUrl = 'https://ocean21.in/api/public/api/userrolelist';
-
-        const fetchData = async () => {
-
-            try {
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-
-                const responseData = response.data.data;
-
-                setDepartmentNameDropdown(responseData);
-
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-
-    }, []);
 
     // Leave Type
 
@@ -201,59 +117,32 @@ const EditLeavePolicy = ({ navigation, route }) => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
 
-    const [employeeDropdown, setEmployeeDropdown] = useState([]);
-    const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
-
-    const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
-
-        const apiUrl = `https://ocean21.in/api/public/api/employee_dropdown_list/${selectedDepartmentIdsAsNumbers}`;
-
-        try {
-
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-
-            const responseData = response.data.data;
-
-            setEmployeeDropdown(responseData);
-
-        } catch (error) {
-            console.error("Error fetching employee dropdown:", error);
-        }
-    };
-
-    const handleToggleEmployee = (employeeName, employeeNameID) => {
-        if (selectedEmployees.includes(employeeName)) {
-            setSelectedEmployees(selectedEmployees.filter(selectedEmployee => selectedEmployee !== employeeName));
-            setSelectedEmployeesIds(selectedEmployeesIds.filter(id => id !== employeeNameID));
-        } else {
-            setSelectedEmployees([...selectedEmployees, employeeName]);
-            setSelectedEmployeesIds([...selectedEmployeesIds, employeeNameID]);
-        }
-    };
-
-    const Handlerefresh = () => {
-        setStartDate(new Date());
-        setEndDate(new Date());
-        // setSelectedleaveType('Select Leave Type');
-        // setSelectedDepartments('Select Role');
-        // setSelectedEmployees('Select Employees');
-        setLeavecount('');
-        setMonthlycount('');
-    }
-
     const HandleSubmit = async () => {
 
         setLoad(true);
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/addleave_policy';
+            if (!Leavecount) {
+                setLeavecountError('Enter Leave Count');
+                setLoad(false);
+                return;
+            } else {
+                setLeavecountError('');
+            }
 
-            const response = await axios.post(apiUrl, {
+            if (!Monthlycount) {
+                setMonthlycountError('Enter Monthly Leave Count');
+                setLoad(false);
+                return;
+            } else {
+                setMonthlycountError('');
+            }
+
+            const apiUrl = 'https://ocean21.in/api/public/api/update_leavepolicy';
+
+            const response = await axios.put(apiUrl, {
+                id: selectedID,
                 start_date: formattedStartDate,
                 end_date: formattedEndDate,
                 role_type: selectedDepartmentIds.toString(),
@@ -261,7 +150,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
                 leave_type: selectedleaveTypeId,
                 leave_count: Leavecount,
                 monthly_count: Monthlycount,
-                created_by: data.userempid
+                updated_by: data.userempid
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -269,9 +158,8 @@ const EditLeavePolicy = ({ navigation, route }) => {
             });
 
             if (response.data.status === "success") {
-                fetchData();
                 setLoad(false);
-                Handlerefresh();
+                navigation.navigate('Leave Policy')
             } else {
                 setLoad(false);
                 Alert.alert('Failed To Add:', response.data.message);
@@ -302,7 +190,9 @@ const EditLeavePolicy = ({ navigation, route }) => {
                 const responseData = response.data.data;
 
                 if (responseData) {
-                    setDatalist(responseData);
+                    setSelectedEmployeesIds(responseData.emp_id);
+                    setSelectedDepartmentIds([responseData.role_type]);
+                    setSelectedleaveTypeId(responseData.leave_type);
                     setSelectedID(responseData.id);
                 }
 
@@ -315,6 +205,18 @@ const EditLeavePolicy = ({ navigation, route }) => {
 
     }, [Id]);
 
+    useEffect(() => {
+        setSelectedleaveType(LeaveType);
+        setSelectedDepartments([Role]);
+        setSelectedEmployees([Name]);
+        setMonthlycount(MonthlyCount);
+        setLeavecount(LeaveCount);
+        const startDateObj = new Date(StartDate);
+        const endDateObj = new Date(EndDate);
+        setStartDate(startDateObj);
+        setEndDate(endDateObj);
+    }, [LeaveType, Role, Name, MonthlyCount, LeaveCount, StartDate, EndDate])
+
 
     return (
         <ScrollView>
@@ -326,6 +228,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
                 </View>
 
                 <View style={styles.Inputcontainer}>
+
                     <Text style={styles.StatDateText}>
                         Start Date
                     </Text>
@@ -388,70 +291,31 @@ const EditLeavePolicy = ({ navigation, route }) => {
                         </View>
                     )}
 
-
                     <Text style={styles.StatDateText}>
                         Role
                     </Text>
 
-                    <TouchableOpacity style={styles.Input} onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}>
+                    <View style={styles.Input}>
                         <View style={styles.selectedDaysContainer}>
                             {selectedDepartments.map(day => (
                                 <Text key={day} style={styles.selectedays}>{day}</Text>
                             ))}
                             {selectedDepartments.length === 0 && <Text>Select Role</Text>}
                         </View>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-                    </TouchableOpacity>
-
-                    {showDepartmentNameDropdown && (
-                        <View style={styles.dropdown}>
-                            {departmentNameDropdown.map((department, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedDepartments.includes(department.role_name) && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleToggleDepartment(department.role_name, department.id)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{department.role_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
+                    </View>
 
                     <Text style={styles.StatDateText}>
                         Select Employee
                     </Text>
 
-                    <TouchableOpacity style={styles.Input} onPress={() => {
-                        setShowEmployeeDropdown(!showEmployeeDropdown);
-                    }}>
+                    <View style={styles.Input}>
                         <View style={styles.selectedDaysContainer}>
                             {selectedEmployees.map(employee => (
                                 <Text key={employee} style={styles.selectedays}>{employee}</Text>
                             ))}
                             {selectedEmployees.length === 0 && <Text>Select Employees</Text>}
                         </View>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-                    </TouchableOpacity>
-
-                    {showEmployeeDropdown && (
-                        <View style={styles.dropdown}>
-                            {employeeDropdown.map((employee, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedEmployees.includes(employee.emp_name) && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleToggleEmployee(employee.emp_name, employee.emp_id)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{employee.emp_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
+                    </View>
 
                     <Text style={styles.StatDateText}>
                         Total Leave Count
@@ -464,6 +328,10 @@ const EditLeavePolicy = ({ navigation, route }) => {
                         style={styles.TextInput}
                     />
 
+                    <Text style={styles.errorText}>
+                        {LeavecountError}
+                    </Text>
+
                     <Text style={styles.StatDateText}>
                         Monthly Leave Count
                     </Text>
@@ -474,6 +342,10 @@ const EditLeavePolicy = ({ navigation, route }) => {
                         onChangeText={(text) => setMonthlycount(text)}
                         style={styles.TextInput}
                     />
+
+                    <Text style={styles.errorText}>
+                        {MonthlycountError}
+                    </Text>
 
                     <View style={styles.buttonview}>
 
@@ -487,7 +359,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton} onPress={Handlerefresh}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={() => navigation.navigate('Leave Policy')}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>

@@ -25,6 +25,8 @@ const LeavePolicy = ({ navigation }) => {
 
     const [Leavecount, setLeavecount] = useState();
     const [Monthlycount, setMonthlycount] = useState();
+    const [LeavecountError, setLeavecountError] = useState('');
+    const [MonthlycountError, setMonthlycountError] = useState('');
 
     // 
 
@@ -100,6 +102,7 @@ const LeavePolicy = ({ navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
+    const [RoleError, setRoleError] = useState('');
 
     const handleToggleDepartment = (departmentName, departmentId) => {
         if (selectedDepartments.includes(departmentName)) {
@@ -156,6 +159,7 @@ const LeavePolicy = ({ navigation }) => {
     const [selectedleaveType, setSelectedleaveType] = useState(null);
     const [selectedleaveTypeId, setSelectedleaveTypeId] = useState(null);
     const [showleaveTypeDropdown, setShowleaveTypeDropdown] = useState(false);
+    const [leaveTypeError, setLeaveTypeError] = useState('');
 
     useEffect(() => {
 
@@ -194,7 +198,7 @@ const LeavePolicy = ({ navigation }) => {
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
-
+    const [EmployeeError, setEmployeeError] = useState('');
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
 
@@ -232,11 +236,15 @@ const LeavePolicy = ({ navigation }) => {
     const Handlerefresh = () => {
         setStartDate(new Date());
         setEndDate(new Date());
-        // setSelectedleaveType('Select Leave Type');
-        // setSelectedDepartments('Select Role');
-        // setSelectedEmployees('Select Employees');
+        setSelectedleaveType('Select Leave Type');
+        setSelectedDepartments([]);
+        setSelectedEmployees([]);
         setLeavecount('');
         setMonthlycount('');
+        setRoleError('');
+        setLeaveTypeError('');
+        setLeavecountError('');
+        setMonthlycountError('');
     }
 
     const HandleSubmit = async () => {
@@ -244,6 +252,46 @@ const LeavePolicy = ({ navigation }) => {
         setLoad(true);
 
         try {
+
+            if (!selectedleaveType) {
+                setLeaveTypeError('Select Leave Type');
+                setLoad(false);
+                return;
+            } else {
+                setLeaveTypeError('')
+            }
+
+            if (!selectedDepartments.length) {
+                setRoleError('Select Role');
+                setLoad(false);
+                return;
+            } else {
+                setRoleError('');
+            }
+
+            if (!selectedEmployees.length) {
+                setEmployeeError('Select Employee');
+                setLoad(false);
+                return;
+            } else {
+                setEmployeeError('');
+            }
+
+            if (!Leavecount) {
+                setLeavecountError('Enter Leave Count');
+                setLoad(false);
+                return;
+            } else {
+                setLeavecountError('');
+            }
+
+            if (!Monthlycount) {
+                setMonthlycountError('Enter Monthly Leave Count');
+                setLoad(false);
+                return;
+            } else {
+                setMonthlycountError('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/addleave_policy';
 
@@ -348,7 +396,14 @@ const LeavePolicy = ({ navigation }) => {
 
     const handlenavigate = (item) => {
         navigation.navigate('Edit Leave Policy', {
-            Id:item.id
+            Id: item.id,
+            Name: item.first_name,
+            Role: item.role_name,
+            LeaveType: item.category_name,
+            StartDate: item.start_date,
+            EndDate: item.end_date,
+            LeaveCount: item.leave_count,
+            MonthlyCount: item.monthly_count,
         })
     }
 
@@ -424,6 +479,9 @@ const LeavePolicy = ({ navigation }) => {
                         </View>
                     )}
 
+                    <Text style={styles.errorText}>
+                        {leaveTypeError}
+                    </Text>
 
                     <Text style={styles.StatDateText}>
                         Role
@@ -455,6 +513,10 @@ const LeavePolicy = ({ navigation }) => {
                             ))}
                         </View>
                     )}
+
+                    <Text style={styles.errorText}>
+                        {RoleError}
+                    </Text>
 
                     <Text style={styles.StatDateText}>
                         Select Employee
@@ -489,6 +551,10 @@ const LeavePolicy = ({ navigation }) => {
                         </View>
                     )}
 
+                    <Text style={styles.errorText}>
+                        {EmployeeError}
+                    </Text>
+
                     <Text style={styles.StatDateText}>
                         Total Leave Count
                     </Text>
@@ -500,6 +566,10 @@ const LeavePolicy = ({ navigation }) => {
                         style={styles.TextInput}
                     />
 
+                    <Text style={styles.errorText}>
+                        {LeavecountError}
+                    </Text>
+
                     <Text style={styles.StatDateText}>
                         Monthly Leave Count
                     </Text>
@@ -510,6 +580,10 @@ const LeavePolicy = ({ navigation }) => {
                         onChangeText={(text) => setMonthlycount(text)}
                         style={styles.TextInput}
                     />
+
+                    <Text style={styles.errorText}>
+                        {MonthlycountError}
+                    </Text>
 
                     <View style={styles.buttonview}>
 

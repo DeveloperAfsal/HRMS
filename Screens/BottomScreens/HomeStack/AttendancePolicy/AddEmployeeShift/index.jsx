@@ -26,6 +26,7 @@ const AddEmployeeShift = ({ navigation }) => {
     const [datalist, setDatalist] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
+    const [slotError, setSlotError] = useState('');
     const [shiftSlotList, setShiftSlotList] = useState([]);
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
@@ -41,7 +42,7 @@ const AddEmployeeShift = ({ navigation }) => {
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
     const [statusError, setStatusError] = useState('');
-
+    const [EmployeeError, setEmployeeError] = useState('');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
@@ -69,8 +70,10 @@ const AddEmployeeShift = ({ navigation }) => {
         if (selectedDepartments.includes(departmentName)) {
             setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
             setSelectedDepartmentIds(selectedDepartmentIds.filter(id => id !== departmentId));
+            
             // Clear selected employees when department is deselected
             setSelectedEmployees([]);
+
         } else {
             setSelectedDepartments([...selectedDepartments, departmentName]);
             setSelectedDepartmentIds([...selectedDepartmentIds, departmentId]);
@@ -83,6 +86,7 @@ const AddEmployeeShift = ({ navigation }) => {
         }
     };
 
+    const [WeekoffError, setWeekoffError] = useState('');
     const [showWeekoff, setShowWeekoff] = useState(false);
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedDaysIds, setSelectedDaysIds] = useState([]);
@@ -324,6 +328,11 @@ const AddEmployeeShift = ({ navigation }) => {
         setSelectedShift(null);
         setSelectedDays([]);
         setSelectedStatus("Selected Status");
+        setStatusError('');
+        setWeekoffError('');
+        setSlotError('');
+        setEmployeeError('');
+        setSelectedShiftError('');
     }
 
     // 
@@ -359,6 +368,47 @@ const AddEmployeeShift = ({ navigation }) => {
         SetLoad(true);
 
         try {
+
+            if (!selectedDepartments.length) {
+                setSelectedShiftError('Select Department Name');
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedShiftError('');
+            }
+
+            if (!selectedEmployees.length) {
+                setEmployeeError('Select Employee Name');
+                SetLoad(false);
+                return;
+            } else {
+                setEmployeeError('');
+            }
+
+            if (!selectedShift) {
+                setSlotError('Select Shift Slot');
+                SetLoad(false);
+                return;
+            } else {
+                setSlotError('');
+            }
+
+            if (!selectedDays.length) {
+                setWeekoffError('Week off Required');
+                SetLoad(false)
+                return;
+            } else {
+                setWeekoffError('');
+            }
+
+            if (!selectedStatus) {
+                setStatusError('Status Require');
+                SetLoad(false)
+                return;
+            } else {
+                setStatusError('')
+            }
+
 
             const apiUrl = 'https://ocean21.in/api/public/api/employeeshiftinsert';
 
@@ -489,10 +539,10 @@ const AddEmployeeShift = ({ navigation }) => {
                         </View>
                     )}
 
-
                     <Text style={styles.errorText}>
-                        {selectedShiftError}
+                        {EmployeeError}
                     </Text>
+
 
                     <Text style={styles.StatDateText}>
                         Start Date
@@ -512,9 +562,7 @@ const AddEmployeeShift = ({ navigation }) => {
                         )}
                     </View>
 
-                    <Text style={styles.errorText}>
-                        {selectedShiftError}
-                    </Text>
+
 
                     <Text style={styles.StatDateText}>
                         End Date
@@ -533,10 +581,6 @@ const AddEmployeeShift = ({ navigation }) => {
                             />
                         )}
                     </View>
-
-                    <Text style={styles.errorText}>
-                        {selectedShiftError}
-                    </Text>
 
                     <Text style={styles.TimeSlotText}>
                         Shift Slot
@@ -562,7 +606,7 @@ const AddEmployeeShift = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedShiftError}
+                        {slotError}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -650,7 +694,7 @@ const AddEmployeeShift = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedShiftError}
+                        {WeekoffError}
                     </Text>
 
                     <Text style={styles.TimeSlotText}>

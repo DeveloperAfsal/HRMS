@@ -30,6 +30,8 @@ const EditEmployeeShift = ({ navigation, route }) => {
 
     // states
 
+    const [WeekoffError, setWeekoffError] = useState('');
+
     const [load, SetLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [selectedID, setSelectedID] = useState();
@@ -150,6 +152,14 @@ const EditEmployeeShift = ({ navigation, route }) => {
         SetLoad(true);
 
         try {
+
+            if (!selectedDays.length) {
+                setWeekoffError('Week off Required');
+                SetLoad(false)
+                return;
+            } else {
+                setWeekoffError('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/update_employeeshift';
 
@@ -459,7 +469,7 @@ const EditEmployeeShift = ({ navigation, route }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedShiftError}
+                        {WeekoffError}
                     </Text>
 
                     <Text style={styles.TimeSlotText}>

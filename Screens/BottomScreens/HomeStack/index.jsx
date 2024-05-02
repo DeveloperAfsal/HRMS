@@ -22,6 +22,7 @@ import SupervisorList from "./OrganizationStructure/SupervisorList";
 import LeavePolicy from "./AttendancePolicy/LeavePolicy";
 import EditSupervisorList from "./OrganizationStructure/EditSupervisorList";
 import EditLeavePolicy from "./AttendancePolicy/EditLeavePolicy";
+import AddEmployee from "./Employee/AddEmployee";
 
 const Stack = createNativeStackNavigator();
 
@@ -92,6 +93,10 @@ const HomeStack = () => {
       <Stack.Screen name="Leave category" component={LeaveCategory} />
       <Stack.Screen name="Leave Policy" component={LeavePolicy} />
       <Stack.Screen name="Edit Leave Policy" component={EditLeavePolicy} />
+
+      {/*  */}
+
+      <Stack.Screen name="Add Employee" component={AddEmployee} />
 
     </Stack.Navigator>
   );
