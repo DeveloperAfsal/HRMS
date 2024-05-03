@@ -23,6 +23,11 @@ import LeavePolicy from "./AttendancePolicy/LeavePolicy";
 import EditSupervisorList from "./OrganizationStructure/EditSupervisorList";
 import EditLeavePolicy from "./AttendancePolicy/EditLeavePolicy";
 import AddEmployee from "./Employee/AddEmployee";
+import EmployeeDetails from "./Employee/AddEmployee/EmployeeDetails";
+import BasicDetails from "./Employee/AddEmployee/BasicDetails";
+import EmployeeRole from "./Employee/AddEmployee/EmployeeRole";
+import BankDetails from "./Employee/AddEmployee/BankDetails";
+import Documents from "./Employee/AddEmployee/Documents";
 
 const Stack = createNativeStackNavigator();
 
