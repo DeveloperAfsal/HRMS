@@ -345,6 +345,30 @@ const styles = StyleSheet.create({
         lineHeight: 19.95,
         color: 'grey',
     },
+
+    // 
+
+    imageContainer: {
+        marginRight: 5,
+        marginTop: 5,
+        position: 'relative',
+    },
+
+    image: {
+        width: 200,
+        height: 200,
+        marginBottom: 5,
+    },
+
+    deleteButton: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        borderRadius: 20,
+        padding: 5,
+        zIndex: 1,
+        backgroundColor: "#fff"
+    },
 })
 
 export default styles;

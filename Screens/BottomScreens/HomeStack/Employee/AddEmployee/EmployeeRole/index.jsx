@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
@@ -26,6 +26,11 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     const [selectedShift, setSelectedShift] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedShiftError, setSelectedShiftError] = useState('');
+
+    const [supervisorDropdown, setSupervisorDropdown] = useState([]);
+    const [selectedSupervisor, setSelectedSupervisor] = useState(null);
+    const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
+    const [showSupervisorDropdown, setShowSupervisorDropdown] = useState(false);
 
     useEffect(() => {
 
@@ -56,7 +61,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
     const handleSelectDepartment = (departmentName) => {
         setSelectedDepartment(departmentName.role_name);
-        setSelectedDepartmentId(departmentName.id)
+        setSelectedDepartmentId(departmentName.id);
+        fetchSupervisorDropdown(departmentName.id);
         setShowDepartmentNameDropdown(false);
     };
 
@@ -89,6 +95,68 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
         setSelectedShift(shift.shift_slot);
         setSelectedShiftId(shift.id);
         setShowDropdown(false);
+    };
+
+    // Api call for supervisor list
+
+    const selectSupervisor = (shift) => {
+        setSelectedSupervisor(shift.supervisor_name);
+        setSelectedSupervisorId(shift.id);
+        setShowSupervisorDropdown(false);
+    };
+
+    const fetchSupervisorDropdown = async (index) => {
+
+        const apiUrl = `https://ocean21.in/api/public/api/supervisor_list/${index}`;
+
+        console.log(apiUrl, "apiUrl")
+
+        try {
+
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            console.log(responseData, "responseData")
+
+            setSupervisorDropdown(responseData);
+
+        } catch (error) {
+            console.error("Error fetching employee dropdown:", error);
+        }
+    };
+
+    // 
+
+    const [showPunch, setShowPunch] = useState(false);
+    const [selectedPunch, setSelectedPunch] = useState(null);
+    const [selectedPunchId, setSelectedPunchId] = useState(null);
+
+    const toggleDropdownPucnh = () => {
+        setShowPunch(!showPunch);
+    };
+
+    const selectPunch = (Punch, index) => {
+        setSelectedPunch(Punch);
+        setSelectedPunchId(index);
+        setShowPunch(false);
+    };
+
+    // 
+
+    const [showOvertime, setShowOvertime] = useState(false);
+    const [selectedOvertime, setSelectedOvertime] = useState(null);
+
+    const toggleDropdownOvertime = () => {
+        setShowOvertime(!showOvertime);
+    };
+
+    const selectOvertime = (Overtime) => {
+        setSelectedOvertime(Overtime);
+        setShowOvertime(false);
     };
 
 
@@ -134,9 +202,26 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 Select Supervisor
             </Text>
 
-            <TextInput
-                style={styles.input}
-            />
+            <TouchableOpacity style={styles.Input} onPress={() => {
+                setShowSupervisorDropdown(!showSupervisorDropdown);
+            }}>
+                <Text style={styles.selectedays}>{selectedSupervisor ? selectedSupervisor : 'Select Supervisor'}</Text>
+                <DropdownIcon width={14} height={14} color={"#000"} />
+            </TouchableOpacity>
+
+            {
+                showSupervisorDropdown && (
+                    <View style={styles.dropdown}>
+                        {supervisorDropdown.map((shift, index) => (
+
+                            <TouchableOpacity key={index} onPress={() => selectSupervisor(shift)} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>{shift.supervisor_name}</Text>
+                            </TouchableOpacity>
+
+                        ))}
+                    </View>
+                )
+            }
 
             <Text style={styles.subHeading}>
                 Shift Role
@@ -180,16 +265,64 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 Check-in / Check-out
             </Text>
 
-            <TextInput
-                style={styles.input}
-            />
+            <TouchableOpacity onPress={toggleDropdownPucnh} style={styles.StatusTouchable}>
+
+                <Text style={styles.StatusTouchableText}>{selectedPunch || "Selected Field"}</Text>
+                <DropdownIcon width={14} height={14} color={"#000"} />
+
+            </TouchableOpacity>
+
+            {showPunch && (
+
+                <View style={styles.dropdown}>
+
+                    <TouchableOpacity onPress={() => selectPunch("Check-in", "1")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Check-in</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => selectPunch("Check-out", "2")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Check-out</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => selectPunch("Both", "3")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Both</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => selectPunch("None", "4")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>None</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+            )}
+
             <Text style={styles.subHeading}>
                 Overtime
             </Text>
 
-            <TextInput
-                style={styles.input}
-            />
+            <TouchableOpacity onPress={toggleDropdownOvertime} style={styles.StatusTouchable}>
+
+                <Text style={styles.StatusTouchableText}>{selectedOvertime || "Selected Field"}</Text>
+                <DropdownIcon width={14} height={14} color={"#000"} />
+
+            </TouchableOpacity>
+
+            {showOvertime && (
+
+                <View style={styles.dropdown}>
+
+                    <TouchableOpacity onPress={() => selectOvertime("Applicable")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Applicable</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => selectOvertime("NA")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>NA</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+            )}
+
 
             <Text style={styles.subHeading}>
                 Late Allowed
