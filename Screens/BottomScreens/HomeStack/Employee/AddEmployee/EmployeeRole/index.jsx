@@ -5,13 +5,25 @@ import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
+
+    const dispatch = useDispatch();
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
+    const { Employee } = useSelector((state) => state.Employee);
+
+    const updateEmployeeFields = (updatedFields) => ({
+        type: 'UPDATE_EMPLOYEE_FIELDS',
+        payload: updatedFields
+    });
+
+    const handleFieldsChange = (fieldName, value) => {
+        dispatch(updateEmployeeFields({ [fieldName]: value }));
+    };
 
     // Api call for userrolelist
 
@@ -60,9 +72,11 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     }, []);
 
     const handleSelectDepartment = (departmentName) => {
-        setSelectedDepartment(departmentName.role_name);
-        setSelectedDepartmentId(departmentName.id);
+        // setSelectedDepartment(departmentName.role_name);
+        // setSelectedDepartmentId(departmentName.id);
         fetchSupervisorDropdown(departmentName.id);
+        handleFieldsChange('userRole', departmentName.role_name);
+        handleFieldsChange('selectedRoleId', departmentName.id);
         setShowDepartmentNameDropdown(false);
     };
 
@@ -92,16 +106,20 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     };
 
     const selectShift = (shift) => {
-        setSelectedShift(shift.shift_slot);
-        setSelectedShiftId(shift.id);
+        // setSelectedShift(shift.shift_slot);
+        // setSelectedShiftId(shift.id);
+        handleFieldsChange('shiftRole', shift.shift_slot);
+        handleFieldsChange('selectedshiftRoleId', shift.id);
         setShowDropdown(false);
     };
 
     // Api call for supervisor list
 
     const selectSupervisor = (shift) => {
-        setSelectedSupervisor(shift.supervisor_name);
-        setSelectedSupervisorId(shift.id);
+        // setSelectedSupervisor(shift.supervisor_name);
+        // setSelectedSupervisorId(shift.id);
+        handleFieldsChange('supervisor', shift.supervisor_name);
+        handleFieldsChange('selectedsupervisorId', shift.id);
         setShowSupervisorDropdown(false);
     };
 
@@ -140,9 +158,11 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     };
 
     const selectPunch = (Punch, index) => {
-        setSelectedPunch(Punch);
-        setSelectedPunchId(index);
+        // setSelectedPunch(Punch);
+        // setSelectedPunchId(index);
         setShowPunch(false);
+        handleFieldsChange('checkinCheckout', Punch);
+        handleFieldsChange('checkinCheckoutId', index);
     };
 
     // 
@@ -155,7 +175,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     };
 
     const selectOvertime = (Overtime) => {
-        setSelectedOvertime(Overtime);
+        // setSelectedOvertime(Overtime);
+        handleFieldsChange('overtime', Overtime);
         setShowOvertime(false);
     };
 
@@ -169,7 +190,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             </Text>
 
             <TouchableOpacity style={styles.Input} onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}>
-                <Text style={styles.selectedays}>{selectedDepartment ? selectedDepartment : 'Select Department Name'}</Text>
+                <Text style={styles.StatusTouchableText}>
+                    {Employee.userRole && Employee.userRole.length > 0 ? Employee.userRole : "Select userRole"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
             </TouchableOpacity>
 
@@ -196,6 +219,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.designation}
+                onChangeText={(text) => handleFieldsChange('designation', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -205,7 +230,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             <TouchableOpacity style={styles.Input} onPress={() => {
                 setShowSupervisorDropdown(!showSupervisorDropdown);
             }}>
-                <Text style={styles.selectedays}>{selectedSupervisor ? selectedSupervisor : 'Select Supervisor'}</Text>
+                <Text style={styles.selectedays}>
+                    {Employee.supervisor && Employee.supervisor.length > 0 ? Employee.supervisor : "Select supervisor"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
             </TouchableOpacity>
 
@@ -229,7 +256,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
 
-                <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
+                <Text style={styles.TimeSlotTouchableText}>
+                    {Employee.shiftRole && Employee.shiftRole.length > 0 ? Employee.shiftRole : "Select Shift"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -252,6 +281,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.officialEmail}
+                onChangeText={(text) => handleFieldsChange('officialEmail', text)}
             />
             <Text style={styles.subHeading}>
                 Password
@@ -259,6 +290,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.password}
+                onChangeText={(text) => handleFieldsChange('password', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -267,7 +300,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownPucnh} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedPunch || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>
+                    {Employee.checkinCheckout && Employee.checkinCheckout.length > 0 ? Employee.checkinCheckout : "Selected Field"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -302,7 +337,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownOvertime} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedOvertime || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>
+                    {Employee.overtime && Employee.overtime.length > 0 ? Employee.overtime : "Select Field"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -330,6 +367,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.lateAllowed}
+                onChangeText={(text) => handleFieldsChange('lateAllowed', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -338,6 +377,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.permissionAllowed}
+                onChangeText={(text) => handleFieldsChange('permissionAllowed', text)}
             />
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>

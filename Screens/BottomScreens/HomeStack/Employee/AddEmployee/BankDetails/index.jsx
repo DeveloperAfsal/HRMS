@@ -4,8 +4,22 @@ import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
+import { useDispatch, useSelector } from "react-redux";
 
 const BankDetails = ({ onDetails, onprevEmpRole }) => {
+
+    const dispatch = useDispatch();
+
+    const { Employee } = useSelector((state) => state.Employee);
+
+    const updateEmployeeFields = (updatedFields) => ({
+        type: 'UPDATE_EMPLOYEE_FIELDS',
+        payload: updatedFields
+    });
+
+    const handleFieldsChange = (fieldName, value) => {
+        dispatch(updateEmployeeFields({ [fieldName]: value }));
+    };
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState(null);
@@ -15,7 +29,8 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
     };
 
     const selectStatus = (status) => {
-        setSelectedStatus(status);
+        // setSelectedStatus(status);
+        handleFieldsChange('accountType', status);
         setShowDropdown(false);
     };
 
@@ -33,6 +48,8 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.bankAccountNumber}
+                onChangeText={(text) => handleFieldsChange('bankAccountNumber', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -41,6 +58,8 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.bankName}
+                onChangeText={(text) => handleFieldsChange('bankName', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -49,6 +68,8 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.bankBranch}
+                onChangeText={(text) => handleFieldsChange('bankBranch', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -57,6 +78,8 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.ifscCode}
+                onChangeText={(text) => handleFieldsChange('ifscCode', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -65,7 +88,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
 
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Account Type"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.accountType || "Selected Account Type"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>

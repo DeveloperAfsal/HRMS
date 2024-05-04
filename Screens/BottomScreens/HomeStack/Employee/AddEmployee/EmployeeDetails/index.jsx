@@ -5,13 +5,25 @@ import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
+
+    const dispatch = useDispatch();
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
+    const { Employee } = useSelector((state) => state.Employee);
+
+    const updateEmployeeFields = (updatedFields) => ({
+        type: 'UPDATE_EMPLOYEE_FIELDS',
+        payload: updatedFields
+    });
+
+    const handleFieldsChange = (fieldName, value) => {
+        dispatch(updateEmployeeFields({ [fieldName]: value }));
+    };
 
     // States
 
@@ -42,8 +54,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     }, []);
 
     const selectCategory = (File) => {
-        setSelectedCategory(File.employee_category);
-        setSelectedCategoryId(File.id);
+        // setSelectedCategory(File.employee_category);
+        // setSelectedCategoryId(File.id);
+        handleFieldsChange('employeeCategory', File.employee_category);
+        handleFieldsChange('selectedemployeeCategory', File.id);
         setShowDropdown(false);
     };
 
@@ -61,8 +75,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     };
 
     const selectPF = (PF) => {
-        setSelectedPF(PF);
+        // setSelectedPF(PF);
         setShowPF(false);
+        handleFieldsChange('providentFund', PF);
     };
 
     // 
@@ -75,8 +90,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     };
 
     const selectESI = (ESI) => {
-        setSelectedESI(ESI);
+        // setSelectedESI(ESI);
         setShowESI(false);
+        handleFieldsChange('esi', ESI);
     };
 
     return (
@@ -93,7 +109,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedCategory ? selectedCategory : "Selected Category Type"}</Text>
+                <Text style={styles.StatusTouchableText}>
+                    {Employee.employeeCategory && Employee.employeeCategory.length > 0 ? Employee.employeeCategory : "Selected Category Type"}
+                </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -116,6 +134,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.dateOfJoining}
+                onChangeText={(text) => handleFieldsChange('dateOfJoining', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -124,6 +144,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.probationPeriod}
+                onChangeText={(text) => handleFieldsChange('probationPeriod', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -132,6 +154,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.confirmationDate}
+                onChangeText={(text) => handleFieldsChange('confirmationDate', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -140,6 +164,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.employeeAgreementPeriod}
+                onChangeText={(text) => handleFieldsChange('employeeAgreementPeriod', text)}
             />
             <Text style={styles.subHeading}>
                 Notice Period
@@ -147,6 +173,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.noticePeriod}
+                onChangeText={(text) => handleFieldsChange('noticePeriod', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -155,6 +183,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.ctc}
+                onChangeText={(text) => handleFieldsChange('ctc', text)}
             />
             <Text style={styles.subHeading}>
                 Gross Salary
@@ -162,6 +192,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.grossSalary}
+                onChangeText={(text) => handleFieldsChange('grossSalary', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -170,6 +202,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.netSalary}
+                onChangeText={(text) => handleFieldsChange('netSalary', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -178,6 +212,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.lastWorkingDay}
+                onChangeText={(text) => handleFieldsChange('lastWorkingDay', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -186,7 +222,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownPF} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedPF || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.providentFund || "Selected Field"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -209,7 +245,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
 
             {
-                selectedPF === "Applicable" ?
+                Employee.providentFund === "Applicable" ?
                     <>
                         <Text style={styles.subHeading}>
                             UAN Number
@@ -217,6 +253,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.uanNumber}
+                            onChangeText={(text) => handleFieldsChange('uanNumber', text)}
                         />
 
                         <Text style={styles.subHeading}>
@@ -225,6 +263,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.employeePfContribution}
+                            onChangeText={(text) => handleFieldsChange('employeePfContribution', text)}
                         />
 
                         <Text style={styles.subHeading}>
@@ -233,6 +273,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.employerPfContribution}
+                            onChangeText={(text) => handleFieldsChange('employerPfContribution', text)}
                         />
                     </>
                     : null
@@ -246,7 +288,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownESI} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedESI || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.esi || "Selected Field"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -268,7 +310,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             )}
 
             {
-                selectedESI === "Applicable" ?
+                Employee.esi === "Applicable" ?
                     <>
                         <Text style={styles.subHeading}>
                             ESI Number
@@ -276,6 +318,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.esiNumber}
+                            onChangeText={(text) => handleFieldsChange('esiNumber', text)}
                         />
 
                         <Text style={styles.subHeading}>
@@ -284,6 +328,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.employeeEsiContribution}
+                            onChangeText={(text) => handleFieldsChange('employeeEsiContribution', text)}
                         />
 
                         <Text style={styles.subHeading}>
@@ -292,6 +338,8 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
                         <TextInput
                             style={styles.input}
+                            value={Employee.employerEsiContribution}
+                            onChangeText={(text) => handleFieldsChange('employerEsiContribution', text)}
                         />
                     </>
                     : null

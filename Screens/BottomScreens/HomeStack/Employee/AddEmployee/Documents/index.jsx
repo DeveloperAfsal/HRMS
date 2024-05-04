@@ -163,7 +163,7 @@ const Documents = ({ onprevBankDetails }) => {
             <View style={styles.fullWidth}>
                 <TouchableOpacity style={styles.NextButton} onPress={addDocument}>
                     <Text style={styles.NextButtonText}>
-                        Upload
+                        ADD
                     </Text>
                     <ArrowRightIcon width={14} height={14} color={'#fff'} />
                 </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, View, TouchableOpacity, ScrollView, Image } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
@@ -6,9 +6,27 @@ import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DeleteIcon from "../../../../../../Assets/Icons/Delete.svg";
 import { launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 
 const BasicDetails = ({ onEmpDetails }) => {
+
+    const dispatch = useDispatch();
+
+    // Employee from redux store 
+
+    const { data } = useSelector((state) => state.login);
+    const { Employee } = useSelector((state) => state.Employee);
+
+    const updateEmployeeFields = (updatedFields) => ({
+        type: 'UPDATE_EMPLOYEE_FIELDS',
+        payload: updatedFields
+    });
+
+    const handleFieldsChange = (fieldName, value) => {
+        dispatch(updateEmployeeFields({ [fieldName]: value }));
+    };
 
     // Select Gender
 
@@ -20,8 +38,9 @@ const BasicDetails = ({ onEmpDetails }) => {
     };
 
     const selectGender = (Gender) => {
-        setSelectedGender(Gender);
+        // setSelectedGender(Gender);
         setShowGender(false);
+        handleFieldsChange('gender', Gender);
     };
 
     // Select Status
@@ -34,8 +53,9 @@ const BasicDetails = ({ onEmpDetails }) => {
     };
 
     const selectStatus = (Status) => {
-        setSelectedStatus(Status);
+        // setSelectedStatus(Status);
         setShowStatus(false);
+        handleFieldsChange('status', Status);
     };
 
     // Select Martial Status
@@ -48,8 +68,9 @@ const BasicDetails = ({ onEmpDetails }) => {
     };
 
     const selectMstatus = (Mstatus) => {
-        setSelectedMstatus(Mstatus);
+        // setSelectedMstatus(Mstatus);
         setShowMstatus(false);
+        handleFieldsChange('maritalStatus', Mstatus);
     };
 
     // Select Image
@@ -81,37 +102,83 @@ const BasicDetails = ({ onEmpDetails }) => {
             for (const image of images) {
                 const compressedUri = await compressImage(image);
                 setSelectedImage((prevImages) => [...prevImages, { uri: compressedUri }]);
+                handleFieldsChange('employeePicture', compressedUri);
             }
         }
     };
 
-    const deleteImage = (uri) => {
-        setSelectedImage((prevImages) => {
-            const updatedImages = prevImages.filter((image) => image.uri !== uri);
-            return updatedImages;
-        });
-    };
+    // const deleteImage = (uri) => {
+    //     setSelectedImage((prevImages) => {
+    //         const updatedImages = prevImages.filter((image) => image.uri !== uri);
+    //         return updatedImages;
+    //     });
+    // };
+
+    const handleDeleteEmployeePicture = () => {
+        dispatch(updateEmployeeFields({ employeePicture: null }));
+    }
 
     const renderSelectedImage = () => {
         return (
+
+            // <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContainer}>
+            //     <View style={styles.container}>
+            //         {selectedImage.map((image, index) => (
+            //             <View key={index} style={styles.imageContainer}>
+            //                 <TouchableOpacity onPress={() => deleteImage(image.uri)} style={styles.deleteButton}>
+            //                     <DeleteIcon width={15} height={15} />
+            //                 </TouchableOpacity>
+            //                 <Image source={{ uri: image.uri }} style={styles.image} />
+            //             </View>
+            //         ))}
+            //     </View>
+            // </ScrollView>
+
             <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContainer}>
                 <View style={styles.container}>
-                    {selectedImage.map((image, index) => (
-                        <View key={index} style={styles.imageContainer}>
-                            <TouchableOpacity onPress={() => deleteImage(image.uri)} style={styles.deleteButton}>
+                    {Employee.employeePicture && (
+                        <View style={styles.imageContainer}>
+                            <TouchableOpacity onPress={() => handleDeleteEmployeePicture()} style={styles.deleteButton}>
                                 <DeleteIcon width={15} height={15} />
                             </TouchableOpacity>
-                            <Image source={{ uri: image.uri }} style={styles.image} />
+                            <Image source={{ uri: Employee.employeePicture }} style={styles.image} />
                         </View>
-                    ))}
+                    )}
                 </View>
             </ScrollView>
+
         );
     };
 
     const handleFromGallery = () => {
         launchImageLibrary({ mediaType: 'photo', selectionLimit: 1 }, handleImagePickerResult);
     };
+
+    // 
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            try {
+                const apiUrl = 'https://ocean21.in/api/public/api/employee_uid';
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+                const responseData = response.data.data;
+
+                dispatch(updateEmployeeFields({ 'employeeId': responseData }));
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+
+    }, [])
 
     return (
 
@@ -128,6 +195,7 @@ const BasicDetails = ({ onEmpDetails }) => {
             <TextInput
                 style={styles.input}
                 editable={false}
+                value={Employee.employeeId}
             />
 
             <Text style={styles.subHeading}>
@@ -154,6 +222,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.firstName}
+                onChangeText={(text) => handleFieldsChange('firstName', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -162,6 +232,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.lastName}
+                onChangeText={(text) => handleFieldsChange('lastName', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -170,7 +242,7 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownGender} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedGender || "Selected Gender"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.gender || "Selected Gender"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -201,7 +273,7 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownStatus} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.status || "Selected Status"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -228,6 +300,9 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.phoneNumber}
+                onChangeText={(text) => handleFieldsChange('phoneNumber', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.subHeading}>
@@ -236,13 +311,19 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.whatsappNumber}
+                onChangeText={(text) => handleFieldsChange('whatsappNumber', text)}
+                keyboardType="number-pad"
             />
+
             <Text style={styles.subHeading}>
                 Email ID
             </Text>
 
             <TextInput
                 style={styles.input}
+                value={Employee.email}
+                onChangeText={(text) => handleFieldsChange('email', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -251,6 +332,9 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.dob}
+                onChangeText={(text) => handleFieldsChange('dob', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.subHeading}>
@@ -259,6 +343,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.currentAddress}
+                onChangeText={(text) => handleFieldsChange('currentAddress', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -267,6 +353,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.permanentAddress}
+                onChangeText={(text) => handleFieldsChange('permanentAddress', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -275,6 +363,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.parentName}
+                onChangeText={(text) => handleFieldsChange('parentName', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -283,7 +373,7 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TouchableOpacity onPress={toggleDropdownMstatus} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{selectedMstatus || "Selected Martial status"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.maritalStatus || "Selected Martial status"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -314,6 +404,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.spouseName}
+                onChangeText={(text) => handleFieldsChange('spouseName', text)}
             />
 
             <Text style={styles.subHeading}>
@@ -322,6 +414,9 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.aadharNumber}
+                onChangeText={(text) => handleFieldsChange('aadharNumber', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.subHeading}>
@@ -330,6 +425,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
             <TextInput
                 style={styles.input}
+                value={Employee.panNumber}
+                onChangeText={(text) => handleFieldsChange('panNumber', text)}
             />
 
             <View style={styles.fullWidth}>
