@@ -1,6 +1,6 @@
 const initialState = {
     Employee: {
-        
+
         employeeId: '',
         employeePicture: null,
         firstName: '',
@@ -39,14 +39,13 @@ const initialState = {
         employeeEsiContribution: '',
         employerEsiContribution: '',
 
-
         userRole: [],
         selectedRoleId: '',
         designation: '',
         supervisor: [],
         selectedsupervisorId: '',
-        shiftRole: [],
-        selectedshiftRoleId: '',
+        // shiftRole: [],
+        // selectedshiftRoleId: '',
         officialEmail: '',
         password: '',
         checkinCheckout: '',
@@ -62,8 +61,11 @@ const initialState = {
         accountType: '',
 
         documentType: '',
+        documentTypeId: '',
         documentName: '',
-        selectedFile: null
+        selectedFile: null,
+
+        documents: [],
     }
 };
 
@@ -75,18 +77,16 @@ const AddEmployeeReducer = (state = initialState, action) => {
                 ...state,
                 Employee: action.payload
             };
-            case 'UPDATE_EMPLOYEE_FIELDS':
-                return {
-                    ...state,
-                    Employee: {
-                        ...state.Employee,
-                        ...action.payload 
-                    }
-                };
-        case 'REMOVE_EMPLOYEE':
+        case 'UPDATE_EMPLOYEE_FIELDS':
             return {
-                Employee: null
+                ...state,
+                Employee: {
+                    ...state.Employee,
+                    ...action.payload
+                }
             };
+        case 'REMOVE_EMPLOYEE':
+            return initialState;
         default:
             return state;
     }

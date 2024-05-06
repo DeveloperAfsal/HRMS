@@ -56,12 +56,12 @@ const AddEmployee = () => {
 
                     <View style={styles.HeaderButtonView}>
 
-                        <View
+                        <TouchableOpacity
                             style={
                                 activeComponent === 'BasicDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BasicDetails')}
+                            onPress={() => renderComponent('BasicDetails')}
                         >
                             <Text
                                 style={
@@ -71,14 +71,14 @@ const AddEmployee = () => {
                             >
                                 1 . Basic Details
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                             style={
                                 activeComponent === 'EmployeeDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeDetails')}
+                            onPress={() => renderComponent('EmployeeDetails')}
                         >
                             <Text
                                 style={
@@ -88,14 +88,14 @@ const AddEmployee = () => {
                             >
                                 2 . Employee Details
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                             style={
                                 activeComponent === 'EmployeeRole' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeRole')}
+                            onPress={() => renderComponent('EmployeeRole')}
                         >
                             <Text
                                 style={
@@ -105,14 +105,14 @@ const AddEmployee = () => {
                             >
                                 3 . Employee Role
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                             style={
                                 activeComponent === 'BankDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BankDetails')}
+                            onPress={() => renderComponent('BankDetails')}
                         >
                             <Text
                                 style={
@@ -122,14 +122,14 @@ const AddEmployee = () => {
                             >
                                 4 . Bank Details
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                             style={
                                 activeComponent === 'Documents' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('Documents')}
+                            onPress={() => renderComponent('Documents')}
                         >
                             <Text
                                 style={
@@ -139,7 +139,7 @@ const AddEmployee = () => {
                             >
                                 5 . Documents
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
                     </View>
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, Platform } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -95,6 +96,67 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
         handleFieldsChange('esi', ESI);
     };
 
+    // 
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [selectedDateDoj, setSelectedDateDoj] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setSelectedDateDoj(date);
+        }
+        const formattedDoj = `${selectedDateDoj.getFullYear()}-${selectedDateDoj.getMonth() + 1}-${selectedDateDoj.getDate()}`;
+        handleFieldsChange('dateOfJoining', formattedDoj);
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const formattedDoj = Employee.dateOfJoining ? new Date(Employee.dateOfJoining).toDateString() : selectedDateDoj.toDateString();
+
+    // 
+
+    const [showDatePickerConfirm, setShowDatePickerConfirm] = useState(false);
+    const [selectedConfirmDate, setSelectedConfirmDate] = useState(new Date());
+
+    const handleConfirmDateChange = (event, date) => {
+        if (date !== undefined) {
+            setSelectedConfirmDate(date);
+        }
+        const formattedConfirmDate = `${selectedConfirmDate.getFullYear()}-${selectedConfirmDate.getMonth() + 1}-${selectedConfirmDate.getDate()}`;
+        handleFieldsChange('confirmationDate', formattedConfirmDate);
+        setShowDatePickerConfirm(Platform.OS === 'ios');
+    };
+
+    const showConfirmDatepicker = () => {
+        setShowDatePickerConfirm(true);
+    };
+
+    const formattedConfirm = Employee.confirmationDate ? new Date(Employee.confirmationDate).toDateString() : selectedConfirmDate.toDateString();
+
+    // 
+
+
+    const [showDatePickerLWD, setShowDatePickerLWD] = useState(false);
+    const [selectedLWDDate, setSelectedLWDDate] = useState(new Date());
+
+    const handleLWDDateChange = (event, date) => {
+        if (date !== undefined) {
+            setSelectedLWDDate(date);
+        }
+        const formattedLWDDate = `${selectedLWDDate.getFullYear()}-${selectedLWDDate.getMonth() + 1}-${selectedLWDDate.getDate()}`;
+        handleFieldsChange('lastWorkingDay', formattedLWDDate);
+        setShowDatePickerLWD(Platform.OS === 'ios');
+    };
+
+    const showLWDDatepicker = () => {
+        setShowDatePickerLWD(true);
+    };
+
+    const formattedLWD = Employee.lastWorkingDay ? new Date(Employee.lastWorkingDay).toDateString() : selectedLWDDate.toDateString();
+
     return (
 
         <View style={styles.InputContainer}>
@@ -132,11 +194,27 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 Date Of Joining
             </Text>
 
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
+                keyboardType="numeric"
                 value={Employee.dateOfJoining}
                 onChangeText={(text) => handleFieldsChange('dateOfJoining', text)}
-            />
+            /> */}
+
+            <View style={styles.inputs}>
+                <Text onPress={showDatepicker}>
+                    {formattedDoj}
+                </Text>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={selectedDateDoj}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
+                    />
+                )}
+            </View>
+
 
             <Text style={styles.subHeading}>
                 Probation Period
@@ -152,11 +230,26 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 Confirmation Date
             </Text>
 
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
+                keyboardType="numeric"
                 value={Employee.confirmationDate}
                 onChangeText={(text) => handleFieldsChange('confirmationDate', text)}
-            />
+            /> */}
+
+            <View style={styles.inputs}>
+                <Text onPress={showConfirmDatepicker}>
+                    {formattedConfirm}
+                </Text>
+                {showDatePickerConfirm && (
+                    <DateTimePicker
+                        value={selectedConfirmDate}
+                        mode="date"
+                        display="default"
+                        onChange={handleConfirmDateChange}
+                    />
+                )}
+            </View>
 
             <Text style={styles.subHeading}>
                 Employee Agreement Period
@@ -210,11 +303,25 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 Last Working Day
             </Text>
 
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
                 value={Employee.lastWorkingDay}
                 onChangeText={(text) => handleFieldsChange('lastWorkingDay', text)}
-            />
+            /> */}
+
+            <View style={styles.inputs}>
+                <Text onPress={showLWDDatepicker}>
+                    {formattedLWD}
+                </Text>
+                {showDatePickerLWD && (
+                    <DateTimePicker
+                        value={selectedLWDDate}
+                        mode="date"
+                        display="default"
+                        onChange={handleLWDDateChange}
+                    />
+                )}
+            </View>
 
             <Text style={styles.subHeading}>
                 PF

@@ -113,6 +113,16 @@ const styles = StyleSheet.create({
         paddingLeft: "5%",
     },
 
+    inputs:{
+        borderWidth: 1,
+        borderColor: '#515151',
+        borderRadius: 7,
+        width: '90%',
+        paddingLeft: "5%",
+        height:50,
+        justifyContent:'center'
+    },
+
     fullWidth: {
         width: '100%',
         paddingHorizontal: '5%'

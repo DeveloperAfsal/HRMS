@@ -105,6 +105,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                         <Text style={styles.dropdownOptionText}>Current</Text>
                     </TouchableOpacity>
 
+                    <TouchableOpacity onPress={() => selectStatus("Salary")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Salary</Text>
+                    </TouchableOpacity>
+
                 </View>
 
             )}

@@ -82,36 +82,36 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
     // Api call for shift slot dropdown
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const apiUrl = 'https://ocean21.in/api/public/api/shiftslotlist';
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-                const responseData = response.data.data;
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const apiUrl = 'https://ocean21.in/api/public/api/shiftslotlist';
+    //             const response = await axios.get(apiUrl, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${data.token}`
+    //                 }
+    //             });
+    //             const responseData = response.data.data;
 
-                setShiftSlotList(responseData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchData();
-    }, []);
+    //             setShiftSlotList(responseData);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
+    // const toggleDropdown = () => {
+    //     setShowDropdown(!showDropdown);
+    // };
 
-    const selectShift = (shift) => {
-        // setSelectedShift(shift.shift_slot);
-        // setSelectedShiftId(shift.id);
-        handleFieldsChange('shiftRole', shift.shift_slot);
-        handleFieldsChange('selectedshiftRoleId', shift.id);
-        setShowDropdown(false);
-    };
+    // const selectShift = (shift) => {
+    //     // setSelectedShift(shift.shift_slot);
+    //     // setSelectedShiftId(shift.id);
+    //     handleFieldsChange('shiftRole', shift.shift_slot);
+    //     handleFieldsChange('selectedshiftRoleId', shift.id);
+    //     setShowDropdown(false);
+    // };
 
     // Api call for supervisor list
 
@@ -126,8 +126,6 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     const fetchSupervisorDropdown = async (index) => {
 
         const apiUrl = `https://ocean21.in/api/public/api/supervisor_list/${index}`;
-
-        console.log(apiUrl, "apiUrl")
 
         try {
 
@@ -250,7 +248,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 )
             }
 
-            <Text style={styles.subHeading}>
+            {/* <Text style={styles.subHeading}>
                 Shift Role
             </Text>
 
@@ -273,7 +271,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
                     ))}
                 </View>
-            )}
+            )} */}
 
             <Text style={styles.subHeading}>
                 Official Email ID

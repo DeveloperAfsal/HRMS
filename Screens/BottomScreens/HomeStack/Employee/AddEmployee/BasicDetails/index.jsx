@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, ScrollView, Image, Platform } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
@@ -7,6 +7,7 @@ import DeleteIcon from "../../../../../../Assets/Icons/Delete.svg";
 import { launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch, useSelector } from "react-redux";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 
 
@@ -18,6 +19,8 @@ const BasicDetails = ({ onEmpDetails }) => {
 
     const { data } = useSelector((state) => state.login);
     const { Employee } = useSelector((state) => state.Employee);
+
+    console.log(Employee.dob, "dob");
 
     const updateEmployeeFields = (updatedFields) => ({
         type: 'UPDATE_EMPLOYEE_FIELDS',
@@ -180,6 +183,27 @@ const BasicDetails = ({ onEmpDetails }) => {
 
     }, [])
 
+    // handleDateChange
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setSelectedDate(date);
+        }
+        const formattedStartDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
+        handleFieldsChange('dob', formattedStartDate);
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const formattedDOB = Employee.dob ? new Date(Employee.dob).toDateString() : selectedDate.toDateString();
+
+
     return (
 
         <View style={styles.InputContainer}>
@@ -330,12 +354,26 @@ const BasicDetails = ({ onEmpDetails }) => {
                 Date Of Birth
             </Text>
 
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
                 value={Employee.dob}
                 onChangeText={(text) => handleFieldsChange('dob', text)}
                 keyboardType="number-pad"
-            />
+            /> */}
+
+            <View style={styles.inputs}>
+                <Text onPress={showDatepicker}>
+                    {formattedDOB}
+                </Text>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={selectedDate}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
+                    />
+                )}
+            </View>
 
             <Text style={styles.subHeading}>
                 Current Address
