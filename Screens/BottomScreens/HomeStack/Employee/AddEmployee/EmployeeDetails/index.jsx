@@ -30,8 +30,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [categoryList, setCategoryList] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
     // Api call for Category
 
@@ -55,8 +53,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     }, []);
 
     const selectCategory = (File) => {
-        // setSelectedCategory(File.employee_category);
-        // setSelectedCategoryId(File.id);
         handleFieldsChange('employeeCategory', File.employee_category);
         handleFieldsChange('selectedemployeeCategory', File.id);
         setShowDropdown(false);
@@ -69,14 +65,12 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     // 
 
     const [showPF, setShowPF] = useState(false);
-    const [selectedPF, setSelectedPF] = useState(null);
 
     const toggleDropdownPF = () => {
         setShowPF(!showPF);
     };
 
     const selectPF = (PF) => {
-        // setSelectedPF(PF);
         setShowPF(false);
         handleFieldsChange('providentFund', PF);
     };
@@ -84,14 +78,12 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     // 
 
     const [showESI, setShowESI] = useState(false);
-    const [selectedESI, setSelectedESI] = useState(null);
 
     const toggleDropdownESI = () => {
         setShowESI(!showESI);
     };
 
     const selectESI = (ESI) => {
-        // setSelectedESI(ESI);
         setShowESI(false);
         handleFieldsChange('esi', ESI);
     };
@@ -137,7 +129,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
     const formattedConfirm = Employee.confirmationDate ? new Date(Employee.confirmationDate).toDateString() : selectedConfirmDate.toDateString();
 
     // 
-
 
     const [showDatePickerLWD, setShowDatePickerLWD] = useState(false);
     const [selectedLWDDate, setSelectedLWDDate] = useState(new Date());
@@ -194,13 +185,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 Date Of Joining
             </Text>
 
-            {/* <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                value={Employee.dateOfJoining}
-                onChangeText={(text) => handleFieldsChange('dateOfJoining', text)}
-            /> */}
-
             <View style={styles.inputs}>
                 <Text onPress={showDatepicker}>
                     {formattedDoj}
@@ -229,13 +213,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             <Text style={styles.subHeading}>
                 Confirmation Date
             </Text>
-
-            {/* <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                value={Employee.confirmationDate}
-                onChangeText={(text) => handleFieldsChange('confirmationDate', text)}
-            /> */}
 
             <View style={styles.inputs}>
                 <Text onPress={showConfirmDatepicker}>
@@ -303,12 +280,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 Last Working Day
             </Text>
 
-            {/* <TextInput
-                style={styles.input}
-                value={Employee.lastWorkingDay}
-                onChangeText={(text) => handleFieldsChange('lastWorkingDay', text)}
-            /> */}
-
             <View style={styles.inputs}>
                 <Text onPress={showLWDDatepicker}>
                     {formattedLWD}
@@ -350,7 +321,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             )}
 
-
             {
                 Employee.providentFund === "Applicable" ?
                     <>
@@ -386,8 +356,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                     </>
                     : null
             }
-
-
 
             <Text style={styles.subHeading}>
                 ESI

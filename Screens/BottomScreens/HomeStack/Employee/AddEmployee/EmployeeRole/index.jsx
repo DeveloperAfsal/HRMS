@@ -29,19 +29,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
-    const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
 
-    const [slotError, setSlotError] = useState('');
-    const [shiftSlotList, setShiftSlotList] = useState([]);
-    const [selectedShiftId, setSelectedShiftId] = useState(null);
-    const [selectedShift, setSelectedShift] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedShiftError, setSelectedShiftError] = useState('');
-
     const [supervisorDropdown, setSupervisorDropdown] = useState([]);
-    const [selectedSupervisor, setSelectedSupervisor] = useState(null);
-    const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
     const [showSupervisorDropdown, setShowSupervisorDropdown] = useState(false);
 
     useEffect(() => {
@@ -72,52 +62,15 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     }, []);
 
     const handleSelectDepartment = (departmentName) => {
-        // setSelectedDepartment(departmentName.role_name);
-        // setSelectedDepartmentId(departmentName.id);
         fetchSupervisorDropdown(departmentName.id);
         handleFieldsChange('userRole', departmentName.role_name);
         handleFieldsChange('selectedRoleId', departmentName.id);
         setShowDepartmentNameDropdown(false);
     };
 
-    // Api call for shift slot dropdown
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const apiUrl = 'https://ocean21.in/api/public/api/shiftslotlist';
-    //             const response = await axios.get(apiUrl, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${data.token}`
-    //                 }
-    //             });
-    //             const responseData = response.data.data;
-
-    //             setShiftSlotList(responseData);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
-
-    // const toggleDropdown = () => {
-    //     setShowDropdown(!showDropdown);
-    // };
-
-    // const selectShift = (shift) => {
-    //     // setSelectedShift(shift.shift_slot);
-    //     // setSelectedShiftId(shift.id);
-    //     handleFieldsChange('shiftRole', shift.shift_slot);
-    //     handleFieldsChange('selectedshiftRoleId', shift.id);
-    //     setShowDropdown(false);
-    // };
-
     // Api call for supervisor list
 
     const selectSupervisor = (shift) => {
-        // setSelectedSupervisor(shift.supervisor_name);
-        // setSelectedSupervisorId(shift.id);
         handleFieldsChange('supervisor', shift.supervisor_name);
         handleFieldsChange('selectedsupervisorId', shift.id);
         setShowSupervisorDropdown(false);
@@ -148,16 +101,12 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     // 
 
     const [showPunch, setShowPunch] = useState(false);
-    const [selectedPunch, setSelectedPunch] = useState(null);
-    const [selectedPunchId, setSelectedPunchId] = useState(null);
 
     const toggleDropdownPucnh = () => {
         setShowPunch(!showPunch);
     };
 
     const selectPunch = (Punch, index) => {
-        // setSelectedPunch(Punch);
-        // setSelectedPunchId(index);
         setShowPunch(false);
         handleFieldsChange('checkinCheckout', Punch);
         handleFieldsChange('checkinCheckoutId', index);
@@ -166,14 +115,12 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
     // 
 
     const [showOvertime, setShowOvertime] = useState(false);
-    const [selectedOvertime, setSelectedOvertime] = useState(null);
 
     const toggleDropdownOvertime = () => {
         setShowOvertime(!showOvertime);
     };
 
     const selectOvertime = (Overtime) => {
-        // setSelectedOvertime(Overtime);
         handleFieldsChange('overtime', Overtime);
         setShowOvertime(false);
     };
@@ -248,31 +195,6 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 )
             }
 
-            {/* <Text style={styles.subHeading}>
-                Shift Role
-            </Text>
-
-            <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
-
-                <Text style={styles.TimeSlotTouchableText}>
-                    {Employee.shiftRole && Employee.shiftRole.length > 0 ? Employee.shiftRole : "Select Shift"}
-                </Text>
-                <DropdownIcon width={14} height={14} color={"#000"} />
-
-            </TouchableOpacity>
-
-            {showDropdown && (
-                <View style={styles.dropdown}>
-                    {shiftSlotList.map((shift, index) => (
-
-                        <TouchableOpacity key={index} onPress={() => selectShift(shift)} style={styles.dropdownOption}>
-                            <Text style={styles.dropdownOptionText}>{shift.shift_slot}</Text>
-                        </TouchableOpacity>
-
-                    ))}
-                </View>
-            )} */}
-
             <Text style={styles.subHeading}>
                 Official Email ID
             </Text>
@@ -313,15 +235,11 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                         <Text style={styles.dropdownOptionText}>Check-in</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => selectPunch("Check-out", "2")} style={styles.dropdownOption}>
-                        <Text style={styles.dropdownOptionText}>Check-out</Text>
+                    <TouchableOpacity onPress={() => selectPunch("Check-in/Check-out", "2")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Check-in/Check-out</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => selectPunch("Both", "3")} style={styles.dropdownOption}>
-                        <Text style={styles.dropdownOptionText}>Both</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => selectPunch("None", "4")} style={styles.dropdownOption}>
+                    <TouchableOpacity onPress={() => selectPunch("None", "3")} style={styles.dropdownOption}>
                         <Text style={styles.dropdownOptionText}>None</Text>
                     </TouchableOpacity>
 

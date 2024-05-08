@@ -9,7 +9,20 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import DocumentPicker from 'react-native-document-picker';
 
-const Documents = ({ onprevBankDetails }) => {
+const Documents = ({
+    onprevBankDetails,
+    selectedImage,
+    setSelectedImage,
+    documentFile,
+    documentName,
+    documentType,
+    setDocumentType,
+    setDocumentName,
+    setDocumentFile,
+    setDocuments,
+    documents,
+    navigation
+}) => {
 
     const dispatch = useDispatch();
 
@@ -17,71 +30,6 @@ const Documents = ({ onprevBankDetails }) => {
 
     const { data } = useSelector((state) => state.login);
     const { Employee } = useSelector((state) => state.Employee);
-
-    console.log(
-        'employee_id:', Employee.employeeId,
-        'emp_profile:', Employee.employeePicture,
-        'first_name:', Employee.firstName,
-        'last_name:', Employee.lastName,
-        'gender:', Employee.gender,
-        'status:', Employee.status,
-        'mobile_number:', Employee.phoneNumber,
-        'whatsapp_number:', Employee.whatsappNumber,
-        'email_id:', Employee.email,
-        'date_of_birth:', Employee.dob,
-        'current_address:', Employee.currentAddress,
-        'permanent_address:', Employee.permanentAddress,
-        'parent_gardian_name:', Employee.parentName,
-        'marital_status:', Employee.maritalStatus,
-        'spouse_name:', Employee.spouseName,
-        'aadhar_no:', Employee.aadharNumber,
-        'pan_no:', Employee.panNumber,
-
-        'employee_category:', Employee.employeeCategory,
-        'selectedemployeeCategory:', Employee.selectedemployeeCategory,
-        'doj:', Employee.dateOfJoining,
-        'probation_period:', Employee.probationPeriod,
-        'confiramation_date:', Employee.confirmationDate,
-        'employee_agree_period:', Employee.employeeAgreementPeriod,
-        'notice_period:', Employee.noticePeriod,
-        'ctc:', Employee.ctc,
-        'gross_salary:', Employee.grossSalary,
-        'net_salary:', Employee.netSalary,
-        'last_working_day:', Employee.lastWorkingDay,
-        'emp_pf:', Employee.providentFund,
-        'uan_number:', Employee.uanNumber,
-        'employee_pf_contribution:', Employee.employeePfContribution,
-        'employeer_pf_contribution:', Employee.employerPfContribution,
-        'emp_esi:', Employee.esi,
-        'esi_number:', Employee.esiNumber,
-        'employee_esi_contribution:', Employee.employeeEsiContribution,
-        'employeer_esi_contribution:', Employee.employerEsiContribution,
-
-        'role:', Employee.userRole,
-        'selectedRoleId:', Employee.selectedRoleId,
-        'designation:', Employee.designation,
-        'supervisor:', Employee.supervisor,
-        'selectedsupervisorId:', Employee.selectedsupervisorId,
-        'official_email:', Employee.officialEmail,
-        'password:', Employee.password,
-        'emp_punch:', Employee.checkinCheckoutId,
-        'ot_status:', Employee.overtime,
-        'late_policy:', Employee.lateAllowed,
-        'permission_policy:', Employee.permissionAllowed,
-
-        'account_number:', Employee.bankAccountNumber,
-        'bank_name:', Employee.bankName,
-        'branch_name:', Employee.bankBranch,
-        'ifsc_code:', Employee.ifscCode,
-        'account_type:', Employee.accountType,
-
-        'emp_document_type:', Employee.documentType,
-        'emp_document_name:', Employee.documentName,
-        'emp_document_image:', Employee.selectedFile,
-        'created_by:', data.userrole,
-
-        'documents:', Employee.documents,
-    )
 
     const updateEmployeeFields = (updatedFields) => ({
         type: 'UPDATE_EMPLOYEE_FIELDS',
@@ -92,14 +40,15 @@ const Documents = ({ onprevBankDetails }) => {
         type: 'REMOVE_EMPLOYEE'
     });
 
-    const handleFieldsChange = (fieldName, value) => {
-        dispatch(updateEmployeeFields({ [fieldName]: value }));
-    };
-
     // state
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [documentList, setDocumentList] = useState([]);
+
+    const [docFile, setDocFile] = useState();
+    const [docName, setDocName] = useState();
+    const [selectedDocument, setSelectedDocument] = useState([]);
+    const [selectedDocumentId, setSelectedDocumentId] = useState(null);
 
     // Api call for Dropdown dropdown
 
@@ -113,7 +62,6 @@ const Documents = ({ onprevBankDetails }) => {
                     }
                 });
                 const responseData = response.data.data;
-
                 setDocumentList(responseData);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -123,8 +71,8 @@ const Documents = ({ onprevBankDetails }) => {
     }, []);
 
     const selectDocument = (File) => {
-        handleFieldsChange('documentType', File.document_name);
-        handleFieldsChange('documentTypeId', File.id);
+        setSelectedDocument(File.document_name);
+        setSelectedDocumentId(File.id);
         setShowDropdown(false);
     };
 
@@ -132,35 +80,39 @@ const Documents = ({ onprevBankDetails }) => {
         setShowDropdown(!showDropdown);
     }
 
-    // Add document to list
+    // 
 
     const addDocument = () => {
+        if (selectedDocumentId && docName && docFile && selectedDocument) {
 
-        if (Employee.documentType && Employee.documentName && Employee.selectedFile) {
             const newDocument = {
-                id: Employee.documents.length + 1,
-                type: Employee.documentType,
-                name: Employee.documentName,
-                File: Employee.selectedFile[0],
+                type: selectedDocument,
+                name: docName,
+                file: docFile[0]
             };
 
-            dispatch(updateEmployeeFields({
-                ...Employee,
-                documents: [...Employee.documents, newDocument],
-                // documentType: '',
-                // documentName: '',
-                // selectedFile: null
-            }));
+            setDocuments(prevDocuments => [...prevDocuments, newDocument]);
+            setDocumentType(prevDocumentTypes => [...prevDocumentTypes, selectedDocumentId]);
+            setDocumentName(prevDocumentNames => [...prevDocumentNames, docName]);
+            setDocumentFile(prevDocumentFiles => [...prevDocumentFiles, docFile[0]]);
 
+            setSelectedDocument([]);
+            setDocName('');
+            setDocFile('');
+
+        } else {
+            Alert.alert('data not addded')
         }
     };
 
     // Delete document from list
 
-    const deleteDocument = (id) => {
-        const updatedDocuments = Employee.documents.filter((doc) => doc.id !== id);
-        dispatch(updateEmployeeFields({ documents: updatedDocuments }));
+    const deleteDocument = (index) => {
+        const updatedDocuments = [...documents];
+        updatedDocuments.splice(index, 1);
+        setDocuments(updatedDocuments);
     };
+
 
     // Function to handle document selection
 
@@ -170,7 +122,8 @@ const Documents = ({ onprevBankDetails }) => {
             const res = await DocumentPicker.pick({
                 type: [DocumentPicker.types.allFiles],
             });
-            handleFieldsChange('selectedFile', res);
+            setDocFile(res);
+            // handleFieldsChange('selectedFile', res);
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 console.log('Document picker is cancelled');
@@ -190,7 +143,22 @@ const Documents = ({ onprevBankDetails }) => {
         //append data
 
         formData.append('employee_id', Employee.employeeId);
-        formData.append('emp_profile', Employee.employeePicture);
+
+        if (selectedImage.length > 0) {
+            selectedImage.map((selectedImage, index) => {
+                const imageUriParts = selectedImage.split('/');
+                const imageName = imageUriParts[imageUriParts.length - 1];
+                formData.append(`emp_profile`, {
+                    uri: selectedImage,
+                    name: imageName,
+                    type: 'image/jpeg',
+                });
+            });
+        }
+        else {
+            formData.append('emp_profile', selectedImage);
+        }
+
         formData.append('first_name', Employee.firstName);
         formData.append('last_name', Employee.lastName);
         formData.append('gender', Employee.gender);
@@ -201,42 +169,138 @@ const Documents = ({ onprevBankDetails }) => {
         formData.append('date_of_birth', Employee.dob);
         formData.append('current_address', Employee.currentAddress);
         formData.append('permanent_address', Employee.permanentAddress);
-        formData.append('parent_gardian_name', Employee.parentName);
+        formData.append('parent_guardian_name', Employee.parentName);
         formData.append('marital_status', Employee.maritalStatus);
         formData.append('spouse_name', Employee.spouseName);
         formData.append('aadhar_no', Employee.aadharNumber);
         formData.append('pan_no', Employee.panNumber);
 
-        // formData.append('employee_category', Employee.employeeCategory);
-        formData.append('selectedemployeeCategory', Employee.selectedemployeeCategory);
-        formData.append('doj', Employee.dateOfJoining);
+        if (!Employee.selectedemployeeCategory) {
+            formData.append('employee_category', "-");
+        } else {
+            formData.append('employee_category', Employee.selectedemployeeCategory);
+        }
+
+        if (!Employee.dateOfJoining) {
+            formData.append('doj', "-");
+        } else {
+            formData.append('doj', Employee.dateOfJoining);
+        }
+
         formData.append('probation_period', Employee.probationPeriod);
         formData.append('confiramation_date', Employee.confirmationDate);
         formData.append('employee_agree_period', Employee.employeeAgreementPeriod);
-        formData.append('notice_period', Employee.noticePeriod);
-        formData.append('ctc', Employee.ctc);
-        formData.append('gross_salary', Employee.grossSalary);
-        formData.append('net_salary', Employee.netSalary);
-        formData.append('last_working_day', Employee.lastWorkingDay);
-        formData.append('emp_pf', Employee.providentFund);
-        formData.append('uan_number', Employee.uanNumber);
-        formData.append('employee_pf_contribution', Employee.employeePfContribution);
-        formData.append('employeer_pf_contribution', Employee.employerPfContribution);
-        formData.append('emp_esi', Employee.esi);
-        formData.append('esi_number', Employee.esiNumber);
-        formData.append('employee_esi_contribution', Employee.employeeEsiContribution);
-        formData.append('employeer_esi_contribution', Employee.employerEsiContribution);
 
-        // formData.append('role', Employee.userRole);
-        formData.append('selectedRoleId', Employee.selectedRoleId);
-        formData.append('designation', Employee.designation);
-        // formData.append('supervisor', Employee.supervisor);
-        formData.append('selectedsupervisorId', Employee.selectedsupervisorId);
-        // formData.append('shift_role', Employee.shiftRole);
-        formData.append('official_email', Employee.officialEmail);
-        formData.append('password', Employee.password);
-        formData.append('emp_punch', Employee.checkinCheckoutId);
-        // formData.append('emp_punch', Employee.checkinCheckout);
+        if (!Employee.noticePeriod) {
+            formData.append('notice_period', "-");
+        } else {
+            formData.append('notice_period', Employee.noticePeriod);
+        }
+
+        if (!Employee.ctc) {
+            formData.append('ctc', "-");
+        } else {
+            formData.append('ctc', Employee.ctc);
+        }
+
+        if (!Employee.grossSalary) {
+            formData.append('gross_salary', "-");
+        } else {
+            formData.append('gross_salary', Employee.grossSalary);
+        }
+
+        if (!Employee.netSalary) {
+            formData.append('net_salary', "-");
+        } else {
+            formData.append('net_salary', Employee.netSalary);
+        }
+
+        formData.append('last_working_day', Employee.lastWorkingDay);
+
+        if (!Employee.providentFund) {
+            formData.append('emp_pf', "-");
+        } else {
+            formData.append('emp_pf', Employee.providentFund);
+        }
+
+        if (!Employee.uanNumber) {
+            formData.append('uan_number', "-");
+        } else {
+            formData.append('uan_number', Employee.uanNumber);
+        }
+
+        if (!Employee.employeePfContribution) {
+            formData.append('employee_pf_contribution', "-");
+        } else {
+            formData.append('employee_pf_contribution', Employee.employeePfContribution);
+        }
+
+        if (!Employee.employerPfContribution) {
+            formData.append('employer_pf_contribution', "-");
+        } else {
+            formData.append('employer_pf_contribution', Employee.employerPfContribution);
+        }
+
+        if (!Employee.esi) {
+            formData.append('emp_esi', "-");
+        } else {
+            formData.append('emp_esi', Employee.esi);
+        }
+
+        if (!Employee.esiNumber) {
+            formData.append('esi_number', "-");
+        } else {
+            formData.append('esi_number', Employee.esiNumber);
+        }
+
+        if (!Employee.employeeEsiContribution) {
+            formData.append('employee_esi_contribution', "-");
+        } else {
+            formData.append('employee_esi_contribution', Employee.employeeEsiContribution);
+        }
+
+        if (!Employee.employerEsiContribution) {
+            formData.append('employer_esi_contribution', "-");
+        } else {
+            formData.append('employer_esi_contribution', Employee.employerEsiContribution);
+        }
+
+        if (!Employee.selectedRoleId) {
+            formData.append('role', "-");
+        } else {
+            formData.append('role', Employee.selectedRoleId);
+        }
+
+        if (!Employee.designation) {
+            formData.append('designation', "-");
+        } else {
+            formData.append('designation', Employee.designation);
+        }
+
+        if (!Employee.selectedsupervisorId) {
+            formData.append('supervisor', "-");
+        } else {
+            formData.append('supervisor', Employee.selectedsupervisorId);
+        }
+
+        if (!Employee.officialEmail) {
+            formData.append('official_email', "-");
+        } else {
+            formData.append('official_email', Employee.officialEmail);
+        }
+
+        if (!Employee.password) {
+            formData.append('password', "-");
+        } else {
+            formData.append('password', Employee.password);
+        }
+
+        if (!Employee.checkinCheckoutId) {
+            formData.append('emp_punch', "-");
+        } else {
+            formData.append('emp_punch', Employee.checkinCheckoutId);
+        }
+
         formData.append('ot_status', Employee.overtime);
         formData.append('late_policy', Employee.lateAllowed);
         formData.append('permission_policy', Employee.permissionAllowed);
@@ -247,12 +311,44 @@ const Documents = ({ onprevBankDetails }) => {
         formData.append('ifsc_code', Employee.ifscCode);
         formData.append('account_type', Employee.accountType);
 
-        // formData.append('emp_document_type', Employee.documentType);
-        formData.append('emp_document_type', Employee.documentTypeId);
-        formData.append('emp_document_name', Employee.documentName);
-        formData.append('emp_document_image', Employee.selectedFile);
-        formData.append('created_by', data.userepkempid);
+        if (documentType.length > 0) {
+            documentType.map((file, index) => {
+                formData.append('emp_document_type[]', file);
+            });
+        } else {
+            formData.append('emp_document_type[]', documentType);
+        }
 
+        if (documentName.length > 0) {
+            documentName.map((file, index) => {
+                formData.append('emp_document_name[]', file);
+            });
+        } else {
+            formData.append('emp_document_name[]', documentName);
+        }
+
+        if (documentFile.length > 0) {
+            documentFile.map((file, index) => {
+                let uri, name;
+                if (typeof file === 'string') {
+                    const imageUriParts = file.split('/');
+                    name = imageUriParts[imageUriParts.length - 1];
+                    uri = file;
+                } else {
+                    name = file.name;
+                    uri = file.uri;
+                }
+                formData.append(`emp_document_image[]`, {
+                    uri: uri,
+                    name: name,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            formData.append('emp_document_image[]', documentFile);
+        }
+
+        formData.append('created_by', data.userrole);
 
         try {
 
@@ -270,9 +366,14 @@ const Documents = ({ onprevBankDetails }) => {
 
             console.log(responsedata, "appended")
 
+            if (response.status === "success") {
+                navigation.navigate('Employee List');
+            }
+
         } catch (error) {
             Alert.alert('Failed to add Employee', error)
         }
+
     }
 
     // Handle Cancel
@@ -296,7 +397,7 @@ const Documents = ({ onprevBankDetails }) => {
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                 <Text style={styles.StatusTouchableText}>
-                    {Employee.documentType && Employee.documentType.length > 0 ? Employee.documentType : "Selected Document Type"}
+                    {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Selected Document Type"}
                 </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -320,16 +421,18 @@ const Documents = ({ onprevBankDetails }) => {
 
             <TextInput
                 style={styles.input}
-                value={Employee.documentName}
-                onChangeText={(text) => handleFieldsChange('documentName', text)}
+                // value={Employee.documentName}
+                // onChangeText={(text) => handleFieldsChange('documentName', text)}
+                value={docName}
+                onChangeText={(text) => setDocName(text)}
             />
 
             <Text style={styles.subHeading}>
                 Select File
             </Text>
 
-            <Text style={Employee.selectedFile && Employee.selectedFile.length > 0 ? styles.DocFileName : styles.DocFileNameHolder}>
-                {Employee.selectedFile && Employee.selectedFile.length > 0 ? Employee.selectedFile[0].name : 'Select The Document'}
+            <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
+                {docFile ? docFile[0].name : 'Select The Document'}
             </Text>
 
             <View style={styles.fullWidth}>
@@ -341,7 +444,9 @@ const Documents = ({ onprevBankDetails }) => {
             </View>
 
             <View style={styles.fullWidth}>
-                <TouchableOpacity style={styles.NextButton} onPress={addDocument}>
+                <TouchableOpacity style={styles.NextButton}
+                    onPress={addDocument}
+                >
                     <Text style={styles.NextButtonText}>
                         ADD
                     </Text>
@@ -357,19 +462,17 @@ const Documents = ({ onprevBankDetails }) => {
 
                 <View style={styles.listContainer}>
 
-
                     <View style={styles.listHeader}>
                         <Text style={styles.sno}>S.No</Text>
                         <Text style={styles.RoleName}>Document Name</Text>
                         <Text style={styles.Action}>Action</Text>
                     </View>
 
-
                     {
-                        Employee.documents.length === 0 ? (
+                        documents.length === 0 ? (
                             <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                         ) : (
-                            Employee.documents.map((doc, index) => (
+                            documents.map((doc, index) => (
                                 <View key={index} style={styles.listcontent}>
                                     <Text style={styles.listcontentsno}>{index + 1}</Text>
                                     <Text style={styles.listcontentRoleName}>{doc.name}</Text>
@@ -414,3 +517,4 @@ const Documents = ({ onprevBankDetails }) => {
 }
 
 export default Documents;
+

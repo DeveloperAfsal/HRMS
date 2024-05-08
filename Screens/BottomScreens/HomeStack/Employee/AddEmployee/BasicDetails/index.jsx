@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, ScrollView, Image, Platform } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, ScrollView, Image, Platform, Alert } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
@@ -9,9 +9,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
+import CheckBox from '@react-native-community/checkbox';
 
 
-const BasicDetails = ({ onEmpDetails }) => {
+const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
 
     const dispatch = useDispatch();
 
@@ -20,7 +21,6 @@ const BasicDetails = ({ onEmpDetails }) => {
     const { data } = useSelector((state) => state.login);
     const { Employee } = useSelector((state) => state.Employee);
 
-    console.log(Employee.dob, "dob");
 
     const updateEmployeeFields = (updatedFields) => ({
         type: 'UPDATE_EMPLOYEE_FIELDS',
@@ -34,14 +34,12 @@ const BasicDetails = ({ onEmpDetails }) => {
     // Select Gender
 
     const [showGender, setShowGender] = useState(false);
-    const [selectedGender, setSelectedGender] = useState(null);
 
     const toggleDropdownGender = () => {
         setShowGender(!showGender);
     };
 
     const selectGender = (Gender) => {
-        // setSelectedGender(Gender);
         setShowGender(false);
         handleFieldsChange('gender', Gender);
     };
@@ -49,14 +47,12 @@ const BasicDetails = ({ onEmpDetails }) => {
     // Select Status
 
     const [showStatus, setShowStatus] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState(null);
 
     const toggleDropdownStatus = () => {
         setShowStatus(!showStatus);
     };
 
     const selectStatus = (Status) => {
-        // setSelectedStatus(Status);
         setShowStatus(false);
         handleFieldsChange('status', Status);
     };
@@ -64,21 +60,17 @@ const BasicDetails = ({ onEmpDetails }) => {
     // Select Martial Status
 
     const [showMstatus, setShowMstatus] = useState(false);
-    const [selectedMstatus, setSelectedMstatus] = useState(null);
 
     const toggleDropdownMstatus = () => {
         setShowMstatus(!showMstatus);
     };
 
     const selectMstatus = (Mstatus) => {
-        // setSelectedMstatus(Mstatus);
         setShowMstatus(false);
         handleFieldsChange('maritalStatus', Mstatus);
     };
 
     // Select Image
-
-    const [selectedImage, setSelectedImage] = useState([]);
 
     const compressImage = async (image) => {
         try {
@@ -89,67 +81,57 @@ const BasicDetails = ({ onEmpDetails }) => {
                 cropping: true,
                 compressImageQuality: 0.8,
                 cropperCircleOverlay: false,
-                includeBase64: false,
+                includeBase64: true,
                 cropperToolbarTitle: 'Edit Image',
             });
-            return croppedImage.path;
+            return croppedImage;
         } catch (error) {
             console.error('Error compressing image:', error);
             return null;
         }
     };
 
-    const handleImagePickerResult = async (response) => {
-        if (!response.didCancel) {
-            const images = Array.isArray(response.assets) ? response.assets : [response];
+    const handleImagePickerResult = async (result) => {
+        if (!result.didCancel) {
+            const images = result.assets ? result.assets : [result];
             for (const image of images) {
-                const compressedUri = await compressImage(image);
-                setSelectedImage((prevImages) => [...prevImages, { uri: compressedUri }]);
-                handleFieldsChange('employeePicture', compressedUri);
+                const response = await fetch(image.uri);
+                const blob = await response.blob();
+                if (blob.size > 1024 * 1024) {
+                    Alert.alert("File size should be less than 1MB");
+                } else {
+                    const compressedUri = await compressImage(image);
+                    console.log(compressedUri, "compressedUri")
+                    setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
+                }
             }
         }
     };
 
-    // const deleteImage = (uri) => {
-    //     setSelectedImage((prevImages) => {
-    //         const updatedImages = prevImages.filter((image) => image.uri !== uri);
-    //         return updatedImages;
-    //     });
-    // };
-
-    const handleDeleteEmployeePicture = () => {
-        dispatch(updateEmployeeFields({ employeePicture: null }));
-    }
+    const deleteImage = (index) => {
+        setSelectedImage(prevImages => {
+            const updatedImages = [...prevImages];
+            updatedImages.splice(index, 1);
+            return updatedImages;
+        });
+    };
 
     const renderSelectedImage = () => {
         return (
-
-            // <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContainer}>
-            //     <View style={styles.container}>
-            //         {selectedImage.map((image, index) => (
-            //             <View key={index} style={styles.imageContainer}>
-            //                 <TouchableOpacity onPress={() => deleteImage(image.uri)} style={styles.deleteButton}>
-            //                     <DeleteIcon width={15} height={15} />
-            //                 </TouchableOpacity>
-            //                 <Image source={{ uri: image.uri }} style={styles.image} />
-            //             </View>
-            //         ))}
-            //     </View>
-            // </ScrollView>
-
             <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContainer}>
                 <View style={styles.container}>
-                    {Employee.employeePicture && (
-                        <View style={styles.imageContainer}>
-                            <TouchableOpacity onPress={() => handleDeleteEmployeePicture()} style={styles.deleteButton}>
-                                <DeleteIcon width={15} height={15} />
-                            </TouchableOpacity>
-                            <Image source={{ uri: Employee.employeePicture }} style={styles.image} />
-                        </View>
-                    )}
+                    {
+                        selectedImage.map((image, index) => (
+                            <View style={styles.imageContainer} key={index}>
+                                <TouchableOpacity onPress={() => deleteImage()} style={styles.deleteButton}>
+                                    <DeleteIcon width={15} height={15} />
+                                </TouchableOpacity>
+                                <Image source={{ uri: image }} style={styles.image} />
+                            </View>
+                        ))
+                    }
                 </View>
             </ScrollView>
-
         );
     };
 
@@ -202,6 +184,19 @@ const BasicDetails = ({ onEmpDetails }) => {
     };
 
     const formattedDOB = Employee.dob ? new Date(Employee.dob).toDateString() : selectedDate.toDateString();
+
+    //    
+
+    const [sameAsCurrentAddress, setSameAsCurrentAddress] = useState(false);
+
+    const toggleSameAsCurrentAddress = () => {
+        setSameAsCurrentAddress(!sameAsCurrentAddress);
+        if (!sameAsCurrentAddress) {
+            handleFieldsChange('permanentAddress', Employee.currentAddress);
+        } else {
+            handleFieldsChange('permanentAddress', '');
+        }
+    };
 
 
     return (
@@ -354,13 +349,6 @@ const BasicDetails = ({ onEmpDetails }) => {
                 Date Of Birth
             </Text>
 
-            {/* <TextInput
-                style={styles.input}
-                value={Employee.dob}
-                onChangeText={(text) => handleFieldsChange('dob', text)}
-                keyboardType="number-pad"
-            /> */}
-
             <View style={styles.inputs}>
                 <Text onPress={showDatepicker}>
                     {formattedDOB}
@@ -394,6 +382,16 @@ const BasicDetails = ({ onEmpDetails }) => {
                 value={Employee.permanentAddress}
                 onChangeText={(text) => handleFieldsChange('permanentAddress', text)}
             />
+
+            <View style={{ width: "90%", paddingTop: '2%', flexDirection: 'row', alignItems: 'center' }}>
+                <CheckBox
+                    tintColors={{ true: '#20DDFE' }}
+                    value={sameAsCurrentAddress}
+                    onValueChange={toggleSameAsCurrentAddress}
+                    style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
+                />
+                <Text style={{ fontWeight: '400', fontSize: 13, lineHeight: 17.29 }}>Same as current address</Text>
+            </View>
 
             <Text style={styles.subHeading}>
                 Parent / Guardian Name

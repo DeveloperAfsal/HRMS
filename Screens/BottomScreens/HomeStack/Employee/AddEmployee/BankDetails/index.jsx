@@ -22,14 +22,12 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
     };
 
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState(null);
 
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
     };
 
     const selectStatus = (status) => {
-        // setSelectedStatus(status);
         handleFieldsChange('accountType', status);
         setShowDropdown(false);
     };

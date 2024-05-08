@@ -28,6 +28,7 @@ import BasicDetails from "./Employee/AddEmployee/BasicDetails";
 import EmployeeRole from "./Employee/AddEmployee/EmployeeRole";
 import BankDetails from "./Employee/AddEmployee/BankDetails";
 import Documents from "./Employee/AddEmployee/Documents";
+import EmployeeList from "./Employee/EmployeeList";
 
 const Stack = createNativeStackNavigator();
 
@@ -102,6 +103,7 @@ const HomeStack = () => {
       {/*  */}
 
       <Stack.Screen name="Add Employee" component={AddEmployee} />
+      <Stack.Screen name="Employee List" component={EmployeeList} />
 
     </Stack.Navigator>
   );

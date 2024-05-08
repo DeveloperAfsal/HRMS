@@ -47,6 +47,13 @@ const AddEmployee = () => {
         setActiveComponent('BasicDetails');
     }
 
+    const [selectedImage, setSelectedImage] = useState([]);
+    const [documentType, setDocumentType] = useState([]);
+    const [documentName, setDocumentName] = useState([]);
+    const [documentFile, setDocumentFile] = useState([]);
+    const [documents, setDocuments] = useState([]);
+    
+
     return (
         <ScrollView>
 
@@ -147,6 +154,8 @@ const AddEmployee = () => {
                         activeComponent === 'BasicDetails' &&
                         <BasicDetails
                             onEmpDetails={handleNextEmpDetails}
+                            selectedImage={selectedImage}
+                            setSelectedImage={setSelectedImage}
                         />
                     }
                     {
@@ -170,7 +179,18 @@ const AddEmployee = () => {
                     {
                         activeComponent === 'Documents' &&
                         <Documents
-                            onprevBankDetails={handlePrevBankDetails} />
+                            onprevBankDetails={handlePrevBankDetails}
+                            selectedImage={selectedImage}
+                            setSelectedImage={setSelectedImage}
+                            documents={documents}
+                            documentFile={documentFile}
+                            documentName={documentName}
+                            documentType={documentType}
+                            setDocuments={setDocuments}
+                            setDocumentType={setDocumentType}
+                            setDocumentName={setDocumentName}
+                            setDocumentFile={setDocumentFile}
+                        />
                     }
 
                 </View>

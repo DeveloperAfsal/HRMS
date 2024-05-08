@@ -2,7 +2,6 @@ const initialState = {
     Employee: {
 
         employeeId: '',
-        employeePicture: null,
         firstName: '',
         lastName: '',
         gender: '',
@@ -44,8 +43,6 @@ const initialState = {
         designation: '',
         supervisor: [],
         selectedsupervisorId: '',
-        // shiftRole: [],
-        // selectedshiftRoleId: '',
         officialEmail: '',
         password: '',
         checkinCheckout: '',
@@ -59,13 +56,7 @@ const initialState = {
         bankBranch: '',
         ifscCode: '',
         accountType: '',
-
-        documentType: '',
-        documentTypeId: '',
-        documentName: '',
-        selectedFile: null,
-
-        documents: [],
+        
     }
 };
 
@@ -82,7 +73,7 @@ const AddEmployeeReducer = (state = initialState, action) => {
                 ...state,
                 Employee: {
                     ...state.Employee,
-                    ...action.payload
+                    ...action.payload,
                 }
             };
         case 'REMOVE_EMPLOYEE':
