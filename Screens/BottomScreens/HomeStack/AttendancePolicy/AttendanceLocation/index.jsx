@@ -307,7 +307,7 @@ const AttendanceLocation = () => {
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
+                        <DropdownIcon width={14} height={14} color={"#0A60F1"} />
 
                     </TouchableOpacity>
 
