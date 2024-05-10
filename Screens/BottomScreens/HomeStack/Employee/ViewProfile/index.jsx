@@ -417,7 +417,7 @@ const ViewProfile = ({ route, navigation }) => {
 
                                     </View>
 
-                                    <View style={[styles.employeeCard, styles.Bottom]}>
+                                    <View style={styles.employeeCard}>
 
                                         <View style={styles.cardheader}>
 
@@ -454,6 +454,15 @@ const ViewProfile = ({ route, navigation }) => {
                                         ))}
 
                                     </View>
+
+                                    <TouchableOpacity style={styles.Editbutton}
+                                        onPress={() => navigation.navigate('Edit Employee', { id: employee.id })}
+                                    >
+                                        <Text style={styles.EditText}>
+                                            Edit
+                                        </Text>
+                                    </TouchableOpacity>
+
                                 </View>
                             )
                         }

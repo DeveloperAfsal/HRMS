@@ -3,6 +3,10 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    activityIndicator:{
+        marginTop:'80%'
+    },
+
     profileimage: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#A4CED8',
         borderRadius: 16,
-        marginTop:'5%'
+        marginTop: '5%'
     },
 
     cardheader: {
@@ -78,19 +82,32 @@ const styles = StyleSheet.create({
         marginHorizontal: '5%'
     },
 
-    bodyline: { 
-        flexDirection: 'row', 
-        paddingVertical: '3%', 
-        width: '100%' 
+    bodyline: {
+        flexDirection: 'row',
+        paddingVertical: '3%',
+        width: '100%'
     },
 
-    halfWidth:{
-        width:'50%'
+    halfWidth: {
+        width: '50%'
     },
 
-    Bottom:{
-        marginBottom:'5%'
+    Editbutton: {
+        backgroundColor: '#0A62F1',
+        width: 110,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        marginVertical: '5%'
     },
+
+    EditText: {
+        fontWeight: '700',
+        fontSize: 16,
+        lineHeight: 21.28,
+        color: '#fff'
+    }
 
 })
 

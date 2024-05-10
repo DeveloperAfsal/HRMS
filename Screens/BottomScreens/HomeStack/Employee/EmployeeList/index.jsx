@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Image, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import SearchIcon from '../../../../../Assets/Icons/Search.svg';
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
@@ -8,6 +8,7 @@ import MailIcon from "../../../../../Assets/Icons/MailorMessage.svg";
 import styles from "./style";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const EmployeeList = ({ navigation }) => {
 
@@ -60,9 +61,14 @@ const EmployeeList = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [selectedStatus]);
+    // useEffect(() => {
+    //     fetchData();
+    // }, [selectedStatus]);
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [selectedStatus])
+    );
 
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);

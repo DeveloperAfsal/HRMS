@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-import styles from "./style";
-import BasicDetails from '../AddEmployee/BasicDetails/index';
-import EmployeeDetails from '../AddEmployee/EmployeeDetails/index';
-import EmployeeRole from '../AddEmployee/EmployeeRole/index';
-import BankDetails from '../AddEmployee/BankDetails/index';
-import Documents from '../AddEmployee/Documents/index';
+import styles from "../AddEmployee/style";
+import BasicDetails from '../EditEmployee/BasicDetails/index';
+import EmployeeDetails from '../EditEmployee/EmployeeDetails/index';
+import EmployeeRole from '../EditEmployee/EmployeeRole/index';
+import BankDetails from '../EditEmployee/BankDetails/index';
+import Documents from '../EditEmployee/Documents/index';
+import { useSelector } from "react-redux";
+import axios from "axios";
 
-const AddEmployee = () => {
+const EditEmployee = ({ route, navigation }) => {
+
+    const { id } = route.params;
+    const { data } = useSelector((state) => state.login);
 
     const [activeComponent, setActiveComponent] = useState('BasicDetails');
 
@@ -53,6 +58,35 @@ const AddEmployee = () => {
     const [documentFile, setDocumentFile] = useState([]);
     const [documents, setDocuments] = useState([]);
 
+    const [loading, setLoading] = useState(false);
+    const [employee, setEmployee] = useState(null);
+    const [employeeDoc, setEmployeeDoc] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get(
+                    `https://ocean21.in/api/public/api/employee_detailslitshow/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${data.token}`
+                        }
+                    }
+                );
+                const resData = response.data.data.employee_details;
+                const resDoc = response.data.data.employee_documents;
+                setEmployee(resData);
+                setEmployeeDoc(resDoc);
+                setLoading(false);
+            } catch (error) {
+                console.log(error.message);
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [id]);
+
 
     return (
         <ScrollView>
@@ -68,7 +102,7 @@ const AddEmployee = () => {
                                 activeComponent === 'BasicDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BasicDetails')}
+                            onPress={() => renderComponent('BasicDetails')}
                         >
                             <Text
                                 style={
@@ -85,7 +119,7 @@ const AddEmployee = () => {
                                 activeComponent === 'EmployeeDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeDetails')}
+                            onPress={() => renderComponent('EmployeeDetails')}
                         >
                             <Text
                                 style={
@@ -102,7 +136,7 @@ const AddEmployee = () => {
                                 activeComponent === 'EmployeeRole' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeRole')}
+                            onPress={() => renderComponent('EmployeeRole')}
                         >
                             <Text
                                 style={
@@ -119,7 +153,7 @@ const AddEmployee = () => {
                                 activeComponent === 'BankDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BankDetails')}
+                            onPress={() => renderComponent('BankDetails')}
                         >
                             <Text
                                 style={
@@ -136,7 +170,7 @@ const AddEmployee = () => {
                                 activeComponent === 'Documents' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('Documents')}
+                            onPress={() => renderComponent('Documents')}
                         >
                             <Text
                                 style={
@@ -156,25 +190,36 @@ const AddEmployee = () => {
                             onEmpDetails={handleNextEmpDetails}
                             selectedImage={selectedImage}
                             setSelectedImage={setSelectedImage}
+                            employee={employee}
+                            setEmployee={setEmployee}
                         />
                     }
                     {
                         activeComponent === 'EmployeeDetails' &&
                         <EmployeeDetails
                             onEmpRole={handleNextEmpRole}
-                            onprevBasicDetails={handlePrevBasicDetails} />
+                            onprevBasicDetails={handlePrevBasicDetails}
+                            employee={employee}
+                            setEmployee={setEmployee}
+                        />
                     }
                     {
                         activeComponent === 'EmployeeRole' &&
                         <EmployeeRole
                             onBankDetails={handleNextBankDetails}
-                            onprevEmpDetails={handlePrevEmpDetails} />
+                            onprevEmpDetails={handlePrevEmpDetails}
+                            employee={employee}
+                            setEmployee={setEmployee}
+                        />
                     }
                     {
                         activeComponent === 'BankDetails' &&
                         <BankDetails
                             onDetails={handleNextDocuments}
-                            onprevEmpRole={handlePrevEmpRole} />
+                            onprevEmpRole={handlePrevEmpRole}
+                            employee={employee}
+                            setEmployee={setEmployee}
+                        />
                     }
                     {
                         activeComponent === 'Documents' &&
@@ -190,6 +235,8 @@ const AddEmployee = () => {
                             setDocumentType={setDocumentType}
                             setDocumentName={setDocumentName}
                             setDocumentFile={setDocumentFile}
+                            setEmployeeDoc={setEmployeeDoc}
+                            employeeDoc={employeeDoc}
                         />
                     }
 
@@ -199,4 +246,4 @@ const AddEmployee = () => {
     )
 }
 
-export default AddEmployee;
+export default EditEmployee;
