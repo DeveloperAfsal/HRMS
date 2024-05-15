@@ -172,7 +172,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
     // Image URL  
 
-    const imageUrl = `http://officeinteriorschennai.com/api/storage/app/${data.userimage}`;
+    const imageUrl = `https://ocean21.in/api/storage/app/${data.userimage}`;
 
     return (
 
@@ -210,7 +210,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     onPress={() => navigation.navigate('Dashboard')}
                 />
 
-                {/* Employee */}
+                {/* Organisation Structure */}
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('OrganisationStructure')}>
                     <View style={styles.Tab}>
@@ -252,7 +252,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     </View>
                 )}
 
-                {/* Attendance */}
+                {/* Leave & Attendance Policy */}
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
                     <View style={styles.Tab}>
@@ -310,7 +310,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     </>
                 )}
 
-                {/* Raise Request */}
+                {/* Employee */}
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Employee')}>
                     <View style={styles.Tab}>
@@ -344,7 +344,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     </>
                 )}
 
-                {/* Hr support */}
+                {/* Attendance */}
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Attendance')}>
                     <View style={styles.Tab}>
@@ -381,7 +381,7 @@ const CustomDrawerContent = ({ navigation }) => {
                     </>
                 )}
 
-                {/* accounts */}
+                {/* HR Support */}
 
                 <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('HRSupport')}>
                     <View style={styles.Tab}>

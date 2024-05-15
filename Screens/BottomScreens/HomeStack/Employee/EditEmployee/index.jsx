@@ -87,7 +87,6 @@ const EditEmployee = ({ route, navigation }) => {
         fetchData();
     }, [id]);
 
-
     return (
         <ScrollView>
 
@@ -237,6 +236,8 @@ const EditEmployee = ({ route, navigation }) => {
                             setDocumentFile={setDocumentFile}
                             setEmployeeDoc={setEmployeeDoc}
                             employeeDoc={employeeDoc}
+                            employee={employee}
+                            setEmployee={setEmployee}
                         />
                     }
 

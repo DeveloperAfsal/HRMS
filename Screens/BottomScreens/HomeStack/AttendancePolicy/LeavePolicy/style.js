@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal:'5%',
+        paddingHorizontal: '5%',
     },
 
     TimeSlotTouchableText: {
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
         borderBottomColor: "#ccc",
     },
 
-    selectedOption:{
-        backgroundColor:'#E1F1FC',
+    selectedOption: {
+        backgroundColor: '#E1F1FC',
     },
 
     dropdownOptionText: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal:'5%',
+        paddingHorizontal: '5%',
     },
 
     StatusTouchableText: {
@@ -177,11 +177,11 @@ const styles = StyleSheet.create({
         borderColor: '#515151',
         width: '90%',
         borderRadius: 7,
-        paddingHorizontal:'5%',
-        paddingVertical:'3%',
+        paddingHorizontal: '5%',
+        paddingVertical: '3%',
         justifyContent: 'space-between',
-        alignItems:'center',
-        flexDirection:'row',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
 
     inputs: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 42,
         borderRadius: 7,
-        paddingHorizontal:'5%',
+        paddingHorizontal: '5%',
         justifyContent: 'center',
     },
 
@@ -463,18 +463,18 @@ const styles = StyleSheet.create({
         color: "grey",
     },
 
-    selectedays:{
-        backgroundColor:'#20DDFE',
-        padding:7,
-        borderRadius:7,
-        color:'#fff',
-        fontWeight:'400',
-        
+    selectedays: {
+        backgroundColor: '#20DDFE',
+        padding: 7,
+        borderRadius: 7,
+        color: '#fff',
+        fontWeight: '400',
+
     },
 
-    selectedDaysContainer:{
-        flexDirection:'row',
-        gap:5,
+    selectedDaysContainer: {
+        flexDirection: 'row',
+        gap: 5,
         flexWrap: 'wrap',
     },
 
@@ -488,8 +488,8 @@ const styles = StyleSheet.create({
         paddingLeft: 15
     },
 
-    listBody:{
-        paddingVertical:'1%'
+    listBody: {
+        paddingVertical: '1%'
     }
 })
 

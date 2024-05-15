@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
         marginRight: 16,
     },
     imageStyle: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
+        width: 70,
+        height: 70,
+        borderRadius: 70,
         borderWidth: 0.5,
         // borderColor: PrimaryPurple
     },

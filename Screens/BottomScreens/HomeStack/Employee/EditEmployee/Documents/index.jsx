@@ -24,19 +24,13 @@ const Documents = ({
     employeeDoc,
     setEmployeeDoc,
     navigation,
+    setEmployee,
+    employee,
 }) => {
-
-    console.log(employeeDoc, "employeeDoc")
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
-    const { Employee } = useSelector((state) => state.Employee);
-
-    const updateEmployeeFields = (updatedFields) => ({
-        type: 'UPDATE_EMPLOYEE_FIELDS',
-        payload: updatedFields
-    });
 
     // state
 
@@ -89,24 +83,24 @@ const Documents = ({
                 emp_id: data.emp_id, // Assuming data.emp_id holds the employee ID
                 document_img: docFile[0].uri // Assuming docFile is an array of File objects and you want to store the URI
             };
-    
+
             // Update employeeDoc state
             setEmployeeDoc(prevEmployeeDoc => [...prevEmployeeDoc, newDocument]);
-    
+
             // Update other related states
             setDocumentType(prevDocumentTypes => [...prevDocumentTypes, selectedDocumentId]);
             setDocumentName(prevDocumentNames => [...prevDocumentNames, docName]);
             setDocumentFile(prevDocumentFiles => [...prevDocumentFiles, docFile[0]]);
-    
+
             setSelectedDocument([]);
             setDocName('');
             setDocFile('');
-    
+
         } else {
             Alert.alert('Please fill in all fields');
         }
     };
-    
+
 
     // Delete document from list
 
@@ -115,8 +109,6 @@ const Documents = ({
         updatedEmployeeDoc.splice(index, 1);
         setEmployeeDoc(updatedEmployeeDoc);
     };
-    
-
 
     // Function to handle document selection
 
@@ -142,178 +134,188 @@ const Documents = ({
 
     const HandleSubmit = async () => {
 
+        console.log('Hiiii')
+
         const formData = new FormData();
 
         //append data
 
-        formData.append('employee_id', Employee.employeeId);
+        formData.append('id', employee.id);
+
+        formData.append('employee_id', employee.hrms_emp_id);
 
         if (selectedImage.length > 0) {
-            selectedImage.map((selectedImage, index) => {
-                const imageUriParts = selectedImage.split('/');
+            selectedImage.map((selectedImg, index) => {
+                const imageUriParts = selectedImg.split('/');
                 const imageName = imageUriParts[imageUriParts.length - 1];
                 formData.append(`emp_profile`, {
-                    uri: selectedImage,
+                    uri: selectedImg,
                     name: imageName,
                     type: 'image/jpeg',
                 });
             });
         }
         else {
-            formData.append('emp_profile', selectedImage);
+            formData.append('emp_profile', employee.profile_img);
         }
 
-        formData.append('first_name', Employee.firstName);
-        formData.append('last_name', Employee.lastName);
-        formData.append('gender', Employee.gender);
-        formData.append('status', Employee.status);
-        formData.append('mobile_number', Employee.phoneNumber);
-        formData.append('whatsapp_number', Employee.whatsappNumber);
-        formData.append('email_id', Employee.email);
-        formData.append('date_of_birth', Employee.dob);
-        formData.append('current_address', Employee.currentAddress);
-        formData.append('permanent_address', Employee.permanentAddress);
-        formData.append('parent_guardian_name', Employee.parentName);
-        formData.append('marital_status', Employee.maritalStatus);
-        formData.append('spouse_name', Employee.spouseName);
-        formData.append('aadhar_no', Employee.aadharNumber);
-        formData.append('pan_no', Employee.panNumber);
+        formData.append('first_name', employee.first_name);
+        formData.append('last_name', employee.last_name);
+        formData.append('gender', employee.gender);
+        formData.append('status', employee.emp_status);
+        formData.append('mobile_number', employee.mobile_no);
+        formData.append('whatsapp_number', employee.whatsapp);
+        formData.append('email_id', employee.email);
+        formData.append('date_of_birth', employee.dob);
+        formData.append('current_address', employee.current_address);
+        formData.append('permanent_address', employee.address);
+        formData.append('parent_guardian_name', employee.parents);
+        formData.append('marital_status', employee.marital_status);
+        formData.append('spouse_name', employee.spouse_name);
+        formData.append('aadhar_no', employee.aadhar_number);
+        formData.append('pan_no', employee.pan_number);
 
-        if (!Employee.selectedemployeeCategory) {
+        if (!employee.employee_category) {
             formData.append('employee_category', "-");
         } else {
-            formData.append('employee_category', Employee.selectedemployeeCategory);
+            formData.append('employee_category', employee.employee_category);
         }
 
-        if (!Employee.dateOfJoining) {
+        if (!employee.doj) {
             formData.append('doj', "-");
         } else {
-            formData.append('doj', Employee.dateOfJoining);
+            formData.append('doj', employee.doj);
         }
 
-        formData.append('probation_period', Employee.probationPeriod);
-        formData.append('confiramation_date', Employee.confirmationDate);
-        formData.append('employee_agree_period', Employee.employeeAgreementPeriod);
+        formData.append('probation_period', employee.probation_period);
 
-        if (!Employee.noticePeriod) {
+        if (!employee.confirmation_date) {
+            formData.append('confiramation_date', "-");
+        } else {
+            formData.append('confiramation_date', employee.confirmation_date);
+        }
+
+        formData.append('employee_agree_period', employee.emp_aggrement);
+
+        if (!employee.notices_period) {
             formData.append('notice_period', "-");
         } else {
-            formData.append('notice_period', Employee.noticePeriod);
+            formData.append('notice_period', employee.notices_period);
         }
 
-        if (!Employee.ctc) {
+        if (!employee.ctc) {
             formData.append('ctc', "-");
         } else {
-            formData.append('ctc', Employee.ctc);
+            formData.append('ctc', employee.ctc);
         }
 
-        if (!Employee.grossSalary) {
+        if (!employee.emp_grosssalary) {
             formData.append('gross_salary', "-");
         } else {
-            formData.append('gross_salary', Employee.grossSalary);
+            formData.append('gross_salary', employee.emp_grosssalary);
         }
 
-        if (!Employee.netSalary) {
+        if (!employee.emp_salary) {
             formData.append('net_salary', "-");
         } else {
-            formData.append('net_salary', Employee.netSalary);
+            formData.append('net_salary', employee.emp_salary);
         }
 
-        formData.append('last_working_day', Employee.lastWorkingDay);
+        formData.append('last_working_day', employee.last_working_date);
 
-        if (!Employee.providentFund) {
+        if (!employee.emp_pf) {
             formData.append('emp_pf', "-");
         } else {
-            formData.append('emp_pf', Employee.providentFund);
+            formData.append('emp_pf', employee.emp_pf);
         }
 
-        if (!Employee.uanNumber) {
+        if (!employee.uan_number) {
             formData.append('uan_number', "-");
         } else {
-            formData.append('uan_number', Employee.uanNumber);
+            formData.append('uan_number', employee.uan_number);
         }
 
-        if (!Employee.employeePfContribution) {
+        if (!employee.employee_contribution) {
             formData.append('employee_pf_contribution', "-");
         } else {
-            formData.append('employee_pf_contribution', Employee.employeePfContribution);
+            formData.append('employee_pf_contribution', employee.employee_contribution);
         }
 
-        if (!Employee.employerPfContribution) {
+        if (!employee.employeer_contribution) {
             formData.append('employer_pf_contribution', "-");
         } else {
-            formData.append('employer_pf_contribution', Employee.employerPfContribution);
+            formData.append('employer_pf_contribution', employee.employeer_contribution);
         }
 
-        if (!Employee.esi) {
+        if (!employee.emp_esi) {
             formData.append('emp_esi', "-");
         } else {
-            formData.append('emp_esi', Employee.esi);
+            formData.append('emp_esi', employee.emp_esi);
         }
 
-        if (!Employee.esiNumber) {
+        if (!employee.esi_number) {
             formData.append('esi_number', "-");
         } else {
-            formData.append('esi_number', Employee.esiNumber);
+            formData.append('esi_number', employee.esi_number);
         }
 
-        if (!Employee.employeeEsiContribution) {
+        if (!employee.employee_esi_contribution) {
             formData.append('employee_esi_contribution', "-");
         } else {
-            formData.append('employee_esi_contribution', Employee.employeeEsiContribution);
+            formData.append('employee_esi_contribution', employee.employee_esi_contribution);
         }
 
-        if (!Employee.employerEsiContribution) {
+        if (!employee.employeer_esi_contribution) {
             formData.append('employer_esi_contribution', "-");
         } else {
-            formData.append('employer_esi_contribution', Employee.employerEsiContribution);
+            formData.append('employer_esi_contribution', employee.employeer_esi_contribution);
         }
 
-        if (!Employee.selectedRoleId) {
+        if (!employee.role_name) {
             formData.append('role', "-");
         } else {
-            formData.append('role', Employee.selectedRoleId);
+            formData.append('role', employee.role_id);
         }
 
-        if (!Employee.designation) {
+        if (!employee.department_name) {
             formData.append('designation', "-");
         } else {
-            formData.append('designation', Employee.designation);
+            formData.append('designation', employee.department_name);
         }
 
-        if (!Employee.selectedsupervisorId) {
+        if (!employee.supervisor_role_name) {
             formData.append('supervisor', "-");
         } else {
-            formData.append('supervisor', Employee.selectedsupervisorId);
+            formData.append('supervisor', employee.supervisor);
         }
 
-        if (!Employee.officialEmail) {
+        if (!employee.official_email) {
             formData.append('official_email', "-");
         } else {
-            formData.append('official_email', Employee.officialEmail);
+            formData.append('official_email', employee.official_email);
         }
 
-        if (!Employee.password) {
+        if (!employee.password) {
             formData.append('password', "-");
         } else {
-            formData.append('password', Employee.password);
+            formData.append('password', employee.password);
         }
 
-        if (!Employee.checkinCheckoutId) {
+        if (!employee.emp_punch) {
             formData.append('emp_punch', "-");
         } else {
-            formData.append('emp_punch', Employee.checkinCheckoutId);
+            formData.append('emp_punch', employee.emp_punch);
         }
 
-        formData.append('ot_status', Employee.overtime);
-        formData.append('late_policy', Employee.lateAllowed);
-        formData.append('permission_policy', Employee.permissionAllowed);
+        formData.append('ot_status', employee.ot_status);
+        formData.append('late_policy', employee.late_policy);
+        formData.append('permission_policy', employee.permission_policy);
 
-        formData.append('account_number', Employee.bankAccountNumber);
-        formData.append('bank_name', Employee.bankName);
-        formData.append('branch_name', Employee.bankBranch);
-        formData.append('ifsc_code', Employee.ifscCode);
-        formData.append('account_type', Employee.accountType);
+        formData.append('account_number', employee.bank_accountnumber);
+        formData.append('bank_name', employee.bank_name);
+        formData.append('branch_name', employee.bank_branch);
+        formData.append('ifsc_code', employee.ifsc_code);
+        formData.append('account_type', employee.ac_type);
 
         if (documentType.length > 0) {
             documentType.map((file, index) => {
@@ -352,7 +354,22 @@ const Documents = ({
             formData.append('emp_document_image[]', documentFile);
         }
 
-        formData.append('created_by', data.userrole);
+        formData.append('updated_by', data.userrole);
+
+        if (selectedImage.length > 0) {
+            selectedImage.map((selectedImg, index) => {
+                const imageUriParts = selectedImg.split('/');
+                const imageName = imageUriParts[imageUriParts.length - 1];
+                formData.append(`old_profileimg`, {
+                    uri: selectedImg,
+                    name: imageName,
+                    type: 'image/jpeg',
+                });
+            });
+        }
+        else {
+            formData.append('old_profileimg', employee.profile_img);
+        }
 
         try {
 
@@ -370,8 +387,9 @@ const Documents = ({
 
             console.log(responsedata, "appended")
 
-            if (response.status === "success") {
-                navigation.navigate('Employee List');
+            if (responsedata.status === "success") {
+                // navigation.navigate('Employee List');
+                Alert.alert('Submitted', 'Employee Details Updated')
             }
 
         } catch (error) {

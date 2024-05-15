@@ -31,6 +31,13 @@ import Documents from "./Employee/AddEmployee/Documents";
 import EmployeeList from "./Employee/EmployeeList";
 import ViewProfile from "./Employee/ViewProfile";
 import EditEmployee from "./Employee/EditEmployee";
+import EmpConfirmation from "./Employee/EmpConfirmation";
+import ApprovalList from "./HrSupport/ApprovalList";
+import AttendanceRequest from "./HrSupport/ApprovalList/AttendanceRequest";
+import LeaveRequest from "./HrSupport/ApprovalList/LeaveRequest";
+import PermissionRequest from "./HrSupport/ApprovalList/PermissionRequest";
+import HalfDayRequest from "./HrSupport/ApprovalList/HalfDayRequest";
+import OverTimeRequest from "./HrSupport/ApprovalList/OverTimeRequest";
 
 const Stack = createNativeStackNavigator();
 
@@ -108,6 +115,14 @@ const HomeStack = () => {
       <Stack.Screen name="Employee List" component={EmployeeList} />
       <Stack.Screen name="View Profile" component={ViewProfile} />
       <Stack.Screen name="Edit Employee" component={EditEmployee} />
+      <Stack.Screen name="Employee Confirmation" component={EmpConfirmation} />
+      <Stack.Screen name="Approvals List" component={ApprovalList} />
+
+      <Stack.Screen name="Attendance Request" component={AttendanceRequest} />
+      <Stack.Screen name="Leave Request" component={LeaveRequest} />
+      <Stack.Screen name="Permission Request" component={PermissionRequest} />
+      <Stack.Screen name="HalfDay Request" component={HalfDayRequest} />
+      <Stack.Screen name="OverTime Request" component={OverTimeRequest} />
 
     </Stack.Navigator>
   );

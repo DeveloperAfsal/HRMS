@@ -209,7 +209,6 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 )}
             </View>
 
-
             <Text style={styles.subHeading}>
                 Probation Period
             </Text>
@@ -226,7 +225,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
 
             <View style={styles.inputs}>
                 <Text onPress={showConfirmDatepicker}>
-                    {employee.confirmation_date === null ? "0000-00-00" : employee.confirmation_date}
+                    {employee.confirmation_date === null ? "yyyy-mm-dd" : employee.confirmation_date}
                 </Text>
                 {showDatePickerConfirm && (
                     <DateTimePicker
