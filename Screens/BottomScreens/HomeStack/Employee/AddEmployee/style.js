@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0A60F1',
+        borderColor: '#0A60F1',
     },
 
     HeaderButtonTextActive: {

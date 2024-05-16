@@ -3,7 +3,8 @@ import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableO
 import SearchIcon from "../../../../../../Assets/Icons/Search.svg";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
-import EditIcon from '../../../../../../Assets/Icons/eyeopen.svg';
+import TickIcon from '../../../../../../Assets/Icons/Tick.svg';
+import CloseIcon from '../../../../../../Assets/Icons/Close.svg';
 import styles from "../AttendanceRequest/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -68,20 +69,189 @@ const LeaveRequest = () => {
         fetchData();
     }, [])
 
+    const exportToExcel = async () => {
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'To Date', 'Reason'];
+        const tableData1 = datalist.map((rowData, index) => [
+            index + 1,
+            rowData.emp_name,
+            rowData.departmentName,
+            rowData.category_name,
+            rowData.shift_slot,
+            rowData.from_date,
+            rowData.to_date,
+            rowData.leave_reason,
+        ]);
+
+        const csvString = tableHead.join(',') + '\n' +
+            tableData1.map(row => row.join(',')).join('\n');
+
+        const ws = XLSX.utils.aoa_to_sheet([tableHead, ...tableData1]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
+
+        try {
+            const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+
+            await RNFS.writeFile(fileUri, wbout, 'base64');
+
+            // Check if file is correctly written
+            console.log('File written to:', fileUri);
+
+            // Share the file
+            const options = {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                url: 'file://' + fileUri,
+                title: 'Share Excel File',
+            };
+            await Share.open(options);
+        } catch (error) {
+            console.error('Error exporting to Excel:', error);
+        }
+    };
+
+    // Export-PDF
+
+    const exportToPDF = async () => {
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'To Date', 'Reason'];
+        const tableData1 = datalist.map((rowData, index) => [
+            index + 1,
+            rowData.emp_name,
+            rowData.departmentName,
+            rowData.category_name,
+            rowData.shift_slot,
+            rowData.from_date,
+            rowData.to_date,
+            rowData.leave_reason,
+        ]);
+
+        const htmlContent = `
+                    <html>
+                        <head>
+                            <style>
+                                @page {
+                                    size: landscape; /* Set the page to landscape mode */
+                                }
+                                table {
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                }
+                                th, td {
+                                    border: 1px solid black;
+                                    padding: 8px;
+                                    text-align: center;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        ${tableHead.map(column => `<th>${column}</th>`).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableData1.map(row => `<tr>${row.map((cell, index) =>
+            `<td style="${index === 1 ? 'text-align: left;' : ''}">${cell}</td>`).join('')}</tr>`).join('')}
+                                </tbody>
+                            </table>
+                        </body>
+                    </html>
+                `;
+
+        try {
+            const { filePath } = await RNHTMLtoPDF.convert({
+                html: htmlContent,
+                fileName: 'Employee_Confirmation',
+                directory: RNFS.DocumentDirectoryPath,
+            });
+
+            Share.open({
+                url: `file://${filePath}`,
+                type: 'application/pdf',
+                title: 'Export to PDF',
+            });
+        } catch (error) {
+            console.error('Error exporting to PDF:', error);
+        }
+    };
+
+    const HandleConfirm = async (item) => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/approval_leave_request`;
+
+            const response = await axios.post(apiUrl, {
+                id: item.id,
+                e_id: item.emp_id,
+                hr_id: data.userempid,
+                request_fromdate: item.from_date,
+                request_todate: item.to_date,
+                hrstatus: "Approved",
+                slot_id: item.sid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            console.log(response.data, "response.data")
+
+            if (response.data.status === "success") {
+                fetchData();
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    const HandleCancel = async (item) => {
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/approval_leave_request`;
+
+            const response = await axios.post(apiUrl, {
+                id: item.id,
+                e_id: item.emp_id,
+                hr_id: data.userempid,
+                request_fromdate: item.from_date,
+                request_todate: item.to_date,
+                hrstatus: "Rejected",
+                slot_id: item.sid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            console.log(response.data, "response.data")
+
+            if (response.data.status === "success") {
+                fetchData();
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
 
         <View style={styles.Container}>
 
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                // onPress={exportToExcel}
+                    onPress={exportToExcel}
                 >
                     <Text style={styles.ButtonText}>
                         Export to Excel
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.Button}
-                // onPress={exportToPDF}
+                    onPress={exportToPDF}
                 >
                     <Text style={styles.ButtonText}>
                         Export to PDF
@@ -92,9 +262,9 @@ const LeaveRequest = () => {
             <View style={styles.InputContainer}>
                 <TextInput
                     style={styles.Input}
-                    // value={filterText}
+                    value={filterText}
                     onChangeText={text => {
-                        // setFilterText(text);
+                        setFilterText(text);
                     }}
                 />
                 <View style={styles.IconBg}>
@@ -135,18 +305,22 @@ const LeaveRequest = () => {
                                         <Text style={[styles.cell, styles.ShiftSlot]}>{item.from_date}</Text>
                                         <Text style={[styles.cell, styles.WeekOff]}>{item.to_date}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                            // onPress={() => Handlenavigate(slot)}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}
-                                            // onPress={() => HandleDelete(slot.id)}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View>
+                                        {
+                                            item.emp_status === "Pending" ?
+                                                <View style={styles.listcontentButtonview}>
+                                                    <TouchableOpacity style={styles.listcontenteditbutton}
+                                                        onPress={() => HandleConfirm(item)}
+                                                    >
+                                                        <TickIcon width={14} height={14} />
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity style={styles.listcontentdelbutton}
+                                                        onPress={() => HandleCancel(item)}
+                                                    >
+                                                        <CloseIcon width={14} height={14} />
+                                                    </TouchableOpacity>
+                                                </View> :
+                                                <Text style={[styles.cell, styles.Status]}>{item.emp_status}</Text>
+                                        }
                                     </View>
                                 ))
                             )}

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
 
     filterInput: {
         borderWidth: 1,
-        borderColor: "#0A60F1",
+        borderColor: "#1AD0FF",
         borderRadius: 5,
         marginBottom: 10,
         paddingHorizontal: 15,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         height: 48,
         backgroundColor: '#fff',
         borderWidth: 1,
-        borderColor: '#0A60F1',
+        borderColor: '#1AD0FF',
         borderRadius: 6,
         flexDirection: 'row',
         alignItems: 'center',
@@ -70,14 +70,14 @@ const styles = StyleSheet.create({
         width: 144,
         borderLeftWidth: 1,
         borderRightWidth: 1,
-        borderColor: "#0A60F1",
+        borderColor: "#1AD0FF",
         backgroundColor: '#fff',
     },
 
     dropdownOption: {
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: "#0A60F1",
+        borderBottomColor: "#1AD0FF",
     },
 
     dropdownOptionText: {

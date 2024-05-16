@@ -95,7 +95,7 @@ const EmployeeList = ({ navigation }) => {
                 />
 
                 <View style={styles.searchIcon}>
-                    <SearchIcon color={"#0A60F1"} />
+                    <SearchIcon color={"#1AD0FF"} />
                 </View>
 
             </View>
@@ -107,7 +107,7 @@ const EmployeeList = ({ navigation }) => {
                 <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                     <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
-                    <DropdownIcon width={14} height={14} color={"#0A60F1"} />
+                    <DropdownIcon width={14} height={14} color={"#1AD0FF"} />
 
                 </TouchableOpacity>
 

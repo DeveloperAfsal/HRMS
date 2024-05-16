@@ -91,7 +91,7 @@ const BottomTabNavigator = () => {
                 tabBarActiveTintColor: White,
                 tabBarHideOnKeyboard: true
             }}
-            >
+        >
             <Tab.Screen
                 name="Home"
                 component={HomeStack}
