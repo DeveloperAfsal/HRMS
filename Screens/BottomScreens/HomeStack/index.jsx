@@ -38,6 +38,15 @@ import LeaveRequest from "./HrSupport/ApprovalList/LeaveRequest";
 import PermissionRequest from "./HrSupport/ApprovalList/PermissionRequest";
 import HalfDayRequest from "./HrSupport/ApprovalList/HalfDayRequest";
 import OverTimeRequest from "./HrSupport/ApprovalList/OverTimeRequest";
+import AddLeavePermissionHalfDay from "./HrSupport/ApprovalList/AddLeavePermissionHalfDay";
+import AddAttendance from "./HrSupport/ApprovalList/AddAttendance";
+import AddOvertime from "./HrSupport/ApprovalList/AddOverTime";
+import TLApprovalList from "./TLApproval";
+import TLLeaveRequest from "./TLApproval/LeaveRequest";
+import TLPermissionRequest from "./TLApproval/PermissionRequest";
+import TLHalfDayRequest from "./TLApproval/HalfDayRequest";
+import TLOtRequest from "./TLApproval/OTAppproval";
+import Template from "./HrSupport/Templates";
 
 const Stack = createNativeStackNavigator();
 
@@ -116,13 +125,32 @@ const HomeStack = () => {
       <Stack.Screen name="View Profile" component={ViewProfile} />
       <Stack.Screen name="Edit Employee" component={EditEmployee} />
       <Stack.Screen name="Employee Confirmation" component={EmpConfirmation} />
+
+      {/*  */}
+
       <Stack.Screen name="Approvals List" component={ApprovalList} />
 
+      <Stack.Screen name="Add Leave Permission Half Day" component={AddLeavePermissionHalfDay} />
+      <Stack.Screen name="Add Attendance" component={AddAttendance} />
+      <Stack.Screen name="Add Over Time" component={AddOvertime} />
       <Stack.Screen name="Attendance Request" component={AttendanceRequest} />
       <Stack.Screen name="Leave Request" component={LeaveRequest} />
       <Stack.Screen name="Permission Request" component={PermissionRequest} />
       <Stack.Screen name="HalfDay Request" component={HalfDayRequest} />
       <Stack.Screen name="OverTime Request" component={OverTimeRequest} />
+
+      <Stack.Screen name="Templates" component={Template} />
+
+      {/*  */}
+
+      <Stack.Screen name="TL Approvals List" component={TLApprovalList} />
+      <Stack.Screen name="TL Leave Request" component={TLLeaveRequest} />
+      <Stack.Screen name="TL Permission Request" component={TLPermissionRequest} />
+      <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
+      
+      <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
+
+
 
     </Stack.Navigator>
   );

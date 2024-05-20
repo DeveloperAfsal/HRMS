@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
-import SearchIcon from "../../../../../../Assets/Icons/Search.svg";
-import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
-import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
-import EditIcon from '../../../../../../Assets/Icons/eyeopen.svg';
-import TickIcon from '../../../../../../Assets/Icons/Tick.svg';
-import CloseIcon from '../../../../../../Assets/Icons/Close.svg';
-import styles from "../AttendanceRequest/style";
+import SearchIcon from "../../../../../Assets/Icons/Search.svg";
+import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
+import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
+import EditIcon from '../../../../../Assets/Icons/eyeopen.svg';
+import TickIcon from '../../../../../Assets/Icons/Tick.svg';
+import CloseIcon from '../../../../../Assets/Icons/Close.svg';
+import styles from "../HalfDayRequest/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import RNFS from 'react-native-fs';
@@ -14,7 +14,7 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const HalfDayRequest = () => {
+const TLHalfDayRequest = () => {
 
     // data from redux store 
 
@@ -52,10 +52,10 @@ const HalfDayRequest = () => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/hr_halfday_approvallist';
+            const apiUrl = 'https://ocean21.in/api/public/api/tl_halfdayrequest_list';
             const response = await axios.post(apiUrl, {
-                emp_id: data.userempid,
-                user_roleid: data.userrole,
+                supervisor_empid: data.userempid,
+                role_id: data.userrole,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -189,17 +189,17 @@ const HalfDayRequest = () => {
 
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_halfday_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
                 e_id: item.emp_id,
-                hr_id: data.userempid,
+                tl_id: data.userempid,
                 request_date: item.permission_date,
                 request_fromtime: item.permission_timefrom,
                 request_totime: item.permission_timeto,
-                hrstatus: "Approved",
-                slot_id: item.sid,
+                tlstatus: "Approved",
+                slot_id: item.slot_id,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -221,17 +221,17 @@ const HalfDayRequest = () => {
     const HandleCancel = async (item) => {
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_halfday_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
                 e_id: item.emp_id,
-                hr_id: data.userempid,
+                tl_id: data.userempid,
                 request_date: item.permission_date,
                 request_fromtime: item.permission_timefrom,
                 request_totime: item.permission_timeto,
-                hrstatus: "Rejected",
-                slot_id: item.sid,
+                tlstatus: "Rejected",
+                slot_id: item.slot_id,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -387,4 +387,4 @@ const HalfDayRequest = () => {
     )
 }
 
-export default HalfDayRequest;
+export default TLHalfDayRequest;

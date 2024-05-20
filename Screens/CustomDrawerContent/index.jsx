@@ -94,21 +94,21 @@ const CustomDrawerContent = ({ navigation }) => {
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/logout';
-            const response = await axios.post(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
+            // const apiUrl = 'https://ocean21.in/api/public/api/logout';
+            // const response = await axios.post(apiUrl, {
+            //     headers: {
+            //         Authorization: `Bearer ${data.token}`
+            //     }
+            // });
 
-            console.log(response, "response")
+            // console.log(response, "response")
 
-            // await AsyncStorage.removeItem('userData');
+            await AsyncStorage.removeItem('userData');
 
             // Clear user data from the Redux store
 
-            // const val = {};
-            // dispatch({ type: 'REMOVE_USER_DATA', payload: val });
+            const val = {};
+            dispatch({ type: 'REMOVE_USER_DATA', payload: val });
 
         } catch (error) {
             console.error('Error signing out:', error);
@@ -121,7 +121,9 @@ const CustomDrawerContent = ({ navigation }) => {
     const imageUrl = `https://ocean21.in/api/storage/app/${data.userimage}`;
 
     return (
+        
         <>
+
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
 
                 <View style={styles.shadowContainer}>
@@ -386,12 +388,12 @@ const CustomDrawerContent = ({ navigation }) => {
 
                             <DrawerItem
                                 label="Leave Approval"
-                                onPress={() => navigation.navigate('LeaveApproval')}
+                                onPress={() => navigation.navigate('TL Approvals List')}
                             />
 
                             <DrawerItem
                                 label="OT Approval"
-                                onPress={() => navigation.navigate('OTApproval')}
+                                onPress={() => navigation.navigate('TL Ot Request')}
                             />
 
                         </>
@@ -440,7 +442,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                         </>)}
 
-                    {/* Assets */}
+                    {/* Events */}
 
                     <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Events')}>
                         <View style={styles.Tab}>

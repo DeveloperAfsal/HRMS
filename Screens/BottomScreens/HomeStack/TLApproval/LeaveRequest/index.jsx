@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
-import SearchIcon from "../../../../../../Assets/Icons/Search.svg";
-import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
-import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
-import EditIcon from '../../../../../../Assets/Icons/eyeopen.svg';
-import TickIcon from '../../../../../../Assets/Icons/Tick.svg';
-import CloseIcon from '../../../../../../Assets/Icons/Close.svg';
-import styles from "../AttendanceRequest/style";
+import SearchIcon from "../../../../../Assets/Icons/Search.svg";
+import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
+import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
+import TickIcon from '../../../../../Assets/Icons/Tick.svg';
+import CloseIcon from '../../../../../Assets/Icons/Close.svg';
+import styles from "../HalfDayRequest/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import RNFS from 'react-native-fs';
@@ -14,7 +13,8 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const HalfDayRequest = () => {
+
+const TLLeaveRequest = () => {
 
     // data from redux store 
 
@@ -52,10 +52,10 @@ const HalfDayRequest = () => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/hr_halfday_approvallist';
+            const apiUrl = 'https://ocean21.in/api/public/api/tl_leaverequest_list';
             const response = await axios.post(apiUrl, {
-                emp_id: data.userempid,
-                user_roleid: data.userrole,
+                supervisor_empid: data.userempid,
+                role_id: data.userrole,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -74,19 +74,16 @@ const HalfDayRequest = () => {
         fetchData();
     }, [])
 
-    // Export-Excel 
-
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'To Date', 'Reason'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
             rowData.emp_name,
             rowData.departmentName,
             rowData.category_name,
             rowData.shift_slot,
-            rowData.permission_date,
-            rowData.permission_timefrom,
-            rowData.permission_timeto,
+            rowData.from_date,
+            rowData.to_date,
             rowData.leave_reason,
         ]);
 
@@ -121,16 +118,15 @@ const HalfDayRequest = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'To Date', 'Reason'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
             rowData.emp_name,
             rowData.departmentName,
             rowData.category_name,
             rowData.shift_slot,
-            rowData.permission_date,
-            rowData.permission_timefrom,
-            rowData.permission_timeto,
+            rowData.from_date,
+            rowData.to_date,
             rowData.leave_reason,
         ]);
 
@@ -189,17 +185,16 @@ const HalfDayRequest = () => {
 
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_leave_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
                 e_id: item.emp_id,
-                hr_id: data.userempid,
-                request_date: item.permission_date,
-                request_fromtime: item.permission_timefrom,
-                request_totime: item.permission_timeto,
-                hrstatus: "Approved",
-                slot_id: item.sid,
+                tl_id: data.userempid,
+                request_fromdate: item.from_date,
+                request_todate: item.to_date,
+                tlstatus: "Approved",
+                slot_id: item.slot_id,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -221,17 +216,16 @@ const HalfDayRequest = () => {
     const HandleCancel = async (item) => {
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_leave_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
                 e_id: item.emp_id,
-                hr_id: data.userempid,
-                request_date: item.permission_date,
-                request_fromtime: item.permission_timefrom,
-                request_totime: item.permission_timeto,
-                hrstatus: "Rejected",
-                slot_id: item.sid,
+                tl_id: data.userempid,
+                request_fromdate: item.from_date,
+                request_todate: item.to_date,
+                tlstatus: "Rejected",
+                slot_id: item.slot_id,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -299,8 +293,7 @@ const HalfDayRequest = () => {
                                 <Text style={[styles.header, styles.cell, styles.StartDate]}>Category</Text>
                                 <Text style={[styles.header, styles.cell, styles.EndDate]}>Shift Slot</Text>
                                 <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>From Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
+                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Date</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                             </View>
@@ -315,9 +308,8 @@ const HalfDayRequest = () => {
                                         <Text style={[styles.cell, styles.EmployeeName]}>{item.departmentName}</Text>
                                         <Text style={[styles.cell, styles.StartDate]}>{item.category_name}</Text>
                                         <Text style={[styles.cell, styles.EndDate]}>{item.shift_slot}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.permission_date}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.permission_timefrom}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.permission_timeto}</Text>
+                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.from_date}</Text>
+                                        <Text style={[styles.cell, styles.WeekOff]}>{item.to_date}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
                                         {
                                             item.emp_status === "Pending" ?
@@ -387,4 +379,4 @@ const HalfDayRequest = () => {
     )
 }
 
-export default HalfDayRequest;
+export default TLLeaveRequest;

@@ -11,7 +11,8 @@ const ApprovalList = ({ navigation }) => {
 
             <View style={styles.Container}>
 
-                <TouchableOpacity style={styles.Button}>
+                <TouchableOpacity style={styles.Button}
+                    onPress={() => navigation.navigate('Add Leave Permission Half Day')}>
                     <Text style={styles.ButtonText}>
                         Add Leave/Permission/Half Day
                     </Text>
@@ -19,13 +20,15 @@ const ApprovalList = ({ navigation }) => {
 
                 <View style={styles.ButtonView}>
 
-                    <TouchableOpacity style={styles.HalfButton}>
+                    <TouchableOpacity style={styles.HalfButton}
+                        onPress={() => navigation.navigate('Add Attendance')}>
                         <Text style={styles.ButtonText}>
                             Add Attendance
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.HalfButton}>
+                    <TouchableOpacity style={styles.HalfButton}
+                        onPress={() => navigation.navigate('Add Over Time')}>
                         <Text style={styles.ButtonText}>
                             Add Over Time
                         </Text>

@@ -25,22 +25,26 @@ const HalfDayRequest = () => {
 
     const [filterText, setFilterText] = useState('');
 
+    const itemsPerPage = 6;
+
     const filteredData = datalist.filter(row => {
         const values = Object.values(row).map(value => String(value));
         return values.some(value =>
             value.toLowerCase().includes(filterText.toLowerCase()));
     });
 
-    // 
+    const paginatedData = filteredData.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const totalItems = filteredData.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pages = [...Array(totalPages).keys()].map(num => num + 1);
 
     const onPageChange = (page) => {
         setCurrentPage(page);
     };
-
-    const totalItems = datalist.length;
-    const itemsPerPage = 10;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pages = [...Array(totalPages).keys()].map(num => num + 1);
 
     // 
 
@@ -208,7 +212,11 @@ const HalfDayRequest = () => {
                 }
             });
 
-            console.log(response.data, "response")
+            if (response.data.status === "success") {
+                fetchData();
+            } else {
+                console.log("error")
+            }
 
         } catch (error) {
             console.log(error)
@@ -217,7 +225,7 @@ const HalfDayRequest = () => {
     }
 
     const HandleCancel = async (item) => {
-      
+
         try {
 
             const apiUrl = `https://ocean21.in/api/public/api/approval_ot_request`;
@@ -238,7 +246,11 @@ const HalfDayRequest = () => {
                 }
             });
 
-            console.log(response.data, "response")
+            if (response.data.status === "success") {
+                fetchData();
+            } else {
+                console.log("error")
+            }
 
         } catch (error) {
             console.log(error)
@@ -272,6 +284,7 @@ const HalfDayRequest = () => {
                     value={filterText}
                     onChangeText={text => {
                         setFilterText(text);
+                        setCurrentPage(1);
                     }}
                 />
                 <View style={styles.IconBg}>
@@ -302,10 +315,10 @@ const HalfDayRequest = () => {
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                             </View>
 
-                            {filteredData.length === 0 ? (
+                            {paginatedData.length === 0 ? (
                                 <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                             ) : (
-                                filteredData.map((item, index) => (
+                                paginatedData.map((item, index) => (
                                     <View key={index} style={[styles.row, styles.listBody]}>
                                         <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                         <Text style={[styles.cell, styles.DepartmentName]}>{item.e_name}</Text>

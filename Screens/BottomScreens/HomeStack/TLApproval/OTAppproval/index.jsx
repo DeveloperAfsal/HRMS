@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
-import SearchIcon from "../../../../../../Assets/Icons/Search.svg";
-import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
-import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
-import EditIcon from '../../../../../../Assets/Icons/eyeopen.svg';
-import TickIcon from '../../../../../../Assets/Icons/Tick.svg';
-import CloseIcon from '../../../../../../Assets/Icons/Close.svg';
-import styles from "../AttendanceRequest/style";
+import SearchIcon from "../../../../../Assets/Icons/Search.svg";
+import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
+import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
+import EditIcon from '../../../../../Assets/Icons/eyeopen.svg';
+import TickIcon from '../../../../../Assets/Icons/Tick.svg';
+import CloseIcon from '../../../../../Assets/Icons/Close.svg';
+import styles from "../HalfDayRequest/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import RNFS from 'react-native-fs';
@@ -14,7 +14,7 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const HalfDayRequest = () => {
+const TLOtRequest = () => {
 
     // data from redux store 
 
@@ -26,7 +26,7 @@ const HalfDayRequest = () => {
 
     const [filterText, setFilterText] = useState('');
 
-    const itemsPerPage = 8;
+    const itemsPerPage = 6;
 
     const filteredData = datalist.filter(row => {
         const values = Object.values(row).map(value => String(value));
@@ -52,10 +52,10 @@ const HalfDayRequest = () => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/hr_halfday_approvallist';
+            const apiUrl = 'https://ocean21.in/api/public/api/tl_otrequest_list';
             const response = await axios.post(apiUrl, {
-                emp_id: data.userempid,
-                user_roleid: data.userrole,
+                supervisor_empid: data.userempid,
+                role_id: data.userrole,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -189,17 +189,18 @@ const HalfDayRequest = () => {
 
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_ot_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
-                e_id: item.emp_id,
-                hr_id: data.userempid,
+                e_id: item.e_id,
+                tl_id: data.userempid,
                 request_date: item.permission_date,
                 request_fromtime: item.permission_timefrom,
                 request_totime: item.permission_timeto,
-                hrstatus: "Approved",
-                slot_id: item.sid,
+                tlstatus: "Approved",
+                slot_id: item.slot_id,
+                totalhours: item.total_hrs,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -221,17 +222,18 @@ const HalfDayRequest = () => {
     const HandleCancel = async (item) => {
         try {
 
-            const apiUrl = `https://ocean21.in/api/public/api/approval_halfday_request`;
+            const apiUrl = `https://ocean21.in/api/public/api/tl_approval_ot_request`;
 
             const response = await axios.post(apiUrl, {
                 id: item.id,
-                e_id: item.emp_id,
-                hr_id: data.userempid,
+                e_id: item.e_id,
+                tl_id: data.userempid,
                 request_date: item.permission_date,
                 request_fromtime: item.permission_timefrom,
                 request_totime: item.permission_timeto,
-                hrstatus: "Rejected",
-                slot_id: item.sid,
+                tlstatus: "Rejected",
+                slot_id: item.slot_id,
+                totalhours: item.total_hrs,
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -296,11 +298,13 @@ const HalfDayRequest = () => {
                                 <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
                                 <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Name</Text>
                                 <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Department</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Category</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Shift Slot</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>From Date</Text>
+                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Type</Text>
+                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Location</Text>
+                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Shift Slot</Text>
+                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Date</Text>
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
+                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Total Hours</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                             </View>
@@ -311,16 +315,18 @@ const HalfDayRequest = () => {
                                 paginatedData.map((item, index) => (
                                     <View key={index} style={[styles.row, styles.listBody]}>
                                         <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.emp_name}</Text>
+                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.e_name}</Text>
                                         <Text style={[styles.cell, styles.EmployeeName]}>{item.departmentName}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.category_name}</Text>
+                                        <Text style={[styles.cell, styles.StartDate]}>{item.request_type_name}</Text>
+                                        <Text style={[styles.cell, styles.EndDate]}>{item.request_location}</Text>
                                         <Text style={[styles.cell, styles.EndDate]}>{item.shift_slot}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.permission_date}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.permission_timefrom}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.permission_timeto}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
+                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.request_date}</Text>
+                                        <Text style={[styles.cell, styles.WeekOff]}>{item.request_fromtime}</Text>
+                                        <Text style={[styles.cell, styles.Status]}>{item.request_totime}</Text>
+                                        <Text style={[styles.cell, styles.Status]}>{item.total_hrs}</Text>
+                                        <Text style={[styles.cell, styles.Status]}>{item.request_reason}</Text>
                                         {
-                                            item.emp_status === "Pending" ?
+                                            item.request_status === "Pending" ?
                                                 <View style={styles.listcontentButtonview}>
                                                     <TouchableOpacity style={styles.listcontenteditbutton}
                                                         onPress={() => HandleConfirm(item)}
@@ -333,7 +339,7 @@ const HalfDayRequest = () => {
                                                         <CloseIcon width={14} height={14} />
                                                     </TouchableOpacity>
                                                 </View> :
-                                                <Text style={[styles.cell, styles.Status]}>{item.emp_status}</Text>
+                                                <Text style={[styles.cell, styles.Status]}>{item.request_status}</Text>
                                         }
                                     </View>
                                 ))
@@ -387,4 +393,4 @@ const HalfDayRequest = () => {
     )
 }
 
-export default HalfDayRequest;
+export default TLOtRequest;
