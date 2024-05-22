@@ -47,6 +47,8 @@ import TLPermissionRequest from "./TLApproval/PermissionRequest";
 import TLHalfDayRequest from "./TLApproval/HalfDayRequest";
 import TLOtRequest from "./TLApproval/OTAppproval";
 import Template from "./HrSupport/Templates";
+import JobOpenings from "./HrSupport/JobOpenings";
+import ViewJob from "./HrSupport/ViewJob";
 
 const Stack = createNativeStackNavigator();
 
@@ -140,6 +142,9 @@ const HomeStack = () => {
       <Stack.Screen name="OverTime Request" component={OverTimeRequest} />
 
       <Stack.Screen name="Templates" component={Template} />
+      <Stack.Screen name="Job Openings" component={JobOpenings} />
+
+      <Stack.Screen name="View Job" component={ViewJob} />
 
       {/*  */}
 

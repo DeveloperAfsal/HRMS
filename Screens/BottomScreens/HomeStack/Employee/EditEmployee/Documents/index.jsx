@@ -134,8 +134,6 @@ const Documents = ({
 
     const HandleSubmit = async () => {
 
-        console.log('Hiiii')
-
         const formData = new FormData();
 
         //append data
