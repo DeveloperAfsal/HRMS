@@ -49,6 +49,7 @@ import TLOtRequest from "./TLApproval/OTAppproval";
 import Template from "./HrSupport/Templates";
 import JobOpenings from "./HrSupport/JobOpenings";
 import ViewJob from "./HrSupport/ViewJob";
+import Holiday from "./Holiday";
 
 const Stack = createNativeStackNavigator();
 
@@ -154,6 +155,10 @@ const HomeStack = () => {
       <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
       
       <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
+
+      {/*  */}
+
+      <Stack.Screen name="Holiday" component={Holiday} />
 
 
 
