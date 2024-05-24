@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import NetInfo from '@react-native-community/netinfo';
 import moment from 'moment-timezone';
@@ -10,8 +10,14 @@ import DepressedIcon from "../../../Assets/Emo/depressed.svg";
 import HeartFeelIcon from "../../../Assets/Emo/HeartFeel.svg";
 import SadIcon from "../../../Assets/Emo/sad.svg";
 import SmileIcon from "../../../Assets/Emo/smile.svg";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const HomeScreen = ({ navigation }) => {
+
+    // data from redux store 
+
+    const { data } = useSelector((state) => state.login);
 
     // states
 
@@ -24,6 +30,19 @@ const HomeScreen = ({ navigation }) => {
     const [currentDate, setCurrentDate] = useState('');
     const [currentDay, setCurrentDay] = useState('');
     const [load, SetLoad] = useState(false);
+
+    const [totalcount, setTotalCount] = useState('');
+
+    const [mood, setMood] = useState('');
+    const [moodLoad, setMoodLoad] = useState('');
+
+    const [moodList, setMoodList] = useState({
+        mood_counts: {},
+        moodboard: [],
+        total_count: 0
+    });
+
+    // 
 
     const [selectedEmoji, setSelectedEmoji] = useState(null);
     const [showFullText, setShowFullText] = useState(false);
@@ -73,14 +92,7 @@ const HomeScreen = ({ navigation }) => {
 
     const initialItemsToShow = 3;
     const [showAll, setShowAll] = useState(false);
-    const data = [
-        { name: 'Afsal', key: '1', iconType: 'smile' },
-        { name: 'Karthick', key: '2', iconType: 'laugh' },
-        { name: 'Sathya', key: '3', iconType: 'heart' },
-        { name: 'Afsal', key: '4', iconType: 'smile' },
-        { name: 'Karthick', key: '5', iconType: 'laugh' },
-        { name: 'Sathya', key: '6', iconType: 'heart' }
-    ];
+
 
     const handleViewMore = () => {
         setShowAll(true);
@@ -88,19 +100,34 @@ const HomeScreen = ({ navigation }) => {
 
     const renderIcon = (iconType) => {
         switch (iconType.toLowerCase()) {
-            case 'smile':
-                return <SmileIcon width={20} height={20} />;
-            case 'laugh':
+
+            case 'face_shy':
                 return <LaughIcon width={20} height={20} />;
-            case 'heart':
-                return <HeartFeelIcon width={20} height={20} />;
-            case 'sad':
-                return <SadIcon width={20} height={20} />;
-            case 'depressed':
+
+            case 'happy':
+                return <SmileIcon width={20} height={20} />;
+
+            case 'happy_positive':
                 return <DepressedIcon width={20} height={20} />;
+
+            case 'love_happy':
+                return <HeartFeelIcon width={20} height={20} />;
+
+            case 'sad_smiley':
+                return <SadIcon width={20} height={20} />;
+
             default:
                 return null;
         }
+    };
+
+    const transformMoodboard = (moodboard) => {
+        return moodboard.map(item => ({
+            name: item.emp_name,
+            key: item.id,
+            iconType: item.mood_name,
+            profileImg: item.profile_img
+        }));
     };
 
     // 
@@ -113,13 +140,130 @@ const HomeScreen = ({ navigation }) => {
 
     // 
 
-    const filteredData = selectedOption === 'All' ? data : data.filter(item => {
-        console.log("selectedOption:", selectedOption);
-        console.log("item.iconType:", item.iconType);
+    const transformedMoodboard = transformMoodboard(moodList.moodboard);
+    const filteredData = selectedOption === 'All' ? transformedMoodboard : transformedMoodboard.filter(item => {
         return item.iconType.toLowerCase() === selectedOption.toLowerCase();
     });
 
+    // 
+
+    const CountApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/adminIndexTodayCount';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data;
+            setTotalCount(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        CountApi();
+    }, [])
+
+    // Get MoodBoardlist
+
+    const MoodBoard = async () => {
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/view_moodboard';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setMoodList(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    // Post MoodBoardlist
+
+    const MoodboardPost = async () => {
+        setMoodLoad(true);
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/addmoodboard';
+            const response = await axios.post(apiUrl, {
+                mood_name: selectedEmoji,
+                created_by: data.userempid
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data;
+            setMood(responseData);
+
+            if (responseData.status === "success") {
+                Alert.alert("Successfull", responseData.message);
+                setMoodLoad(false);
+            } else {
+                Alert.alert("Failed", responseData.message)
+                setMoodLoad(false);
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setMoodLoad(false);
+        }
+    }
+
+    const MoodCancel = () => {
+        setSelectedEmoji(null);
+    }
+
+    // Edit Mood 
+
+    const [editIcon, setEditIcon] = useState();
+
+    const EditMood = async () => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/editview_moodboard/${data.userempid}`;
+
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+
+            setEditIcon(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        EditMood();
+        MoodBoard();
+    }, [mood])
+
+
+    const Update = () => {
+        setMood('');
+    }
+
     return (
+
         <ScrollView>
 
             <View>
@@ -200,14 +344,14 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Total Employee</Text>
-                                <Text style={styles.numbers}>1</Text>
+                                <Text style={styles.numbers}>{totalcount.total_employee_count}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}  >
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Late</Text>
-                                <Text style={styles.numbers}>2</Text>
+                                <Text style={styles.numbers}>{totalcount.days_late}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -218,14 +362,14 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1} >
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Present</Text>
-                                <Text style={styles.numbers}>3</Text>
+                                <Text style={styles.numbers}>{totalcount.days_present}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1} >
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Absent</Text>
-                                <Text style={styles.numbers}>4</Text>
+                                <Text style={styles.numbers}>{totalcount.days_absent}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -236,14 +380,14 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Permission</Text>
-                                <Text style={styles.numbers}>5</Text>
+                                <Text style={styles.numbers}>{totalcount.days_permission}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Half Day</Text>
-                                <Text style={styles.numbers}>6</Text>
+                                <Text style={styles.numbers}>{totalcount.days_halfday}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -254,14 +398,14 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Leave</Text>
-                                <Text style={styles.numbers}>7</Text>
+                                <Text style={styles.numbers}>{totalcount.days_leave}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>On Duty</Text>
-                                <Text style={styles.numbers}>8</Text>
+                                <Text style={styles.numbers}>{totalcount.days_onduty}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -272,14 +416,14 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Missed Count</Text>
-                                <Text style={styles.numbers}>9</Text>
+                                <Text style={styles.numbers}>{totalcount.total_missed_count}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Manual Entry</Text>
-                                <Text style={styles.numbers}>10</Text>
+                                <Text style={styles.numbers}>{totalcount.ManualEntryCount}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -290,7 +434,7 @@ const HomeScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
                             <View style={styles.counterCards}>
                                 <Text style={styles.fontStyle}>Total Visitors</Text>
-                                <Text style={styles.numbers}>11</Text>
+                                <Text style={styles.numbers}>{totalcount.days_permission}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -310,41 +454,84 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.text}>What's your mood today? </Text>
                         </View>
 
-                        <View style={styles.Emo}>
+                        {
+                            mood.status === "success" ?
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: '5%', gap: 10 }}>
 
-                            <TouchableOpacity onPress={() => selectEmoji('laugh')} style={[styles.emojiButton, selectedEmoji === 'laugh' && styles.selectedEmoji]}>
-                                <LaughIcon />
-                            </TouchableOpacity>
+                                    <Text style={{
+                                        fontWeight: '400',
+                                        fontSize: 14, color: "#000",
+                                    }}>Hey ! You'R Mood Today</Text>
 
-                            <TouchableOpacity onPress={() => selectEmoji('depressed')} style={[styles.emojiButton, selectedEmoji === 'depressed' && styles.selectedEmoji]}>
-                                <DepressedIcon />
-                            </TouchableOpacity>
+                                    {
+                                        editIcon.mood_name === "face_shy" ? (
+                                            <SmileIcon />
+                                        ) : editIcon.mood_name === "happy" ? (
+                                            <LaughIcon />
+                                        ) : editIcon.mood_name === "happy_positive" ? (
+                                            <DepressedIcon />
+                                        ) : editIcon.mood_name === "love_happy" ? (
+                                            <HeartFeelIcon />
+                                        ) : editIcon.mood_name === "sad_smiley" ? (
+                                            <SadIcon />
+                                        ) : editIcon.mood_name === "face_shy" ? (
+                                            <SmileIcon />
+                                        ) : null
+                                    }
 
-                            <TouchableOpacity onPress={() => selectEmoji('heart')} style={[styles.emojiButton, selectedEmoji === 'heart' && styles.selectedEmoji]}>
-                                <HeartFeelIcon />
-                            </TouchableOpacity>
+                                </View>
+                                :
+                                <View style={styles.Emo}>
 
-                            <TouchableOpacity onPress={() => selectEmoji('sad')} style={[styles.emojiButton, selectedEmoji === 'sad' && styles.selectedEmoji]}>
-                                <SadIcon />
-                            </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => selectEmoji('happy')} style={[styles.emojiButton, selectedEmoji === 'happy' && styles.selectedEmoji]}>
+                                        <LaughIcon />
+                                    </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => selectEmoji('smile')} style={[styles.emojiButton, selectedEmoji === 'smile' && styles.selectedEmoji]}>
-                                <SmileIcon />
-                            </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => selectEmoji('happy_positive')} style={[styles.emojiButton, selectedEmoji === 'happy_positive' && styles.selectedEmoji]}>
+                                        <DepressedIcon />
+                                    </TouchableOpacity>
 
-                        </View>
+                                    <TouchableOpacity onPress={() => selectEmoji('love_happy')} style={[styles.emojiButton, selectedEmoji === 'love_happy' && styles.selectedEmoji]}>
+                                        <HeartFeelIcon />
+                                    </TouchableOpacity>
 
-                        <View style={styles.buttonContainer}>
+                                    <TouchableOpacity onPress={() => selectEmoji('sad_smiley')} style={[styles.emojiButton, selectedEmoji === 'sad_smiley' && styles.selectedEmoji]}>
+                                        <SadIcon />
+                                    </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.buttonSubmit}>
-                                <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Submit</Text>
-                            </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => selectEmoji('face_shy')} style={[styles.emojiButton, selectedEmoji === 'face_shy' && styles.selectedEmoji]}>
+                                        <SmileIcon />
+                                    </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.buttonCancel}>
-                                <Text style={styles.EmployeeModeBoardbuttonCancelText}>Cancel</Text>
-                            </TouchableOpacity>
+                                </View>
+                        }
 
-                        </View>
+                        {
+                            mood.status === "success" ?
+                                <View style={{ marginTop: '5%' }}>
+                                    <TouchableOpacity style={styles.buttonSubmit} onPress={Update}>
+                                        <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Update</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                :
+                                <View style={styles.buttonContainer}>
+
+                                    <TouchableOpacity style={styles.buttonSubmit}
+                                        onPress={MoodboardPost}
+                                    >
+                                        {
+                                            moodLoad ? <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Submit</Text>
+
+                                        }
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={styles.buttonCancel} onPress={MoodCancel}>
+                                        <Text style={styles.EmployeeModeBoardbuttonCancelText}>Cancel</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+                        }
 
                     </View>
 
@@ -362,48 +549,56 @@ const HomeScreen = ({ navigation }) => {
                             <TouchableOpacity
                                 style={[styles.option, selectedOption === 'All' && styles.selectedOption]}
                                 onPress={() => handleOptionClick('All')}>
-                                <Text style={styles.MoodBoardText}>All</Text>
+                                <Text style={styles.MoodBoardText}>All ({moodList.total_count})</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                style={[styles.option, selectedOption === 'Laugh' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('Laugh')}
-                            >
-                                <LaughIcon width={20} height={20} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'Depressed' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('Depressed')}
-                            >
-                                <DepressedIcon width={20} height={20} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'Heart' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('Heart')}
-                            >
-                                <HeartFeelIcon width={20} height={20} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'Sad' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('Sad')}
-                            >
-                                <SadIcon width={20} height={20} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'Smile' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('Smile')}
+                                style={[styles.option, selectedOption === 'face_shy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('face_shy')}
                             >
                                 <SmileIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.happy_positive})</Text>
                             </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('happy')}
+                            >
+                                <LaughIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.happy})</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'happy_positive' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('happy_positive')}
+                            >
+                                <DepressedIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.face_shy})</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'love_happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('love_happy')}
+                            >
+                                <HeartFeelIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.love_happy})</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'sad_smiley' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('sad_smiley')}
+                            >
+                                <SadIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.sad_smiley})</Text>
+                            </TouchableOpacity>
+
+
                         </View>
 
                         <View>
-                            {filteredData.slice(0, showAll ? data.length : initialItemsToShow).map(item => (
+                            {filteredData.slice(0, showAll ? transformedMoodboard.length : initialItemsToShow).map(item => (
                                 <View style={styles.EmoCheckList} key={item.key}>
+                                    <Image source={{ uri: `https://ocean21.in/api/storage/app/${item.profileImg}` }} style={styles.profileImage} />
                                     <Text style={styles.MoodBoardText}>{item.name}</Text>
                                     {renderIcon(item.iconType)}
                                 </View>
@@ -500,7 +695,8 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
         </ScrollView >
+
     )
 }
 
-export default HomeScreen
+export default HomeScreen;

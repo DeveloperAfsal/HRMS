@@ -324,11 +324,6 @@ const CustomDrawerContent = ({ navigation }) => {
                             />
 
                             <DrawerItem
-                                label="Monthly Attendance Calendar View"
-                                onPress={() => navigation.navigate('Monthly Attendance Calendar View')}
-                            />
-
-                            <DrawerItem
                                 label="Monthly List"
                                 onPress={() => navigation.navigate('Monthly List')}
                             />

@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 50
+    },
+
     topcontainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -227,9 +233,9 @@ const styles = StyleSheet.create({
     EmoCheck: {
         flexDirection: 'row',
         paddingTop: "5%",
+        paddingHorizontal: '5%',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: "75%",
     },
 
     MoodBoardText: {
@@ -241,7 +247,7 @@ const styles = StyleSheet.create({
     EmoCheckList: {
         paddingTop: '5%',
         flexDirection: 'row',
-        width: '70%',
+        width: '75%',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -312,7 +318,7 @@ const styles = StyleSheet.create({
     },
     option: {
         paddingVertical: 5,
-        paddingHorizontal: 10,
+        paddingHorizontal: 7,
     },
     selectedOption: {
         borderBottomWidth: 2,

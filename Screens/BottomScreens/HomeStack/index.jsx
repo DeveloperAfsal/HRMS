@@ -50,6 +50,10 @@ import Template from "./HrSupport/Templates";
 import JobOpenings from "./HrSupport/JobOpenings";
 import ViewJob from "./HrSupport/ViewJob";
 import Holiday from "./Holiday";
+import DailyAttendance from "./Attendance/DailyAttendance";
+import MonthlyAttendance from "./Attendance/MonthlyAttendance";
+import MonthlyList from "./Attendance/Monthlylist";
+import Indvidual from "./Attendance/Indvidual";
 
 const Stack = createNativeStackNavigator();
 
@@ -128,6 +132,13 @@ const HomeStack = () => {
       <Stack.Screen name="View Profile" component={ViewProfile} />
       <Stack.Screen name="Edit Employee" component={EditEmployee} />
       <Stack.Screen name="Employee Confirmation" component={EmpConfirmation} />
+
+      {/*  */}
+
+      <Stack.Screen name="Daily Attendance" component={DailyAttendance} />
+      <Stack.Screen name="Monthly Attendance" component={MonthlyAttendance} />
+      <Stack.Screen name="Monthly List" component={MonthlyList} />
+      <Stack.Screen name="Indvidual" component={Indvidual} />
 
       {/*  */}
 
