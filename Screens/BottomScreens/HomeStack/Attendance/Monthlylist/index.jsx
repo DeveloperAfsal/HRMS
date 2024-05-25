@@ -307,7 +307,9 @@ const MonthlyList = ({ navigation }) => {
                                     <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                 ) : (
                                     paginatedData.map((item, index) => (
-                                        <TouchableOpacity key={index} style={[styles.row, styles.listBody]} onPress={() => navigation.navigate('Indvidual')}>
+                                        <TouchableOpacity key={index} style={[styles.row, styles.listBody]} onPress={() => navigation.navigate('Indvidual', {
+                                            Id: item.id,
+                                        })}>
                                             <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.Name}</Text>
                                             {allKeys.map((day, index) => (

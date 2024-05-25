@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
-    box:{
-        width:50,
-        height:50,
-        borderRadius:5,
+    box: {
+        width: 50,
+        height: 50,
+        borderRadius: 5,
     },
 
     top: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         width: 100
     },
 
-    box:{
+    box: {
         width: 100,
     },
 
@@ -201,13 +201,15 @@ const styles = StyleSheet.create({
     NextText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#0A60F1'
+        color: '#0A60F1',
+        paddingLeft: 10
     },
 
     prevText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#737373'
+        color: '#737373',
+        paddingRight: 10
     },
 
     pagination: {
