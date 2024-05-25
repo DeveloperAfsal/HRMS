@@ -102,10 +102,10 @@ const HomeScreen = ({ navigation }) => {
         switch (iconType.toLowerCase()) {
 
             case 'face_shy':
-                return <LaughIcon width={20} height={20} />;
+                return <SmileIcon width={20} height={20} />;
 
             case 'happy':
-                return <SmileIcon width={20} height={20} />;
+                return <LaughIcon width={20} height={20} />;
 
             case 'happy_positive':
                 return <DepressedIcon width={20} height={20} />;
@@ -474,8 +474,6 @@ const HomeScreen = ({ navigation }) => {
                                             <HeartFeelIcon />
                                         ) : editIcon.mood_name === "sad_smiley" ? (
                                             <SadIcon />
-                                        ) : editIcon.mood_name === "face_shy" ? (
-                                            <SmileIcon />
                                         ) : null
                                     }
 
@@ -557,7 +555,7 @@ const HomeScreen = ({ navigation }) => {
                                 onPress={() => handleOptionClick('face_shy')}
                             >
                                 <SmileIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.happy_positive})</Text>
+                                <Text>({moodList.mood_counts.face_shy})</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -573,7 +571,7 @@ const HomeScreen = ({ navigation }) => {
                                 onPress={() => handleOptionClick('happy_positive')}
                             >
                                 <DepressedIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.face_shy})</Text>
+                                <Text>({moodList.mood_counts.happy_positive})</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
