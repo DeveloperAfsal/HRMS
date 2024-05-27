@@ -54,6 +54,9 @@ import DailyAttendance from "./Attendance/DailyAttendance";
 import MonthlyAttendance from "./Attendance/MonthlyAttendance";
 import MonthlyList from "./Attendance/Monthlylist";
 import Indvidual from "./Attendance/Indvidual";
+import ActivityLog from "./Logs/ActivityLog";
+import EMPActiveLog from "./Logs/EmployeeLog";
+import Announcement from "../HomeScreen/Announcement";
 
 const Stack = createNativeStackNavigator();
 
@@ -100,6 +103,8 @@ const HomeStack = () => {
           };
         }}
       />
+
+      <Stack.Screen name="Announcement" component={Announcement} />
 
       {/*  */}
 
@@ -164,14 +169,17 @@ const HomeStack = () => {
       <Stack.Screen name="TL Leave Request" component={TLLeaveRequest} />
       <Stack.Screen name="TL Permission Request" component={TLPermissionRequest} />
       <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
-      
+
       <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
 
       {/*  */}
 
       <Stack.Screen name="Holiday" component={Holiday} />
 
+      {/*  */}
 
+      <Stack.Screen name="Activity Log" component={ActivityLog} />
+      <Stack.Screen name="Employee Activity Log" component={EMPActiveLog} />
 
     </Stack.Navigator>
   );

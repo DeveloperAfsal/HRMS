@@ -121,7 +121,7 @@ const CustomDrawerContent = ({ navigation }) => {
     const imageUrl = `https://ocean21.in/api/storage/app/${data.userimage}`;
 
     return (
-        
+
         <>
 
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>

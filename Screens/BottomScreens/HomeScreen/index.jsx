@@ -4,6 +4,8 @@ import styles from "./style";
 import NetInfo from '@react-native-community/netinfo';
 import moment from 'moment-timezone';
 import Svg, { Path } from 'react-native-svg';
+import { launchImageLibrary } from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import HandCursorIcon from "../../../Assets/Icons/HandCursor.svg";
 import LaughIcon from "../../../Assets/Emo/laugh.svg";
 import DepressedIcon from "../../../Assets/Emo/depressed.svg";
@@ -13,57 +15,12 @@ import SmileIcon from "../../../Assets/Emo/smile.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
+
 const HomeScreen = ({ navigation }) => {
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
-
-    // states
-
-    const [refreshing, setRefreshing] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [loggedInTime, setLoggedInTime] = useState('00:00');
-    const [loggedOutTime, setLoggedOutTime] = useState('00:00');
-    const [totalHours, setTotalHours] = useState('00:00');
-    const [userAlreadyLoggedIn, setUserAlreadyLoggedIn] = useState('0');
-    const [currentDate, setCurrentDate] = useState('');
-    const [currentDay, setCurrentDay] = useState('');
-    const [load, SetLoad] = useState(false);
-
-    const [totalcount, setTotalCount] = useState('');
-
-    const [mood, setMood] = useState('');
-    const [moodLoad, setMoodLoad] = useState('');
-
-    const [moodList, setMoodList] = useState({
-        mood_counts: {},
-        moodboard: [],
-        total_count: 0
-    });
-
-    // 
-
-    const [selectedEmoji, setSelectedEmoji] = useState(null);
-    const [showFullText, setShowFullText] = useState(false);
-    const toggleText = () => setShowFullText(!showFullText);
-
-    // current date & current day
-
-    useEffect(() => {
-        const updateDateTime = () => {
-            const indiaTimeZone = 'Asia/Kolkata';
-            const now = moment().tz(indiaTimeZone);
-            const formattedDate = now.format('MMMM DD YYYY');
-            const formattedDay = now.format('dddd');
-
-            setCurrentDate(formattedDate);
-            setCurrentDay(formattedDay);
-        };
-        updateDateTime();
-        const intervalId = setInterval(updateDateTime, 60000);
-        return () => clearInterval(intervalId);
-    }, []);
 
     // clock icon
 
@@ -82,13 +39,75 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
-    // 
+    // states
 
-    const selectEmoji = (emoji) => {
-        setSelectedEmoji(emoji);
-    };
+    const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [loggedInTime, setLoggedInTime] = useState('00:00');
+    const [loggedOutTime, setLoggedOutTime] = useState('00:00');
+    const [totalHours, setTotalHours] = useState('00:00');
+    const [userAlreadyLoggedIn, setUserAlreadyLoggedIn] = useState('0');
+    const [currentDate, setCurrentDate] = useState('');
+    const [currentDay, setCurrentDay] = useState('');
+    const [load, SetLoad] = useState(false);
 
-    // 
+    // current date & current day
+
+    useEffect(() => {
+        const updateDateTime = () => {
+            const indiaTimeZone = 'Asia/Kolkata';
+            const now = moment().tz(indiaTimeZone);
+            const formattedDate = now.format('MMMM DD YYYY');
+            const formattedDay = now.format('dddd');
+
+            setCurrentDate(formattedDate);
+            setCurrentDay(formattedDay);
+        };
+        updateDateTime();
+        const intervalId = setInterval(updateDateTime, 60000);
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // totalcount --------------
+
+    const [totalcount, setTotalCount] = useState('');
+
+    const CountApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/adminIndexTodayCount';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data;
+            setTotalCount(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        CountApi();
+    }, [])
+
+    // mood Board -------------
+
+    const [mood, setMood] = useState('');
+    const [moodLoad, setMoodLoad] = useState('');
+    const [moodList, setMoodList] = useState({
+        mood_counts: {},
+        moodboard: [],
+        total_count: 0
+    });
+    const [selectedEmoji, setSelectedEmoji] = useState(null);
+    const [showFullText, setShowFullText] = useState(false);
+
+    const toggleText = () => setShowFullText(!showFullText);
 
     const initialItemsToShow = 3;
     const [showAll, setShowAll] = useState(false);
@@ -130,7 +149,9 @@ const HomeScreen = ({ navigation }) => {
         }));
     };
 
-    // 
+    const selectEmoji = (emoji) => {
+        setSelectedEmoji(emoji);
+    };
 
     const [selectedOption, setSelectedOption] = useState('All');
 
@@ -138,37 +159,10 @@ const HomeScreen = ({ navigation }) => {
         setSelectedOption(option);
     };
 
-    // 
-
     const transformedMoodboard = transformMoodboard(moodList.moodboard);
     const filteredData = selectedOption === 'All' ? transformedMoodboard : transformedMoodboard.filter(item => {
         return item.iconType.toLowerCase() === selectedOption.toLowerCase();
     });
-
-    // 
-
-    const CountApi = async () => {
-
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/adminIndexTodayCount';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-
-            const responseData = response.data;
-            setTotalCount(responseData);
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
-    }
-
-    useEffect(() => {
-        CountApi();
-    }, [])
 
     // Get MoodBoardlist
 
@@ -262,6 +256,273 @@ const HomeScreen = ({ navigation }) => {
         setMood('');
     }
 
+    // 
+
+    const [announcementList, setAnnouncementList] = useState([]);
+
+    const formatDate = (dateString) => {
+        const today = new Date();
+        const date = new Date(dateString);
+
+        return date.toDateString() === today.toDateString() ? 'Today' : dateString;
+    };
+
+    const Annlist = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/view_announcement';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setAnnouncementList(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        Annlist();
+    }, [])
+
+    // 
+
+    const [selectedImage, setSelectedImage] = useState([]);
+
+    const handleFromGallery = () => {
+        launchImageLibrary({ mediaType: 'photo', selectionLimit: 1 }, handleImagePickerResult);
+    };
+
+    const handleImagePickerResult = async (result) => {
+        if (!result.didCancel) {
+            const images = result.assets ? result.assets : [result];
+            for (const image of images) {
+                const response = await fetch(image.uri);
+                const blob = await response.blob();
+                if (blob.size > 1024 * 1024) {
+                    Alert.alert("File size should be less than 1MB");
+                } else {
+                    const compressedUri = await compressImage(image);
+                    // console.log(compressedUri, "compressedUri")
+                    setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
+                    checkWiFiConnection();
+                }
+            }
+        }
+    };
+
+    const compressImage = async (image) => {
+        try {
+            const croppedImage = await ImagePicker.openCropper({
+                path: image.uri,
+                width: 1024,
+                height: 1024,
+                cropping: true,
+                compressImageQuality: 0.8,
+                cropperCircleOverlay: true,
+                includeBase64: true,
+                cropperToolbarTitle: 'Edit Image',
+            });
+            return croppedImage;
+        } catch (error) {
+            console.error('Error compressing image:', error);
+            return null;
+        }
+    };
+
+    // CustomAlert
+
+    const [showAlert, setShowAlert] = useState(false);
+
+    const handlecheckout = () => {
+        setShowAlert(true);
+    };
+
+    const handleCancel = () => {
+        setShowAlert(false);
+    };
+
+    const handleConfirm = () => {
+        setShowAlert(false);
+        performCheckOut();
+    };
+
+    const [allowedipAddress, setAllowedipAddress] = useState([]);
+    const [useripaddress, setUseripaddress] = useState('');
+
+    useEffect(() => {
+
+        const fetchIPAddresses = async () => {
+            try {
+
+                // Fetch EPKipaddress using Laravel
+                const epkResponse = await axios.get('https://ocean21.in/api/public/api/getipAddresses', {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+                const epkData = epkResponse.data.data;
+                setAllowedipAddress(epkData);
+
+                // Fetch Actualipaddress
+                const connectionInfo = await NetInfo.fetch();
+                const ipAddress = connectionInfo.details.ipAddress;
+                setUseripaddress(ipAddress);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchIPAddresses();
+    }, []);
+
+    const checkWiFiConnection = async () => {
+
+        SetLoad(true);
+
+        const connectionInfo = await NetInfo.fetch();
+
+        if (connectionInfo.details) {
+            const ipAddress = connectionInfo.details.ipAddress;
+            setUseripaddress(ipAddress);
+
+            if (allowedipAddress.includes(ipAddress)) {
+                if (userAlreadyLoggedIn == 1) {
+                    performCheckOut();
+                } else {
+                    performCheckIn();
+                }
+            } else {
+                // handlecheckout1();
+                console.log("Error")
+            }
+        }
+
+    };
+
+    // checkin function
+
+    const performCheckIn = async () => {
+
+        const formData = new FormData();
+
+        formData.append('checkinuserempid', data.userempid);
+        formData.append('checkinuseripaddress', useripaddress);
+        formData.append('device', 'Redmi8');
+        formData.append('checking_type', 'Mobile');
+        formData.append('created_by', data.userempid);
+
+        if (selectedImage.length > 0) {
+            selectedImage.map((image, index) => {
+                const imageUriParts = image.split('/');
+                const imageName = imageUriParts[imageUriParts.length - 1];
+                formData.append(`checkin_user_img`, {
+                    uri: image,
+                    name: imageName,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            formData.append('checkin_user_img', selectedImage);
+        }
+
+
+        try {
+            const response = await fetch('https://ocean21.in/api/public/api/insertappcheckin', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
+
+            const responsedata = await response.json();
+
+            if (responsedata.status === "success") {
+                getInOutWorkingTime();
+                Alert.alert('Successfull', responsedata.message)
+            } else {
+                Alert.alert('Failed', responsedata.message)
+            }
+
+        } catch (error) {
+            console.error('Error:', error.response.data);
+        }
+    }
+
+    // checkout function
+
+    const performCheckOut = async () => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/insertcheckout`;
+
+            const response = await axios.post(apiUrl, {
+                checkinuserempid: data.userempid,
+                updated_by: data.userempid,
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+            const responsedata = await response.data;
+            console.log(responsedata, "performancecheckout")
+
+            if (responsedata.status === "success") {
+                getInOutWorkingTime();
+                Alert.alert('Successfull', responsedata.message)
+            } else {
+                Alert.alert('Failed', responsedata.message)
+            }
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    // 
+
+    const getInOutWorkingTime = async () => {
+
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/employeeIndexinouttime';
+
+            const response = await axios.post(apiUrl, {
+                emp_id: data.userempid
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            console.log(response.data, "response")
+
+            if (response && response.data) {
+                const updatedata = response.data;
+                setLoggedInTime(updatedata.userempcheckintime);
+                setLoggedOutTime(updatedata.userempcheckouttime);
+                setTotalHours(updatedata.userempchecktotaltime);
+                setUserAlreadyLoggedIn(updatedata.statuscurrentdate);
+            }
+
+        } catch (error) {
+            Alert.alert('Error during login:', error);
+        }
+    };
+
     return (
 
         <ScrollView>
@@ -282,17 +543,18 @@ const HomeScreen = ({ navigation }) => {
 
                                     <Text style={styles.datetime}>{currentDay}, {currentDate}</Text>
 
-                                    <TouchableOpacity>
-
+                                    <TouchableOpacity
+                                        onPress={handleFromGallery}
+                                    >
                                         <View
                                             style={[styles.button,
-                                            { backgroundColor: "#19CDFE" }
+                                            { backgroundColor: userAlreadyLoggedIn == 1 ? "#19CDFE" : "#0879F6" }
                                             ]}>
 
                                             <View style={{ alignItems: 'center' }}>
                                                 <HandCursorIcon color={"#fff"} width={60} height={60} />
                                                 <Text style={styles.buttontext}>
-                                                    Check In
+                                                    {userAlreadyLoggedIn == 1 ? 'Check Out' : 'Check In'}
                                                 </Text>
                                             </View>
 
@@ -305,8 +567,7 @@ const HomeScreen = ({ navigation }) => {
                                             <ClockIcon />
                                             <Text style={styles.timetext}>In Time</Text>
                                             <Text style={styles.timenumbertext}>
-                                                {/* {loggedInTime} */}
-                                                12:00
+                                                {loggedInTime}
                                             </Text>
                                         </View>
 
@@ -314,8 +575,7 @@ const HomeScreen = ({ navigation }) => {
                                             <ClockIcon />
                                             <Text style={styles.timetext}>Out Time</Text>
                                             <Text style={styles.timenumbertext}>
-                                                {/* {loggedOutTime} */}
-                                                12:00
+                                                {loggedOutTime}
                                             </Text>
                                         </View>
 
@@ -323,8 +583,7 @@ const HomeScreen = ({ navigation }) => {
                                             <ClockIcon />
                                             <Text style={styles.timetext}>Working Hrs</Text>
                                             <Text style={styles.timenumbertext}>
-                                                {/* {totalHours} */}
-                                                12:00
+                                                {totalHours}
                                             </Text>
                                         </View>
                                     </View>
@@ -622,67 +881,41 @@ const HomeScreen = ({ navigation }) => {
 
                             <Text style={styles.tittleText}>Announcements</Text>
 
-                            <TouchableOpacity style={styles.addbutton}>
-                                <Text style={styles.addbuttonText}>
-                                    + Add
-                                </Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                                <TouchableOpacity style={styles.addbutton}
+                                    onPress={() => navigation.navigate('Announcement')}
+                                >
+                                    <Text style={styles.addbuttonText}>
+                                        View
+                                    </Text>
+                                </TouchableOpacity>
 
+                                <TouchableOpacity style={styles.addbutton}>
+                                    <Text style={styles.addbuttonText}>
+                                        + Add
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
-                        <View style={{ paddingTop: "5%" }}>
+                        <View style={{ paddingTop: "1%" }}>
 
-                            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#E1F3F8', width: "85%", paddingTop: '5%', borderRadius: 7 }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "85%" }}>
-                                    <Text style={{ color: '#000000', fontWeight: '700', fontSize: 14, lineHeight: 18.62 }}>Ramzan</Text>
-                                    <Text style={{ fontWeight: '400', fontSize: 15, lineHeight: 19.95 }}>Today</Text>
-                                </View>
+                            {
+                                announcementList.map((item, index) => (
+                                    <View key={index} style={styles.AnnouncementData}>
 
-                                <View style={{ padding: '5%' }}>
-                                    <Text style={{ fontWeight: '400', lineHeight: 18.62 }}> {showFullText ?
-                                        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit sint placeat dolores, tempora non ut eum modi in, vitae, veritatis fuga! Vel modi voluptas, exercitationem optio veniam doloribus sequi harum." :
-                                        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit sint placeat dolores..."
-                                    }</Text>
-                                    {!showFullText &&
-                                        <TouchableOpacity onPress={toggleText}>
-                                            <Text style={{ color: '#0A60F1', paddingTop: "1%" }}>See more</Text>
-                                        </TouchableOpacity>
-                                    }
-                                </View>
+                                        <View style={styles.AnnouncementDataHeadr}>
+                                            <Text style={styles.AnnouncementDataHeadrTitle}>{item.a_title}</Text>
+                                            <Text style={styles.AnnouncementDataHeadrWhen}>{formatDate(item.a_validdate)}</Text>
+                                        </View>
 
-                            </View>
+                                        <View style={{ padding: '5%' }}>
+                                            <Text style={{ fontWeight: '400', lineHeight: 18.62 }}>{item.a_description}</Text>
+                                        </View>
 
-                        </View>
-
-                        <View style={{ paddingTop: "5%" }}>
-
-                            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFDEB', width: "85%", paddingTop: '5%', borderRadius: 7 }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "85%" }}>
-                                    <Text style={{ color: '#000000', fontWeight: '700', fontSize: 14, lineHeight: 18.62 }}>Holi</Text>
-                                    <Text style={{ fontWeight: '400', fontSize: 15, lineHeight: 19.95 }}>Today</Text>
-                                </View>
-
-                                <View style={{ padding: '5%' }}>
-                                    <Text style={{ fontWeight: '400', lineHeight: 18.62 }}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit sint placeat dolores, tempora non ut eum modi in, vitae, veritatis fuga! Vel modi voluptas, exercitationem optio veniam doloribus sequi harum.</Text>
-                                </View>
-
-                            </View>
-
-                        </View>
-
-                        <View style={{ paddingTop: "5%" }}>
-
-                            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F6E5', width: "85%", paddingTop: '5%', borderRadius: 7 }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "85%" }}>
-                                    <Text style={{ color: '#000000', fontWeight: '700', fontSize: 14, lineHeight: 18.62 }}>Tamil New Year</Text>
-                                    <Text style={{ fontWeight: '400', fontSize: 15, lineHeight: 19.95 }}>Today</Text>
-                                </View>
-
-                                <View style={{ padding: '5%' }}>
-                                    <Text style={{ fontWeight: '400', lineHeight: 18.62 }}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit sint placeat dolores, tempora non ut eum modi in, vitae, veritatis fuga! Vel modi voluptas, exercitationem optio veniam doloribus sequi harum.</Text>
-                                </View>
-
-                            </View>
+                                    </View>
+                                ))
+                            }
 
                         </View>
 

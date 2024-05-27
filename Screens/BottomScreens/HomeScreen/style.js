@@ -271,7 +271,8 @@ const styles = StyleSheet.create({
     },
 
     AnnounceMent: {
-        width: "90%",
+        // width: "90%",
+        marginHorizontal: '5%',
         paddingTop: "5%",
         paddingBottom: "5%",
         borderRadius: 19,
@@ -282,7 +283,8 @@ const styles = StyleSheet.create({
     tittle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '90%'
+        alignItems:'center',
+        width: '85%'
     },
 
     tittleText: {
@@ -308,22 +310,53 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 18.62,
     },
+
     emojiButton: {
         padding: 10,
         borderRadius: 20,
         margin: 5,
     },
+
     selectedEmoji: {
         backgroundColor: '#D0F6FF',
     },
+
     option: {
         paddingVertical: 5,
         paddingHorizontal: 7,
     },
+
     selectedOption: {
         borderBottomWidth: 2,
         borderBottomColor: '#000000',
-    }
+    },
+
+    AnnouncementData: {
+        backgroundColor: '#E1F3F8',
+        marginHorizontal: '7%',
+        paddingTop: '5%',
+        borderRadius: 7,
+        marginTop: '5%'
+    },
+
+    AnnouncementDataHeadr: {
+        paddingHorizontal: '5%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    AnnouncementDataHeadrTitle: {
+        color: '#000000',
+        fontWeight: '700',
+        fontSize: 14,
+        lineHeight: 18.62
+    },
+
+    AnnouncementDataHeadrWhen: {
+        fontWeight: '400',
+        fontSize: 15,
+        lineHeight: 19.95
+    },
 });
 
 export default styles;
