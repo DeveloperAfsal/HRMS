@@ -278,7 +278,7 @@ const Indvidual = ({ route }) => {
                                 <Text style={[styles.header, styles.cell, styles.Status]}>HL</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>LA</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>PR</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>OT</Text>
+                                <Text style={[styles.header, styles.cell, styles.Status]}>OT/W/H</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Total Hours</Text>
                             </View>
 
@@ -297,7 +297,7 @@ const Indvidual = ({ route }) => {
                                         <Text style={[styles.cell, styles.Status]}>HL</Text>
                                         <Text style={[styles.cell, styles.Status]}>LA</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.emp_permission}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.emp_onduty}</Text>
+                                        <Text style={[styles.cell, styles.Status]}>{item.others}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.checkout_total_hours}</Text>
                                     </View>
                                 ))

@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Image, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import SearchIcon from '../../../../../Assets/Icons/Search.svg';
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Image, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import ProfileIcon from "../../../../../Assets/Icons/Profile.svg";
 import PhoneIcon from "../../../../../Assets/Icons/Phone.svg";
 import MailIcon from "../../../../../Assets/Icons/MailorMessage.svg";
+import SearchIcon from '../../../../../Assets/Icons/Search.svg';
 import styles from "./style";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useFocusEffect } from "@react-navigation/native";
 
-const EmployeeList = ({ navigation }) => {
+
+const VisitorLog = ({ navigation }) => {
 
     // data from redux
 
@@ -24,6 +24,8 @@ const EmployeeList = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('Active');
+    const [EditLoad, setEditLoad] = useState(false);
+    const [Number, setNumber] = useState(0);
 
     const filteredData = employeeData.filter(row => {
         const values = Object.values(row).map(value => String(value));
@@ -34,25 +36,12 @@ const EmployeeList = ({ navigation }) => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`https://ocean21.in/api/public/api/employee_litshow/${selectedStatus}`, {
+            const response = await axios.get(`https://ocean21.in/api/public/api/visitor_list`, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
                 }
             });
             const employeeData = response.data.data;
-
-            employeeData.sort((a, b) => {
-                const firstNameA = a.first_name.toUpperCase();
-                const firstNameB = b.first_name.toUpperCase();
-
-                if (firstNameA < firstNameB) {
-                    return -1;
-                }
-                if (firstNameA > firstNameB) {
-                    return 1;
-                }
-                return 0;
-            });
 
             setEmployeeData(employeeData);
             setLoading(false);
@@ -61,23 +50,53 @@ const EmployeeList = ({ navigation }) => {
         }
     };
 
-    useFocusEffect(
-        useCallback(() => {
-            fetchData();
-        }, [selectedStatus])
-    );
+    useEffect(() => {
+        fetchData();
+    }, [])
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
+    // 
 
-    const selectStatus = (status) => {
-        setSelectedStatus(status);
-        setShowDropdown(false);
-    };
+    const Checkout = async (employee) => {
+
+        // setEditLoad(true);
+
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/visitor_checkout';
+
+            const response = await axios.put(apiUrl, {
+                id: employee.id,
+                out_time: "16:00:00",
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                },
+            });
+
+            const resdata = response.data;
+            console.log(resdata, "resdata")
+
+            if (resdata.status === "success") {
+                setEditLoad(false);
+                setNumber(1);
+                Alert.alert("successfull", resdata.message);
+                fetchData();
+            } else {
+                setEditLoad(false);
+                Alert.alert("Failed To Update", resdata.message);
+                console.error('Failed To Update:');
+            }
+
+        } catch (error) {
+            setEditLoad(false);
+            Alert.alert("Error during submit", resdata.message);
+            console.error('Error during submit:', error);
+        }
+
+    }
 
     return (
-
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} />}>
 
             <View style={styles.filterInput}>
@@ -97,37 +116,6 @@ const EmployeeList = ({ navigation }) => {
 
             </View>
 
-            <View style={styles.ActiveInactiveContainer}>
-
-                <Text style={{ fontWeight: '600', fontSize: 16, lineHeight: 21.28 }}>Status :</Text>
-
-                <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
-
-                    <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
-                    <DropdownIcon width={14} height={14} color={"#1AD0FF"} />
-
-                </TouchableOpacity>
-
-                {/* Dropdown to show the options */}
-
-                {showDropdown && (
-
-                    <View style={styles.dropdown}>
-
-                        <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
-                            <Text style={styles.dropdownOptionText}>Active</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={() => selectStatus("In-Active")} style={styles.dropdownOption}>
-                            <Text style={styles.dropdownOptionText}>In-Active</Text>
-                        </TouchableOpacity>
-
-                    </View>
-
-                )}
-
-            </View>
-
             <View style={styles.container}>
                 {loading ? (
                     <ActivityIndicator size="large" color={"#0A60F1"} style={styles.activityIndicator} />
@@ -137,10 +125,10 @@ const EmployeeList = ({ navigation }) => {
                             filteredData.map((employee, index) =>
 
                             (
-                                <TouchableOpacity key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}
-                                    onPress={() => navigation.navigate('View Profile', { id: employee.id })}
+                                <View key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}
+
                                 >
-                                    <View key={employee.id} >
+                                    <View key={index} >
                                         <View style={styles.cardtop}>
                                             <View>
                                                 {employee.profile_img ? (
@@ -157,24 +145,40 @@ const EmployeeList = ({ navigation }) => {
 
 
                                                 <View style={styles.NameContainer}>
-                                                    <Text style={styles.name}>{employee.first_name} {employee.last_name}</Text>
-                                                    <Text style={styles.depname}>{employee.department_name}</Text>
+                                                    <Text style={styles.name}>{employee.visitor_name}</Text>
                                                 </View>
                                             </View>
                                         </View>
 
                                         <View style={styles.phoneEmail}>
                                             <View style={styles.gap} >
-                                                <PhoneIcon width={18} height={18} color={"#3A3A3A"} />
-                                                <MailIcon width={18} height={18} color={"#3A3A3A"} />
+                                                <Text style={styles.fontsize}>Phone Number :</Text>
+                                                <Text style={styles.fontsize}>Email ID : </Text>
                                             </View>
                                             <View style={styles.gap} >
-                                                <Text style={styles.fontsize}>   {employee.mobile_no}</Text>
-                                                <Text style={styles.fontsize}>   {employee.official_email}</Text>
+                                                <Text style={styles.fontsize}>   {employee.mobile_number}</Text>
+                                                <Text style={styles.fontsize}>   {employee.email_id}</Text>
                                             </View>
                                         </View>
+
+                                        <View style={styles.Buttonview}>
+                                            <TouchableOpacity style={Number == 1 ? styles.CheckoutActive : styles.Checkout}
+                                                onPress={() => Checkout(employee)}
+                                            >
+                                                {
+                                                    EditLoad ?
+                                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                        <Text style={styles.CheckoutText}>Check out</Text>
+                                                }
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={styles.ViewDetails}
+                                                onPress={() => navigation.navigate('ViewDeatails', { Id: employee })}
+                                            >
+                                                <Text style={styles.DetailsText}>View Details</Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                </TouchableOpacity>
+                                </View>
                             ))
                         }
 
@@ -183,8 +187,7 @@ const EmployeeList = ({ navigation }) => {
             </View>
 
         </ScrollView>
-
     )
 }
 
-export default EmployeeList;
+export default VisitorLog;

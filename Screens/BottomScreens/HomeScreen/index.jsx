@@ -278,7 +278,7 @@ const HomeScreen = ({ navigation }) => {
                     const compressedUri = await compressImage(image);
                     // console.log(compressedUri, "compressedUri")
                     setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
-                    checkWiFiConnection();
+                    performCheckIn();
                 }
             }
         }
@@ -364,10 +364,9 @@ const HomeScreen = ({ navigation }) => {
                 if (userAlreadyLoggedIn == 1) {
                     performCheckOut();
                 } else {
-                    performCheckIn();
+                    handleFromGallery();
                 }
             } else {
-                // handlecheckout1();
                 console.log("Error")
             }
         }
@@ -620,7 +619,7 @@ const HomeScreen = ({ navigation }) => {
                                     <Text style={styles.datetime}>{currentDay}, {currentDate}</Text>
 
                                     <TouchableOpacity
-                                        onPress={handleFromGallery}
+                                        onPress={checkWiFiConnection}
                                     >
                                         <View
                                             style={[styles.button,

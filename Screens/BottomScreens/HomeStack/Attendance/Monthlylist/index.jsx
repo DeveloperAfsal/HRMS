@@ -231,6 +231,7 @@ const MonthlyList = ({ navigation }) => {
                         <Text style={[styles.Agenta, { color: '#FB5A00' }]}>LA - Late</Text>
                         <Text style={[styles.Agenta, { color: '#9BB500' }]}>PR - Permission</Text>
                         <Text style={[styles.Agenta, { color: '#6B057B' }]}>HL - Half Day</Text>
+                        <Text style={[styles.Agenta, { color: '#404040' }]}>OT - Over Time</Text>
                     </View>
 
                     <View >

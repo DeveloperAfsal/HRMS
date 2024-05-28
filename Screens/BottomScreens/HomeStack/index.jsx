@@ -57,6 +57,9 @@ import Indvidual from "./Attendance/Indvidual";
 import ActivityLog from "./Logs/ActivityLog";
 import EMPActiveLog from "./Logs/EmployeeLog";
 import Announcement from "../HomeScreen/Announcement";
+import AddVisitor from "./VisitorManagement/AddVisitor";
+import VisitorLog from "./VisitorManagement/VisitorLog";
+import ViewDeatails from "./VisitorManagement/Details";
 
 const Stack = createNativeStackNavigator();
 
@@ -178,8 +181,14 @@ const HomeStack = () => {
 
       {/*  */}
 
+      <Stack.Screen name="Add visitor" component={AddVisitor} />
+      <Stack.Screen name="Visitor log" component={VisitorLog} />
+
+      {/*  */}
+
       <Stack.Screen name="Activity Log" component={ActivityLog} />
       <Stack.Screen name="Employee Activity Log" component={EMPActiveLog} />
+      <Stack.Screen name="ViewDeatails" component={ViewDeatails} />
 
     </Stack.Navigator>
   );
