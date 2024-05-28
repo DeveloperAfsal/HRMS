@@ -5,6 +5,7 @@ import ArrowRightIcon from "../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../Assets/Icons/leftarrow.svg";
 import EditIcon from "../../../../Assets/Icons/Edit.svg";
 import DeleteIcon from "../../../../Assets/Icons/Delete.svg";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "./style";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -181,6 +182,152 @@ const Announcement = () => {
         }
     };
 
+    // 
+
+    // Api call for Delete
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [ReasonError, setReasonError] = useState('')
+    const [Reason, setReason] = useState('');
+    const [DelData, setDelData] = useState(false);
+    const [slotToDelete, setSlotToDelete] = useState(null);
+
+    const HandleDelete = (slotId) => {
+        setSlotToDelete(slotId);
+        setModalVisible(true);
+    }
+
+    const cancelDelete = () => {
+        setSlotToDelete(null);
+        setModalVisible(false);
+        setReasonError('');
+        setReason('');
+        setDelData(false);
+    }
+
+    const confirmDelete = async () => {
+
+        setDelData(true)
+
+        if (slotToDelete) {
+
+            try {
+
+                if (!Reason) {
+                    setReasonError('Reason Required');
+                    setDelData(false);
+                    return;
+                } else {
+                    setReasonError('');
+                    setReason('');
+                }
+
+                const apiUrl = `https://ocean21.in/api/public/api/delete_announcement`;
+
+                const response = await axios.post(apiUrl, {
+                    id: slotToDelete,
+                    updated_by: data.userempid,
+                    reason: Reason,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                if (response.data.status === "success") {
+                    const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
+                    setDatalist(updatedDataList);
+                    setDelData(false);
+                    Alert.alert("Deleted", "Deleted Successfully");
+                } else {
+                    Alert.alert("Failed", "Failed to delete shift slot");
+                    setDelData(false)
+                }
+            } catch (error) {
+                Alert.alert("Error", "Error while deleting shift slot");
+                console.error('Error deleting shift slot:', error);
+                setDelData(false)
+            }
+            setSlotToDelete(null);
+            setModalVisible(false);
+        }
+    }
+
+    // 
+
+    const [selectedSlotId, setSelectedSlotId] = useState('');
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [EditLoad, setEditLoad] = useState(false);
+    const [AnnounceMentTitle, setAnnounceMentTitle] = useState('');
+    const [AnnounceMentdes, setAnnounceMentdes] = useState('');
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setStartDate(date);
+        }
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+
+
+    const openEditModal = (slot) => {
+        setEditModalVisible(true);
+        setSelectedSlotId(slot.id);
+        setStartDate(new Date(slot.a_validdate));
+        setAnnounceMentTitle(slot.a_title);
+        setAnnounceMentdes(slot.a_description);
+    };
+
+    const closeEditModal = () => {
+        setEditModalVisible(false);
+    };
+
+    const handleEditSubmit = async () => {
+
+        setEditLoad(true);
+
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/update_announcement';
+
+            const response = await axios.put(apiUrl, {
+                id: selectedSlotId,
+                validdate: formattedStartDate,
+                title: AnnounceMentTitle,
+                description: AnnounceMentdes,
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                },
+            });
+
+            if (response.data.status === "success") {
+                setEditLoad(false);
+                Alert.alert("Successfull", response.data.message);
+                setEditModalVisible(false);
+                setStartDate(new Date());
+                fetchData();
+            } else {
+                setEditLoad(false);
+                Alert.alert("Failed", response.data.message);
+            }
+
+        } catch (error) {
+            setEditLoad(false);
+            Alert.alert("Failed", error);
+        }
+
+        closeEditModal();
+    };
+
     return (
 
         <View style={styles.Container}>
@@ -248,10 +395,14 @@ const Announcement = () => {
                                         <Text style={[styles.cell, styles.ShiftSlot]}>{item.status}</Text>
                                         <Text style={[styles.cell, styles.WeekOff]}>{item.updated_name}</Text>
                                         <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}>
+                                            <TouchableOpacity style={styles.listcontenteditbutton}
+                                                onPress={() => openEditModal(item)}
+                                            >
                                                 <EditIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}>
+                                            <TouchableOpacity style={styles.listcontentdelbutton}
+                                                onPress={() => HandleDelete(item.id)}
+                                            >
                                                 <DeleteIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
                                         </View>
@@ -301,6 +452,123 @@ const Announcement = () => {
 
                 </View>
             </View>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                        <Text style={styles.modalText}>Reason:</Text>
+                        <TextInput
+                            value={Reason}
+                            onChangeText={(text) => setReason(text)}
+                            style={styles.Reason}
+                        />
+                        <Text style={styles.errorTextDelete}>
+                            {ReasonError}
+                        </Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                {
+                                    DelData ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                }
+
+
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={editModalVisible}
+                onRequestClose={closeEditModal}
+            >
+                <View style={styles.modalContainer}>
+
+                    <View style={styles.modalContent}>
+
+                        <Text style={styles.Heading}>Edit Announcement</Text>
+
+                        <Text style={styles.modalLabelText}>Date :</Text>
+
+                        <View style={styles.modalInput} >
+                            <Text onPress={showDatepicker}>
+                                {startDate.toDateString()} &nbsp;
+                            </Text>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    value={startDate}
+                                    mode="date"
+                                    display="default"
+                                    onChange={handleDateChange}
+                                />
+                            )}
+                        </View>
+
+                        <Text style={styles.ModalerrorText}>
+                            { }
+                        </Text>
+
+                        <Text style={styles.modalLabelText}>Title :</Text>
+
+                        <TextInput
+                            value={AnnounceMentTitle}
+                            onChangeText={(txt) => setAnnounceMentTitle(txt)}
+                            style={styles.modalInput}
+                        />
+
+                        <Text style={styles.ModalerrorText}>
+                            { }
+                        </Text>
+
+                        <Text style={styles.modalLabelText}>Description :</Text>
+
+                        <TextInput
+                            value={AnnounceMentdes}
+                            onChangeText={(txt) => setAnnounceMentdes(txt)}
+                            style={styles.modalInput}
+                        />
+
+                        <Text style={styles.ModalerrorText}>
+                            { }
+                        </Text>
+
+
+                        <View style={styles.buttoncontainer}>
+
+                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
+                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.modalSubmitButton}
+                                onPress={handleEditSubmit}
+                            >
+                                {
+                                    EditLoad ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                }
+                            </TouchableOpacity>
+
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
 
         </View>
 

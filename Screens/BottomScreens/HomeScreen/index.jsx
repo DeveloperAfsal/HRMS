@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Image, ImageBackground, Modal, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import NetInfo from '@react-native-community/netinfo';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import Svg, { Path } from 'react-native-svg';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -14,6 +15,7 @@ import SadIcon from "../../../Assets/Emo/sad.svg";
 import SmileIcon from "../../../Assets/Emo/smile.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const HomeScreen = ({ navigation }) => {
@@ -258,40 +260,6 @@ const HomeScreen = ({ navigation }) => {
 
     // 
 
-    const [announcementList, setAnnouncementList] = useState([]);
-
-    const formatDate = (dateString) => {
-        const today = new Date();
-        const date = new Date(dateString);
-
-        return date.toDateString() === today.toDateString() ? 'Today' : dateString;
-    };
-
-    const Annlist = async () => {
-
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/view_announcement';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-
-            const responseData = response.data.data;
-            setAnnouncementList(responseData);
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
-    }
-
-    useEffect(() => {
-        Annlist();
-    }, [])
-
-    // 
-
     const [selectedImage, setSelectedImage] = useState([]);
 
     const handleFromGallery = () => {
@@ -522,6 +490,114 @@ const HomeScreen = ({ navigation }) => {
             Alert.alert('Error during login:', error);
         }
     };
+
+    // 
+
+    const [announcementList, setAnnouncementList] = useState([]);
+
+    const formatDate = (dateString) => {
+        const today = new Date();
+        const date = new Date(dateString);
+
+        return date.toDateString() === today.toDateString() ? 'Today' : dateString;
+    };
+
+    const Annlist = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/view_announcement';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setAnnouncementList(responseData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            Annlist();
+        }, [])
+    );
+
+    // Announcement
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [DelAnnouncement, setDelAnnouncement] = useState(false);
+    const [AnnounceMentTitle, setAnnounceMentTitle] = useState('');
+    const [AnnounceMentdes, setAnnounceMentdes] = useState('');
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setStartDate(date);
+        }
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
+
+    const HandleDelete = () => {
+        setModalVisible(true);
+    }
+
+    const cancelDelete = () => {
+        setModalVisible(false);
+        setDelAnnouncement(false);
+    }
+
+    const addAnnouncement = async () => {
+        setDelAnnouncement(true);
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/addannouncement';
+            const response = await axios.post(apiUrl, {
+                validdate: formattedStartDate,
+                title: AnnounceMentTitle,
+                description: AnnounceMentdes,
+                created_by: data.userempid
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data;
+            console.log(responseData, "responseData")
+
+            if (responseData.status === "success") {
+                Alert.alert("Successfull", responseData.message);
+                setDelAnnouncement(false);
+                setModalVisible(false);
+                setAnnounceMentdes('');
+                setAnnounceMentTitle('');
+                setStartDate(new Date());
+                Annlist();
+            } else {
+                Alert.alert("Failed", responseData.message)
+                setDelAnnouncement(false);
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setDelAnnouncement(false);
+        }
+
+
+    }
 
     return (
 
@@ -890,7 +966,9 @@ const HomeScreen = ({ navigation }) => {
                                     </Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.addbutton}>
+                                <TouchableOpacity style={styles.addbutton}
+                                    onPress={() => HandleDelete()}
+                                >
                                     <Text style={styles.addbuttonText}>
                                         + Add
                                     </Text>
@@ -919,13 +997,89 @@ const HomeScreen = ({ navigation }) => {
 
                         </View>
 
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => setModalVisible(false)}
+                        >
+                            <View style={styles.modalContainer}>
+
+                                <View style={styles.modalContent}>
+
+                                    <Text style={styles.modalTextHeading}>Add Announcement</Text>
+
+                                    <Text style={styles.modalText}>Date:</Text>
+
+                                    <View style={styles.inputs} >
+                                        <Text onPress={showDatepicker}>
+                                            {startDate.toDateString()} &nbsp;
+                                        </Text>
+                                        {showDatePicker && (
+                                            <DateTimePicker
+                                                value={startDate}
+                                                mode="date"
+                                                display="default"
+                                                onChange={handleDateChange}
+                                            />
+                                        )}
+                                    </View>
+
+                                    <Text style={styles.errorText}>
+                                        { }
+                                    </Text>
+
+                                    <Text style={styles.modalText}>Title:</Text>
+
+                                    <TextInput
+                                        value={AnnounceMentTitle}
+                                        onChangeText={(txt) => setAnnounceMentTitle(txt)}
+                                        style={styles.modalInput}
+                                    />
+
+                                    <Text style={styles.errorText}>
+                                        { }
+                                    </Text>
+
+                                    <Text style={styles.modalText}>description:</Text>
+
+                                    <TextInput
+                                        value={AnnounceMentdes}
+                                        onChangeText={(txt) => setAnnounceMentdes(txt)}
+                                        style={styles.modalInput}
+                                    />
+
+                                    <Text style={styles.errorText}>
+                                        { }
+                                    </Text>
+
+                                    <View style={styles.modalButtonContainer}>
+                                        <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                            <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.modalDeleteButton}
+                                            onPress={addAnnouncement}
+                                        >
+
+                                            {
+                                                DelAnnouncement ?
+                                                    <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                    <Text style={styles.modalDeleteButtonText}>Submit</Text>
+                                            }
+
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Modal>
+
                     </View>
 
                 </View>
 
             </View>
 
-        </ScrollView >
+        </ScrollView>
 
     )
 }

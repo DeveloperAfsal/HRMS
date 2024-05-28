@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     tittle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
+        alignItems: 'center',
         width: '85%'
     },
 
@@ -357,6 +357,144 @@ const styles = StyleSheet.create({
         fontSize: 15,
         lineHeight: 19.95
     },
+
+    ModalerrorText: {
+        color: "red",
+        paddingTop: 10,
+    },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+    },
+
+    modalTextHeading: {
+        fontSize: 16,
+        fontWeight: '800',
+        // textAlign: 'center',
+        color: "#000",
+        paddingBottom: '10%',
+    },
+
+    Heading: {
+        fontSize: 16,
+        fontWeight: '800',
+        textAlign: 'center',
+        color: "#000",
+    },
+
+    modalText: {
+        marginBottom: 5,
+        fontSize: 18,
+        fontWeight: '600',
+    },
+
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+
+    buttoncontainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingTop: '10%'
+    },
+
+    modalCancelButton: {
+        backgroundColor: '#ccc',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+
+    modalDeleteButton: {
+        backgroundColor: '#0A62F1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        width: 90,
+        height: 34,
+    },
+
+    modalDeleteButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+
+    modalSubmitButton: {
+        backgroundColor: '#0A62F1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        width: 90,
+        height: 34,
+    },
+
+    modalSubmitButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+
+    Reason: {
+        marginBottom: "5%",
+        borderRadius: 5,
+        borderColor: '#515151',
+        borderWidth: 1,
+        paddingLeft: 20,
+    },
+
+    modalInput: {
+        paddingLeft: 20,
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: "#515151",
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: '5%',
+        marginVertical: '5%'
+    },
+
+    inputs: {
+        borderWidth: 0.5,
+        borderColor: '#515151',
+        marginVertical: '5%',
+        // width: '90%',
+        height: 50,
+        borderRadius: 7,
+        paddingHorizontal: '5%',
+        marginBottom: '3%',
+        justifyContent: 'center',
+    },
+
+    modalLabelText: {
+        paddingTop: '5%',
+        paddingBottom: '5%'
+    },
+
+    Activeindicator: {
+        height: 100,
+    }
 });
 
 export default styles;
