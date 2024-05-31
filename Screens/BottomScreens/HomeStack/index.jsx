@@ -60,6 +60,12 @@ import Announcement from "../HomeScreen/Announcement";
 import AddVisitor from "./VisitorManagement/AddVisitor";
 import VisitorLog from "./VisitorManagement/VisitorLog";
 import ViewDeatails from "./VisitorManagement/Details";
+import Eventlist from "./Event/EventList";
+import MeetingList from "./Meeting/MeetingList";
+import Addmeeting from "./Meeting/AddMeeting";
+import AddEvent from "./Event/AddEvent";
+import Editmeeting from "./Meeting/EditMeeting";
+import EditEvent from "./Event/EditEvent";
 
 const Stack = createNativeStackNavigator();
 
@@ -174,6 +180,18 @@ const HomeStack = () => {
       <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
 
       <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
+
+      {/*  */}
+
+      <Stack.Screen name="Add Event" component={AddEvent} />
+      <Stack.Screen name="Edit Event" component={EditEvent} />
+      <Stack.Screen name="Event List" component={Eventlist} />
+
+      {/*  */}
+
+      <Stack.Screen name="Add Meeting" component={Addmeeting} />
+      <Stack.Screen name="Edit Meeting" component={Editmeeting} />
+      <Stack.Screen name="Meeting List" component={MeetingList} />
 
       {/*  */}
 

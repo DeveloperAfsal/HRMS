@@ -421,7 +421,7 @@ const HomeScreen = ({ navigation }) => {
             }
 
         } catch (error) {
-            console.error('Error:', error.response.data);
+            Alert.alert('Error:', 'Connect With Office Wifi And Check');
         }
     }
 
