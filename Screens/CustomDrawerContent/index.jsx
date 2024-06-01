@@ -102,8 +102,6 @@ const CustomDrawerContent = ({ navigation }) => {
 
             const ResData = response.data;
 
-            console.log(response, "response");
-
             if (ResData.status === "success") {
                 Alert.alert("Successfull", ResData.message);
                 await AsyncStorage.removeItem('userData');
