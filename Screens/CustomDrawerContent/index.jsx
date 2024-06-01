@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View, } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View, } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import LinearGradient from 'react-native-linear-gradient';
 import styles from "./style";
@@ -93,28 +93,31 @@ const CustomDrawerContent = ({ navigation }) => {
     const signout = async () => {
 
         try {
+            const apiUrl = 'https://ocean21.in/api/public/api/logout';
+            const response = await axios.post(apiUrl, {}, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
 
-            // const apiUrl = 'https://ocean21.in/api/public/api/logout';
-            // const response = await axios.post(apiUrl, {
-            //     headers: {
-            //         Authorization: `Bearer ${data.token}`
-            //     }
-            // });
+            const ResData = response.data;
 
-            // console.log(response, "response")
+            console.log(response, "response");
 
-            await AsyncStorage.removeItem('userData');
-
-            // Clear user data from the Redux store
-
-            const val = {};
-            dispatch({ type: 'REMOVE_USER_DATA', payload: val });
+            if (ResData.status === "success") {
+                Alert.alert("Successfull", ResData.message);
+                await AsyncStorage.removeItem('userData');
+                const val = {};
+                dispatch({ type: 'REMOVE_USER_DATA', payload: val });
+            } else {
+                Alert.alert("Failed", ResData.message)
+            }
 
         } catch (error) {
             console.error('Error signing out:', error);
         }
-
     }
+
 
     // Image URL  
 
