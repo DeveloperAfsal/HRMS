@@ -5,6 +5,8 @@ import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
 import EditIcon from "../../../../../Assets/Icons/Edit.svg";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
+import TickIcon from '../../../../../Assets/Icons/Tick.svg';
+import CloseIcon from '../../../../../Assets/Icons/Close.svg';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "./style";
 import axios from "axios";
@@ -24,6 +26,8 @@ const MeetingList = ({ navigation }) => {
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [remarks, setRemarks] = useState('');
+    console.log(remarks, "remarks")
 
     const [filterText, setFilterText] = useState('');
 
@@ -263,6 +267,152 @@ const MeetingList = ({ navigation }) => {
         }
     }
 
+    const [modalVisible1, setModalVisible1] = useState(false);
+    const [ReasonError1, setReasonError1] = useState('')
+    const [Reason1, setReason1] = useState('');
+    const [DelData1, setDelData1] = useState(false);
+    const [slotToDelete1, setSlotToDelete1] = useState(null);
+    const [status, setStatus] = useState('');
+
+    const HandleDelete1 = (item, status) => {
+        setSlotToDelete1(item.id);
+        setModalVisible1(true);
+        setStatus(status);
+        // StatusApi();
+    }
+
+    const cancelDelete1 = () => {
+        setSlotToDelete1(null);
+        setModalVisible1(false);
+        setReasonError1('');
+        setReason1('');
+        setDelData1(false);
+    }
+
+    const [modalVisible2, setModalVisible2] = useState(false);
+    const [ReasonError2, setReasonError2] = useState('')
+    const [Reason2, setReason2] = useState('');
+    const [DelData2, setDelData2] = useState(false);
+    const [slotToDelete2, setSlotToDelete2] = useState(null);
+
+    const HandleDelete2 = (item, status) => {
+        setSlotToDelete2(item.id);
+        setModalVisible2(true);
+        setStatus(status);
+        // StatusApi();
+    }
+
+    const cancelDelete2 = () => {
+        setSlotToDelete2(null);
+        setModalVisible2(false);
+        setReasonError2('');
+        setReason2('');
+        setDelData2(false);
+    }
+
+    const HandleConfirm = async () => {
+
+        setDelData1(true);
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/approval_meeting`;
+
+            const response = await axios.post(apiUrl, {
+                meeting_id: slotToDelete1,
+                meetingemp_id: data.userempid,
+                meeting_status: status,
+                meeting_remarks: Reason1
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const Resdata = response.data;
+
+            if (Resdata.status === "success") {
+                fetchData();
+                Alert.alert("Successfull", Resdata.message);
+                setDelData1(false);
+                setReason1('');
+            } else {
+                Alert.alert("Failed", Resdata.message)
+                console.log("error");
+                setDelData1(false);
+            }
+
+        } catch (error) {
+            console.log(error);
+            setDelData1(false);
+        }
+
+    }
+
+    const HandleCancel = async (item) => {
+
+        setDelData2(true);
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/approval_meeting`;
+
+            const response = await axios.post(apiUrl, {
+                meeting_id: slotToDelete2,
+                meetingemp_id: data.userempid,
+                meeting_status: "Rejected",
+                meeting_remarks: Reason2
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const Resdata = response.data;
+
+            if (Resdata.status === "success") {
+                fetchData();
+                Alert.alert("Successfull", Resdata.message);
+                setDelData2(false);
+                setReason1('');
+            } else {
+                Alert.alert("Failed", Resdata.message)
+                console.log("error");
+                setDelData2(false);
+            }
+
+        } catch (error) {
+            console.log(error);
+            setDelData2(false);
+        }
+
+    }
+
+    // const StatusApi = async () => {
+
+    //     try {
+    //         const apiUrl = `https://ocean21.in/api/public/api/meeting_status_list/1/${status}`;
+    //         const response = await axios.get(apiUrl, {
+    //             headers: {
+    //                 Authorization: `Bearer ${data.token}`
+    //             }
+    //         });
+
+    //         const responseData = response.data;
+    //         setRemarks(responseData);
+
+    //         if (responseData.status === "success") {
+    //             Alert.alert('Successfull', "Updated Successfully")
+    //         } else {
+    //             Alert.alert('Failed', "Failed to Update")
+    //         }
+
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+
+    // }
+
     return (
 
         <View style={styles.Container}>
@@ -317,8 +467,17 @@ const MeetingList = ({ navigation }) => {
                                 <Text style={[styles.header, styles.cell, styles.Status]}>End Time</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Agenda</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Remarks</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Approval List</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Rejectt List</Text>
+                                {
+                                    data.userrole == 1 || data.userrole == 2 ?
+                                        <>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Approval List</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Rejectt List</Text>
+                                        </> :
+                                        <>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                        </>
+                                }
+
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
                             </View>
 
@@ -337,20 +496,57 @@ const MeetingList = ({ navigation }) => {
                                         <Text style={[styles.cell, styles.Status]}>{item.m_end_time}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.m_agenda}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.m_remarks}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.approved_approval}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.rejected_approval}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                                onPress={() => navigation.navigate('Edit Meeting', { Id: item })}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}
-                                                onPress={() => HandleDelete(item.id)}
-                                            >
-                                                <DeleteIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View>
+                                        {
+                                            data.userrole == 1 || data.userrole == 2 ?
+                                                <>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.approved_approval === null ? "-" : item.approved_approval}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.rejected_approval === null ? "-" : item.rejected_approval}</Text>
+                                                </> :
+                                                <>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.empreason}</Text>
+                                                </>
+                                        }
+
+
+                                        {(data.userrole == 1 || data.userrole == 2) ? (
+                                            <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => navigation.navigate('Edit Meeting', { Id: item })}
+                                                >
+                                                    <EditIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.listcontentdelbutton}
+                                                    onPress={() => HandleDelete(item.id)}
+                                                >
+                                                    <DeleteIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        ) : (
+                                            item.emp_status === null ?
+                                                (
+                                                    <>
+                                                        <View style={styles.listcontentButtonview}>
+                                                            <TouchableOpacity style={styles.listcontenteditbutton}
+                                                                onPress={() => HandleDelete1(item, 'Approved')}
+                                                            >
+                                                                <TickIcon width={14} height={14} />
+                                                            </TouchableOpacity>
+                                                            <TouchableOpacity style={styles.listcontentdelbutton}
+                                                                onPress={() => HandleDelete2(item, 'Rejected')}
+                                                            >
+                                                                <CloseIcon width={14} height={14} />
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    </>
+                                                ) :
+                                                (
+                                                    <>
+                                                        <View style={[styles.cell, styles.Status]}>
+                                                            <Text>{item.emp_status}</Text>
+                                                        </View>
+                                                    </>
+                                                )
+                                        )}
                                     </View>
                                 ))
                             )}
@@ -389,6 +585,82 @@ const MeetingList = ({ navigation }) => {
                                         DelData ?
                                             <ActivityIndicator size={"small"} color={"#fff"} /> :
                                             <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible1}
+                    onRequestClose={() => setModalVisible1(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTextHeading}>Meeting Status</Text>
+                            <Text style={styles.modalText}>Meeting Remarks:</Text>
+                            <TextInput
+                                value={Reason1}
+                                onChangeText={(text) => setReason1(text)}
+                                style={styles.Reason}
+                            />
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError1}
+                            </Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete1}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalDeleteButton} onPress={HandleConfirm}>
+
+
+                                    {
+                                        DelData1 ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Update</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible2}
+                    onRequestClose={() => setModalVisible2(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTextHeading}>Meeting Status</Text>
+                            <Text style={styles.modalText}>Meeting Remarks:</Text>
+                            <TextInput
+                                value={Reason2}
+                                onChangeText={(text) => setReason2(text)}
+                                style={styles.Reason}
+                            />
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError2}
+                            </Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete2}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalDeleteButton} onPress={HandleCancel}>
+
+
+                                    {
+                                        DelData2 ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Update</Text>
                                     }
 
 

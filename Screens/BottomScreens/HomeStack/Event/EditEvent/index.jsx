@@ -26,7 +26,6 @@ const EditEvent = ({ navigation, route }) => {
     const [agenda, setAgenda] = useState('');
     const [load, setLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
-    console.log(datalist, "datalist")
 
     // Department
 
@@ -229,20 +228,20 @@ const EditEvent = ({ navigation, route }) => {
         });
     };
 
-
     const renderSelectedImage = () => {
-
         return (
             <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContainer}>
                 <View style={styles.container}>
                     {showInitialImage ? (
-                        datalist.e_image ? <View style={styles.imageContainer}>
-                            <Image source={{ uri: `https://ocean21.in/api/storage/app/${datalist.e_image}` }} style={styles.image} />
-                        </View> : ""
+                        datalist.e_image ? (
+                            <View style={styles.imageContainer}>
+                                <Image source={{ uri: `https://ocean21.in/api/storage/app/${datalist.e_image}` }} style={styles.image} />
+                            </View>
+                        ) : null
                     ) : (
                         selectedImage.map((image, index) => (
                             <View style={styles.imageContainer} key={index}>
-                                <TouchableOpacity onPress={() => deleteImage()} style={styles.deleteButton}>
+                                <TouchableOpacity onPress={() => deleteImage(index)} style={styles.deleteButton}>
                                     <DeleteIcon width={15} height={15} />
                                 </TouchableOpacity>
                                 <Image source={{ uri: image }} style={styles.image} />
@@ -321,7 +320,6 @@ const EditEvent = ({ navigation, route }) => {
         setLoad(true);
 
         const formData = new FormData();
-
         formData.append('id', SpecId.id);
         formData.append('e_title', title);
         formData.append('e_teams', selectedDepartmentIdsAsNumbers);
@@ -331,9 +329,11 @@ const EditEvent = ({ navigation, route }) => {
         formData.append('e_end_time', slotToTime);
         formData.append('e_agenda', agenda);
         formData.append('updated_by', data.userempid);
+        formData.append('oldimg_path', datalist.e_image);
 
-        if (selectedImage.length > 0) {
-            selectedImage.map((image, index) => {
+        if (selectedImage.length > 0 && !selectedImage.includes(datalist.e_image)) {
+            // Only add the image if it has been changed
+            selectedImage.forEach((image, index) => {
                 const imageUriParts = image.split('/');
                 const imageName = imageUriParts[imageUriParts.length - 1];
                 formData.append(`e_image`, {
@@ -343,19 +343,15 @@ const EditEvent = ({ navigation, route }) => {
                 });
             });
         } else {
-            formData.append('e_image', selectedImage);
+            // If the image is not changed, include the existing image URL
+            formData.append('e_image', datalist.e_image);
         }
-
-        formData.append('oldimg_path', datalist.e_image);
-
-
 
         try {
             const response = await fetch('https://ocean21.in/api/public/api/update_event', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${data.token}`
                 },
                 body: formData,
@@ -365,19 +361,21 @@ const EditEvent = ({ navigation, route }) => {
 
             if (responsedata.status === "success") {
                 setLoad(false);
-                Alert.alert('Successfull', responsedata.message);
+                Alert.alert('Successful', responsedata.message);
                 Handlerefresh();
-                navigation.navigate('Event List')
+                navigation.navigate('Event List');
             } else {
-                Alert.alert('Failed', responsedata.message)
+                Alert.alert('Failed', responsedata.message);
                 setLoad(false);
             }
-
         } catch (error) {
-            console.error('Error:', error.response.data);
+            console.error('Error:', error);
+            Alert.alert('Network Request Failed', error.message);
             setLoad(false);
         }
     }
+
+
 
 
     return (
