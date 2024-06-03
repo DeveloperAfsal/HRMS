@@ -76,6 +76,7 @@ const CustomDrawerContent = ({ navigation }) => {
         TLapproval: false,
         OrganisationStructure: false,
         HRSupport: false,
+        HelpDesk: false,
     });
 
     const toggleDropdown = (dropdown) => {
@@ -402,13 +403,45 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Help Desk */}
 
-                    <DrawerItem
-                        style={styles.forSingle}
-                        label="HelpDesk"
-                        labelStyle={styles.forsinglelable}
-                        icon={() => <HelpDeskIcon width={20} height={20} color={'#000'} />}
-                        onPress={() => navigation.navigate('HelpDesk')}
-                    />
+                    <TouchableOpacity onPress={() => toggleDropdown('HelpDesk')} style={styles.dropdown}>
+                        <View style={styles.Tab}>
+                            <HelpDeskIcon width={20} height={20} color={'#000'} />
+                            <Text style={styles.dropdownText}>HelpDesk</Text>
+                        </View>
+                        {
+                            dropdowns.HelpDesk ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                                <DropdownIcon width={15} height={15} color={'#000'} />
+                        }
+                    </TouchableOpacity>
+
+                    {dropdowns.HelpDesk && (
+
+                        <>
+
+                            <DrawerItem
+                                label="Issue Type"
+                                onPress={() => navigation.navigate('Issue Type')}
+                            />
+
+                            <DrawerItem
+                                label="Raise Ticket"
+                                onPress={() => navigation.navigate('Raise Ticket')}
+                            />
+
+                            <DrawerItem
+                                label="Tickets List"
+                                onPress={() => navigation.navigate('Tickets List')}
+                            />
+
+                            <DrawerItem
+                                label="Assigned List"
+                                onPress={() => navigation.navigate('Assigned List')}
+                            />
+
+                        </>
+
+                    )}
+
 
                     {/* Assets */}
 

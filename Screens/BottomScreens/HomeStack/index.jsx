@@ -70,6 +70,9 @@ import AssetsList from "./Assets/AssetList";
 import AssetType from "./Assets/AssetType";
 import AddAsset from "./Assets/AddAsset";
 import EditAsset from "./Assets/EditAsset";
+import IssueType from "./HelpDesk/IssueType";
+import AssignedList from "./HelpDesk/AssignedList";
+import TicketList from "./HelpDesk/TicketList";
 
 const Stack = createNativeStackNavigator();
 
@@ -184,6 +187,12 @@ const HomeStack = () => {
       <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
 
       <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
+
+      {/*  */}
+
+      <Stack.Screen name="Issue Type" component={IssueType} />
+      <Stack.Screen name="Assigned List" component={AssignedList} />
+      <Stack.Screen name="Tickets List" component={TicketList} />
 
       {/*  */}
 
