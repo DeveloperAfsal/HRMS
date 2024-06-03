@@ -152,15 +152,21 @@ const AddAsset = ({ navigation }) => {
 
     // 
 
-    const [assetType, setAssetType] = useState([]);
-    const [showassetTypeDropdown, setShowassetTypeDropdown] = useState(false);
-    const [selectedassetType, setSelectedassetType] = useState('');
-    const [selectedassetTypeId, setSelectedassetTypeId] = useState('');
+    const [assetTypeDropdown, setAssetTypeDropdown] = useState([]);
+    const [showAssetTypeDropdown, setShowAssetTypeDropdown] = useState(false);
+    const [selectedAssetTypes, setSelectedAssetTypes] = useState([]);
+    const [selectedAssetTypeIds, setSelectedAssetTypeIds] = useState([]);
+    const Assetid = selectedAssetTypeIds.join(', ')
 
-    const handleSelectAsset = (item) => {
-        setSelectedassetType(item.asset_type_name);
-        setSelectedassetTypeId(item.id);
-        setShowassetTypeDropdown(false);
+
+    const handleToggleAssetType = (assetTypeName, assetTypeId) => {
+        if (selectedAssetTypes.includes(assetTypeName)) {
+            setSelectedAssetTypes(selectedAssetTypes.filter(selectedAsset => selectedAsset !== assetTypeName));
+            setSelectedAssetTypeIds(selectedAssetTypeIds.filter(id => id !== assetTypeId));
+        } else {
+            setSelectedAssetTypes([...selectedAssetTypes, assetTypeName]);
+            setSelectedAssetTypeIds([...selectedAssetTypeIds, assetTypeId]);
+        }
     };
 
     useEffect(() => {
@@ -176,7 +182,7 @@ const AddAsset = ({ navigation }) => {
                 });
 
                 const responseData = response.data.data;
-                setAssetType(responseData);
+                setAssetTypeDropdown(responseData);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -193,7 +199,7 @@ const AddAsset = ({ navigation }) => {
     const onRefresh = () => {
         setSelectedDepartments('');
         setSelectedMember('');
-        setSelectedassetType('');
+        setSelectedAssetTypeIds('');
         setAssetsDetails('');
         setAssetsValue('');
         setRemarks('');
@@ -216,7 +222,7 @@ const AddAsset = ({ navigation }) => {
             const response = await axios.post(apiUrl, {
                 department: selectedDepartmentsId,
                 emp_id: selectedMemberId,
-                asset_type: selectedassetTypeId,
+                asset_type: Assetid,
                 asset_details: assetDetails,
                 asset_value: assetValue,
                 issue_date: formattedStartDate,
@@ -331,32 +337,37 @@ const AddAsset = ({ navigation }) => {
                         Asset Type
                     </Text>
 
-                    <TouchableOpacity
-                        onPress={() => setShowassetTypeDropdown(!showassetTypeDropdown)}
-                        style={styles.StatusTouchable}>
-
-                        <Text style={styles.StatusTouchableText}>
-                            {selectedassetType ? selectedassetType : 'Select Asset Type'}
-                        </Text>
+                    <TouchableOpacity style={styles.Input} onPress={() => {
+                        setShowAssetTypeDropdown(!showAssetTypeDropdown);
+                    }}>
+                        <View style={styles.selectedDaysContainer}>
+                            {selectedAssetTypes.map(assetType => (
+                                <Text key={assetType} style={styles.selectedays}>{assetType}</Text>
+                            ))}
+                            {selectedAssetTypes.length === 0 && <Text>Select Asset Types</Text>}
+                        </View>
                         <DropdownIcon width={14} height={14} color={"#000"} />
-
                     </TouchableOpacity>
 
-                    {showassetTypeDropdown && (
+                    {showAssetTypeDropdown && (
                         <View style={styles.dropdown}>
                             <ScrollView>
-                                {assetType.map((item, index) => (
+                                {assetTypeDropdown.map((asset, index) => (
                                     <TouchableOpacity
                                         key={index}
-                                        style={styles.dropdownOption}
-                                        onPress={() => handleSelectAsset(item)}
+                                        style={[
+                                            styles.dropdownOption,
+                                            selectedAssetTypes.includes(asset.asset_type_name) && styles.selectedOption
+                                        ]}
+                                        onPress={() => handleToggleAssetType(asset.asset_type_name, asset.id)}
                                     >
-                                        <Text>{item.asset_type_name}</Text>
+                                        <Text style={styles.dropdownOptionText}>{asset.asset_type_name}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
                         </View>
                     )}
+
 
                     <Text style={styles.errorText}>
                         { }

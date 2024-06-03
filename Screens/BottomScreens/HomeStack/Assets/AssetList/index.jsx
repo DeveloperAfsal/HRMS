@@ -267,189 +267,189 @@ const AssetsList = ({ navigation }) => {
     }
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            <ScrollView horizontal={true}>
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
+                    />
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
+                    </View>
+                </View>
 
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
-                        <View>
+                <ScrollView horizontal={true}>
 
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Department</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Employee Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Asset ID</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Asset Type</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Asset Details</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Asset Value</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Issue Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Valid Till</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Return On</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Remarks</Text>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
 
-                                {
-                                    data.userrole == 1 || data.userrole == 2 ?
-                                        <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> :
-                                        null
-                                }
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Department</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Employee Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Asset ID</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Asset Type</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Asset Details</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>Asset Value</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Issue Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Valid Till</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Return On</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Remarks</Text>
 
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
-                            </View>
+                                    {
+                                        data.userrole == 1 || data.userrole == 2 ?
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> :
+                                            null
+                                    }
 
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.department}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.emp_name}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.asset_id}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.asset_name}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.asset_details}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.asset_value}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.issue_date}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.valid_till}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.return_on}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.remarks}</Text>
-                                        {
-                                            data.userrole == 1 || data.userrole == 2 ?
-                                                <View style={styles.listcontentButtonview}>
-                                                    <TouchableOpacity style={styles.listcontenteditbutton}
-                                                        onPress={() => navigation.navigate('Edit Asset', { Id: item })}
-                                                    >
-                                                        <EditIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.listcontentdelbutton}
-                                                        onPress={() => HandleDelete(item.id)}
-                                                    >
-                                                        <DeleteIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
-                                                </View> : null
-                                        }
-                                        <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
-                                    </View>
-                                ))
-                            )}
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                </View>
 
-                            <Modal
-                                animationType="fade"
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => setModalVisible(false)}
-                            >
-                                <View style={styles.modalContainer}>
-                                    <View style={styles.modalContent}>
-                                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                                        <Text style={styles.modalText}>Reason:</Text>
-                                        <TextInput
-                                            value={Reason}
-                                            onChangeText={(text) => setReason(text)}
-                                            style={styles.Reason}
-                                        />
-                                        <Text style={styles.errorTextDelete}>
-                                            {ReasonError}
-                                        </Text>
-                                        <View style={styles.modalButtonContainer}>
-                                            <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.department}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.emp_name}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.asset_id}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.asset_name}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.asset_details}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.asset_value}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.issue_date}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.valid_till}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.return_on}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.remarks}</Text>
+                                            {
+                                                data.userrole == 1 || data.userrole == 2 ?
+                                                    <View style={styles.listcontentButtonview}>
+                                                        <TouchableOpacity style={styles.listcontenteditbutton}
+                                                            onPress={() => navigation.navigate('Edit Asset', { Id: item })}
+                                                        >
+                                                            <EditIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity style={styles.listcontentdelbutton}
+                                                            onPress={() => HandleDelete(item.id)}
+                                                        >
+                                                            <DeleteIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                    </View> : null
+                                            }
+                                            <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+                                        </View>
+                                    ))
+                                )}
 
-
-                                                {
-                                                    DelData ?
-                                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                                }
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={modalVisible}
+                                    onRequestClose={() => setModalVisible(false)}
+                                >
+                                    <View style={styles.modalContainer}>
+                                        <View style={styles.modalContent}>
+                                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                                            <Text style={styles.modalText}>Reason:</Text>
+                                            <TextInput
+                                                value={Reason}
+                                                onChangeText={(text) => setReason(text)}
+                                                style={styles.Reason}
+                                            />
+                                            <Text style={styles.errorTextDelete}>
+                                                {ReasonError}
+                                            </Text>
+                                            <View style={styles.modalButtonContainer}>
+                                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
 
-                                            </TouchableOpacity>
+                                                    {
+                                                        DelData ?
+                                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                                    }
+
+
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                            </Modal>
+                                </Modal>
 
-                        </View>
-                    )
-                    }
-                </View>
+                            </View>
+                        )
+                        }
+                    </View>
 
-            </ScrollView>
+                </ScrollView>
 
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
 
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
                         >
-                            {page}
-                        </Text>
-                    ))}
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
 
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
+
             </View>
-
-        </View>
-
+        </ScrollView>
     )
 }
 

@@ -156,17 +156,24 @@ const EditAsset = ({ route, navigation }) => {
     const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
     const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
     const formattedReturnDate = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}`;
+
     // 
 
-    const [assetType, setAssetType] = useState([]);
-    const [showassetTypeDropdown, setShowassetTypeDropdown] = useState(false);
-    const [selectedassetType, setSelectedassetType] = useState('');
-    const [selectedassetTypeId, setSelectedassetTypeId] = useState('');
+    const [assetTypeDropdown, setAssetTypeDropdown] = useState([]);
+    const [showAssetTypeDropdown, setShowAssetTypeDropdown] = useState(false);
+    const [selectedAssetTypes, setSelectedAssetTypes] = useState([]);
+    const [selectedAssetTypeIds, setSelectedAssetTypeIds] = useState([]);
+    const Assetid = selectedAssetTypeIds.join(', ')
 
-    const handleSelectAsset = (item) => {
-        setSelectedassetType(item.asset_type_name);
-        setSelectedassetTypeId(item.id);
-        setShowassetTypeDropdown(false);
+
+    const handleToggleAssetType = (assetTypeName, assetTypeId) => {
+        if (selectedAssetTypes.includes(assetTypeName)) {
+            setSelectedAssetTypes(selectedAssetTypes.filter(selectedAsset => selectedAsset !== assetTypeName));
+            setSelectedAssetTypeIds(selectedAssetTypeIds.filter(id => id !== assetTypeId));
+        } else {
+            setSelectedAssetTypes([...selectedAssetTypes, assetTypeName]);
+            setSelectedAssetTypeIds([...selectedAssetTypeIds, assetTypeId]);
+        }
     };
 
     useEffect(() => {
@@ -182,7 +189,7 @@ const EditAsset = ({ route, navigation }) => {
                 });
 
                 const responseData = response.data.data;
-                setAssetType(responseData);
+                setAssetTypeDropdown(responseData);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -193,13 +200,59 @@ const EditAsset = ({ route, navigation }) => {
         Asstype();
 
     }, [])
+    // 
+
+    useEffect(() => {
+
+        const EditassType = async () => {
+
+            try {
+                const apiUrl = `https://ocean21.in/api/public/api/edit_assign_assetlist/${SpecId.id}`;
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data;
+                const resp = response.data.data;
+
+                if (responseData.status === 'success') {
+                    setDatalist(resp);
+                    setSelectedAssetTypeIds([resp.asset_id]);
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+
+        }
+
+        EditassType();
+
+    }, [SpecId])
+
+    useEffect(() => {
+        setSelectedDepartmentsId(datalist.department);
+        setSelectedDepartments(SpecId.department);
+        setSelectedMemberId(datalist.emp_id);
+        setSelectedMember(SpecId.emp_name);
+        setSelectedAssetTypes(SpecId.asset_name.split(','));
+        setAssetsDetails(datalist.asset_details);
+        setAssetsValue(datalist.asset_value);
+        setStartDate(new Date(datalist.issue_date));
+        setEndDate(new Date(datalist.valid_till));
+        setreturnDate(new Date(datalist.return_on));
+        setRemarks(datalist.remarks);
+        setSelectedStatus(datalist.status);
+    }, [datalist])
 
     // 
 
     const onRefresh = () => {
         setSelectedDepartments('');
         setSelectedMember('');
-        setSelectedassetType('');
+        setSelectedAssetTypeIds([]);
         setAssetsDetails('');
         setAssetsValue('');
         setRemarks('');
@@ -223,7 +276,7 @@ const EditAsset = ({ route, navigation }) => {
                 id: SpecId.id,
                 department: selectedDepartmentsId,
                 emp_id: selectedMemberId,
-                asset_type: selectedassetTypeId,
+                asset_type: Assetid,
                 asset_details: assetDetails,
                 asset_value: assetValue,
                 issue_date: formattedStartDate,
@@ -256,49 +309,6 @@ const EditAsset = ({ route, navigation }) => {
         }
 
     }
-
-    useEffect(() => {
-
-        const EditassType = async () => {
-
-            try {
-                const apiUrl = `https://ocean21.in/api/public/api/edit_assign_assetlist/${SpecId.id}`;
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-
-                const responseData = response.data.data;
-                setDatalist(responseData);
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-
-        }
-
-        EditassType();
-
-    }, [SpecId])
-
-    useEffect(() => {
-        if (datalist) {
-            setSelectedDepartmentsId(datalist.department);
-            setSelectedDepartments(SpecId.department);
-            setSelectedMemberId(datalist.emp_id);
-            setSelectedMember(SpecId.emp_name);
-            setSelectedassetTypeId(datalist.asset_id);
-            setSelectedassetType(SpecId.asset_name);
-            setAssetsDetails(datalist.asset_details);
-            setAssetsValue(datalist.asset_value);
-            setStartDate(new Date(SpecId.issue_date));
-            setEndDate(new Date(SpecId.valid_till));
-            setreturnDate(new Date(SpecId.return_on));
-            setRemarks(datalist.remarks);
-            setSelectedStatus(datalist.status)
-        }
-    }, [datalist])
 
     return (
 
@@ -381,27 +391,31 @@ const EditAsset = ({ route, navigation }) => {
                         Asset Type
                     </Text>
 
-                    <TouchableOpacity
-                        onPress={() => setShowassetTypeDropdown(!showassetTypeDropdown)}
-                        style={styles.StatusTouchable}>
-
-                        <Text style={styles.StatusTouchableText}>
-                            {selectedassetType ? selectedassetType : 'Select Asset Type'}
-                        </Text>
+                    <TouchableOpacity style={styles.Input} onPress={() => {
+                        setShowAssetTypeDropdown(!showAssetTypeDropdown);
+                    }}>
+                        <View style={styles.selectedDaysContainer}>
+                            {selectedAssetTypes.map((assetType, index) => (
+                                <Text key={index} style={styles.selectedays}>{assetType}</Text>
+                            ))}
+                            {selectedAssetTypes.length === 0 && <Text>Select Asset Types</Text>}
+                        </View>
                         <DropdownIcon width={14} height={14} color={"#000"} />
-
                     </TouchableOpacity>
 
-                    {showassetTypeDropdown && (
+                    {showAssetTypeDropdown && (
                         <View style={styles.dropdown}>
                             <ScrollView>
-                                {assetType.map((item, index) => (
+                                {assetTypeDropdown.map((asset, index) => (
                                     <TouchableOpacity
                                         key={index}
-                                        style={styles.dropdownOption}
-                                        onPress={() => handleSelectAsset(item)}
+                                        style={[
+                                            styles.dropdownOption,
+                                            selectedAssetTypes.includes(asset.asset_type_name) && styles.selectedOption
+                                        ]}
+                                        onPress={() => handleToggleAssetType(asset.asset_type_name, asset.id)}
                                     >
-                                        <Text>{item.asset_type_name}</Text>
+                                        <Text style={styles.dropdownOptionText}>{asset.asset_type_name}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>

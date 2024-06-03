@@ -2,6 +2,32 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    Input: {
+        borderWidth: 1,
+        borderColor: '#515151',
+        width: '90%',
+        borderRadius: 7,
+        paddingHorizontal: '5%',
+        paddingVertical: '3%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+
+    selectedDaysContainer: {
+        flexDirection: 'row',
+        gap: 5,
+        flexWrap: 'wrap',
+    },
+
+    selectedays: {
+        backgroundColor: '#20DDFE',
+        padding: 7,
+        borderRadius: 7,
+        color: '#fff',
+        fontWeight: '400',
+    },
+
     inputs: {
         borderWidth: 1,
         borderColor: '#515151',
