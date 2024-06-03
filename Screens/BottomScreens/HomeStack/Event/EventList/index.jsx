@@ -454,7 +454,7 @@ const Eventlist = ({ navigation }) => {
                                         {(data.userrole == 1 || data.userrole == 2) ? (
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity style={styles.listcontenteditbutton}
-                                                    onPress={() => navigation.navigate('Edit Meeting', { Id: item })}
+                                                    onPress={() => navigation.navigate('Edit Event', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

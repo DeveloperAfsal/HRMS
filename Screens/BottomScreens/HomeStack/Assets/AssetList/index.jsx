@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
@@ -13,8 +13,9 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { useFocusEffect } from "@react-navigation/native";
 
-const AssetsList = () => {
+const AssetsList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -73,24 +74,29 @@ const AssetsList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Department', 'Employee Name', 'Asset ID', 'Asset Type', 'Asset Details', 'Asset Value', 'Issue Date', 'Valid Till', 'Return On', 'Remarks', 'Status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.department,
+            rowData.emp_name,
+            rowData.asset_id,
+            rowData.asset_name,
+            rowData.asset_details,
+            rowData.asset_value,
+            rowData.issue_date,
+            rowData.valid_till,
+            rowData.return_on,
+            rowData.remarks,
+            rowData.status,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -124,17 +130,20 @@ const AssetsList = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Department', 'Employee Name', 'Asset ID', 'Asset Type', 'Asset Details', 'Asset Value', 'Issue Date', 'Valid Till', 'Return On', 'Remarks', 'Status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.department,
+            rowData.emp_name,
+            rowData.asset_id,
+            rowData.asset_name,
+            rowData.asset_details,
+            rowData.asset_value,
+            rowData.issue_date,
+            rowData.valid_till,
+            rowData.return_on,
+            rowData.remarks,
+            rowData.status,
         ]);
 
         const htmlContent = `
@@ -342,7 +351,7 @@ const AssetsList = () => {
                                             data.userrole == 1 || data.userrole == 2 ?
                                                 <View style={styles.listcontentButtonview}>
                                                     <TouchableOpacity style={styles.listcontenteditbutton}
-                                                    // onPress={() => navigation.navigate('Edit Meeting', { Id: item })}
+                                                        onPress={() => navigation.navigate('Edit Asset', { Id: item })}
                                                     >
                                                         <EditIcon width={14} height={14} color={"#000"} />
                                                     </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import styles from "../../AddEmployee/style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
@@ -27,7 +27,7 @@ const Documents = ({
     setEmployee,
     employee,
 }) => {
-
+console.log(employee.password,"employee")
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
@@ -41,6 +41,7 @@ const Documents = ({
     const [docName, setDocName] = useState();
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+    const [load, setLoad] = useState(false);
 
     // Api call for Dropdown dropdown
 
@@ -133,6 +134,8 @@ const Documents = ({
     // Handle Submit
 
     const HandleSubmit = async () => {
+
+        setLoad(true);
 
         const formData = new FormData();
 
@@ -387,11 +390,13 @@ const Documents = ({
 
             if (responsedata.status === "success") {
                 // navigation.navigate('Employee List');
-                Alert.alert('Submitted', 'Employee Details Updated')
+                Alert.alert('Submitted', 'Employee Details Updated');
+                setLoad(false);
             }
 
         } catch (error) {
-            Alert.alert('Failed to add Employee', error)
+            Alert.alert('Failed to add Employee', error);
+            setLoad(false);
         }
 
     }
@@ -519,9 +524,9 @@ const Documents = ({
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.NextButton} onPress={HandleSubmit}>
-                    <Text style={styles.NextButtonText}>
+                    { load ? <ActivityIndicator size={"small"} color={"#fff"}/>:<Text style={styles.NextButtonText}>
                         Submit
-                    </Text>
+                    </Text>}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.PrevButton} onPress={HandleCancel}>

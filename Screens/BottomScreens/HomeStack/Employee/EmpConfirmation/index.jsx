@@ -123,7 +123,19 @@ const EmpConfirmation = () => {
     }, [])
 
     const handleEditSubmit = async () => {
+
+        console.log(
+            'id', selectedId,
+            'confirmation_status', editedStatus,
+            'no_of_days', NofDays,
+            'confirmed_date', confirmedate,
+            'employee_category', selectedCatID,
+            'reason', reason,
+            'updated_by', data.userempid
+        );
+
         setEditLoad(true);
+
         try {
 
             if (!reason) {

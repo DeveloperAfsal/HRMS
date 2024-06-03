@@ -70,7 +70,7 @@ const AddEmployeeShift = ({ navigation }) => {
         if (selectedDepartments.includes(departmentName)) {
             setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
             setSelectedDepartmentIds(selectedDepartmentIds.filter(id => id !== departmentId));
-            
+
             // Clear selected employees when department is deselected
             setSelectedEmployees([]);
 

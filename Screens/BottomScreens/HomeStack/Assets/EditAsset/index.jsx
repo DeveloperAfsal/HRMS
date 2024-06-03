@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import styles from "./style";
+import styles from "../AddAsset/style";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const AddAsset = ({ navigation }) => {
+const EditAsset = ({ route, navigation }) => {
+
+    // 
+
+    const SpecId = route.params.Id;
 
     // data from redux store 
 
@@ -16,6 +20,9 @@ const AddAsset = ({ navigation }) => {
     const [assetDetails, setAssetsDetails] = useState('');
     const [assetValue, setAssetsValue] = useState('');
     const [remarks, setRemarks] = useState('');
+
+    const [datalist, setDatalist] = useState([]);
+
     const [load, SetLoad] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
@@ -146,10 +153,9 @@ const AddAsset = ({ navigation }) => {
         setShowDatePicker2(true);
     };
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
-    const formattedReturnDate = `${returnDate.getFullYear()}-${returnDate.getMonth() + 1}-${returnDate.getDate()}`;
-
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
+    const formattedReturnDate = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}`;
     // 
 
     const [assetType, setAssetType] = useState([]);
@@ -205,15 +211,16 @@ const AddAsset = ({ navigation }) => {
 
     // 
 
-    const AddAss = async () => {
+    const EditAss = async () => {
 
         SetLoad(true);
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/add_assign_asset';
+            const apiUrl = 'https://ocean21.in/api/public/api/update_assign_asset';
 
-            const response = await axios.post(apiUrl, {
+            const response = await axios.put(apiUrl, {
+                id: SpecId.id,
                 department: selectedDepartmentsId,
                 emp_id: selectedMemberId,
                 asset_type: selectedassetTypeId,
@@ -224,7 +231,7 @@ const AddAsset = ({ navigation }) => {
                 return_on: formattedReturnDate,
                 remarks: remarks,
                 status: selectedStatus,
-                created_by: data.userempid
+                updated_by: data.userempid
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -249,6 +256,49 @@ const AddAsset = ({ navigation }) => {
         }
 
     }
+
+    useEffect(() => {
+
+        const EditassType = async () => {
+
+            try {
+                const apiUrl = `https://ocean21.in/api/public/api/edit_assign_assetlist/${SpecId.id}`;
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+                setDatalist(responseData);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+
+        }
+
+        EditassType();
+
+    }, [SpecId])
+
+    useEffect(() => {
+        if (datalist) {
+            setSelectedDepartmentsId(datalist.department);
+            setSelectedDepartments(SpecId.department);
+            setSelectedMemberId(datalist.emp_id);
+            setSelectedMember(SpecId.emp_name);
+            setSelectedassetTypeId(datalist.asset_id);
+            setSelectedassetType(SpecId.asset_name);
+            setAssetsDetails(datalist.asset_details);
+            setAssetsValue(datalist.asset_value);
+            setStartDate(new Date(SpecId.issue_date));
+            setEndDate(new Date(SpecId.valid_till));
+            setreturnDate(new Date(SpecId.return_on));
+            setRemarks(datalist.remarks);
+            setSelectedStatus(datalist.status)
+        }
+    }, [datalist])
 
     return (
 
@@ -503,7 +553,7 @@ const AddAsset = ({ navigation }) => {
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton}
-                            onPress={AddAss}
+                            onPress={EditAss}
                         >
                             {
                                 load ?
@@ -531,4 +581,4 @@ const AddAsset = ({ navigation }) => {
     )
 }
 
-export default AddAsset;
+export default EditAsset;

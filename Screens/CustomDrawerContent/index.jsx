@@ -92,28 +92,32 @@ const CustomDrawerContent = ({ navigation }) => {
 
     const signout = async () => {
 
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/logout';
-            const response = await axios.post(apiUrl, {}, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
+        await AsyncStorage.removeItem('userData');
+        const val = {};
+        dispatch({ type: 'REMOVE_USER_DATA', payload: val });
 
-            const ResData = response.data;
+        // try {
+        //     const apiUrl = 'https://ocean21.in/api/public/api/logout';
+        //     const response = await axios.post(apiUrl, {}, {
+        //         headers: {
+        //             Authorization: `Bearer ${data.token}`
+        //         }
+        //     });
 
-            if (ResData.status === "success") {
-                Alert.alert("Successfull", ResData.message);
-                await AsyncStorage.removeItem('userData');
-                const val = {};
-                dispatch({ type: 'REMOVE_USER_DATA', payload: val });
-            } else {
-                Alert.alert("Failed", ResData.message)
-            }
+        //     const ResData = response.data;
 
-        } catch (error) {
-            console.error('Error signing out:', error);
-        }
+        //     if (ResData.status === "success") {
+        //         Alert.alert("Successfull", ResData.message);
+        //         await AsyncStorage.removeItem('userData');
+        //         const val = {};
+        //         dispatch({ type: 'REMOVE_USER_DATA', payload: val });
+        //     } else {
+        //         Alert.alert("Failed", ResData.message)
+        //     }
+
+        // } catch (error) {
+        //     console.error('Error signing out:', error);
+        // }
     }
 
 

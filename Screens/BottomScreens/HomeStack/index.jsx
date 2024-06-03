@@ -69,6 +69,7 @@ import EditEvent from "./Event/EditEvent";
 import AssetsList from "./Assets/AssetList";
 import AssetType from "./Assets/AssetType";
 import AddAsset from "./Assets/AddAsset";
+import EditAsset from "./Assets/EditAsset";
 
 const Stack = createNativeStackNavigator();
 
@@ -188,6 +189,7 @@ const HomeStack = () => {
 
       <Stack.Screen name="Asset List" component={AssetsList} />
       <Stack.Screen name="Add Asset" component={AddAsset} />
+      <Stack.Screen name="Edit Asset" component={EditAsset} />
       <Stack.Screen name="Assets Type" component={AssetType} />
 
       {/*  */}
