@@ -423,9 +423,18 @@ const CustomDrawerContent = ({ navigation }) => {
                                 onPress={() => navigation.navigate('Issue Type')}
                             />
 
+                            {
+                                ((data.userrole == 1 || data.userrole == 2) ?
+                                    <DrawerItem
+                                        label="Raise Ticket"
+                                        onPress={() => navigation.navigate('Raise Ticket')}
+                                    /> : null
+                                )
+                            }
+
                             <DrawerItem
-                                label="Raise Ticket"
-                                onPress={() => navigation.navigate('Raise Ticket')}
+                                label="Raise Ticket Employee"
+                                onPress={() => navigation.navigate('Raise Ticket Emp')}
                             />
 
                             <DrawerItem

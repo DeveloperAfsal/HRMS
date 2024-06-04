@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
@@ -13,8 +13,9 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { useFocusEffect } from "@react-navigation/native";
 
-const TicketList = () => {
+const TicketList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -70,9 +71,12 @@ const TicketList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Export-Excel 
 
@@ -183,6 +187,75 @@ const TicketList = () => {
         }
     };
 
+    // Api call for Delete
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [ReasonError, setReasonError] = useState('')
+    const [Reason, setReason] = useState('');
+    const [DelData, setDelData] = useState(false);
+    const [slotToDelete, setSlotToDelete] = useState(null);
+
+    const HandleDelete = (slotId) => {
+        setSlotToDelete(slotId);
+        setModalVisible(true);
+    }
+
+    const cancelDelete = () => {
+        setSlotToDelete(null);
+        setModalVisible(false);
+        setReasonError('');
+        setReason('');
+        setDelData(false);
+    }
+
+    const confirmDelete = async () => {
+
+        setDelData(true)
+
+        if (slotToDelete) {
+
+            try {
+
+                if (!Reason) {
+                    setReasonError('Reason Required');
+                    setDelData(false);
+                    return;
+                } else {
+                    setReasonError('');
+                    setReason('');
+                }
+
+                const apiUrl = `https://ocean21.in/api/public/api/delete_raiseticket`;
+
+                const response = await axios.post(apiUrl, {
+                    id: slotToDelete,
+                    updated_by: data.userempid,
+                    reason: Reason,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                if (response.data.status === "success") {
+                    const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
+                    setDatalist(updatedDataList);
+                    setDelData(false);
+                    Alert.alert("Deleted", "Deleted Successfully");
+                } else {
+                    Alert.alert("Failed", "Failed to delete shift slot");
+                    setDelData(false)
+                }
+            } catch (error) {
+                Alert.alert("Error", "Error while deleting shift slot");
+                console.error('Error deleting shift slot:', error);
+                setDelData(false)
+            }
+            setSlotToDelete(null);
+            setModalVisible(false);
+        }
+    }
+
     return (
 
         <View style={styles.Container}>
@@ -218,13 +291,16 @@ const TicketList = () => {
                 </View>
             </View>
 
-            <View>
-                <TouchableOpacity style={styles.TicketButton}>
-                    <Text style={styles.TicketButtonText}>
-                        Manual Ticket Raise
-                    </Text>
-                </TouchableOpacity>
-            </View>
+            {
+                (data.userrole == 1 || data.userrole == 2) ?
+                    <View>
+                        <TouchableOpacity style={styles.TicketButton} onPress={() => navigation.navigate('Raise Ticket')}>
+                            <Text style={styles.TicketButtonText}>
+                                Manual Ticket Raise
+                            </Text>
+                        </TouchableOpacity>
+                    </View> : null
+            }
 
             <ScrollView horizontal={true}>
 
@@ -244,7 +320,12 @@ const TicketList = () => {
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>Assigned Employee</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                                {
+                                    (data.userrole == 1 || data.userrole == 2) ?
+                                        <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                                        :
+                                        null
+                                }
                             </View>
 
                             {paginatedData.length === 0 ? (
@@ -267,18 +348,27 @@ const TicketList = () => {
                                             </TouchableOpacity>
                                         </View>
                                         <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                            // onPress={() => navigation.navigate('Edit Event', { Id: item })}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}
-                                            // onPress={() => HandleDelete(item.id)}
-                                            >
-                                                <DeleteIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View>
+
+                                        {
+                                            (data.userrole == 1 || data.userrole == 2) ?
+                                                <>
+                                                    <View style={styles.listcontentButtonview}>
+                                                        <TouchableOpacity style={styles.listcontenteditbutton}
+                                                            onPress={() => navigation.navigate('Edit Raise Ticket', { Id: item })}
+                                                        >
+                                                            <EditIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity style={styles.listcontentdelbutton}
+                                                            onPress={() => HandleDelete(item.id)}
+                                                        >
+                                                            <DeleteIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </> :
+                                                null
+                                        }
+
+
                                     </View>
                                 ))
                             )}
@@ -287,6 +377,44 @@ const TicketList = () => {
                     )
                     }
                 </View>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                            <Text style={styles.modalText}>Reason:</Text>
+                            <TextInput
+                                value={Reason}
+                                onChangeText={(text) => setReason(text)}
+                                style={styles.Reason}
+                            />
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError}
+                            </Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                    {
+                                        DelData ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
 
             </ScrollView>
 

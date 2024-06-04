@@ -54,10 +54,13 @@ const Template = ({ navigation }) => {
     const fetchData = async () => {
 
         setLoadData(true);
-        const apiUrl = 'https://ocean21.in/api/public/api/hr_templatelist';
 
         try {
-            const response = await axios.get(apiUrl, {
+            const apiUrl = 'https://ocean21.in/api/public/api/hr_templatelist';
+            const response = await axios.post(apiUrl, {
+                user_roleid: data.userrole,
+                emp_id: data.userempid
+            }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
                 }
@@ -444,6 +447,7 @@ const Template = ({ navigation }) => {
                             <View style={styles.listHeader}>
                                 <Text style={styles.sno}>S.No</Text>
                                 <Text style={styles.RoleName}>Title</Text>
+                                <Text style={styles.RoleName}>Status</Text>
                                 <Text style={styles.Action}>Action</Text>
                             </View>
 
@@ -458,6 +462,7 @@ const Template = ({ navigation }) => {
                                                     <View key={index} style={styles.listcontent}>
                                                         <Text style={styles.listcontentsno}>{index + 1}</Text>
                                                         <Text style={styles.listcontentRoleName}>{doc.title}</Text>
+                                                        <Text style={styles.listcontentStatus}>{doc.status}</Text>
                                                         <View style={styles.listcontentButtonview}>
 
                                                             <TouchableOpacity

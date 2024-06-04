@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
 
     RoleName: {
-        width: '40%',
+        width: '20%',
         color: "#404040",
         fontWeight: '600',
         fontSize: 15,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
 
     Action: {
         width: '35%',
-        paddingLeft: "17%",
+        paddingLeft: "15%",
         color: "#404040",
         fontWeight: '600',
         fontSize: 15,
@@ -264,7 +264,12 @@ const styles = StyleSheet.create({
     },
 
     listcontentRoleName: {
-        width: '40%',
+        width: '20%',
+        textAlign: 'center'
+    },
+
+    listcontentStatus: {
+        width: '20%',
         textAlign: 'center'
     },
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
@@ -13,8 +13,9 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { useFocusEffect } from "@react-navigation/native";
 
-const AssignedList = () => {
+const AssignedList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -70,9 +71,11 @@ const AssignedList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Export-Excel 
 
@@ -259,14 +262,15 @@ const AssignedList = () => {
                                             </TouchableOpacity>
                                         </View>
                                         <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                            // onPress={() => navigation.navigate('Edit Event', { Id: item })}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-
-                                        </View>
+                                        {item.status === "Solved" ? <Text style={[styles.cell, styles.ShiftSlot]}>-</Text> :
+                                            <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => navigation.navigate('Edit Raise Assign', { Id: item })}
+                                                >
+                                                    <EditIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        }
                                     </View>
                                 ))
                             )}

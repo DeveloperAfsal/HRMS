@@ -73,6 +73,10 @@ import EditAsset from "./Assets/EditAsset";
 import IssueType from "./HelpDesk/IssueType";
 import AssignedList from "./HelpDesk/AssignedList";
 import TicketList from "./HelpDesk/TicketList";
+import RaiseTicket from "./HelpDesk/RaiseTicket";
+import EditRaiseTicket from "./HelpDesk/EditRaiseTicket";
+import EditRaiseAssign from "./HelpDesk/EditRaiseAssign";
+import RaiseTicketEmp from "./HelpDesk/RaiseTicketEmp";
 
 const Stack = createNativeStackNavigator();
 
@@ -193,6 +197,10 @@ const HomeStack = () => {
       <Stack.Screen name="Issue Type" component={IssueType} />
       <Stack.Screen name="Assigned List" component={AssignedList} />
       <Stack.Screen name="Tickets List" component={TicketList} />
+      <Stack.Screen name="Raise Ticket" component={RaiseTicket} />
+      <Stack.Screen name="Raise Ticket Emp" component={RaiseTicketEmp} />
+      <Stack.Screen name="Edit Raise Ticket" component={EditRaiseTicket} />
+      <Stack.Screen name="Edit Raise Assign" component={EditRaiseAssign} />
 
       {/*  */}
 

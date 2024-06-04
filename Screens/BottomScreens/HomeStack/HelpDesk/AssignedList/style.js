@@ -439,7 +439,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#fff',
         fontSize: 16
-    }
+    },
+
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
 })
 
 export default styles;
