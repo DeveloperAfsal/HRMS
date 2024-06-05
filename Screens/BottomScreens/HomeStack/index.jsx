@@ -77,6 +77,7 @@ import RaiseTicket from "./HelpDesk/RaiseTicket";
 import EditRaiseTicket from "./HelpDesk/EditRaiseTicket";
 import EditRaiseAssign from "./HelpDesk/EditRaiseAssign";
 import RaiseTicketEmp from "./HelpDesk/RaiseTicketEmp";
+import OrgChart from "./OrganizationStructure/OrgChart";
 
 const Stack = createNativeStackNavigator();
 
@@ -135,6 +136,7 @@ const HomeStack = () => {
       <Stack.Screen name="Employee Document Type" component={DocumentType} />
       <Stack.Screen name="Supervisor List" component={SupervisorList} />
       <Stack.Screen name="Edit Supervisor List" component={EditSupervisorList} />
+      <Stack.Screen name="ORG chart" component={OrgChart} />
 
       {/*  */}
 
