@@ -4,7 +4,9 @@ import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import ProfileIcon from "../../../../../Assets/Icons/Profile.svg";
 import PhoneIcon from "../../../../../Assets/Icons/Phone.svg";
 import MailIcon from "../../../../../Assets/Icons/MailorMessage.svg";
+import TickIcon from '../../../../../Assets/Icons/Tick.svg';
 import SearchIcon from '../../../../../Assets/Icons/Search.svg';
+import moment from 'moment-timezone';
 import styles from "./style";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -22,10 +24,7 @@ const VisitorLog = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [filterText, setFilterText] = useState('');
     const [refreshing, setRefreshing] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState('Active');
     const [EditLoad, setEditLoad] = useState(false);
-    const [Number, setNumber] = useState(0);
 
     const filteredData = employeeData.filter(row => {
         const values = Object.values(row).map(value => String(value));
@@ -56,6 +55,23 @@ const VisitorLog = ({ navigation }) => {
 
     // 
 
+    const [currentTime, setCurrentTime] = useState('');
+
+    useEffect(() => {
+        const updateDateTime = () => {
+            const indiaTimeZone = 'Asia/Kolkata';
+            const now = moment().tz(indiaTimeZone);
+            const formattedTime = now.format('hh:mm:ss');
+
+            setCurrentTime(formattedTime);
+        };
+        updateDateTime();
+        const intervalId = setInterval(updateDateTime, 1000);
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // 
+
     const Checkout = async (employee) => {
 
         // setEditLoad(true);
@@ -66,7 +82,7 @@ const VisitorLog = ({ navigation }) => {
 
             const response = await axios.put(apiUrl, {
                 id: employee.id,
-                out_time: "16:00:00",
+                out_time: currentTime,
                 updated_by: data.userempid,
             }, {
                 headers: {
@@ -79,7 +95,6 @@ const VisitorLog = ({ navigation }) => {
 
             if (resdata.status === "success") {
                 setEditLoad(false);
-                setNumber(1);
                 Alert.alert("successfull", resdata.message);
                 fetchData();
             } else {
@@ -162,13 +177,16 @@ const VisitorLog = ({ navigation }) => {
                                         </View>
 
                                         <View style={styles.Buttonview}>
-                                            <TouchableOpacity style={Number == 1 ? styles.CheckoutActive : styles.Checkout}
+                                            <TouchableOpacity style={employee.out_time === null ? styles.Checkout : styles.CheckoutActive}
                                                 onPress={() => Checkout(employee)}
                                             >
                                                 {
                                                     EditLoad ?
                                                         <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                        <Text style={styles.CheckoutText}>Check out</Text>
+                                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                                            {employee.out_time === null ? null : <TickIcon width={14} height={14} />}
+                                                            <Text style={styles.CheckoutText}>Check out</Text>
+                                                        </View>
                                                 }
                                             </TouchableOpacity>
                                             <TouchableOpacity style={styles.ViewDetails}
