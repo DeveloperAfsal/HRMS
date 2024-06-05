@@ -118,74 +118,79 @@ const JobOpenings = ({ navigation }) => {
         <ScrollView>
 
             <View style={styles.ShiftSlotContainer}>
+                {
+                    (data.userrole == 1 || data.userrole == 2) ?
+                        <>
+                            <View style={styles.ShiftSlotContainerTitle}>
+                                <Text style={styles.ShiftSlotContainerTitleText}>Add Job</Text>
+                            </View>
 
-                <View style={styles.ShiftSlotContainerTitle}>
-                    <Text style={styles.ShiftSlotContainerTitleText}>Add Job</Text>
-                </View>
+                            <View style={styles.Inputcontainer}>
 
-                <View style={styles.Inputcontainer}>
+                                <Text style={styles.ShiftSlotText}>
+                                    Designation
+                                </Text>
 
-                    <Text style={styles.ShiftSlotText}>
-                        Designation
-                    </Text>
+                                <TextInput
+                                    value={designation}
+                                    onChangeText={(txt) => setDesignation(txt)}
+                                    style={styles.ShiftSlotTextInput}
+                                />
 
-                    <TextInput
-                        value={designation}
-                        onChangeText={(txt) => setDesignation(txt)}
-                        style={styles.ShiftSlotTextInput}
-                    />
+                                <Text style={styles.errorText}>
+                                    {designationError}
+                                </Text>
 
-                    <Text style={styles.errorText}>
-                        {designationError}
-                    </Text>
+                                <Text style={styles.ShiftSlotText}>
+                                    No. of Vacancies
+                                </Text>
 
-                    <Text style={styles.ShiftSlotText}>
-                        No. of Vacancies
-                    </Text>
+                                <TextInput
+                                    value={nofVacancies}
+                                    onChangeText={(txt) => setNofVacancies(txt)}
+                                    style={styles.ShiftSlotTextInput}
+                                />
 
-                    <TextInput
-                        value={nofVacancies}
-                        onChangeText={(txt) => setNofVacancies(txt)}
-                        style={styles.ShiftSlotTextInput}
-                    />
+                                <Text style={styles.errorText}>
+                                    {nofVacanciesError}
+                                </Text>
 
-                    <Text style={styles.errorText}>
-                        {nofVacanciesError}
-                    </Text>
+                                <Text style={styles.ShiftSlotText}>
+                                    Description
+                                </Text>
 
-                    <Text style={styles.ShiftSlotText}>
-                        Description
-                    </Text>
+                                <TextInput
+                                    value={description}
+                                    onChangeText={(txt) => setDescription(txt)}
+                                    style={styles.ShiftSlotTextInput}
+                                />
+                                {/* react-native-pell-rich-editor */}
 
-                    <TextInput
-                        value={description}
-                        onChangeText={(txt) => setDescription(txt)}
-                        style={styles.ShiftSlotTextInput}
-                    />
-                    {/* react-native-pell-rich-editor */}
+                                <View style={styles.buttonview}>
+                                    <TouchableOpacity style={styles.submitbutton}
+                                        onPress={HandleSubmit}
+                                    >
+                                        {
+                                            load ?
+                                                <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                <Text style={styles.submitbuttonText}>
+                                                    Submit
+                                                </Text>
+                                        }
+                                    </TouchableOpacity>
 
-                    <View style={styles.buttonview}>
-                        <TouchableOpacity style={styles.submitbutton}
-                            onPress={HandleSubmit}
-                        >
-                            {
-                                load ?
-                                    <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                    <Text style={styles.submitbuttonText}>
-                                        Submit
-                                    </Text>
-                            }
-                        </TouchableOpacity>
+                                    <TouchableOpacity style={styles.cancelbutton}
+                                        onPress={() => navigation.navigate('Dashboard')}
+                                    >
+                                        <Text style={styles.cancelbuttontext}>
+                                            Cancel
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </> : null
+                }
 
-                        <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
-                        >
-                            <Text style={styles.cancelbuttontext}>
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
 
                 <View style={styles.ShiftSlotContainerTitle}>
                     <Text style={styles.ShiftSlotContainerTitleText}>Jobs</Text>

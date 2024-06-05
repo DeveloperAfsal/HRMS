@@ -259,6 +259,15 @@ const EditRaiseAssign = ({ route, navigation }) => {
         setSelectedDepartments1(SpecId.role_name);
     }, [datalist])
 
+    useEffect(() => {
+        const selectedDepartment = departmentNameDropdown.find(department => department.id === selectedDepartmentsId);
+        if (selectedDepartment) {
+            setSelectedDepartments(selectedDepartment.role_name);
+        } else {
+            setSelectedDepartments('');
+        }
+    }, [selectedDepartmentsId, departmentNameDropdown]);
+
     // 
 
     const [EditLoad, setEditLoad] = useState(false)

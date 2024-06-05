@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
 
     RoleName: {
-        width: '20%',
+        width: 100,
         color: "#404040",
         fontWeight: '600',
         fontSize: 15,
@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
     },
 
     sno: {
-        width: '15%',
-        paddingLeft: "3%",
+        width: 100,
+        textAlign: 'center',
         color: "#404040",
         fontWeight: '600',
         fontSize: 15,
@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
     },
 
     Action: {
-        width: '35%',
-        paddingLeft: "15%",
+        width: 100,
+        textAlign: 'center',
         color: "#404040",
         fontWeight: '600',
         fontSize: 15,
@@ -259,23 +259,24 @@ const styles = StyleSheet.create({
     },
 
     listcontentsno: {
-        width: '15%',
-        paddingLeft: "5%"
+        width: 100,
+        textAlign: 'center'
     },
 
     listcontentRoleName: {
-        width: '20%',
+        width: 100,
         textAlign: 'center'
     },
 
     listcontentStatus: {
-        width: '20%',
+        width: 100,
         textAlign: 'center'
     },
 
     listcontentButtonview: {
-        width: '35%',
-        paddingLeft: "5%",
+        width: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
         flexDirection: 'row',
         gap: 10
     },

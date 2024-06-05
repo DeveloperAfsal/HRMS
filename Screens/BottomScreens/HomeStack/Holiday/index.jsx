@@ -481,7 +481,7 @@ const AttendanceRequest = () => {
                 </View>
             </View>
 
-            <View style={styles.AddHoliday}>
+            {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.AddHoliday}>
                 <TouchableOpacity style={styles.AddHolidayButton}
                     onPress={toggleModal}
                 >
@@ -489,7 +489,7 @@ const AttendanceRequest = () => {
                         Add Holiday
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> : null}
 
             <ScrollView horizontal={true}>
 
@@ -504,7 +504,9 @@ const AttendanceRequest = () => {
                                 <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Holiday</Text>
                                 <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Date</Text>
                                 <Text style={[styles.header, styles.cell, styles.StartDate]}>Day</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Action</Text>
+                                {(data.userrole == 1 || data.userrole == 2) ?
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Action</Text> : null
+                                }
                             </View>
 
                             {paginatedData.length === 0 ? (
@@ -516,7 +518,7 @@ const AttendanceRequest = () => {
                                         <Text style={[styles.cell, styles.DepartmentName]}>{item.h_name}</Text>
                                         <Text style={[styles.cell, styles.EmployeeName]}>{item.h_date}</Text>
                                         <Text style={[styles.cell, styles.StartDate]}>{item.h_day}</Text>
-                                        <View style={[styles.listcontentButtonview, styles.EndDate]}>
+                                        {(data.userrole == 1 || data.userrole == 2) ? <View style={[styles.listcontentButtonview, styles.EndDate]}>
                                             <TouchableOpacity
                                                 onPress={() => openEditModal(item)}
                                                 style={styles.listcontenteditbutton}>
@@ -529,7 +531,7 @@ const AttendanceRequest = () => {
                                                 <DeleteIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
 
-                                        </View>
+                                        </View> : null}
                                     </View>
                                 ))
                             )}

@@ -10,6 +10,7 @@ import axios from "axios";
 import DocumentPicker from 'react-native-document-picker';
 
 const Documents = ({
+    navigation,
     onprevBankDetails,
     selectedImage,
     setSelectedImage,
@@ -23,11 +24,10 @@ const Documents = ({
     documents,
     employeeDoc,
     setEmployeeDoc,
-    navigation,
     setEmployee,
     employee,
 }) => {
-console.log(employee.password,"employee")
+
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
@@ -389,7 +389,7 @@ console.log(employee.password,"employee")
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                // navigation.navigate('Employee List');
+                navigation.navigate('Employee List');
                 Alert.alert('Submitted', 'Employee Details Updated');
                 setLoad(false);
             }
@@ -404,7 +404,7 @@ console.log(employee.password,"employee")
     // Handle Cancel
 
     const HandleCancel = () => {
-        // navigation.navigate('Employee List');
+        navigation.navigate('Employee List');
     }
 
     return (
@@ -524,7 +524,7 @@ console.log(employee.password,"employee")
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.NextButton} onPress={HandleSubmit}>
-                    { load ? <ActivityIndicator size={"small"} color={"#fff"}/>:<Text style={styles.NextButtonText}>
+                    {load ? <ActivityIndicator size={"small"} color={"#fff"} /> : <Text style={styles.NextButtonText}>
                         Submit
                     </Text>}
                 </TouchableOpacity>

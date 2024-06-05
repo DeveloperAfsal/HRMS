@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import ProfileIcon from "../../../../../Assets/Icons/Profile.svg";
@@ -6,6 +6,7 @@ import PlusIcon from "../../../../../Assets/Icons/Plus.svg";
 import MinusIcon from "../../../../../Assets/Icons/minus.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ViewProfile = ({ route, navigation }) => {
 
@@ -46,30 +47,33 @@ const ViewProfile = ({ route, navigation }) => {
         setIsDocuments(!isDocuments);
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get(
-                    `https://ocean21.in/api/public/api/employee_detailslitshow/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${data.token}`
-                        }
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(
+                `https://ocean21.in/api/public/api/employee_detailslitshow/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
                     }
-                );
-                const resData = response.data.data.employee_details;
-                const resDoc = response.data.data;
-                setEmployee(resData);
-                setEmployeeDoc(resDoc);
-                setLoading(false);
-            } catch (error) {
-                console.log(error.message);
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id]);
+                }
+            );
+            const resData = response.data.data.employee_details;
+            const resDoc = response.data.data;
+            setEmployee(resData);
+            setEmployeeDoc(resDoc);
+            setLoading(false);
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [id])
+    );
 
     return (
         <View style={styles.container}>

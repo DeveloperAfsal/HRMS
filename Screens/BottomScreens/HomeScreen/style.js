@@ -265,8 +265,8 @@ const styles = StyleSheet.create({
     },
 
     AnnounceMentContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         paddingBottom: "5%",
     },
 
@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
 
     AnnouncementDataHeadr: {
         paddingHorizontal: '5%',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

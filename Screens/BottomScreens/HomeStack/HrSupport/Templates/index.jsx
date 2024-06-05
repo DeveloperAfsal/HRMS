@@ -341,98 +341,102 @@ const Template = ({ navigation }) => {
 
             <View style={styles.ShiftSlotContainer}>
 
-                <View style={styles.ShiftSlotContainerTitle}>
-                    <Text style={styles.ShiftSlotContainerTitleText}>Add Template</Text>
-                </View>
-
-                <View style={styles.Inputcontainer}>
-
-                    <Text style={styles.ShiftSlotText}>
-                        Title
-                    </Text>
-
-                    <TextInput
-                        value={title}
-                        onChangeText={(txt) => setTitle(txt)}
-                        style={styles.ShiftSlotTextInput}
-                    />
-
-                    <Text style={styles.errorText}>
-                        {titleError}
-                    </Text>
-
-                    <Text style={styles.ShiftSlotText}>
-                        Status
-                    </Text>
-
-                    <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
-
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-
-                    </TouchableOpacity>
-
-                    {showDropdownstatus && (
-
-                        <View style={styles.dropdown}>
-
-                            <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
-                                <Text style={styles.dropdownOptionText}>Active</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => selectStatus("In-Active")} style={styles.dropdownOption}>
-                                <Text style={styles.dropdownOptionText}>In-Active</Text>
-                            </TouchableOpacity>
-
+                {(data.userrole == 1 || data.userrole == 2) ?
+                    <>
+                        <View style={styles.ShiftSlotContainerTitle}>
+                            <Text style={styles.ShiftSlotContainerTitleText}>Add Template</Text>
                         </View>
 
-                    )}
+                        <View style={styles.Inputcontainer}>
 
-                    <Text style={styles.errorText}>
-                        {/* {titleError} */}
-                    </Text>
-
-                    <Text style={styles.ShiftSlotText}>
-                        Upload File
-                    </Text>
-
-                    <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
-                        {docFile ? docFile[0].name : 'Select The Document'}
-                    </Text>
-
-                    <View style={styles.fullWidth}>
-                        <TouchableOpacity style={styles.UploadButton}
-                            onPress={handleDocumentSelection}
-                        >
-                            <Text style={styles.UploadButtonText}>
-                                Choose File
+                            <Text style={styles.ShiftSlotText}>
+                                Title
                             </Text>
-                        </TouchableOpacity>
-                    </View>
 
+                            <TextInput
+                                value={title}
+                                onChangeText={(txt) => setTitle(txt)}
+                                style={styles.ShiftSlotTextInput}
+                            />
 
-                    <View style={styles.buttonview}>
-                        <TouchableOpacity style={styles.submitbutton}
-                            onPress={HandleSubmit}
-                        >
-                            {
-                                load ?
-                                    <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                    <Text style={styles.submitbuttonText}>
-                                        Submit
+                            <Text style={styles.errorText}>
+                                {titleError}
+                            </Text>
+
+                            <Text style={styles.ShiftSlotText}>
+                                Status
+                            </Text>
+
+                            <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
+
+                                <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                                <DropdownIcon width={14} height={14} color={"#000"} />
+
+                            </TouchableOpacity>
+
+                            {showDropdownstatus && (
+
+                                <View style={styles.dropdown}>
+
+                                    <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
+                                        <Text style={styles.dropdownOptionText}>Active</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => selectStatus("In-Active")} style={styles.dropdownOption}>
+                                        <Text style={styles.dropdownOptionText}>In-Active</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+
+                            )}
+
+                            <Text style={styles.errorText}>
+                                {/* {titleError} */}
+                            </Text>
+
+                            <Text style={styles.ShiftSlotText}>
+                                Upload File
+                            </Text>
+
+                            <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
+                                {docFile ? docFile[0].name : 'Select The Document'}
+                            </Text>
+
+                            <View style={styles.fullWidth}>
+                                <TouchableOpacity style={styles.UploadButton}
+                                    onPress={handleDocumentSelection}
+                                >
+                                    <Text style={styles.UploadButtonText}>
+                                        Choose File
                                     </Text>
-                            }
-                        </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
 
-                        <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
-                        >
-                            <Text style={styles.cancelbuttontext}>
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+
+                            <View style={styles.buttonview}>
+                                <TouchableOpacity style={styles.submitbutton}
+                                    onPress={HandleSubmit}
+                                >
+                                    {
+                                        load ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.submitbuttonText}>
+                                                Submit
+                                            </Text>
+                                    }
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.cancelbutton}
+                                    onPress={() => navigation.navigate('Dashboard')}
+                                >
+                                    <Text style={styles.cancelbuttontext}>
+                                        Cancel
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </> : null
+                }
 
                 <>
 
@@ -471,11 +475,11 @@ const Template = ({ navigation }) => {
                                                                 <ViewIcon width={14} height={14} color={"#000"} />
                                                             </TouchableOpacity>
 
-                                                            <TouchableOpacity
+                                                            {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
                                                                 onPress={() => openEditModal(doc)}
                                                                 style={styles.listcontentdownloadbutton}>
                                                                 <EditIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity>
+                                                            </TouchableOpacity> : null}
 
                                                             <TouchableOpacity
                                                                 onPress={() => handleDownload(doc.template_file)}
@@ -483,11 +487,11 @@ const Template = ({ navigation }) => {
                                                                 <DownloadIcon width={14} height={14} color={"#000"} />
                                                             </TouchableOpacity>
 
-                                                            <TouchableOpacity
+                                                            {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
                                                                 onPress={() => HandleDelete(doc.id)}
                                                                 style={styles.listcontentdelbutton}>
                                                                 <DeleteIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity>
+                                                            </TouchableOpacity> : null}
 
                                                         </View>
                                                     </View>

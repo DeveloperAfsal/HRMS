@@ -238,6 +238,7 @@ const EditEmployee = ({ route, navigation }) => {
                             employeeDoc={employeeDoc}
                             employee={employee}
                             setEmployee={setEmployee}
+                            navigation={navigation}
                         />
                     }
 

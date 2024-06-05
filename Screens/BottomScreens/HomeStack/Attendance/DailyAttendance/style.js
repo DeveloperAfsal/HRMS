@@ -19,6 +19,13 @@ const styles = StyleSheet.create({
         lineHeight: 23.94,
     },
 
+    Agenta1: {
+        paddingVertical: '7%',
+        fontWeight: '600',
+        fontSize: 18,
+        lineHeight: 23.94,
+    },
+
     AgentaView: {
         flexDirection: 'row',
         paddingBottom: '5%',

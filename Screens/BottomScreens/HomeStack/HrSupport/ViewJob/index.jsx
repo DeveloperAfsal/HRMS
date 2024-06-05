@@ -152,22 +152,25 @@ const ViewJob = ({ navigation, route }) => {
                         <Text style={styles.Designation}>{Item.designation}</Text>
                         <Text style={styles.Vaccancies}>No. of vacancies: {Item.no_of_vacancies}</Text>
                     </View>
+                    {
+                        (data.userrole == 1 || data.userrole == 2) ?
+                            <View style={styles.EditDel}>
+                                <TouchableOpacity
+                                    style={styles.listcontenteditbutton}
+                                    onPress={() => openEditModal(Item)}
+                                >
+                                    <EditIcon width={24} height={24} color={"#000"} />
+                                </TouchableOpacity>
 
-                    <View style={styles.EditDel}>
-                        <TouchableOpacity
-                            style={styles.listcontenteditbutton}
-                            onPress={() => openEditModal(Item)}
-                        >
-                            <EditIcon width={24} height={24} color={"#000"} />
-                        </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.listcontentdelbutton}
+                                    onPress={() => HandleDelete(Item)}
+                                >
+                                    <DeleteIcon width={20} height={20} color={"#000"} />
+                                </TouchableOpacity>
+                            </View> : null
+                    }
 
-                        <TouchableOpacity
-                            style={styles.listcontentdelbutton}
-                            onPress={() => HandleDelete(Item)}
-                        >
-                            <DeleteIcon width={20} height={20} color={"#000"} />
-                        </TouchableOpacity>
-                    </View>
 
                 </View>
 

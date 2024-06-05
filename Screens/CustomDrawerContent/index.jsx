@@ -173,7 +173,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Organisation Structure */}
 
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('OrganisationStructure')}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('OrganisationStructure')}>
                         <View style={styles.Tab}>
                             <OrgIcon width={20} height={20} color={'#000'} />
                             <Text style={styles.dropdownText}>Organisation Structure</Text>
@@ -182,7 +182,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.OrganisationStructure ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.OrganisationStructure && (
                         <View>
@@ -215,7 +215,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Leave & Attendance Policy */}
 
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
                         <View style={styles.Tab}>
                             <LeavePolicyIcon width={22} height={22} color={'#000'} />
                             <Text style={styles.dropdownText}>Leave & Atten Policy</Text>
@@ -224,7 +224,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.AttendancePolicy ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.AttendancePolicy && (
                         <>
@@ -273,7 +273,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Employee */}
 
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Employee')}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Employee')}>
                         <View style={styles.Tab}>
                             <EmployeeIcon width={22} height={22} color={'#000'} />
                             <Text style={styles.dropdownText}>Employee</Text>
@@ -283,7 +283,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.Employee ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.Employee && (
                         <>
@@ -372,7 +372,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* TLapproval  */}
 
-                    <TouchableOpacity onPress={() => toggleDropdown('TLapproval')} style={styles.dropdown}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity onPress={() => toggleDropdown('TLapproval')} style={styles.dropdown}>
                         <View style={styles.Tab}>
                             <TLApprovalIcon width={20} height={20} color={'#000'} />
                             <Text style={styles.dropdownText}>TL Approval</Text>
@@ -381,7 +381,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.TLapproval ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.TLapproval && (
 
@@ -633,7 +633,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Visitor Management */}
 
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Visitormanagement')}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Visitormanagement')}>
                         <View style={styles.Tab}>
                             <VistitorManageIcon width={20} height={20} color={'#000'} />
                             <Text style={styles.dropdownText}>Visitor management</Text>
@@ -642,7 +642,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.Visitormanagement ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.Visitormanagement && (
                         <>
@@ -661,7 +661,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     {/* Logs */}
 
-                    <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Logs')}>
+                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Logs')}>
                         <View style={styles.Tab}>
                             <LogsIcon width={20} height={20} color={'#000'} />
                             <Text style={styles.dropdownText}>Logs</Text>
@@ -670,7 +670,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             dropdowns.meeting ? <DropupIcon width={15} height={15} color={'#000'} /> :
                                 <DropdownIcon width={15} height={15} color={'#000'} />
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
                     {dropdowns.Logs && (
                         <>

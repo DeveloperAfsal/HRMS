@@ -2,8 +2,13 @@ import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import styles from "./style";
+import { useSelector } from "react-redux";
 
 const ApprovalList = ({ navigation }) => {
+
+    // data from redux store 
+
+    const { data } = useSelector((state) => state.login);
 
     return (
 
@@ -11,30 +16,33 @@ const ApprovalList = ({ navigation }) => {
 
             <View style={styles.Container}>
 
-                <TouchableOpacity style={styles.Button}
-                    onPress={() => navigation.navigate('Add Leave Permission Half Day')}>
-                    <Text style={styles.ButtonText}>
-                        Add Leave/Permission/Half Day
-                    </Text>
-                </TouchableOpacity>
+                {(data.userrole == 1 || data.userrole == 2) ?
+                    <>
+                        <TouchableOpacity style={styles.Button}
+                            onPress={() => navigation.navigate('Add Leave Permission Half Day')}>
+                            <Text style={styles.ButtonText}>
+                                Add Leave/Permission/Half Day
+                            </Text>
+                        </TouchableOpacity>
 
-                <View style={styles.ButtonView}>
+                        <View style={styles.ButtonView}>
 
-                    <TouchableOpacity style={styles.HalfButton}
-                        onPress={() => navigation.navigate('Add Attendance')}>
-                        <Text style={styles.ButtonText}>
-                            Add Attendance
-                        </Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.HalfButton}
+                                onPress={() => navigation.navigate('Add Attendance')}>
+                                <Text style={styles.ButtonText}>
+                                    Add Attendance
+                                </Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.HalfButton}
-                        onPress={() => navigation.navigate('Add Over Time')}>
-                        <Text style={styles.ButtonText}>
-                            Add Over Time
-                        </Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.HalfButton}
+                                onPress={() => navigation.navigate('Add Over Time')}>
+                                <Text style={styles.ButtonText}>
+                                    Add Over Time
+                                </Text>
+                            </TouchableOpacity>
 
-                </View>
+                        </View>
+                    </> : null}
 
                 <View>
 
