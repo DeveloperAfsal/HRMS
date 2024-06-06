@@ -3,6 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View, Image } from "react-native";
 import EmployeeIcon from '../../../../../Assets/Icons/Employee.svg';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import styles from "./style";
 
 const OrgChart = () => {
 
@@ -12,7 +13,6 @@ const OrgChart = () => {
 
     // state for managing fetched data
 
-    const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [datalistAdmin, setDatalistAdmin] = useState([]);
 
@@ -36,8 +36,6 @@ const OrgChart = () => {
 
     const fetchData = async () => {
 
-        setLoadData(true);
-
         try {
             const apiUrl = 'https://ocean21.in/api/public/api/orgchart_list/1';
             const response = await axios.get(apiUrl, {
@@ -45,11 +43,9 @@ const OrgChart = () => {
                     Authorization: `Bearer ${data.token}`
                 }
             });
-            setLoadData(false);
             const responseData = response.data.data;
             setDatalist(responseData);
         } catch (error) {
-            setLoadData(false);
             console.error('Error fetching data:', error);
         }
     };
@@ -60,18 +56,18 @@ const OrgChart = () => {
     }, []);
 
     const renderEmployee = (employee, level) => (
-        <View key={employee.id} style={{ marginLeft: `${level * 10}%`, marginTop: level === 0 ? 0 : '3%' }}>
-            <TouchableOpacity style={{ backgroundColor: '#00275C', width: 213, height: 60, borderRadius: 5, alignItems: 'center', flexDirection: 'row', gap: 10, paddingLeft: '3%', marginTop: '10%' }}>
-                <View style={{ backgroundColor: '#fff', width: 41, height: 41, alignItems: 'center', justifyContent: 'center', borderRadius: 3 }}>
+        <View key={employee.id} style={{ marginLeft: `${level * 20}%`, marginTop: level === 0 ? 0 : '3%' }}>
+            <TouchableOpacity style={styles.Card1}>
+                <View style={styles.ImgCard}>
                     {employee.profile_img ? (
-                        <Image source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }} style={{ width: 41, height: 41, borderColor: '#fff', borderWidth: 1 }} />
+                        <Image source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }} style={styles.Img} />
                     ) : (
                         <EmployeeIcon width={22} height={22} color={'#000'} />
                     )}
                 </View>
                 <View>
-                    <Text style={{ color: '#fff', fontSize: 14, fontWeight: '700' }}>{employee.first_name} {employee.last_name}</Text>
-                    <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>{employee.role_name}</Text>
+                    <Text style={styles.Name}>{employee.first_name} {employee.last_name}</Text>
+                    <Text style={styles.Role}>{employee.role_name}</Text>
                 </View>
             </TouchableOpacity>
             {employee.subordinates && employee.subordinates.length > 0 && (
@@ -86,19 +82,19 @@ const OrgChart = () => {
 
             <View style={{ margin: '5%' }}>
 
-                <TouchableOpacity style={{ backgroundColor: '#00275C', width: 213, height: 60, borderRadius: 5, alignItems: 'center', gap: 10, paddingLeft: '3%', flexDirection: 'row' }}>
-                    <View style={{ backgroundColor: '#fff', width: 41, height: 41, alignItems: 'center', justifyContent: 'center', borderRadius: 3 }}>
+                <View style={styles.Card}>
+                    <View style={styles.ImgCard}>
                         {datalistAdmin.profile_img ? (
-                            <Image source={{ uri: `https://ocean21.in/api/storage/app/${datalistAdmin.profile_img}` }} style={{ width: 41, height: 41, borderColor: '#fff', borderWidth: 1 }} />
+                            <Image source={{ uri: `https://ocean21.in/api/storage/app/${datalistAdmin.profile_img}` }} style={styles.Img} />
                         ) : (
                             <EmployeeIcon width={22} height={22} color={'#000'} />
                         )}
                     </View>
                     <View>
-                        <Text style={{ color: '#fff', fontSize: 14, fontWeight: '700' }}>{datalistAdmin.first_name} {datalistAdmin.last_name}</Text>
-                        <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>{datalistAdmin.role_name}</Text>
+                        <Text style={styles.Name}>{datalistAdmin.first_name} {datalistAdmin.last_name}</Text>
+                        <Text style={styles.Role}>{datalistAdmin.role_name}</Text>
                     </View>
-                </TouchableOpacity>
+                </View>
 
             </View>
 
