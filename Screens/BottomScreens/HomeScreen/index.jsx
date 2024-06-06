@@ -953,20 +953,23 @@ const HomeScreen = ({ navigation }) => {
                         <View style={{ paddingTop: "1%" }}>
 
                             {
-                                announcementList.map((item, index) => (
-                                    <View key={index} style={styles.AnnouncementData}>
+                                announcementList.length === 0 ?
+                                    <Text style={{ textAlign: 'center', paddingVertical: '5%' }}>No Announcement Yet</Text>
+                                    :
+                                    announcementList.map((item, index) => (
+                                        <View key={index} style={styles.AnnouncementData}>
 
-                                        <View style={styles.AnnouncementDataHeadr}>
-                                            <Text style={styles.AnnouncementDataHeadrTitle}>{item.a_title}</Text>
-                                            <Text style={styles.AnnouncementDataHeadrWhen}>{formatDate(item.a_validdate)}</Text>
+                                            <View style={styles.AnnouncementDataHeadr}>
+                                                <Text style={styles.AnnouncementDataHeadrTitle}>{item.a_title}</Text>
+                                                <Text style={styles.AnnouncementDataHeadrWhen}>{formatDate(item.a_validdate)}</Text>
+                                            </View>
+
+                                            <View style={{ padding: '5%' }}>
+                                                <Text style={{ fontWeight: '400', lineHeight: 18.62 }}>{item.a_description}</Text>
+                                            </View>
+
                                         </View>
-
-                                        <View style={{ padding: '5%' }}>
-                                            <Text style={{ fontWeight: '400', lineHeight: 18.62 }}>{item.a_description}</Text>
-                                        </View>
-
-                                    </View>
-                                ))
+                                    ))
                             }
 
                         </View>

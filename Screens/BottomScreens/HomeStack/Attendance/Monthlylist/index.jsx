@@ -221,7 +221,9 @@ const MonthlyList = ({ navigation }) => {
     }, []).sort((a, b) => a - b);
 
     return (
+
         <ScrollView>
+
             <View style={styles.Container}>
 
                 <View style={styles.AgentaView}>
@@ -239,7 +241,7 @@ const MonthlyList = ({ navigation }) => {
                         <Text style={[styles.Agenta, { color: '#C0000C' }]}>L - Leave</Text>
                         <Text style={[styles.Agenta, { color: '#5E20C8' }]}>W - Week Off</Text>
                         <Text style={[styles.Agenta, { color: '#028A00' }]}>H - Holiday</Text>
-                        
+
                     </View>
 
                 </View>
@@ -352,6 +354,24 @@ const MonthlyList = ({ navigation }) => {
 
                 </ScrollView>
 
+                <View style={styles.RequestContainer}>
+                    <TouchableOpacity style={styles.RaiseButton}>
+                        <Text style={styles.RaiseText}>
+                            Leave
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.RaiseButton}>
+                        <Text style={styles.RaiseText}>
+                            Attendance
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.RaiseButton}>
+                        <Text style={styles.RaiseText}>
+                            Overtime
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
                 <View style={{ alignItems: 'center' }}>
                     <View style={styles.pagination}>
 
@@ -389,7 +409,9 @@ const MonthlyList = ({ navigation }) => {
                 </View>
 
             </View>
+
         </ScrollView>
+
     )
 }
 

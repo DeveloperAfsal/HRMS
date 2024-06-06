@@ -5,13 +5,14 @@ const styles = StyleSheet.create({
 
     Card: {
         backgroundColor: '#00275C',
-        width: "55%",
+        width: "60%",
         height: 70,
         borderRadius: 5,
         alignItems: 'center',
+        flexDirection: 'row',
         gap: 10,
         paddingLeft: '3%',
-        flexDirection: 'row'
+        marginTop: '5%'
     },
 
     ImgCard: {
@@ -43,17 +44,6 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
 
-    Card1: {
-        backgroundColor: '#00275C',
-        width: "60%",
-        height: 70,
-        borderRadius: 5,
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 10,
-        paddingLeft: '3%',
-        marginTop: '10%'
-    }
 })
 
 export default styles;

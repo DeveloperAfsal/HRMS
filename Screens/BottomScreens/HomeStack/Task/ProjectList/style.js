@@ -2,6 +2,63 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    Taskdrop: {
+        borderWidth: 1,
+        borderColor: "#0879F6",
+        borderRadius: 5,
+        marginHorizontal: 5,
+        paddingHorizontal: '1%'
+    },
+
+    PriorityLow: {
+        backgroundColor: '#F0F6E5',
+        color: '#76B700',
+        fontWeight: '600',
+        borderWidth: 1,
+        borderColor: '#76B700',
+        borderRadius: 4,
+        width: 50,
+    },
+
+    PriorityMedium: {
+        backgroundColor: '#FFFACE',
+        color: '#B7A400',
+        fontWeight: '600',
+        borderWidth: 1,
+        borderColor: '#B7A400',
+        borderRadius: 4,
+        width: 50,
+    },
+
+    PriorityHigh: {
+        backgroundColor: '#FFE0E0',
+        color: '#FF7676',
+        fontWeight: '600',
+        borderWidth: 1,
+        borderColor: '#FF7676',
+        borderRadius: 4,
+        width: 50,
+    },
+
+    modaldropdown: {
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: "#ccc",
+        width: "70%",
+    },
+
+    FilterView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
+
     RequestContainer: {
         margin: '5%',
         flexDirection: 'row',
@@ -126,6 +183,7 @@ const styles = StyleSheet.create({
 
     listBody: {
         paddingVertical: '1%',
+        alignItems: 'center',
         borderBottomWidth: 0.5,
     },
 
@@ -150,6 +208,13 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         textAlign: 'center',
+    },
+
+    cell1: {
+        flex: 1,
+        padding: 10,
+        color: '#0879F6'
+        // textAlign: 'center',
     },
 
     sno: {
@@ -186,6 +251,22 @@ const styles = StyleSheet.create({
 
     Status: {
         width: 100
+    },
+
+    StatusT: {
+        width: 150,
+    },
+
+    Status1: {
+        width: 100,
+        height: 35,
+        alignItems: 'center'
+    },
+
+    Status2: {
+        width: 140,
+        alignItems: 'center',
+        flexDirection: 'row'
     },
 
     Action: {
@@ -314,8 +395,8 @@ const styles = StyleSheet.create({
     },
 
     modalCancelButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: '700',
         color: '#fff',
     },
 
@@ -324,8 +405,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,
-        width: 90,
-        height: 34,
+        width: 100,
+        height: 35,
     },
 
     modalDeleteButtonText: {
@@ -339,13 +420,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,
-        width: 90,
-        height: 34,
+        width: 100,
+        height: 35,
     },
 
     modalSubmitButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: '700',
         color: '#fff',
     },
 
@@ -357,17 +438,32 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
 
-    modalInput: {
+    modalInput1: {
         paddingLeft: 20,
+        width: '70%',
         borderRadius: 7,
         borderWidth: 0.5,
         borderColor: "#515151",
-        height: 42,
+        height: 35,
+        //   flexDirection: 'row',
+        // alignItems: 'center',
+        justifyContent: 'center',
+        // paddingRight: "5%",
+        // paddingLeft: "5%"  
+    },
+
+    modalInput: {
+        paddingLeft: 20,
+        width: '70%',
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: "#515151",
+        height: 35,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingRight: "5%",
-        paddingLeft: "5%"
+        paddingHorizontal: "5%",
+
     },
 
     modalReasonInput: {
@@ -384,8 +480,7 @@ const styles = StyleSheet.create({
     },
 
     modalLabelText: {
-        paddingTop: '5%',
-        paddingBottom: '5%'
+        paddingVertical: '5%',
     },
 
     dropdown: {
@@ -395,13 +490,15 @@ const styles = StyleSheet.create({
     },
 
     dropdownOption: {
-        padding: 10,
+        padding: 7,
+        // height:35,
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
     },
 
     dropdownOptionText: {
-        fontSize: 16,
+        fontSize: 14,
+        paddingHorizontal: '5%',
     },
 
     listcontentButtonview: {
@@ -410,6 +507,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 10,
+    },
+
+    listcontentviewbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#8056FF",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E7E0FC'
     },
 
     listcontenteditbutton: {

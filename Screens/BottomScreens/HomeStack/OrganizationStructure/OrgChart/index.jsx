@@ -14,30 +14,13 @@ const OrgChart = () => {
     // state for managing fetched data
 
     const [datalist, setDatalist] = useState([]);
-    const [datalistAdmin, setDatalistAdmin] = useState([]);
 
     // function to fetch data
-
-    const fetchDataAdmin = async () => {
-
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/orgchart_superadmin';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
-            const responseData = response.data.data;
-            setDatalistAdmin(responseData);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
 
     const fetchData = async () => {
 
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/orgchart_list/1';
+            const apiUrl = 'https://ocean21.in/api/public/api/orgchart_list/0';
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -52,12 +35,11 @@ const OrgChart = () => {
 
     useEffect(() => {
         fetchData();
-        fetchDataAdmin();
     }, []);
 
     const renderEmployee = (employee, level) => (
-        <View key={employee.id} style={{ marginLeft: `${level * 20}%`, marginTop: level === 0 ? 0 : '3%' }}>
-            <TouchableOpacity style={styles.Card1}>
+        <View key={employee.id} style={{ marginLeft: `${level * 15}%`, marginTop: level === 0 ? 0 : '3%' }}>
+            <TouchableOpacity style={styles.Card}>
                 <View style={styles.ImgCard}>
                     {employee.profile_img ? (
                         <Image source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }} style={styles.Img} />
@@ -80,25 +62,7 @@ const OrgChart = () => {
 
         <ScrollView>
 
-            <View style={{ margin: '5%' }}>
-
-                <View style={styles.Card}>
-                    <View style={styles.ImgCard}>
-                        {datalistAdmin.profile_img ? (
-                            <Image source={{ uri: `https://ocean21.in/api/storage/app/${datalistAdmin.profile_img}` }} style={styles.Img} />
-                        ) : (
-                            <EmployeeIcon width={22} height={22} color={'#000'} />
-                        )}
-                    </View>
-                    <View>
-                        <Text style={styles.Name}>{datalistAdmin.first_name} {datalistAdmin.last_name}</Text>
-                        <Text style={styles.Role}>{datalistAdmin.role_name}</Text>
-                    </View>
-                </View>
-
-            </View>
-
-            <View style={{ marginLeft: '15%' }}>
+            <View style={{ marginLeft: '5%' }}>
                 {datalist.map(employee => renderEmployee(employee, 0))}
             </View>
 

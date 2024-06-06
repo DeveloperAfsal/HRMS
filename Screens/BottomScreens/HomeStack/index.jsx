@@ -78,6 +78,8 @@ import EditRaiseTicket from "./HelpDesk/EditRaiseTicket";
 import EditRaiseAssign from "./HelpDesk/EditRaiseAssign";
 import RaiseTicketEmp from "./HelpDesk/RaiseTicketEmp";
 import OrgChart from "./OrganizationStructure/OrgChart";
+import ProjectList from "./Task/ProjectList";
+import TaskList from "./Task/TaskList";
 
 const Stack = createNativeStackNavigator();
 
@@ -222,6 +224,11 @@ const HomeStack = () => {
       <Stack.Screen name="Add Meeting" component={Addmeeting} />
       <Stack.Screen name="Edit Meeting" component={Editmeeting} />
       <Stack.Screen name="Meeting List" component={MeetingList} />
+
+      {/*  */}
+
+      <Stack.Screen name="Projects List" component={ProjectList} />
+      <Stack.Screen name="Task List" component={TaskList} />
 
       {/*  */}
 

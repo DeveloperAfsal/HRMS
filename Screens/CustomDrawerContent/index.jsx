@@ -165,7 +165,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                     <DrawerItem
                         style={styles.forSingle}
-                        label="Home"
+                        label="Dashboard"
                         labelStyle={[styles.forsinglelable, isFocused && { color: '#0A60F1' }]}
                         icon={() => <HomeIcon width={20} height={20} color={isFocused ? '#0A60F1' : '#000'} />}
                         onPress={() => navigation.navigate('Dashboard')}
@@ -266,6 +266,11 @@ const CustomDrawerContent = ({ navigation }) => {
                             <DrawerItem
                                 label="Leave Policy"
                                 onPress={() => navigation.navigate('Leave Policy')}
+                            />
+
+                            <DrawerItem
+                                label="Overtime Type"
+                                onPress={() => navigation.navigate('Overtime Type')}
                             />
 
                         </>
@@ -572,18 +577,13 @@ const CustomDrawerContent = ({ navigation }) => {
                             />
 
                             < DrawerItem
-                                label="Tasks – Employee view"
-                                onPress={() => navigation.navigate('Tasks – Employee view')}
-                            />
-
-                            < DrawerItem
                                 label="Task List"
                                 onPress={() => navigation.navigate('Task List')}
                             />
 
                             < DrawerItem
-                                label="Task Progress"
-                                onPress={() => navigation.navigate('Task Progress')}
+                                label="Assigned Task"
+                                onPress={() => navigation.navigate('Assigned Task')}
                             />
 
                         </>)}
@@ -605,6 +605,16 @@ const CustomDrawerContent = ({ navigation }) => {
                         <>
 
                             < DrawerItem
+                                label="Overtime Calculation"
+                                onPress={() => navigation.navigate('Overtime Calculation')}
+                            />
+
+                            < DrawerItem
+                                label="Assign Employee Salary"
+                                onPress={() => navigation.navigate('Assign Employee Salary')}
+                            />
+
+                            < DrawerItem
                                 label="Salary Calculation"
                                 onPress={() => navigation.navigate('Salary Calculation')}
                             />
@@ -615,8 +625,8 @@ const CustomDrawerContent = ({ navigation }) => {
                             />
 
                             < DrawerItem
-                                label="Payroll List"
-                                onPress={() => navigation.navigate('Payroll List')}
+                                label="Payslip List"
+                                onPress={() => navigation.navigate('Payslip List')}
                             />
 
                         </>)}
