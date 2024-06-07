@@ -198,7 +198,9 @@ const TaskList = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [ReasonError, setReasonError] = useState('')
+    const [ReasonError1, setReasonError1] = useState('')
     const [Reason, setReason] = useState('');
+    const [Reason1, setReason1] = useState('');
     const [DelData, setDelData] = useState(false);
     const [slotToDelete, setSlotToDelete] = useState(null);
 
@@ -512,6 +514,89 @@ const TaskList = () => {
         setShowEmployeeDropdown1(false);
     };
 
+    // 
+
+    const [editModalVisible1, setEditModalVisible1] = useState(false);
+    const [editedStatus1, setEditedStatus1] = useState();
+    const [EditLoad, setEditLoad] = useState(false);
+    const [selectedSlotId, setSelectedSlotId] = useState('');
+
+    const [showModalDropdown1, setShowModalDropdown1] = useState(false);
+
+    const toggleModalDropdown1 = () => {
+        setShowModalDropdown1(!showModalDropdown1);
+    };
+
+    const selecModaltStatus1 = (status) => {
+        setEditedStatus1(status);
+        setShowModalDropdown1(false);
+    };
+
+    // Function to open edit modal and populate data
+
+    const openEditModal1 = (item) => {
+        setEditedStatus1(item.task_status);
+        setSelectedSlotId(item.id);
+        setEditModalVisible1(true);
+    };
+
+    // Function to close edit modal
+
+    const closeEditModal1 = () => {
+        setEditModalVisible1(false);
+    };
+
+    // Function to handle edit submission
+
+    const handleEditSubmit1 = async () => {
+
+        setEditLoad(true);
+
+        try {
+
+            if (editedStatus1 === "Hold") {
+                if (!Reason1) {
+                    setReasonError1('Reason Required');
+                    setEditLoad(false);
+                    return;
+                } else {
+                    setReasonError1('');
+                    setReason1('');
+                }
+            }
+
+            const apiUrl = 'https://ocean21.in/api/public/api/task_update_status';
+
+            const response = await axios.put(apiUrl, {
+                id: selectedSlotId,
+                status: editedStatus1,
+                reason: Reason1,
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                },
+            });
+
+            if (response.data.status === "success") {
+                setEditLoad(false);
+                fetchData();
+                Alert.alert("Successfull", response.data.message);
+            } else {
+                setEditLoad(false);
+                Alert.alert("Failed To Update", response.data.message);
+                console.error('Failed To Update:', response.data.error);
+            }
+
+        } catch (error) {
+            setEditLoad(false);
+            Alert.alert("Error during submit", "Check The Input Credentials");
+            console.error('Error during submit:', error);
+        }
+
+        closeEditModal1();
+    };
+
 
     return (
 
@@ -628,7 +713,7 @@ const TaskList = () => {
                                             </TouchableOpacity>
                                         </View> : null}
                                         {(data.userrole == 1 || data.userrole == 2) ? null :
-                                            <TouchableOpacity style={[styles.Status2, styles.Taskdrop]}>
+                                            <TouchableOpacity style={[styles.Status2, styles.Taskdrop]} onPress={() => openEditModal1(item)}>
                                                 <Text style={[styles.cell1]}>{item.task_status}</Text>
                                                 <DropdownIcon width={14} height={14} color={"#0879F6"} />
                                             </TouchableOpacity>}
@@ -917,6 +1002,93 @@ const TaskList = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
+                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={editModalVisible1}
+                onRequestClose={closeEditModal1}
+            >
+                <View style={styles.modalContainer}>
+
+                    <View style={styles.modalContent}>
+
+                        <Text style={styles.Heading}>Status Update</Text>
+
+                        <Text style={styles.modalLabelText}>Status</Text>
+
+                        <TouchableOpacity onPress={toggleModalDropdown1} style={styles.modalInput2}>
+
+                            <Text style={styles.StatusTouchableText}>{editedStatus1}</Text>
+                            <DropdownIcon width={14} height={14} color={"#000"} />
+
+                        </TouchableOpacity>
+
+                        {/* Dropdown to show the options */}
+
+                        {showModalDropdown1 && (
+
+                            <View style={styles.dropdown}>
+
+                                <TouchableOpacity onPress={() => selecModaltStatus1("Not Yet Start")} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>Not Yet Start</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => selecModaltStatus1("In-Progress")} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>In-Progress</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => selecModaltStatus1("Hold")} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>Hold</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => selecModaltStatus1("Completed")} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>Completed</Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+                        )}
+
+                        {editedStatus1 === "Hold" ?
+                            <>
+                                <Text style={styles.ModalerrorText}>
+                                    { }
+                                </Text>
+
+                                <Text style={styles.modalLabelText}>Reason:</Text>
+
+                                <TextInput
+                                    value={Reason1}
+                                    onChangeText={(text) => setReason1(text)}
+                                    style={styles.Reason1}
+                                />
+
+                                <Text style={styles.errorTextDelete}>
+                                    {ReasonError1}
+                                </Text>
+                            </> : null
+                        }
+
+                        <View style={styles.buttoncontainer}>
+
+                            <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit1}>
+                                {
+                                    EditLoad ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                }
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal1}>
                                 <Text style={styles.modalCancelButtonText}>Cancel</Text>
                             </TouchableOpacity>
 

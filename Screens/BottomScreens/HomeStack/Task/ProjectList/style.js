@@ -438,6 +438,15 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
 
+    Reason1: {
+        marginBottom: "5%",
+        borderRadius: 5,
+        borderColor: '#515151',
+        borderWidth: 0.5,
+        paddingLeft: 20,
+        height: 100
+    },
+
     modalInput1: {
         paddingLeft: 20,
         width: '70%',
@@ -463,7 +472,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: "5%",
+    },
 
+    modalInput2: {
+        paddingLeft: 20,
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: "#515151",
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: "5%",
     },
 
     modalReasonInput: {
@@ -491,7 +511,7 @@ const styles = StyleSheet.create({
 
     dropdownOption: {
         padding: 7,
-        // height:35,
+        height: 35,
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
     },
