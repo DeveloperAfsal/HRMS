@@ -80,6 +80,7 @@ import RaiseTicketEmp from "./HelpDesk/RaiseTicketEmp";
 import OrgChart from "./OrganizationStructure/OrgChart";
 import ProjectList from "./Task/ProjectList";
 import TaskList from "./Task/TaskList";
+import AssignedTask from "./Task/AssignedTask";
 
 const Stack = createNativeStackNavigator();
 
@@ -229,6 +230,7 @@ const HomeStack = () => {
 
       <Stack.Screen name="Projects List" component={ProjectList} />
       <Stack.Screen name="Task List" component={TaskList} />
+      <Stack.Screen name="Assigned Task" component={AssignedTask} />
 
       {/*  */}
 
