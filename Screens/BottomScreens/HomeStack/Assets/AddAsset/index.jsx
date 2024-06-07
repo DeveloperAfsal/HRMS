@@ -199,7 +199,7 @@ const AddAsset = ({ navigation }) => {
     const onRefresh = () => {
         setSelectedDepartments('');
         setSelectedMember('');
-        setSelectedAssetTypeIds('');
+        setSelectedAssetTypeIds([]);
         setAssetsDetails('');
         setAssetsValue('');
         setRemarks('');
@@ -453,7 +453,7 @@ const AddAsset = ({ navigation }) => {
                         <Text onPress={showDatepicker2}>
                             {returnDate.toDateString()} &nbsp;
                         </Text>
-                        {showDatePicker && (
+                        {showDatePicker2 && (
                             <DateTimePicker
                                 value={returnDate}
                                 mode="date"

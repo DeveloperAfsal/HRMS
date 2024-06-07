@@ -506,7 +506,7 @@ const EditAsset = ({ route, navigation }) => {
                         <Text onPress={showDatepicker2}>
                             {returnDate.toDateString()} &nbsp;
                         </Text>
-                        {showDatePicker && (
+                        {showDatePicker2 && (
                             <DateTimePicker
                                 value={returnDate}
                                 mode="date"
