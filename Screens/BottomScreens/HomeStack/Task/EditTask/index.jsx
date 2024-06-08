@@ -17,7 +17,6 @@ const EditTask = ({ route, navigation }) => {
     // route
 
     const SpecId = route.params.Id;
-    console.log(SpecId, "SpecId")
 
     const [tname, setTname] = useState('');
     const [pworktype, setPworktype] = useState('');
@@ -263,7 +262,6 @@ const EditTask = ({ route, navigation }) => {
 
     const [datalist, setDatalist] = useState([]);
     const [dataload, setDataload] = useState(false);
-    console.log(datalist, "datalist")
 
     useEffect(() => {
 
@@ -339,19 +337,6 @@ const EditTask = ({ route, navigation }) => {
         formData.append('updated_by', data.userempid);
         formData.append('oldimg_path', datalist.attachment);
         formData.append('p_reason', "-");
-
-        // if (docFile.length > 0) {
-        //     docFile.map((file, index) => {
-        //         formData.append(`attachment`, {
-        //             uri: file.uri,
-        //             name: file.name,
-        //             type: file.type,
-        //         });
-        //     });
-        // }
-        // else {
-        //     formData.append('attachment', docFile);
-        // }
 
         if (docFile.length > 0 && !docFile.includes(datalist.attachment)) {
             // Only add the image if it has been changed
@@ -535,7 +520,7 @@ const EditTask = ({ route, navigation }) => {
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
 
-                    {showEmployeeDropdown && (
+                    {showEmployeeDropdown && (  
                         <View style={styles.dropdown}>
                             {employeeDropdown.map((employee, index) => (
                                 <TouchableOpacity
