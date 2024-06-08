@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    ShiftSlotContainer: {
+        alignItems: 'center',
+        paddingBottom: '5%',
+        marginVertical:'5%'
+    },
+
     container1: {
         flex: 1,
         padding: 10,

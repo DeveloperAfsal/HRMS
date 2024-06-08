@@ -170,7 +170,7 @@ const JobOpenings = ({ navigation }) => {
                                 />
 
                                 {/* react-native-pell-rich-editor */}
-                                
+
                                 {/* <SafeAreaView style={styles.container1}>
                                     <RichEditor
                                         ref={richText}
