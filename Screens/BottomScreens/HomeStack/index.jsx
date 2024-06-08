@@ -83,6 +83,8 @@ import TaskList from "./Task/TaskList";
 import AssignedTask from "./Task/AssignedTask";
 import AddProject from "./Task/AddProject";
 import EditProject from "./Task/EditProject";
+import AddTask from "./Task/AddTask";
+import EditTask from "./Task/EditTask";
 
 const Stack = createNativeStackNavigator();
 
@@ -233,6 +235,8 @@ const HomeStack = () => {
       <Stack.Screen name="Add Project" component={AddProject} />
       <Stack.Screen name="Edit Project" component={EditProject} />
       <Stack.Screen name="Projects List" component={ProjectList} />
+      <Stack.Screen name="Add Task" component={AddTask} />
+      <Stack.Screen name="Edit Task" component={EditTask} />
       <Stack.Screen name="Task List" component={TaskList} />
       <Stack.Screen name="Assigned Task" component={AssignedTask} />
 

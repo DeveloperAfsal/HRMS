@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#76B700',
         borderRadius: 4,
-        width: 50,
+        // width: 50,
     },
 
     PriorityMedium: {
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#B7A400',
         borderRadius: 4,
-        width: 50,
+        // width: 50,
     },
 
     PriorityHigh: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#FF7676',
         borderRadius: 4,
-        width: 50,
+        // width: 50,
     },
 
     modaldropdown: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
@@ -15,8 +15,9 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { useFocusEffect } from "@react-navigation/native";
 
-const TaskList = () => {
+const TaskList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -73,9 +74,11 @@ const TaskList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Export-Excel 
 
@@ -703,6 +706,7 @@ const TaskList = () => {
 
                                         {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.listcontentButtonview}>
                                             <TouchableOpacity style={styles.listcontenteditbutton}
+                                                onPress={() => navigation.navigate('Edit Task', { Id: item })}
                                             >
                                                 <EditIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>

@@ -1,35 +1,77 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Modal, Platform, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import styles from "./style";
+import styles from "../AddProject/style";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DocumentPicker from 'react-native-document-picker';
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useFocusEffect } from '@react-navigation/native';
 
-const AddProject = ({ navigation }) => {
+
+const EditTask = ({ route, navigation }) => {
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
 
-    // states
+    // route
 
-    const [pname, setPname] = useState('');
-    const [ptype, setPtype] = useState('');
-    const [pcategory, setPcategory] = useState('');
+    const SpecId = route.params.Id;
+    console.log(SpecId, "SpecId")
+
+    const [tname, setTname] = useState('');
     const [pworktype, setPworktype] = useState('');
     const [des, setDes] = useState('');
-    const [duration, setDuration] = useState('');
+    const [TaskId, setTaskId] = useState('');
+    const [prolist, setProlist] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    const [cname, setCname] = useState('');
-    const [ccompany, setCcompany] = useState('');
-    const [ccontact, setCcontact] = useState('');
-    const [cemail, setCemail] = useState('');
-    const [ccity, setCcity] = useState('');
-    const [cstate, setCstate] = useState('');
+    const fetchTask = async () => {
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/task_id';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data?.token}`
+                }
+            });
 
-    const [load, SetLoad] = useState(false);
+            const responseData = response.data.data;
+            setTaskId(responseData);
+
+        } catch (error) {
+            console.error('Error fetching task data:', error);
+        }
+    };
+
+    const fetchProList = async () => {
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/project_name_list';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data?.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setProlist(responseData);
+
+        } catch (error) {
+            console.error('Error fetching project list data:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (data?.token) {
+            fetchTask();
+            fetchProList();
+        } else {
+            console.error('Token is missing');
+        }
+    }, [data?.token]);
+
+    const [load, setLoad] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
@@ -74,39 +116,6 @@ const AddProject = ({ navigation }) => {
             });
         }
     };
-
-
-    // handleDateChange
-
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
-
-    const handleDateChange = (event, date) => {
-        if (date !== undefined) {
-            setStartDate(date);
-        }
-        setShowDatePicker(Platform.OS === 'ios');
-    };
-
-    const showDatepicker = () => {
-        setShowDatePicker(true);
-    };
-
-    const [showDatePicker1, setShowDatePicker1] = useState(false);
-    const [endDate, setEndDate] = useState(new Date());
-
-    const handleDateChange1 = (event, date) => {
-        if (date !== undefined) {
-            setEndDate(date);
-        }
-        setShowDatePicker1(Platform.OS === 'ios');
-    };
-
-    const showDatepicker1 = () => {
-        setShowDatePicker1(true);
-    };
-
-    // 
 
     // Api call for userrolelist
 
@@ -160,86 +169,40 @@ const AddProject = ({ navigation }) => {
         }
     };
 
+    // handleDateChange
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setStartDate(date);
+        }
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const [showDatePicker1, setShowDatePicker1] = useState(false);
+    const [endDate, setEndDate] = useState(new Date());
+
+    const handleDateChange1 = (event, date) => {
+        if (date !== undefined) {
+            setEndDate(date);
+        }
+        setShowDatePicker1(Platform.OS === 'ios');
+    };
+
+    const showDatepicker1 = () => {
+        setShowDatePicker1(true);
+    };
+
     // Date Formatter 
 
     const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
     const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
-
-    // 
-
-    const Handlerefresh = () => {
-        setStartDate(new Date());
-        setEndDate(new Date());
-        setSelectedDepartments([]);
-        setSelectedEmployees([]);
-        setPname('');
-        setPtype('');
-        setPworktype('');
-        setPcategory('');
-        setDes('');
-        setDuration('');
-        setCname('');
-        setCcompany('');
-        setCemail('');
-        setCcontact('');
-        setCemail('');
-        setCstate('');
-        setEditedStatus('Select Status');
-    }
-
-    // Api call for Handle Submit
-
-    const HandleSubmit = async () => {
-
-        SetLoad(true);
-
-        try {
-
-            const apiUrl = 'https://ocean21.in/api/public/api/add_project';
-
-            const response = await axios.post(apiUrl, {
-                p_name: pname,
-                p_type: ptype,
-                p_work_type: pworktype,
-                p_category: pcategory,
-                p_description: des,
-                p_department: selectedDepartmentIdsAsNumbers,
-                p_members: selectedEmployeesIdsAsNumbers,
-                from_date: formattedStartDate,
-                to_date: formattedEndDate,
-                p_durations: duration,
-                c_name: cname,
-                c_company: ccompany,
-                c_email: cemail,
-                c_mobile: ccontact,
-                c_city: ccity,
-                c_state: cstate,
-                status: editedStatus,
-                created_by: data.userempid,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                },
-            });
-
-            if (response.data.status === "success") {
-                SetLoad(false);
-                navigation.navigate('Projects List')
-                Alert.alert("Successfull", response.data.message);
-                Handlerefresh();
-            } else {
-                Alert.alert("Failed To Add", response.data.message);
-                SetLoad(false);
-                console.error('Failed To Add:', response.data.error);
-            }
-
-        } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
-            console.error('Error during submit:', error);
-            SetLoad(false);
-        }
-
-    }
 
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [editedStatus, setEditedStatus] = useState(null);
@@ -253,6 +216,190 @@ const AddProject = ({ navigation }) => {
         setShowModalDropdown(false);
     };
 
+    // 
+
+    const [docFile, setDocFile] = useState();
+    const [showModalDropdown1, setShowModalDropdown1] = useState(false);
+    const [editedStatus1, setEditedStatus1] = useState(null);
+
+    const toggleModalDropdown1 = () => {
+        setShowModalDropdown1(!showModalDropdown1);
+    };
+
+    const selecModaltStatus1 = (status) => {
+        setEditedStatus1(status);
+        setShowModalDropdown1(false);
+    };
+
+    const handleDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setDocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
+
+    // 
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const selectProject = (project) => {
+        setSelectedProject(project.project_name);
+        setSelectedProjectId(project.id);
+        setShowDropdown(false);
+    };
+
+    // 
+
+    const [datalist, setDatalist] = useState([]);
+    const [dataload, setDataload] = useState(false);
+    console.log(datalist, "datalist")
+
+    useEffect(() => {
+
+        const EditRaisetick = async () => {
+
+            setDataload(true);
+
+            try {
+                const apiUrl = `https://ocean21.in/api/public/api/edit_tasklist/${SpecId.id}`;
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data;
+                const resp = response.data.data;
+
+                if (responseData.status === 'success') {
+                    setDatalist(resp);
+                    setDataload(false);
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+
+        }
+
+        EditRaisetick();
+
+    }, [SpecId])
+
+    // 
+
+    useEffect(() => {
+        setTname(datalist.t_name);
+        setSelectedProjectId(datalist.p_name);
+        setSelectedProject(SpecId.project_name);
+        setPworktype(datalist.p_work_type);
+        setStartDate(new Date(SpecId.start_date));
+        setEndDate(new Date(SpecId.end_date));
+        setSelectedDepartments(SpecId.department.split(','));
+        setSelectedEmployees(SpecId.assign_to.split(','));
+        setSelectedDepartmentIds([datalist.department]);
+        setSelectedEmployeesIds([datalist.assign_to]);
+        setEditedStatus(SpecId.task_status);
+        setEditedStatus1(SpecId.priority);
+        setDes(datalist.description);
+        setDocFile(datalist.attachment);
+    }, [SpecId, datalist])
+
+    // Api call for Handle Submit
+
+    const HandleSubmit = async () => {
+
+        setLoad(true);
+
+        const formData = new FormData();
+
+        formData.append('id', SpecId.id);
+        formData.append('t_id', TaskId);
+        formData.append('t_name', tname);
+        formData.append('p_name', selectedProjectId);
+        formData.append('p_work_type', pworktype);
+        formData.append('department', selectedDepartmentIdsAsNumbers);
+        formData.append('assign_to', selectedEmployeesIdsAsNumbers);
+        formData.append('start_date', formattedStartDate);
+        formData.append('end_date', formattedEndDate);
+        formData.append('priority', editedStatus1);
+        formData.append('description', des);
+        formData.append('status', editedStatus);
+        formData.append('updated_by', data.userempid);
+        formData.append('oldimg_path', datalist.attachment);
+        formData.append('p_reason', "-");
+
+        // if (docFile.length > 0) {
+        //     docFile.map((file, index) => {
+        //         formData.append(`attachment`, {
+        //             uri: file.uri,
+        //             name: file.name,
+        //             type: file.type,
+        //         });
+        //     });
+        // }
+        // else {
+        //     formData.append('attachment', docFile);
+        // }
+
+        if (docFile.length > 0 && !docFile.includes(datalist.attachment)) {
+            // Only add the image if it has been changed
+            docFile.forEach((image, index) => {
+                const imageUriParts = image.split('/');
+                const imageName = imageUriParts[imageUriParts.length - 1];
+                formData.append(`attachment`, {
+                    uri: image,
+                    name: imageName,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            // If the image is not changed, include the existing image URL
+            formData.append('attachment', datalist.attachment);
+        }
+
+        try {
+
+            const response = await fetch('https://ocean21.in/api/public/api/update_task_list', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
+
+            const responsedata = await response.json();
+
+            if (responsedata.status === "success") {
+                setLoad(false);
+                navigation.navigate('Task List')
+                Alert.alert("Successfull", responsedata.message);
+            } else {
+                Alert.alert("Failed To Add", responsedata.message);
+                setLoad(false);
+                console.error('Failed To Add:', responsedata.error);
+            }
+
+        } catch (error) {
+            console.log(error, "error");
+            setLoad(false);
+        }
+
+    }
+
 
     return (
 
@@ -261,48 +408,63 @@ const AddProject = ({ navigation }) => {
             <View style={styles.PolicyContainer}>
 
                 <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Add Project Details </Text>
+                    <Text style={styles.PolicyContainerTitleText}>Edit Task</Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>
 
                     <Text style={styles.StatDateText}>
+                        Task ID
+                    </Text>
+
+                    <TextInput
+                        value={SpecId.ticket_id}
+                        editable={false}
+                        style={styles.inputs}
+                    />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
+                    <Text style={styles.StatDateText}>
+                        Task Name
+                    </Text>
+
+                    <TextInput
+                        value={tname}
+                        onChangeText={(txt) => setTname(txt)}
+                        style={styles.inputs}
+                    />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
+                    <Text style={styles.StatDateText}>
                         Project Name
                     </Text>
 
-                    <TextInput
-                        value={pname}
-                        onChangeText={(txt) => setPname(txt)}
-                        style={styles.inputs}
-                    />
+                    <TouchableOpacity style={styles.Input} onPress={toggleDropdown}>
+                        <Text style={styles.StatusTouchableText}>
+                            {selectedProject ? selectedProject : "Select Project"}
+                        </Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+                    </TouchableOpacity>
 
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Project Type
-                    </Text>
-
-                    <TextInput
-                        value={ptype}
-                        onChangeText={(txt) => setPtype(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Project Category
-                    </Text>
-
-                    <TextInput
-                        value={pcategory}
-                        onChangeText={(txt) => setPcategory(txt)}
-                        style={styles.inputs}
-                    />
+                    {showDropdown && (
+                        <View style={styles.dropdown}>
+                            {prolist.map((project) => (
+                                <TouchableOpacity
+                                    key={project.id}
+                                    onPress={() => selectProject(project)}
+                                    style={styles.dropdownOption}
+                                >
+                                    <Text style={styles.dropdownOptionText}>{project.project_name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
 
                     <Text style={styles.errorText}>
                         { }
@@ -358,7 +520,7 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.StatDateText}>
-                        Members
+                        Assigned To
                     </Text>
 
                     <TouchableOpacity style={styles.Input} onPress={() => {
@@ -394,9 +556,8 @@ const AddProject = ({ navigation }) => {
                         { }
                     </Text>
 
-
                     <Text style={styles.StatDateText}>
-                        From Date
+                        Start Date
                     </Text>
 
                     <View style={styles.inputs} >
@@ -418,7 +579,7 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.StatDateText}>
-                        To Date
+                        End Date
                     </Text>
 
                     <View style={styles.inputs} >
@@ -440,21 +601,7 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.StatDateText}>
-                        Duration
-                    </Text>
-
-                    <TextInput
-                        value={duration}
-                        onChangeText={(txt) => setDuration(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Status
+                        Task Status
                     </Text>
 
                     <TouchableOpacity onPress={toggleModalDropdown} style={styles.Input}>
@@ -493,6 +640,41 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.StatDateText}>
+                        Priority
+                    </Text>
+
+                    <TouchableOpacity onPress={toggleModalDropdown1} style={styles.Input}>
+
+                        <Text style={styles.StatusTouchableText}>{editedStatus1 ? editedStatus1 : "Select Priority"}</Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+
+                    </TouchableOpacity>
+
+                    {showModalDropdown1 && (
+
+                        <View style={styles.dropdown}>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus1("High")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>High</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus1("Medium")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Medium</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus1("Low")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Low</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    )}
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
+                    <Text style={styles.StatDateText}>
                         Description
                     </Text>
 
@@ -506,106 +688,29 @@ const AddProject = ({ navigation }) => {
                         { }
                     </Text>
 
-                </View>
-
-
-            </View>
-
-            <View style={styles.PolicyContainer}>
-
-                <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Client Details</Text>
-                </View>
-
-                <View style={styles.Inputcontainer}>
-
                     <Text style={styles.StatDateText}>
-                        Client Name
+                        Attachment
                     </Text>
 
-                    <TextInput
-                        value={cname}
-                        onChangeText={(txt) => setCname(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
+                    <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
+                        {docFile ? docFile[0].name : 'Select The Document'}
                     </Text>
 
-                    <Text style={styles.StatDateText}>
-                        Client Company
-                    </Text>
-
-                    <TextInput
-                        value={ccompany}
-                        onChangeText={(txt) => setCcompany(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Contact No.
-                    </Text>
-
-                    <TextInput
-                        value={ccontact}
-                        onChangeText={(txt) => setCcontact(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Email
-                    </Text>
-
-                    <TextInput
-                        value={cemail}
-                        onChangeText={(txt) => setCemail(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        City
-                    </Text>
-
-                    <TextInput
-                        value={ccity}
-                        onChangeText={(txt) => setCcity(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        State
-                    </Text>
-
-                    <TextInput
-                        value={cstate}
-                        onChangeText={(txt) => setCstate(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
+                    <View style={styles.fullWidth}>
+                        <TouchableOpacity style={styles.UploadButton}
+                            onPress={handleDocumentSelection}
+                        >
+                            <Text style={styles.UploadButtonText}>
+                                Choose File
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <View style={styles.buttonview}>
 
-                        <TouchableOpacity style={styles.submitbutton} onPress={HandleSubmit}>
+                        <TouchableOpacity style={styles.submitbutton}
+                            onPress={HandleSubmit}
+                        >
                             {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
@@ -615,7 +720,9 @@ const AddProject = ({ navigation }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton} onPress={Handlerefresh}>
+                        <TouchableOpacity style={styles.cancelbutton}
+                            onPress={() => navigation.navigate('Task List')}
+                        >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
@@ -629,8 +736,8 @@ const AddProject = ({ navigation }) => {
             </View>
 
         </ScrollView>
-
     )
+
 }
 
-export default AddProject; 
+export default EditTask;

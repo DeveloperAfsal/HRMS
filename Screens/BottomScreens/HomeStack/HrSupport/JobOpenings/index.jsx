@@ -1,12 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
+
 
 const JobOpenings = ({ navigation }) => {
+
+    const richText = useRef();
 
     // data from redux store 
 
@@ -164,7 +168,38 @@ const JobOpenings = ({ navigation }) => {
                                     onChangeText={(txt) => setDescription(txt)}
                                     style={styles.ShiftSlotTextInput}
                                 />
+
                                 {/* react-native-pell-rich-editor */}
+                                
+                                {/* <SafeAreaView style={styles.container1}>
+                                    <RichEditor
+                                        ref={richText}
+                                        style={styles.richTextEditor1}
+                                        placeholder="Start writing here..."
+                                    />
+
+                                    <RichToolbar
+                                        editor={richText}
+                                        actions={[
+                                            actions.setBold,
+                                            actions.setItalic,
+                                            actions.setUnderline,
+                                            actions.heading1,
+                                            actions.insertBulletsList,
+                                            actions.insertOrderedList,
+                                            actions.insertLink,
+                                            actions.setStrikethrough,
+                                            actions.setSubscript,
+                                            actions.setSuperscript,
+                                        ]}
+                                        iconMap={{
+                                            [actions.setBold]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>B</Text>,
+                                            [actions.setItalic]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>I</Text>,
+                                            [actions.setUnderline]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>U</Text>,
+                                            [actions.heading1]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>H1</Text>,
+                                        }}
+                                    />
+                                </SafeAreaView> */}
 
                                 <View style={styles.buttonview}>
                                     <TouchableOpacity style={styles.submitbutton}

@@ -561,20 +561,20 @@ const CustomDrawerContent = ({ navigation }) => {
                     {dropdowns.TeamTask && (
                         <>
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Add Project"
                                 onPress={() => navigation.navigate('Add Project')}
-                            />
+                            /> : null}
 
                             < DrawerItem
                                 label="Projects List"
                                 onPress={() => navigation.navigate('Projects List')}
                             />
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Add Task"
                                 onPress={() => navigation.navigate('Add Task')}
-                            />
+                            /> : null}
 
                             < DrawerItem
                                 label="Task List"

@@ -4,6 +4,45 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
+    UploadButton: {
+        backgroundColor: '#D4E7EB',
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5
+    },
+
+    UploadButtonText: {
+        color: '#3D3D3D',
+        fontWeight: '600',
+        fontSize: 13,
+        lineHeight: 17.92
+    },
+
+    DocFileName: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        marginBottom: '5%',
+        marginHorizontal: '5%',
+        borderRadius: 5,
+        padding: '3%',
+        width: '90%',
+        backgroundColor: '#D4E7EB',
+    },
+
+    DocFileNameHolder: {
+        width: '90%',
+        lineHeight: 21.28,
+        fontSize: 14,
+        marginBottom: '5%',
+    },
+
+    fullWidth: {
+        width: '100%',
+        paddingHorizontal: '5%'
+    },
+
     PolicyContainer: {
         alignItems: 'center',
         paddingBottom: '5%'
