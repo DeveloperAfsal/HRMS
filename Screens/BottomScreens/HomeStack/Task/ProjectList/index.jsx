@@ -14,7 +14,7 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const ProjectList = () => {
+const ProjectList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -334,7 +334,7 @@ const ProjectList = () => {
                                         <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
                                         <View style={styles.listcontentButtonview}>
                                             <TouchableOpacity style={styles.listcontenteditbutton}
-                                            // onPress={() => openEditModal(item)}
+                                                onPress={() => navigation.navigate('Edit Project', { Id: item })}
                                             >
                                                 <EditIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
@@ -353,7 +353,7 @@ const ProjectList = () => {
                     }
                 </View>
 
-            </ScrollView>
+            </ScrollView >
 
             <Modal
                 animationType="fade"
@@ -429,7 +429,7 @@ const ProjectList = () => {
                 </View>
             </View>
 
-        </View>
+        </View >
 
     )
 }

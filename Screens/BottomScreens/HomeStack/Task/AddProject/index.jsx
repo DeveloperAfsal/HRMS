@@ -17,6 +17,20 @@ const AddProject = ({ navigation }) => {
 
     // states
 
+    const [pname, setPname] = useState('');
+    const [ptype, setPtype] = useState('');
+    const [pcategory, setPcategory] = useState('');
+    const [pworktype, setPworktype] = useState('');
+    const [des, setDes] = useState('');
+    const [duration, setDuration] = useState('');
+
+    const [cname, setCname] = useState('');
+    const [ccompany, setCcompany] = useState('');
+    const [ccontact, setCcontact] = useState('');
+    const [cemail, setCemail] = useState('');
+    const [ccity, setCcity] = useState('');
+    const [cstate, setCstate] = useState('');
+
     const [load, SetLoad] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -160,8 +174,19 @@ const AddProject = ({ navigation }) => {
         setEndDate(new Date());
         setSelectedDepartments([]);
         setSelectedEmployees([]);
-        setSelectedStatus("Selected Status");
-        setWeekoffError('');
+        setPname('');
+        setPtype('');
+        setPworktype('');
+        setPcategory('');
+        setDes('');
+        setDuration('');
+        setCname('');
+        setCcompany('');
+        setCemail('');
+        setCcontact('');
+        setCemail('');
+        setCstate('');
+        setEditedStatus('Select Status');
     }
 
     // Api call for Handle Submit
@@ -172,10 +197,26 @@ const AddProject = ({ navigation }) => {
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/employeeshiftinsert';
+            const apiUrl = 'https://ocean21.in/api/public/api/add_project';
 
             const response = await axios.post(apiUrl, {
-
+                p_name: pname,
+                p_type: ptype,
+                p_work_type: pworktype,
+                p_category: pcategory,
+                p_description: des,
+                p_department: selectedDepartmentIdsAsNumbers,
+                p_members: selectedEmployeesIdsAsNumbers,
+                from_date: formattedStartDate,
+                to_date: formattedEndDate,
+                p_durations: duration,
+                c_name: cname,
+                c_company: ccompany,
+                c_email: cemail,
+                c_mobile: ccontact,
+                c_city: ccity,
+                c_state: cstate,
+                status: editedStatus,
                 created_by: data.userempid,
             }, {
                 headers: {
@@ -184,11 +225,12 @@ const AddProject = ({ navigation }) => {
             });
 
             if (response.data.status === "success") {
-                fetchData();
                 SetLoad(false);
+                navigation.navigate('Projects List')
+                Alert.alert("Successfull", response.data.message);
                 Handlerefresh();
             } else {
-                Alert.alert("Failed To Add");
+                Alert.alert("Failed To Add", response.data.message);
                 SetLoad(false);
                 console.error('Failed To Add:', response.data.error);
             }
@@ -200,6 +242,18 @@ const AddProject = ({ navigation }) => {
         }
 
     }
+
+    const [showModalDropdown, setShowModalDropdown] = useState(false);
+    const [editedStatus, setEditedStatus] = useState(null);
+
+    const toggleModalDropdown = () => {
+        setShowModalDropdown(!showModalDropdown);
+    };
+
+    const selecModaltStatus = (status) => {
+        setEditedStatus(status);
+        setShowModalDropdown(false);
+    };
 
 
     return (
@@ -219,6 +273,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={pname}
+                        onChangeText={(txt) => setPname(txt)}
                         style={styles.inputs}
                     />
 
@@ -231,6 +287,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={ptype}
+                        onChangeText={(txt) => setPtype(txt)}
                         style={styles.inputs}
                     />
 
@@ -243,6 +301,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={pcategory}
+                        onChangeText={(txt) => setPcategory(txt)}
                         style={styles.inputs}
                     />
 
@@ -255,6 +315,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={pworktype}
+                        onChangeText={(txt) => setPworktype(txt)}
                         style={styles.inputs}
                     />
 
@@ -384,6 +446,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={duration}
+                        onChangeText={(txt) => setDuration(txt)}
                         style={styles.inputs}
                     />
 
@@ -395,9 +459,36 @@ const AddProject = ({ navigation }) => {
                         Status
                     </Text>
 
-                    <TextInput
-                        style={styles.inputs}
-                    />
+                    <TouchableOpacity onPress={toggleModalDropdown} style={styles.Input}>
+
+                        <Text style={styles.StatusTouchableText}>{editedStatus ? editedStatus : "Select Status"}</Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+
+                    </TouchableOpacity>
+
+                    {showModalDropdown && (
+
+                        <View style={styles.dropdown}>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus("Not Yet Start")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Not Yet Start</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus("In-Progress")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>In-Progress</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus("Hold")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Hold</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selecModaltStatus("Completed")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Completed</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    )}
 
                     <Text style={styles.errorText}>
                         { }
@@ -408,6 +499,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={des}
+                        onChangeText={(txt) => setDes(txt)}
                         style={styles.inputs}
                     />
 
@@ -433,6 +526,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={cname}
+                        onChangeText={(txt) => setCname(txt)}
                         style={styles.inputs}
                     />
 
@@ -445,6 +540,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={ccompany}
+                        onChangeText={(txt) => setCcompany(txt)}
                         style={styles.inputs}
                     />
 
@@ -457,6 +554,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={ccontact}
+                        onChangeText={(txt) => setCcontact(txt)}
                         style={styles.inputs}
                     />
 
@@ -469,6 +568,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={cemail}
+                        onChangeText={(txt) => setCemail(txt)}
                         style={styles.inputs}
                     />
 
@@ -481,6 +582,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={ccity}
+                        onChangeText={(txt) => setCcity(txt)}
                         style={styles.inputs}
                     />
 
@@ -493,6 +596,8 @@ const AddProject = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={cstate}
+                        onChangeText={(txt) => setCstate(txt)}
                         style={styles.inputs}
                     />
 

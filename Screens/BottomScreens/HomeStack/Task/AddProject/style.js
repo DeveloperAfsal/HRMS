@@ -371,8 +371,7 @@ const styles = StyleSheet.create({
         width: "90%"
     },
     Activeindicator: {
-        height: 150,
-        width: 400
+        marginTop: '50%'
     },
 
     StatDateText: {
