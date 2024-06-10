@@ -86,6 +86,9 @@ import EditProject from "./Task/EditProject";
 import AddTask from "./Task/AddTask";
 import EditTask from "./Task/EditTask";
 import OvertimeType from "./AttendancePolicy/OvertimeType";
+import EmpLeaveReq from "./Attendance/EmpLeaveReq";
+import EmpAttendReq from "./Attendance/EmpAttendReq";
+import EmpOvertimeReq from "./Attendance/EmpOvertimeReq";
 
 const Stack = createNativeStackNavigator();
 
@@ -175,6 +178,9 @@ const HomeStack = () => {
       <Stack.Screen name="Monthly Attendance" component={MonthlyAttendance} />
       <Stack.Screen name="Monthly List" component={MonthlyList} />
       <Stack.Screen name="Indvidual" component={Indvidual} />
+      <Stack.Screen name="Employee Leave Request" component={EmpLeaveReq} />
+      <Stack.Screen name="Employee Attendance Request" component={EmpAttendReq} />
+      <Stack.Screen name="Employee Overtime Request" component={EmpOvertimeReq} />
 
       {/*  */}
 

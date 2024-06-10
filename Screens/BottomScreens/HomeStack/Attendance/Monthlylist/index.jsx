@@ -3,7 +3,9 @@ import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableO
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
+import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DocumentPicker from 'react-native-document-picker';
 import styles from "../DailyAttendance/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -32,7 +34,37 @@ const MonthlyList = ({ navigation }) => {
         setShowDatePicker(true);
     };
 
+    // const [showDatePicker1, setShowDatePicker1] = useState(false);
+    // const [endDate, setEndDate] = useState(new Date());
+
+    // const handleDateChange1 = (event, date) => {
+    //     if (date !== undefined) {
+    //         setEndDate(date);
+    //     }
+    //     setShowDatePicker1(Platform.OS === 'ios');
+    // };
+
+    // const showDatepicker1 = () => {
+    //     setShowDatePicker1(true);
+    // };
+
+    // const [showDatePicker2, setShowDatePicker2] = useState(false);
+    // const [returnDate, setreturnDate] = useState(new Date());
+
+    // const handleDateChange2 = (event, date) => {
+    //     if (date !== undefined) {
+    //         setreturnDate(date);
+    //     }
+    //     setShowDatePicker2(Platform.OS === 'ios');
+    // };
+
+    // const showDatepicker2 = () => {
+    //     setShowDatePicker2(true);
+    // };
+
     const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}`;
+    // const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+    // const formattedReturnDate = `${returnDate.getFullYear()}-${returnDate.getMonth() + 1}-${returnDate.getDate()}`;
 
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
@@ -220,6 +252,106 @@ const MonthlyList = ({ navigation }) => {
         return keys;
     }, []).sort((a, b) => a - b);
 
+    // 
+
+    const [EdocFile, setEdocFile] = useState([]);
+    const [EditedocFile, seteditedocFile] = useState([]);
+
+    // Api call For EditButton
+
+    const handleEditDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setEdocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
+
+    
+
+    // 
+
+    // const [modalVisible, setModalVisible] = useState(false);
+    // const [ReasonError, setReasonError] = useState('')
+    // const [Reason, setReason] = useState('');
+    // const [DelData, setDelData] = useState(false);
+
+    // const HandleLeave = () => {
+    //     setModalVisible(true);
+    // }
+
+    // const cancelDelete = () => {
+    //     setModalVisible(false);
+    // }
+
+    // const Confirm = async () => {
+
+    //     setDelData(true)
+
+    //     const formData = new FormData();
+
+    //     formData.append('emp_id', data.userempid);
+    //     formData.append('emp_name', data.username);
+    //     formData.append('request_type', selectedleaveTypeId);
+    //     formData.append('request_category', selectedCategoryId);
+    //     formData.append('from_date', formattedEndDate);
+    //     formData.append('to_date', formattedReturnDate);
+    //     formData.append('permission_date', "");
+    //     formData.append('permission_timefrom', "");
+    //     formData.append('permission_timeto', "");
+    //     formData.append('shift_slot', "1");
+    //     formData.append('leave_reason', Reason);
+
+    //     if (EdocFile.length > 0) {
+    //         EdocFile.map((file, index) => {
+    //             formData.append(`attachement`, {
+    //                 uri: file.uri,
+    //                 name: file.name,
+    //                 type: 'image/jpeg',
+    //             });
+    //         });
+    //     } else {
+    //         formData.append('attachement', EdocFile);
+    //     }
+
+    //     try {
+    //         const response = await fetch('https://ocean21.in/api/public/api/add_employee_leave_request', {
+    //             method: 'POST',
+    //             headers: {
+    //                 Accept: 'application/json',
+    //                 'Content-Type': 'multipart/form-data',
+    //                 Authorization: `Bearer ${data.token}`
+    //             },
+    //             body: formData,
+    //         });
+
+    //         const responsedata = await response.json();
+
+    //         if (responsedata.status === "success") {
+    //             Alert.alert('Successfull', responsedata.message);
+    //             setDelData(false)
+    //         } else {
+    //             Alert.alert('Failed', responsedata.message)
+    //             setDelData(false)
+    //         }
+
+    //     } catch (error) {
+    //         Alert.alert('Error');
+    //         setDelData(false)
+    //     }
+
+    //     setModalVisible(false);
+
+    // }
+
     return (
 
         <ScrollView>
@@ -262,6 +394,24 @@ const MonthlyList = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                {(data.userrole == 1) ? null : <View style={styles.RequestContainer}>
+                    <TouchableOpacity style={styles.RaiseButton} onPress={() => navigation.navigate('Employee Leave Request')}>
+                        <Text style={styles.RaiseText}>
+                            Leave
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.RaiseButton} onPress={() => navigation.navigate('Employee Attendance Request')}>
+                        <Text style={styles.RaiseText}>
+                            Attendance
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.RaiseButton} onPress={() => navigation.navigate('Employee Overtime Request')}>
+                        <Text style={styles.RaiseText}>
+                            Overtime
+                        </Text>
+                    </TouchableOpacity>
+                </View>}
 
                 <View style={styles.InputContainer}>
                     <TextInput
@@ -354,23 +504,190 @@ const MonthlyList = ({ navigation }) => {
 
                 </ScrollView>
 
-                <View style={styles.RequestContainer}>
-                    <TouchableOpacity style={styles.RaiseButton}>
-                        <Text style={styles.RaiseText}>
-                            Leave
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.RaiseButton}>
-                        <Text style={styles.RaiseText}>
-                            Attendance
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.RaiseButton}>
-                        <Text style={styles.RaiseText}>
-                            Overtime
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                {/* <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+
+                        <View style={styles.modalContent}>
+
+                            <Text style={styles.modalTextHeading}>Leave Request</Text>
+
+                            <Text style={styles.modalText}>Request Type</Text>
+
+                            <TouchableOpacity style={styles.modalInput} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
+                                <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
+                                <DropdownIcon width={14} height={14} color={"#000"} />
+                            </TouchableOpacity>
+
+                            {showleaveTypeDropdown && (
+                                <View style={styles.dropdown}>
+                                    {leaveTypeDropdown.map((department, index) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={[
+                                                styles.dropdownOption,
+                                                selectedleaveType === department.leave_type_name && styles.selectedOption
+                                            ]}
+                                            onPress={() => handleSelectLeave(department)}
+                                        >
+                                            <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            )}
+
+                            <Text style={styles.errorTextDelete}>
+                                { }
+                            </Text>
+
+                            <Text style={styles.modalText}>Category</Text>
+
+                            <TouchableOpacity
+                                onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                                style={styles.modalInput}>
+
+                                <Text style={styles.StatusTouchableText}>
+                                    {selectedCategory ? selectedCategory : 'Select Category'}
+                                </Text>
+                                <DropdownIcon width={14} height={14} color={"#000"} />
+
+                            </TouchableOpacity>
+
+                            {showCategoryDropdown && (
+                                <View style={styles.dropdown}>
+                                    <ScrollView>
+                                        {CategoryDropdown.map((item, index) => (
+                                            <TouchableOpacity
+                                                key={index}
+                                                style={styles.dropdownOption}
+                                                onPress={() => handleSelectCategory(item)}
+                                            >
+                                                <Text>{item.leave_category_name}</Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                            )}
+
+                            <Text style={styles.errorTextDelete}>
+                                { }
+                            </Text>
+
+                            <View style={styles.DoubleInputs}>
+
+                                <View style={styles.shortInputs}>
+
+                                    <Text style={styles.Text}>
+                                        From Date
+                                    </Text>
+
+                                    <View style={styles.input}>
+                                        <Text onPress={showDatepicker1}>
+                                            {endDate.toDateString()} &nbsp;
+                                        </Text>
+                                        {showDatePicker1 && (
+                                            <DateTimePicker
+                                                value={endDate}
+                                                mode="date"
+                                                display="default"
+                                                onChange={handleDateChange1}
+                                            />
+                                        )}
+                                    </View>
+
+                                </View>
+
+                                <View style={styles.shortInputs}>
+
+                                    <Text style={styles.Text}>
+                                        To Date
+                                    </Text>
+
+                                    <View style={styles.input}>
+                                        <Text onPress={showDatepicker2}>
+                                            {returnDate.toDateString()} &nbsp;
+                                        </Text>
+                                        {showDatePicker2 && (
+                                            <DateTimePicker
+                                                value={returnDate}
+                                                mode="date"
+                                                display="default"
+                                                onChange={handleDateChange2}
+                                            />
+                                        )}
+                                    </View>
+
+                                </View>
+
+                            </View>
+
+                            <Text style={styles.errorTextDelete}>
+                                { }
+                            </Text>
+
+                            <Text style={styles.modalText}>Attachment</Text>
+
+                            <Text
+                                style={styles.MDocFileName}
+                            >
+                                {EdocFile ? EdocFile[0]?.name : EdocFile}
+                            </Text>
+
+                            <View style={styles.MfullWidth}>
+                                <TouchableOpacity style={styles.UploadButton}
+                                    onPress={handleEditDocumentSelection}
+                                >
+                                    <Text style={styles.UploadButtonText}>
+                                        Choose File
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <Text style={styles.errorTextDelete}>
+                                { }
+                            </Text>
+
+                            <Text style={styles.modalText}>Reason</Text>
+
+                            <TextInput
+                                value={Reason}
+                                onChangeText={(text) => setReason(text)}
+                                style={styles.Reason}
+                            />
+
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError}
+                            </Text>
+
+                            <View style={styles.modalButtonContainer}>
+
+                                <TouchableOpacity style={styles.modalDeleteButton}
+                                    onPress={Confirm}
+                                >
+
+                                    {
+                                        DelData ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Submit</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+                        </View>
+
+                    </View>
+                </Modal> */}
 
                 <View style={{ alignItems: 'center' }}>
                     <View style={styles.pagination}>
