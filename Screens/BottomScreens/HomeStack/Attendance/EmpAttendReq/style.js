@@ -4,6 +4,15 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
+    subHeading: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        paddingVertical: '5%',
+        paddingHorizontal: '5%',
+        width: '100%',
+    },
+
     UploadButton: {
         backgroundColor: '#D4E7EB',
         height: 42,

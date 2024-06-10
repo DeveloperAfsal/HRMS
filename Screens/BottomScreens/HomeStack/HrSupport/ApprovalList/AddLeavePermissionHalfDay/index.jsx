@@ -137,6 +137,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    console.log(selectedCategory, "selectedCategory")
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_category_list';
@@ -526,7 +527,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                 )}
 
                 {
-                    selectedCategory === "Permission" || "Half Day" ?
+                    selectedCategory === "Permission" || selectedCategory === "Half Day" ?
                         <>
                             <Text style={styles.subHeading}>
                                 Date

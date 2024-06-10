@@ -60,6 +60,46 @@ const EmpAttendReq = ({ navigation }) => {
         setShowleaveTypeDropdown(false);
     };
 
+    // Category
+
+    const [CategoryDropdown, setCategoryDropdown] = useState([]);
+    const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
+
+    useEffect(() => {
+        const apiUrl = 'https://ocean21.in/api/public/api/leave_category_list';
+
+        const fetchData = async () => {
+
+            try {
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+
+                // console.log(responseData,"responseData")
+
+                setCategoryDropdown(responseData);
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [])
+
+    const handleSelectCategory = (item) => {
+        setSelectedCategory(item.leave_category_name);
+        setSelectedCategoryId(item.id);
+        setShowCategoryDropdown(false);
+    };
+
     // Location
 
     const [LocationDropdown, setLocationDropdown] = useState([]);
@@ -214,7 +254,7 @@ const EmpAttendReq = ({ navigation }) => {
                 emp_id: data.userempid,
                 emp_name: data.username,
                 emp_email: data.useremail,
-                request_type: selectedleaveTypeId,
+                request_type: selectedCategoryId,
                 request_location: selectedLocationId,
                 request_date: formattedStartDate,
                 request_fromtime: slotfromTime,
@@ -260,7 +300,7 @@ const EmpAttendReq = ({ navigation }) => {
                         Request Type
                     </Text>
 
-                    <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
+                    {/* <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
                         <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -279,6 +319,33 @@ const EmpAttendReq = ({ navigation }) => {
                                     <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
                                 </TouchableOpacity>
                             ))}
+                        </View>
+                    )} */}
+
+                    <TouchableOpacity
+                        onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                        style={styles.StatusTouchable}>
+
+                        <Text style={styles.StatusTouchableText}>
+                            {selectedCategory ? selectedCategory : 'Select Category'}
+                        </Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+
+                    </TouchableOpacity>
+
+                    {showCategoryDropdown && (
+                        <View style={styles.dropdown}>
+                            <ScrollView>
+                                {CategoryDropdown.map((item, index) => (
+                                    <TouchableOpacity
+                                        key={index}
+                                        style={styles.dropdownOption}
+                                        onPress={() => handleSelectCategory(item)}
+                                    >
+                                        <Text>{item.leave_category_name}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
                         </View>
                     )}
 
