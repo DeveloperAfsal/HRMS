@@ -85,6 +85,7 @@ import AddProject from "./Task/AddProject";
 import EditProject from "./Task/EditProject";
 import AddTask from "./Task/AddTask";
 import EditTask from "./Task/EditTask";
+import OvertimeType from "./AttendancePolicy/OvertimeType";
 
 const Stack = createNativeStackNavigator();
 
@@ -158,6 +159,7 @@ const HomeStack = () => {
       <Stack.Screen name="Leave category" component={LeaveCategory} />
       <Stack.Screen name="Leave Policy" component={LeavePolicy} />
       <Stack.Screen name="Edit Leave Policy" component={EditLeavePolicy} />
+      <Stack.Screen name="Overtime Type" component={OvertimeType} />
 
       {/*  */}
 
