@@ -411,7 +411,7 @@ const TaskList = ({ navigation }) => {
             // Construct the request payload
             const payload = {
                 department_id: selectedDepartmentsId,
-                emp_id: selectedMemberId,
+                emp_id: selectedMemberId || data.userempid,
                 status: editedStatus
             };
 

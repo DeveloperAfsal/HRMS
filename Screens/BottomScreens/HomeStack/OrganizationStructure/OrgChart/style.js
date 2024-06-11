@@ -3,16 +3,76 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    Line: {
+        left: '-45%',
+        top: '20%',
+        transform: [{ translateY: -25 }, { rotate: '90deg' }],
+        borderWidth: 1,
+        borderColor: '#00275C',
+        backgroundColor: '#00275C',
+        height: 2.5,
+        width: "75%"
+    },
+
+    Line1: {
+        left: '-32%',
+        top: '20%',
+        transform: [{ translateY: -25 }, { rotate: '90deg' }],
+        borderWidth: 1,
+        borderColor: '#00275C',
+        backgroundColor: '#00275C',
+        height: 2,
+        width: "20%"
+    },
+
+    Line2: {
+        left: '-50%',
+        top: '17%',
+        transform: [{ translateY: -25 }, { rotate: '90deg' }],
+        borderWidth: 1,
+        borderColor: '#00275C',
+        backgroundColor: '#00275C',
+        height: 2,
+        width: "55%"
+    },
+
+    Line3: {
+        left: '7.5%',
+        top: '-22%',
+        borderWidth: 1.1,
+        borderColor: '#00275C',
+        backgroundColor: '#00275C',
+        height: 2,
+        width: "10%"
+    },
+
+    Line4: {
+        left: '22.9%',
+        top: '-23%',
+        borderWidth: 1.1,
+        borderColor: '#00275C',
+        backgroundColor: '#00275C',
+        height: 2,
+        width: "10%"
+    },
+
+    EmployeeContainer: {
+        marginVertical: "5%",
+        width: '100%',
+    },
+
     Card: {
         backgroundColor: '#00275C',
         width: "60%",
         height: 70,
         borderRadius: 5,
-        alignItems: 'center',
-        flexDirection: 'row',
         gap: 10,
-        paddingLeft: '3%',
-        marginTop: '5%'
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        zIndex: 1,
     },
 
     ImgCard: {

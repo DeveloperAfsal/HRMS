@@ -9,10 +9,11 @@ const styles = StyleSheet.create({
     },
 
     container1: {
-        flex: 1,
-        padding: 10,
+        // flex: 1,
+        // padding: 10,
         height: 250,
-        backgroundColor: '#fff',
+        width: "90%",
+        // backgroundColor: '#fff',
     },
 
     header1: {
@@ -23,14 +24,14 @@ const styles = StyleSheet.create({
 
     richTextEditor1: {
         flex: 1,
-        borderColor: '#ccc',
+        // borderColor: '#ccc',
         borderWidth: 1,
-        padding: 10,
+        padding: 5,
         borderRadius: 5,
     },
     
     toolbarButton1: {
-        fontSize: 18,
+        // fontSize: 18,
         paddingHorizontal: 10,
     },
 

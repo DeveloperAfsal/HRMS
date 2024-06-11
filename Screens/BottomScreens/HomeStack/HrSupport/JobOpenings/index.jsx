@@ -163,15 +163,16 @@ const JobOpenings = ({ navigation }) => {
                                     Description
                                 </Text>
 
-                                <TextInput
+                                {/* <TextInput
                                     value={description}
                                     onChangeText={(txt) => setDescription(txt)}
                                     style={styles.ShiftSlotTextInput}
-                                />
+                                /> */}
 
                                 {/* react-native-pell-rich-editor */}
 
-                                {/* <SafeAreaView style={styles.container1}>
+                                <SafeAreaView style={styles.container1}>
+
                                     <RichEditor
                                         ref={richText}
                                         style={styles.richTextEditor1}
@@ -187,10 +188,10 @@ const JobOpenings = ({ navigation }) => {
                                             actions.heading1,
                                             actions.insertBulletsList,
                                             actions.insertOrderedList,
-                                            actions.insertLink,
-                                            actions.setStrikethrough,
-                                            actions.setSubscript,
-                                            actions.setSuperscript,
+                                            // actions.insertLink,
+                                            // actions.setStrikethrough,
+                                            // actions.setSubscript,
+                                            // actions.setSuperscript,
                                         ]}
                                         iconMap={{
                                             [actions.setBold]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>B</Text>,
@@ -199,7 +200,7 @@ const JobOpenings = ({ navigation }) => {
                                             [actions.heading1]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>H1</Text>,
                                         }}
                                     />
-                                </SafeAreaView> */}
+                                </SafeAreaView>
 
                                 <View style={styles.buttonview}>
                                     <TouchableOpacity style={styles.submitbutton}
