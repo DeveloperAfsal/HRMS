@@ -25,36 +25,36 @@ const styles = StyleSheet.create({
         width: "20%"
     },
 
-    Line2: {
-        left: '-50%',
-        top: '17%',
-        transform: [{ translateY: -25 }, { rotate: '90deg' }],
-        borderWidth: 1,
-        borderColor: '#00275C',
-        backgroundColor: '#00275C',
-        height: 2,
-        width: "55%"
-    },
+    // Line2: {
+    //     left: '-32%',
+    //     top: '20%',
+    //     transform: [{ translateY: -25 }, { rotate: '90deg' }],
+    //     borderWidth: 1,
+    //     borderColor: '#00275C',
+    //     backgroundColor: '#00275C',
+    //     height: 2,
+    //     width: "20%"
+    // },
 
-    Line3: {
-        left: '7.5%',
-        top: '-22%',
-        borderWidth: 1.1,
-        borderColor: '#00275C',
-        backgroundColor: '#00275C',
-        height: 2,
-        width: "10%"
-    },
+    // Line3: {
+    //     left: '7.5%',
+    //     top: '-22%',
+    //     borderWidth: 1.1,
+    //     borderColor: '#00275C',
+    //     backgroundColor: '#00275C',
+    //     height: 2,
+    //     width: "10%"
+    // },
 
-    Line4: {
-        left: '22.9%',
-        top: '-23%',
-        borderWidth: 1.1,
-        borderColor: '#00275C',
-        backgroundColor: '#00275C',
-        height: 2,
-        width: "10%"
-    },
+    // Line4: {
+    //     left: '22.9%',
+    //     top: '-23%',
+    //     borderWidth: 1.1,
+    //     borderColor: '#00275C',
+    //     backgroundColor: '#00275C',
+    //     height: 2,
+    //     width: "10%"
+    // },
 
     EmployeeContainer: {
         marginVertical: "5%",

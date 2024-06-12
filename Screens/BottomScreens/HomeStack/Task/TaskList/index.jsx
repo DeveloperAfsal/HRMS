@@ -602,544 +602,551 @@ const TaskList = ({ navigation }) => {
 
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
-                </View>
-            </View>
-
-            <View style={{ margin: '5%' }}>
-                <TouchableOpacity
-                    onPress={() => openEditModal()}
-                    style={{ backgroundColor: '#0A62F1', width: '25%', height: 41, borderRadius: 6, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>
-                        Filter
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <ScrollView horizontal={true}>
-
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
-                        <View>
-
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Task ID</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Task Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Project Work Type</Text>
-                                {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.Status]}>Description</Text>}
-                                {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.WeekOff]}>Department</Text> : null}
-                                {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Assigned To</Text> : null}
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Start Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>End Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
-                                {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Task Status</Text> : null}
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Priority</Text>
-                                {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> : null}
-                                {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.StatusT]}>Task Status</Text>}
-                            </View>
-
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.ticket_id}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.task_name}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.project_name}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.project_worktype}</Text>
-                                        {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.cell, styles.ShiftSlot]}>{item.department}</Text> : null}
-                                        {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.cell, styles.WeekOff]}>{item.assign_to}</Text> : null}
-                                        {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.cell, styles.WeekOff]}>{item.description}</Text>}
-                                        <Text style={[styles.cell, styles.Status]}>{item.created_by}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.start_date}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.end_date}</Text>
-
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity
-                                                // onPress={() => handlePreview(doc.template_file)}
-                                                style={styles.listcontentviewbutton}>
-                                                <ViewIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.cell, styles.Status]}>{item.task_status}</Text> : null}
-
-                                        <View style={[styles.Status1]}>
-                                            <Text style={[styles.cell, item.priority === "Low" ? styles.PriorityLow : item.priority === "Medium" ? styles.PriorityMedium : item.priority === "High" ? styles.PriorityHigh : null]}>{item.priority}</Text>
-                                        </View>
-
-                                        {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                                onPress={() => navigation.navigate('Edit Task', { Id: item })}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}
-                                                onPress={() => HandleDelete(item.id)}
-                                            >
-                                                <DeleteIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View> : null}
-                                        {(data.userrole == 1 || data.userrole == 2) ? null :
-                                            <TouchableOpacity style={[styles.Status2, styles.Taskdrop]} onPress={() => openEditModal1(item)}>
-                                                <Text style={[styles.cell1]}>{item.task_status}</Text>
-                                                <DropdownIcon width={14} height={14} color={"#0879F6"} />
-                                            </TouchableOpacity>}
-                                    </View>
-                                ))
-                            )}
-
-                        </View>
-                    )
-                    }
-                </View>
-
-            </ScrollView>
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                        <Text style={styles.modalText}>Reason:</Text>
-                        <TextInput
-                            value={Reason}
-                            onChangeText={(text) => setReason(text)}
-                            style={styles.Reason}
-                        />
-                        <Text style={styles.errorTextDelete}>
-                            {ReasonError}
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
                         </Text>
-                        <View style={styles.modalButtonContainer}>
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
-
-                                {
-                                    DelData ?
-                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                }
-
-
-                            </TouchableOpacity>
-                        </View>
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
+                    />
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
                     </View>
                 </View>
-            </Modal>
 
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={editModalVisible}
-                onRequestClose={closeEditModal}
-            >
-                <View style={styles.modalContainer}>
+                <View style={{ margin: '5%' }}>
+                    <TouchableOpacity
+                        onPress={() => openEditModal()}
+                        style={{ backgroundColor: '#0A62F1', width: '25%', height: 41, borderRadius: 6, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>
+                            Filter
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.modalContent}>
+                <ScrollView horizontal={true}>
 
-                        {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.FilterView}>
-                            <Text style={styles.modalLabelText}>Department</Text>
-                            <TouchableOpacity
-                                onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}
-                                style={styles.modalInput}>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
 
-                                <Text style={styles.StatusTouchableText}>
-                                    {selectedDepartments ? selectedDepartments : 'Select Department'}
-                                </Text>
-                                <DropdownIcon width={14} height={14} color={"#000"} />
-
-                            </TouchableOpacity>
-
-                        </View> : null}
-
-                        {showDepartmentNameDropdown && (
-                            <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
-                                <View style={styles.modaldropdown}>
-                                    <ScrollView>
-                                        {departmentNameDropdown.map((item, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.dropdownOption}
-                                                onPress={() => handleSelectDepartment(item)}
-                                            >
-                                                <Text>{item.role_name}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </ScrollView>
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Task ID</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Task Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Project Work Type</Text>
+                                    {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.Status]}>Description</Text>}
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.WeekOff]}>Department</Text> : null}
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Assigned To</Text> : null}
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Start Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>End Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Task Status</Text> : null}
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Priority</Text>
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> : null}
+                                    {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.StatusT]}>Task Status</Text>}
                                 </View>
-                            </View>
-                        )}
 
-                        {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.FilterView}>
-                            <Text style={styles.modalLabelText}>Assigned To</Text>
-                            <TouchableOpacity
-                                onPress={() => setShowEmployeeDropdown(!showEmployeeDropdown)}
-                                style={styles.modalInput}>
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.ticket_id}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.task_name}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.project_name}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.project_worktype}</Text>
+                                            {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.cell, styles.ShiftSlot]}>{item.department}</Text> : null}
+                                            {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.cell, styles.WeekOff]}>{item.assign_to}</Text> : null}
+                                            {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.cell, styles.WeekOff]}>{item.description}</Text>}
+                                            <Text style={[styles.cell, styles.Status]}>{item.created_by}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.start_date}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.end_date}</Text>
 
-                                <Text style={styles.StatusTouchableText}>
-                                    {selectedMember ? selectedMember : 'Select Member'}
-                                </Text>
-                                <DropdownIcon width={14} height={14} color={"#000"} />
+                                            <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity
+                                                    // onPress={() => handlePreview(doc.template_file)}
+                                                    style={styles.listcontentviewbutton}>
+                                                    <ViewIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
 
-                            </TouchableOpacity>
+                                            {(data.userrole == 1 || data.userrole == 2) ? (
+                                                <TouchableOpacity
+                                                    style={[styles.cell, styles.Status]}
+                                                    onPress={item.task_status === "Hold" ? () => Alert.alert(item.hold_reason) : null}
+                                                >
+                                                    <Text style={item.task_status === "Hold" ? { color: 'red' } : {}}>{item.task_status}</Text>
+                                                </TouchableOpacity>
+                                            ) : null}
 
+                                            <View style={[styles.Status1]}>
+                                                <Text style={[styles.cell, item.priority === "Low" ? styles.PriorityLow : item.priority === "Medium" ? styles.PriorityMedium : item.priority === "High" ? styles.PriorityHigh : null]}>{item.priority}</Text>
+                                            </View>
 
-                        </View> : null}
-
-                        {showEmployeeDropdown && (
-                            <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
-                                <View style={styles.modaldropdown}>
-                                    <ScrollView>
-                                        {employeeDropdown.map((item, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.dropdownOption}
-                                                onPress={() => handleSelectMember(item)}
-                                            >
-                                                <Text>{item.emp_name}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </ScrollView>
-                                </View>
-                            </View>
-                        )}
-
-                        {(data.userrole == 3) ? <View style={styles.FilterView}>
-                            <Text style={styles.modalLabelText}>Department</Text>
-                            <TouchableOpacity
-                                onPress={() => setShowDepartmentNameDropdown1(!showDepartmentNameDropdown1)}
-                                style={styles.modalInput}>
-
-                                <Text style={styles.StatusTouchableText}>
-                                    {selectedDepartments1 ? selectedDepartments1 : 'Select Department'}
-                                </Text>
-                                <DropdownIcon width={14} height={14} color={"#000"} />
-
-                            </TouchableOpacity>
-
-                        </View> : null}
-
-                        {showDepartmentNameDropdown1 && (
-                            <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
-                                <View style={styles.modaldropdown}>
-                                    <ScrollView>
-                                        {departmentNameDropdown1.map((item, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.dropdownOption}
-                                                onPress={() => handleSelectDepartment1(item)}
-                                            >
-                                                <Text>{item.role_name}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </ScrollView>
-                                </View>
-                            </View>
-                        )}
-
-                        {(data.userrole == 3) ? <View style={styles.FilterView}>
-                            <Text style={styles.modalLabelText}>Assigned To</Text>
-                            <TouchableOpacity
-                                onPress={() => setShowEmployeeDropdown1(!showEmployeeDropdown1)}
-                                style={styles.modalInput}>
-
-                                <Text style={styles.StatusTouchableText}>
-                                    {selectedMember1 ? selectedMember1 : 'Select Member'}
-                                </Text>
-                                <DropdownIcon width={14} height={14} color={"#000"} />
-
-                            </TouchableOpacity>
-
-
-                        </View> : null}
-
-                        {showEmployeeDropdown1 && (
-                            <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
-                                <View style={styles.modaldropdown}>
-                                    <ScrollView>
-                                        {employeeDropdown1.map((item, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.dropdownOption}
-                                                onPress={() => handleSelectMember1(item)}
-                                            >
-                                                <Text>{item.emp_name}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </ScrollView>
-                                </View>
-                            </View>
-                        )}
-
-                        <View style={styles.FilterView}>
-
-                            <Text style={styles.modalLabelText}>From Date</Text>
-
-                            <View style={styles.modalInput1} >
-                                <Text onPress={showDatepicker}>
-                                    {isStartDateSelected ? startDate.toDateString() : "Select Start Date"} &nbsp;
-                                </Text>
-                                {showDatePicker && (
-                                    <DateTimePicker
-                                        value={startDate}
-                                        mode="date"
-                                        display="default"
-                                        onChange={handleDateChange}
-                                    />
+                                            {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => navigation.navigate('Edit Task', { Id: item })}
+                                                >
+                                                    <EditIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.listcontentdelbutton}
+                                                    onPress={() => HandleDelete(item.id)}
+                                                >
+                                                    <DeleteIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View> : null}
+                                            {(data.userrole == 1 || data.userrole == 2) ? null :
+                                                <TouchableOpacity style={[styles.Status2, styles.Taskdrop]} onPress={() => openEditModal1(item)}>
+                                                    <Text style={[styles.cell1]}>{item.task_status}</Text>
+                                                    <DropdownIcon width={14} height={14} color={"#0879F6"} />
+                                                </TouchableOpacity>}
+                                        </View>
+                                    ))
                                 )}
+
+                            </View>
+                        )
+                        }
+                    </View>
+
+                </ScrollView>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                            <Text style={styles.modalText}>Reason:</Text>
+                            <TextInput
+                                value={Reason}
+                                onChangeText={(text) => setReason(text)}
+                                style={styles.Reason}
+                            />
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError}
+                            </Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                    {
+                                        DelData ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={editModalVisible}
+                    onRequestClose={closeEditModal}
+                >
+                    <View style={styles.modalContainer}>
+
+                        <View style={styles.modalContent}>
+
+                            {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.FilterView}>
+                                <Text style={styles.modalLabelText}>Department</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}
+                                    style={styles.modalInput}>
+
+                                    <Text style={styles.StatusTouchableText}>
+                                        {selectedDepartments ? selectedDepartments : 'Select Department'}
+                                    </Text>
+                                    <DropdownIcon width={14} height={14} color={"#000"} />
+
+                                </TouchableOpacity>
+
+                            </View> : null}
+
+                            {showDepartmentNameDropdown && (
+                                <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
+                                    <View style={styles.modaldropdown}>
+                                        <ScrollView>
+                                            {departmentNameDropdown.map((item, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.dropdownOption}
+                                                    onPress={() => handleSelectDepartment(item)}
+                                                >
+                                                    <Text>{item.role_name}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                            )}
+
+                            {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.FilterView}>
+                                <Text style={styles.modalLabelText}>Assigned To</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowEmployeeDropdown(!showEmployeeDropdown)}
+                                    style={styles.modalInput}>
+
+                                    <Text style={styles.StatusTouchableText}>
+                                        {selectedMember ? selectedMember : 'Select Member'}
+                                    </Text>
+                                    <DropdownIcon width={14} height={14} color={"#000"} />
+
+                                </TouchableOpacity>
+
+
+                            </View> : null}
+
+                            {showEmployeeDropdown && (
+                                <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
+                                    <View style={styles.modaldropdown}>
+                                        <ScrollView>
+                                            {employeeDropdown.map((item, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.dropdownOption}
+                                                    onPress={() => handleSelectMember(item)}
+                                                >
+                                                    <Text>{item.emp_name}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                            )}
+
+                            {(data.userrole == 3) ? <View style={styles.FilterView}>
+                                <Text style={styles.modalLabelText}>Department</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowDepartmentNameDropdown1(!showDepartmentNameDropdown1)}
+                                    style={styles.modalInput}>
+
+                                    <Text style={styles.StatusTouchableText}>
+                                        {selectedDepartments1 ? selectedDepartments1 : 'Select Department'}
+                                    </Text>
+                                    <DropdownIcon width={14} height={14} color={"#000"} />
+
+                                </TouchableOpacity>
+
+                            </View> : null}
+
+                            {showDepartmentNameDropdown1 && (
+                                <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
+                                    <View style={styles.modaldropdown}>
+                                        <ScrollView>
+                                            {departmentNameDropdown1.map((item, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.dropdownOption}
+                                                    onPress={() => handleSelectDepartment1(item)}
+                                                >
+                                                    <Text>{item.role_name}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                            )}
+
+                            {(data.userrole == 3) ? <View style={styles.FilterView}>
+                                <Text style={styles.modalLabelText}>Assigned To</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowEmployeeDropdown1(!showEmployeeDropdown1)}
+                                    style={styles.modalInput}>
+
+                                    <Text style={styles.StatusTouchableText}>
+                                        {selectedMember1 ? selectedMember1 : 'Select Member'}
+                                    </Text>
+                                    <DropdownIcon width={14} height={14} color={"#000"} />
+
+                                </TouchableOpacity>
+
+
+                            </View> : null}
+
+                            {showEmployeeDropdown1 && (
+                                <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
+                                    <View style={styles.modaldropdown}>
+                                        <ScrollView>
+                                            {employeeDropdown1.map((item, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.dropdownOption}
+                                                    onPress={() => handleSelectMember1(item)}
+                                                >
+                                                    <Text>{item.emp_name}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                            )}
+
+                            <View style={styles.FilterView}>
+
+                                <Text style={styles.modalLabelText}>From Date</Text>
+
+                                <View style={styles.modalInput1} >
+                                    <Text onPress={showDatepicker}>
+                                        {isStartDateSelected ? startDate.toDateString() : "Select Start Date"} &nbsp;
+                                    </Text>
+                                    {showDatePicker && (
+                                        <DateTimePicker
+                                            value={startDate}
+                                            mode="date"
+                                            display="default"
+                                            onChange={handleDateChange}
+                                        />
+                                    )}
+                                </View>
+
+                            </View>
+
+                            <View style={styles.FilterView}>
+
+                                <Text style={styles.modalLabelText}>To Date</Text>
+
+                                <View style={styles.modalInput1} >
+                                    <Text onPress={showDatepicker1}>
+                                        {isEndDateSelected ? endDate.toDateString() : "Select End Date"} &nbsp;
+                                    </Text>
+                                    {showDatePicker1 && (
+                                        <DateTimePicker
+                                            value={endDate}
+                                            mode="date"
+                                            display="default"
+                                            onChange={handleDateChange1}
+                                        />
+                                    )}
+                                </View>
+
+                            </View>
+
+                            <View style={styles.FilterView}>
+
+                                <Text style={styles.modalLabelText}>Status</Text>
+
+                                <TouchableOpacity onPress={toggleModalDropdown} style={styles.modalInput}>
+
+                                    <Text style={styles.StatusTouchableText}>{editedStatus ? editedStatus : "Select Status"}</Text>
+                                    <DropdownIcon width={14} height={14} color={"#000"} />
+
+                                </TouchableOpacity>
+
+                            </View>
+
+                            {/* Dropdown to show the options */}
+
+                            {showModalDropdown && (
+                                <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
+                                    <View style={styles.modaldropdown}>
+
+                                        <TouchableOpacity onPress={() => selecModaltStatus("Not Yet Start")} style={styles.dropdownOption}>
+                                            <Text style={styles.dropdownOptionText}>Not Yet Start</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => selecModaltStatus("In-Progress")} style={styles.dropdownOption}>
+                                            <Text style={styles.dropdownOptionText}>In-Progress</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => selecModaltStatus("Hold")} style={styles.dropdownOption}>
+                                            <Text style={styles.dropdownOptionText}>Hold</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => selecModaltStatus("Completed")} style={styles.dropdownOption}>
+                                            <Text style={styles.dropdownOptionText}>Completed</Text>
+                                        </TouchableOpacity>
+
+                                    </View>
+                                </View>
+                            )}
+
+                            <View style={styles.buttoncontainer}>
+
+                                <TouchableOpacity style={styles.modalSubmitButton}
+                                    onPress={handleEditSubmit}
+                                >
+                                    {
+                                        filtLoad ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalSubmitButtonText}>Apply Filter</Text>
+                                    }
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
                             </View>
 
                         </View>
+                    </View>
+                </Modal>
 
-                        <View style={styles.FilterView}>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={editModalVisible1}
+                    onRequestClose={closeEditModal1}
+                >
+                    <View style={styles.modalContainer}>
 
-                            <Text style={styles.modalLabelText}>To Date</Text>
+                        <View style={styles.modalContent}>
 
-                            <View style={styles.modalInput1} >
-                                <Text onPress={showDatepicker1}>
-                                    {isEndDateSelected ? endDate.toDateString() : "Select End Date"} &nbsp;
-                                </Text>
-                                {showDatePicker1 && (
-                                    <DateTimePicker
-                                        value={endDate}
-                                        mode="date"
-                                        display="default"
-                                        onChange={handleDateChange1}
-                                    />
-                                )}
-                            </View>
-
-                        </View>
-
-                        <View style={styles.FilterView}>
+                            <Text style={styles.Heading}>Status Update</Text>
 
                             <Text style={styles.modalLabelText}>Status</Text>
 
-                            <TouchableOpacity onPress={toggleModalDropdown} style={styles.modalInput}>
+                            <TouchableOpacity onPress={toggleModalDropdown1} style={styles.modalInput2}>
 
-                                <Text style={styles.StatusTouchableText}>{editedStatus ? editedStatus : "Select Status"}</Text>
+                                <Text style={styles.StatusTouchableText}>{editedStatus1}</Text>
                                 <DropdownIcon width={14} height={14} color={"#000"} />
 
                             </TouchableOpacity>
 
-                        </View>
+                            {/* Dropdown to show the options */}
 
-                        {/* Dropdown to show the options */}
+                            {showModalDropdown1 && (
 
-                        {showModalDropdown && (
-                            <View style={{ alignItems: 'flex-end', marginTop: -6 }}>
-                                <View style={styles.modaldropdown}>
+                                <View style={styles.dropdown}>
 
-                                    <TouchableOpacity onPress={() => selecModaltStatus("Not Yet Start")} style={styles.dropdownOption}>
+                                    <TouchableOpacity onPress={() => selecModaltStatus1("Not Yet Start")} style={styles.dropdownOption}>
                                         <Text style={styles.dropdownOptionText}>Not Yet Start</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={() => selecModaltStatus("In-Progress")} style={styles.dropdownOption}>
+                                    <TouchableOpacity onPress={() => selecModaltStatus1("In-Progress")} style={styles.dropdownOption}>
                                         <Text style={styles.dropdownOptionText}>In-Progress</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={() => selecModaltStatus("Hold")} style={styles.dropdownOption}>
+                                    <TouchableOpacity onPress={() => selecModaltStatus1("Hold")} style={styles.dropdownOption}>
                                         <Text style={styles.dropdownOptionText}>Hold</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={() => selecModaltStatus("Completed")} style={styles.dropdownOption}>
+                                    <TouchableOpacity onPress={() => selecModaltStatus1("Completed")} style={styles.dropdownOption}>
                                         <Text style={styles.dropdownOptionText}>Completed</Text>
                                     </TouchableOpacity>
 
                                 </View>
+
+                            )}
+
+                            {editedStatus1 === "Hold" ?
+                                <>
+                                    <Text style={styles.ModalerrorText}>
+                                        { }
+                                    </Text>
+
+                                    <Text style={styles.modalLabelText}>Reason:</Text>
+
+                                    <TextInput
+                                        value={Reason1}
+                                        onChangeText={(text) => setReason1(text)}
+                                        style={styles.Reason1}
+                                    />
+
+                                    <Text style={styles.errorTextDelete}>
+                                        {ReasonError1}
+                                    </Text>
+                                </> : null
+                            }
+
+                            <View style={styles.buttoncontainer}>
+
+                                <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit1}>
+                                    {
+                                        EditLoad ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                    }
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal1}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
                             </View>
-                        )}
-
-                        <View style={styles.buttoncontainer}>
-
-                            <TouchableOpacity style={styles.modalSubmitButton}
-                                onPress={handleEditSubmit}
-                            >
-                                {
-                                    filtLoad ?
-                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalSubmitButtonText}>Apply Filter</Text>
-                                }
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
 
                         </View>
-
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={editModalVisible1}
-                onRequestClose={closeEditModal1}
-            >
-                <View style={styles.modalContainer}>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
 
-                    <View style={styles.modalContent}>
-
-                        <Text style={styles.Heading}>Status Update</Text>
-
-                        <Text style={styles.modalLabelText}>Status</Text>
-
-                        <TouchableOpacity onPress={toggleModalDropdown1} style={styles.modalInput2}>
-
-                            <Text style={styles.StatusTouchableText}>{editedStatus1}</Text>
-                            <DropdownIcon width={14} height={14} color={"#000"} />
-
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
                         </TouchableOpacity>
 
-                        {/* Dropdown to show the options */}
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
 
-                        {showModalDropdown1 && (
-
-                            <View style={styles.dropdown}>
-
-                                <TouchableOpacity onPress={() => selecModaltStatus1("Not Yet Start")} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>Not Yet Start</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => selecModaltStatus1("In-Progress")} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>In-Progress</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => selecModaltStatus1("Hold")} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>Hold</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => selecModaltStatus1("Completed")} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>Completed</Text>
-                                </TouchableOpacity>
-
-                            </View>
-
-                        )}
-
-                        {editedStatus1 === "Hold" ?
-                            <>
-                                <Text style={styles.ModalerrorText}>
-                                    { }
-                                </Text>
-
-                                <Text style={styles.modalLabelText}>Reason:</Text>
-
-                                <TextInput
-                                    value={Reason1}
-                                    onChangeText={(text) => setReason1(text)}
-                                    style={styles.Reason1}
-                                />
-
-                                <Text style={styles.errorTextDelete}>
-                                    {ReasonError1}
-                                </Text>
-                            </> : null
-                        }
-
-                        <View style={styles.buttoncontainer}>
-
-                            <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit1}>
-                                {
-                                    EditLoad ?
-                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalSubmitButtonText}>Submit</Text>
-                                }
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal1}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
-
-                        </View>
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
 
                     </View>
                 </View>
-            </Modal>
 
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
-
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
-                        >
-                            {page}
-                        </Text>
-                    ))}
-
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
-
-                </View>
             </View>
-
-        </View>
-
+        </ScrollView>
     )
 }
 

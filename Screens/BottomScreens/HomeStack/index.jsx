@@ -89,6 +89,8 @@ import OvertimeType from "./AttendancePolicy/OvertimeType";
 import EmpLeaveReq from "./Attendance/EmpLeaveReq";
 import EmpAttendReq from "./Attendance/EmpAttendReq";
 import EmpOvertimeReq from "./Attendance/EmpOvertimeReq";
+import OTCalculation from "./Payroll/OTCalculation/indexx";
+import EditOtCalculation from "./Payroll/EditOTCalculation";
 
 const Stack = createNativeStackNavigator();
 
@@ -247,6 +249,11 @@ const HomeStack = () => {
       <Stack.Screen name="Edit Task" component={EditTask} />
       <Stack.Screen name="Task List" component={TaskList} />
       <Stack.Screen name="Assigned Task" component={AssignedTask} />
+
+      {/*  */}
+
+      <Stack.Screen name="Overtime Calculation" component={OTCalculation} />
+      <Stack.Screen name="Edit Overtime Calculation" component={EditOtCalculation} />
 
       {/*  */}
 

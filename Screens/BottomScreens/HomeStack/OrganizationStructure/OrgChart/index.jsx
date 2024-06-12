@@ -65,7 +65,7 @@ const OrgChart = () => {
             )}
 
             {employee.id == 3 && (
-                <View style={[styles.Line2, { marginLeft: `${level * 20 + 25}%` }]} />
+                <View style={[styles.Line1, { marginLeft: `${level * 20 + 25}%` }]} />
             )}
 
             {
