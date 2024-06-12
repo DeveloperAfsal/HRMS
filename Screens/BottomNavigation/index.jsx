@@ -100,14 +100,14 @@ const BottomTabNavigator = () => {
                     tabBarLabel: '',
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Notification"
                 component={ProfileStack}
                 options={{
                     tabBarIcon: ({ focused }) => <NotificationIcon active={focused} />,
                     tabBarLabel: '',
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Profile"
                 component={ProfileStack}

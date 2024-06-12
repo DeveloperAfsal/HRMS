@@ -3,7 +3,8 @@ import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableO
 import SearchIcon from "../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
-import EditIcon from "../../../../../Assets/Icons/Edit.svg";
+import ViewIcon from "../../../../../Assets/Icons/eyeopen.svg";
+import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "./style";
 import axios from "axios";
@@ -13,8 +14,9 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { useFocusEffect } from "@react-navigation/native";
+import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
-const OTCalculation = ({ navigation }) => {
+const PayslipList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -23,11 +25,12 @@ const OTCalculation = ({ navigation }) => {
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    console.log(datalist,"datalist")
+    const [selectedStatus, setSelectedStatus] = useState('Active');
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const [filterText, setFilterText] = useState('');
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 8;
 
     const filteredData = datalist.filter(row => {
         const values = Object.values(row).map(value => String(value));
@@ -53,20 +56,18 @@ const OTCalculation = ({ navigation }) => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/get_overtimelist';
-            const response = await axios.post(apiUrl, {
-                role_id: data.userrole,
-                e_id: data.userempid,
-            }, {
+            const apiUrl = `https://ocean21.in/api/public/api/view_activeinactiveList/${selectedStatus}`;
+            const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
                 }
             });
-            setLoadData(false)
+
             const responseData = response.data.data;
             setDatalist(responseData);
-        } catch (error) {
             setLoadData(false)
+
+        } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
@@ -74,28 +75,27 @@ const OTCalculation = ({ navigation }) => {
     useFocusEffect(
         useCallback(() => {
             fetchData();
-        }, [])
+        }, [selectedStatus])
     );
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const selectStatus = (status) => {
+        setSelectedStatus(status);
+        setShowDropdown(false);
+    };
 
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Type', 'Location', 'Shift Slot', 'Date', 'From Time', 'To Time', 'OT Rate', 'OT Amount', 'Created By', 'Updated By'];
+        const tableHead = ['S.No', 'Employee Name'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.employee_name,
-            rowData.emp_department,
-            rowData.ot_type,
-            rowData.ot_location_name,
-            rowData.shift_name,
-            rowData.ot_date,
-            rowData.ot_fromtime,
-            rowData.ot_totime,
-            rowData.overtime_rate,
-            rowData.ot_amount,
-            rowData.created_name,
-            rowData.updated_name,
+            rowData.emp_name,
         ]);
+
 
         const csvString = tableHead.join(',') + '\n' +
             tableData1.map(row => row.join(',')).join('\n');
@@ -128,21 +128,10 @@ const OTCalculation = ({ navigation }) => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Type', 'Location', 'Shift Slot', 'Date', 'From Time', 'To Time', 'OT Rate', 'OT Amount', 'Created By', 'Updated By'];
+        const tableHead = ['S.No', 'Employee Name'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.employee_name,
-            rowData.emp_department,
-            rowData.ot_type,
-            rowData.ot_location_name,
-            rowData.shift_name,
-            rowData.ot_date,
-            rowData.ot_fromtime,
-            rowData.ot_totime,
-            rowData.overtime_rate,
-            rowData.ot_amount,
-            rowData.created_name,
-            rowData.updated_name,
+            rowData.emp_name,
         ]);
 
         const htmlContent = `
@@ -231,54 +220,61 @@ const OTCalculation = ({ navigation }) => {
                 </View>
             </View>
 
-            <ScrollView horizontal={true}>
+            <View style={styles.ActiveInactiveContainer}>
+
+                <Text style={{ fontWeight: '600', fontSize: 16, lineHeight: 21.28 }}>Status :</Text>
+
+                <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
+
+                    <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
+                    <DropdownIcon width={14} height={14} color={"#1AD0FF"} />
+
+                </TouchableOpacity>
+
+                {/* Dropdown to show the options */}
+
+                {showDropdown && (
+
+                    <View style={styles.dropdown}>
+
+                        <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
+                            <Text style={styles.dropdownOptionText}>Active</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => selectStatus("In-Active")} style={styles.dropdownOption}>
+                            <Text style={styles.dropdownOptionText}>In-Active</Text>
+                        </TouchableOpacity>
+
+                    </View>
+
+                )}
+
+            </View>
+
+            <ScrollView>
 
                 <View style={styles.Tablecontainer}>
                     {loadData ? (
                         <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
                     ) : (
                         <View>
-
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Department</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Type</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Location</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Shift Slot</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>From Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>To Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>OT Rate</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>OT Amount</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Update By</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                            <View style={styles.listHeader1}>
+                                <Text style={styles.sno1}>S.No</Text>
+                                <Text style={styles.shift1}>Employee Name</Text>
+                                <Text style={styles.Action1}>Action</Text>
                             </View>
 
                             {paginatedData.length === 0 ? (
                                 <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                             ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.employee_name}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.emp_department}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.ot_type}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.ot_location_name}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.shift_name}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.ot_date}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.ot_fromtime}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.ot_totime}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.overtime_rate}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.ot_amount}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.created_name}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.updated_name}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                                onPress={() => navigation.navigate('Edit Overtime Calculation', { Id: item })}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
+                                paginatedData.map((slot, index) => (
+                                    <View style={styles.listcontent} key={index}>
+                                        <Text style={styles.listcontentsno}>{index + 1}</Text>
+                                        <Text style={styles.listcontentShift}>{slot.emp_name}</Text>
+
+                                        <View style={styles.listcontentButtonview1}>
+                                            <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => navigation.navigate('Payslip', { Id: slot })}>
+                                                <ViewIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -333,4 +329,4 @@ const OTCalculation = ({ navigation }) => {
     )
 }
 
-export default OTCalculation;
+export default PayslipList;

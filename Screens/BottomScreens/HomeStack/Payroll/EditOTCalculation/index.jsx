@@ -324,6 +324,8 @@ const EditOtCalculation = ({ route, navigation }) => {
         setOtRate(datalist.overtime_rate);
         setOtAmount(datalist.ot_amount);
         setStartDate(new Date(datalist.ot_date));
+        setSelectedEmployees(SpecId.employee_name.split(','))
+        setSelectedDepartments(SpecId.department_name.split(','))
     }, [datalist, SpecId])
 
     // 
@@ -380,32 +382,14 @@ const EditOtCalculation = ({ route, navigation }) => {
                         Select Department
                     </Text>
 
-                    <TouchableOpacity style={styles.Input} onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}>
+                    <TouchableOpacity style={styles.Input}>
                         <View style={styles.selectedDaysContainer}>
                             {selectedDepartments.map(day => (
                                 <Text key={day} style={styles.selectedays}>{day}</Text>
                             ))}
                             {selectedDepartments.length === 0 && <Text>Select Department Name</Text>}
                         </View>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
-
-                    {showDepartmentNameDropdown && (
-                        <View style={styles.dropdown}>
-                            {departmentNameDropdown.map((department, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedDepartments.includes(department.role_name) && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleToggleDepartment(department.role_name, department.id)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{department.role_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
 
                     <Text style={styles.errorText}>
                         { }
@@ -415,34 +399,14 @@ const EditOtCalculation = ({ route, navigation }) => {
                         Select Members
                     </Text>
 
-                    <TouchableOpacity style={styles.Input} onPress={() => {
-                        setShowEmployeeDropdown(!showEmployeeDropdown);
-                    }}>
+                    <TouchableOpacity style={styles.Input}>
                         <View style={styles.selectedDaysContainer}>
                             {selectedEmployees.map(employee => (
                                 <Text key={employee} style={styles.selectedays}>{employee}</Text>
                             ))}
                             {selectedEmployees.length === 0 && <Text>Select Employees</Text>}
                         </View>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
-
-                    {showEmployeeDropdown && (
-                        <View style={styles.dropdown}>
-                            {employeeDropdown.map((employee, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedEmployees.includes(employee.emp_name) && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleToggleEmployee(employee.emp_name, employee.emp_id)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{employee.emp_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
 
                     <Text style={styles.errorText}>
                         { }
