@@ -366,11 +366,11 @@ const EmpPayslip = ({ navigation }) => {
                                             </TouchableOpacity>
 
 
-                                            <TouchableOpacity
+                                            {(data.userrole == 1 || data.userrole == 2) ?<TouchableOpacity
                                                 onPress={() => HandleDelete(item.id)}
                                                 style={styles.listcontentdelbutton}>
                                                 <DeleteIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
+                                            </TouchableOpacity>: null}
 
                                         </View>
                                     </View>

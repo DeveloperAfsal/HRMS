@@ -23,7 +23,7 @@ const OTCalculation = ({ navigation }) => {
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    console.log(datalist,"datalist")
+    console.log(datalist, "datalist")
 
     const [filterText, setFilterText] = useState('');
 
@@ -253,7 +253,7 @@ const OTCalculation = ({ navigation }) => {
                                 <Text style={[styles.header, styles.cell, styles.Status]}>OT Amount</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Update By</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                                {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> : null}
                             </View>
 
                             {paginatedData.length === 0 ? (
@@ -274,13 +274,13 @@ const OTCalculation = ({ navigation }) => {
                                         <Text style={[styles.cell, styles.Status]}>{item.ot_amount}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.created_name}</Text>
                                         <Text style={[styles.cell, styles.WeekOff]}>{item.updated_name}</Text>
-                                        <View style={styles.listcontentButtonview}>
+                                        {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.listcontentButtonview}>
                                             <TouchableOpacity style={styles.listcontenteditbutton}
                                                 onPress={() => navigation.navigate('Edit Overtime Calculation', { Id: item })}
                                             >
                                                 <EditIcon width={14} height={14} color={"#000"} />
                                             </TouchableOpacity>
-                                        </View>
+                                        </View> : null}
                                     </View>
                                 ))
                             )}

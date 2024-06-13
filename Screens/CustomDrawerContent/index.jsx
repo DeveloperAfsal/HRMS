@@ -609,20 +609,20 @@ const CustomDrawerContent = ({ navigation }) => {
                                 onPress={() => navigation.navigate('Overtime Calculation')}
                             />
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Assign Employee Salary"
                                 onPress={() => navigation.navigate('Assign Employee Salary')}
-                            />
+                            /> : null}
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Salary Calculation"
                                 onPress={() => navigation.navigate('Salary Calculation')}
-                            />
+                            /> : null}
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Generate Payslip"
                                 onPress={() => navigation.navigate('Generate Payslip')}
-                            />
+                            /> : null}
 
                             {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Payslip List"
