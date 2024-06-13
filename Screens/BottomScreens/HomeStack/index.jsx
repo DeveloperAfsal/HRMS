@@ -94,6 +94,7 @@ import EditOtCalculation from "./Payroll/EditOTCalculation";
 import PayslipList from "./Payroll/PayslipList";
 import PaySlip from "./Payroll/Payslip";
 import Slip from "./Payroll/Slip";
+import EmpPayslip from "./Payroll/EmpPayslip";
 
 const Stack = createNativeStackNavigator();
 
@@ -259,6 +260,7 @@ const HomeStack = () => {
       <Stack.Screen name="Edit Overtime Calculation" component={EditOtCalculation} />
       <Stack.Screen name="Payslip List" component={PayslipList} />
       <Stack.Screen name="Payslip" component={PaySlip} />
+      <Stack.Screen name="Employee Payslip" component={EmpPayslip} />
       <Stack.Screen name="Slip" component={Slip} />
 
       {/*  */}

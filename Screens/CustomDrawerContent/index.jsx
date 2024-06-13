@@ -624,10 +624,15 @@ const CustomDrawerContent = ({ navigation }) => {
                                 onPress={() => navigation.navigate('Generate Payslip')}
                             />
 
-                            < DrawerItem
+                            {(data.userrole == 1 || data.userrole == 2) ? < DrawerItem
                                 label="Payslip List"
                                 onPress={() => navigation.navigate('Payslip List')}
-                            />
+                            /> : null}
+
+                            {(data.userrole == 1 || data.userrole == 2) ? null : < DrawerItem
+                                label="Employee Payslip"
+                                onPress={() => navigation.navigate('Employee Payslip')}
+                            />}
 
                         </>)}
 

@@ -143,7 +143,7 @@ const Slip = ({ route }) => {
           <body>
             <div class="company-info">
 
-            <img
+           <img
             src='https://officeinteriorschennai.com/assets/Employee/EPK_group_Logo.png'
             alt="Company Logo"
             className="logo"
@@ -151,9 +151,10 @@ const Slip = ({ route }) => {
               <div class="vertical-line"></div>
 
               <div class="company-details">
-               <div class="company-name">Qwerty Solutions</div>
+               <div class="company-name">EPK Group</div>
                <div class="address">
-                 No.7, ABC Building, ABC Street, Nearby Landmark, XYZ Area,Chennai, Tamilnadu - 600 006<br />
+                 No,624, Anna Salai 4th floor, Khivraj Building,<br />
+                 Near Gemini Flyover, Tamilnadu - 600006<br />
                </div>
 
               <div class="company-name1">Payslip - ${`${monthName} ${year}`}</div>
@@ -273,7 +274,7 @@ const Slip = ({ route }) => {
 
         const { filePath } = await RNHTMLtoPDF.convert({
             html: htmlContent,
-            fileName: 'Attendance_list',
+            fileName: 'Pay_Slip',
             directory: RNFS.DocumentDirectoryPath,
         });
 
@@ -309,14 +310,26 @@ const Slip = ({ route }) => {
                 <View style={styles.container}>
                     <View style={styles.companyInfo}>
                         <View>
-                            <ImageBackground
+                            {/* <ImageBackground
                                 source={require('../../../../../Assets/Image/Logo.png')}
                                 style={styles.backgroundImage}
-                            /></View>
+                            /> */}
+                            <Image
+                                source={{ uri: 'https://officeinteriorschennai.com/assets/Employee/EPK_group_Logo.png' }}
+                                style={styles.logo}
+                                resizeMode="stretch"
+                            />
+                        </View>
                         <View style={styles.companyDetails}>
-                            <Text style={styles.companyName}>Qwerty Solutions</Text>
+                            {/* <Text style={styles.companyName}>Qwerty Solutions</Text>
                             <Text style={styles.address}>
                                 No.7, ABC Building, ABC Street, Nearby Landmark, XYZ Area,Chennai, Tamilnadu - 600 006
+                            </Text> */}
+                            <Text style={styles.companyName}>EPK Group</Text>
+                            <Text style={styles.address}>
+                                No,624, Anna Salai 4th floor, Khivraj Building,
+                                {'\n'}
+                                Near Gemini Flyover, Tamilnadu - 600006
                             </Text>
                             <Text style={styles.SalarySlip}>Payslip - {`${monthName} ${year}`}</Text>
                         </View>

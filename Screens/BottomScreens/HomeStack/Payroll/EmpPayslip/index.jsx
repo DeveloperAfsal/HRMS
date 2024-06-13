@@ -6,7 +6,7 @@ import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
 import ViewIcon from "../../../../../Assets/Icons/eyeopen.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import styles from "./style";
+import styles from "../Payslip/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import RNFS from 'react-native-fs';
@@ -14,10 +14,7 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const PaySlip = ({ route, navigation }) => {
-
-    const SpecId = route.params.Id;
-    console.log(SpecId,"SpecId")
+const EmpPayslip = ({ navigation }) => {
 
     // data from redux store 
 
@@ -55,7 +52,7 @@ const PaySlip = ({ route, navigation }) => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/get_emp_payslip_list/${SpecId.e_id}`;
+            const apiUrl = `https://ocean21.in/api/public/api/get_emp_payslip_list/${data.userempid}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -466,4 +463,4 @@ const PaySlip = ({ route, navigation }) => {
     )
 }
 
-export default PaySlip;
+export default EmpPayslip;
