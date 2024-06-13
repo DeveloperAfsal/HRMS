@@ -19,7 +19,6 @@ const GeneratePayslip = ({ navigation }) => {
     const [nop, setNoP] = useState('');
     const [nohd, setNohd] = useState('');
     const [nol, setNol] = useState('');
-    console.log(nol, "nol")
     const [noa, setNoa] = useState('');
     const [totalWDM, setTotalWDM] = useState('');
     const [nowd, setNowd] = useState('');
@@ -30,9 +29,7 @@ const GeneratePayslip = ({ navigation }) => {
     const [otherDeduction, setOtherDeduction] = useState('');
     const [netPay, setNetPay] = useState('');
     const [lopAmount, setLopAmount] = useState('');
-    console.log(lopAmount, "lopAmount");
     const [lopcount, setLopcount] = useState('');
-    console.log(lopcount, "lopcount");
     const [empSalaryOverall, setOverallSalaryOverall] = useState('');
     const [overAllDeduction, setOverAllDeduction] = useState('');
     const [presentCount, setPresentCount] = useState('');
