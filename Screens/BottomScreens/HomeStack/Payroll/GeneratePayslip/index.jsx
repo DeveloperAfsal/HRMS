@@ -14,6 +14,37 @@ const GeneratePayslip = ({ navigation }) => {
     const { data } = useSelector((state) => state.login);
 
     const [load, SetLoad] = useState(false);
+    const [datalist, setDatalist] = useState([]);
+    const [nola, setNola] = useState('');
+    const [nop, setNoP] = useState('');
+    const [nohd, setNohd] = useState('');
+    const [nol, setNol] = useState('');
+    console.log(nol, "nol")
+    const [noa, setNoa] = useState('');
+    const [totalWDM, setTotalWDM] = useState('');
+    const [nowd, setNowd] = useState('');
+    const [overtime, setOvertime] = useState('');
+    const [grossSalary, setGrossSalary] = useState('');
+    const [perDaySalary, setPerDaySalary] = useState('');
+    const [variable, setVariable] = useState('');
+    const [otherDeduction, setOtherDeduction] = useState('');
+    const [netPay, setNetPay] = useState('');
+    const [lopAmount, setLopAmount] = useState('');
+    console.log(lopAmount, "lopAmount");
+    const [lopcount, setLopcount] = useState('');
+    console.log(lopcount, "lopcount");
+    const [empSalaryOverall, setOverallSalaryOverall] = useState('');
+    const [overAllDeduction, setOverAllDeduction] = useState('');
+    const [presentCount, setPresentCount] = useState('');
+
+    const [editable, setEditable] = useState(false);
+
+    const toggleEdit = () => {
+        setEditable(!editable);
+        if (editable) {
+            getAfterLop();
+        }
+    };
 
     //
 
@@ -102,32 +133,111 @@ const GeneratePayslip = ({ navigation }) => {
         setShowDatePicker(true);
     };
 
-    const [showDatePicker1, setShowDatePicker1] = useState(false);
-    const [endDate, setEndDate] = useState(new Date());
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
 
-    const handleDateChange1 = (event, date) => {
-        if (date !== undefined) {
-            setEndDate(date);
+    const getData = async () => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/get_emp_yearmonth_details`;
+
+            const response = await axios.post(apiUrl, {
+                emp_id: selectedMemberId,
+                yearmonth: formattedStartDate
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+            const responsedata = await response.data;
+            const resdata = response.data.data;
+
+            if (responsedata.status === "success") {
+                setDatalist(resdata);
+            } else {
+                Alert.alert('Failed', responsedata.message)
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
         }
-        setShowDatePicker1(Platform.OS === 'ios');
     };
 
-    const showDatepicker1 = () => {
-        setShowDatePicker1(true);
+    const getAfterLop = async () => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/ot_emp_salary_details`;
+
+            const response = await axios.post(apiUrl, {
+                emp_id: selectedMemberId,
+                yearmonth: formattedStartDate,
+                lop: lopcount
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+            const responsedata = await response.data;
+            console.log(responsedata, "responsedata")
+            const resdata = response.data.data;
+
+            if (responsedata.status === "success") {
+                setNola(resdata.latecount?.toString() || '');
+                setNoP(resdata.permissioncount?.toString() || '');
+                setNohd(resdata.halfdaycount?.toString() || '');
+                setNol(resdata.leavecount?.toString() || '');
+                setNoa(resdata.absentcount?.toString() || '');
+                setTotalWDM(resdata.totalmonthlyworkingdays?.toString() || '');
+                setNowd(resdata.totalworkeddays?.toString() || '');
+                setOvertime(resdata.ot_totalamount?.toString() || '');
+                setGrossSalary(resdata.empgrosssalary?.toString() || '');
+                setPerDaySalary(resdata.empsalaryperday?.toString() || '');
+                setVariable(resdata.variable?.toString() || '');
+                setOtherDeduction(resdata.otherdeduction?.toString() || '');
+                setLopAmount(resdata.lopamount?.toString() || '');
+                setNetPay(resdata.totalnetpayamount?.toString() || '');
+                setLopcount(resdata.totallopdays?.toString() || '');
+                setPresentCount(resdata.presentcount?.toString() || '');
+                setOverAllDeduction(resdata.overalldeduction?.toString() || '');
+                setOverallSalaryOverall(resdata.empsalaryoverall?.toString() || '');
+            } else {
+                Alert.alert('Failed', responsedata.message)
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
-    const formattedStartDate = `${startDate.getMonth() + 1}`;
-    const formattedEndDate = `${endDate.getFullYear()}}`;
+    useEffect(() => {
+        getData();
+    }, [startDate])
 
-
-    // 
-
-    const onRefresh = () => {
-        setSelectedDepartments('');
-        setSelectedMember('');
-        setStartDate(new Date());
-        setEndDate(new Date());
-    }
+    useEffect(() => {
+        setNola(datalist.latecount?.toString() || '');
+        setNoP(datalist.permissioncount?.toString() || '');
+        setNohd(datalist.halfdaycount?.toString() || '');
+        setNol(datalist.leavecount?.toString() || '');
+        setNoa(datalist.absentcount?.toString() || '');
+        setTotalWDM(datalist.totalmonthlyworkingdays?.toString() || '');
+        setNowd(datalist.totalworkeddays?.toString() || '');
+        setOvertime(datalist.ot_totalamount?.toString() || '');
+        setGrossSalary(datalist.empgrosssalary?.toString() || '');
+        setPerDaySalary(datalist.empsalaryperday?.toString() || '');
+        setVariable(datalist.variable?.toString() || '');
+        setOtherDeduction(datalist.otherdeduction?.toString() || '');
+        setLopAmount(datalist.lopamount?.toString() || '');
+        setNetPay(datalist.totalnetpayamount?.toString() || '');
+        setLopcount(datalist.totallopdays?.toString() || '');
+        setPresentCount(datalist.presentcount?.toString() || '');
+        setOverAllDeduction(datalist.overalldeduction?.toString() || '');
+        setOverallSalaryOverall(datalist.empsalaryoverall?.toString() || '');
+    }, [datalist])
 
     // 
 
@@ -137,10 +247,27 @@ const GeneratePayslip = ({ navigation }) => {
 
         try {
 
-            const apiUrl = 'https://ocean21.in/api/public/api/add_assign_asset';
+            const apiUrl = 'https://ocean21.in/api/public/api/add_generate_payslip';
 
             const response = await axios.post(apiUrl, {
-
+                e_id: selectedMemberId,
+                dep_id: selectedDepartmentsId,
+                payslipmonthyear: formattedStartDate,
+                late_count: nol,
+                halfday_count: nohd,
+                absent_count: noa,
+                leave_count: nol,
+                permission_count: nop,
+                present_count: presentCount,
+                totalmonthlyworkingdays: totalWDM,
+                totalworkeddays: nowd,
+                totallopdays: lopcount,
+                lopamount: lopAmount,
+                ot_totalamount: overtime,
+                empsalaryperday: perDaySalary,
+                overalldeduction: overAllDeduction,
+                empsalaryoverall: empSalaryOverall,
+                totalnetpayamount: netPay,
                 created_by: data.userempid
             }, {
                 headers: {
@@ -152,9 +279,8 @@ const GeneratePayslip = ({ navigation }) => {
 
             if (responseData.status === "success") {
                 Alert.alert("Successfull", responseData.message);
+                navigation.navigate('Payslip List')
                 SetLoad(false);
-                navigation.navigate('Asset List');
-                onRefresh();
             } else {
                 Alert.alert("Failed", responseData.message);
                 SetLoad(false);
@@ -246,13 +372,13 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
-                        Select Month
+                        Select Year Month
                     </Text>
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
                             {/* {startDate.toDateString()} &nbsp; */}
-                            {format(startDate, 'MMMM')} &nbsp;
+                            {format(startDate, 'yyyy-MM')}
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -269,33 +395,11 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
-                        Select Year
-                    </Text>
-
-                    <View style={styles.inputs} >
-                        <Text onPress={showDatepicker1}>
-                            {/* {endDate.toDateString()} &nbsp; */}
-                            {format(endDate, 'yyyy')} &nbsp;
-                        </Text>
-                        {showDatePicker1 && (
-                            <DateTimePicker
-                                value={endDate}
-                                mode="date"
-                                display="default"
-                                onChange={handleDateChange1}
-                            />
-                        )}
-                    </View>
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.ShiftSlotText}>
                         No. Of Late
                     </Text>
 
                     <TextInput
+                        value={nola}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -309,6 +413,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={nop}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -322,6 +427,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={nohd}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -335,6 +441,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={nol}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -348,6 +455,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={noa}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -361,6 +469,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={totalWDM}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -374,6 +483,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={nowd}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -387,6 +497,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={overtime}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -400,6 +511,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={grossSalary}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -413,6 +525,21 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={perDaySalary}
+                        editable={false}
+                        style={styles.inputs}
+                    />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
+                    <Text style={styles.ShiftSlotText}>
+                        Variable
+                    </Text>
+
+                    <TextInput
+                        value={variable}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -426,6 +553,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={otherDeduction}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -439,12 +567,23 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={lopcount}
+                        editable={editable}
+                        onChangeText={(txt) => setLopcount(txt)}
                         style={styles.inputs}
                     />
 
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
+                    <View style={{ alignItems: 'flex-end', width: '90%' }}>
+                        <TouchableOpacity onPress={toggleEdit}
+                            style={{ backgroundColor: '#0A62F1', width: '20%', height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 5 }}
+                        >
+                            <Text
+                                style={{ color: '#fff', fontWeight: '600' }}
+                            >
+                                {editable ? 'Save' : 'Edit'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 
 
                     <Text style={styles.ShiftSlotText}>
@@ -452,6 +591,7 @@ const GeneratePayslip = ({ navigation }) => {
                     </Text>
 
                     <TextInput
+                        value={netPay}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -468,7 +608,7 @@ const GeneratePayslip = ({ navigation }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Submit
+                                        Generate
                                     </Text>
                             }
                         </TouchableOpacity>
