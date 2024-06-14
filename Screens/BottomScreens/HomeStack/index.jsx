@@ -96,6 +96,9 @@ import PaySlip from "./Payroll/Payslip";
 import Slip from "./Payroll/Slip";
 import EmpPayslip from "./Payroll/EmpPayslip";
 import GeneratePayslip from "./Payroll/GeneratePayslip";
+import AssignEmpSalary from "./Payroll/AssignEmployeeSalary";
+import AssignEmpList from "./Payroll/AssignEmployeelist";
+import EditAssignEmpSalary from "./Payroll/EditAssignEmpSalary";
 
 const Stack = createNativeStackNavigator();
 
@@ -264,6 +267,9 @@ const HomeStack = () => {
       <Stack.Screen name="Employee Payslip" component={EmpPayslip} />
       <Stack.Screen name="Slip" component={Slip} />
       <Stack.Screen name="Generate Payslip" component={GeneratePayslip} />
+      <Stack.Screen name="Assign Employee Salary Add" component={AssignEmpSalary} />
+      <Stack.Screen name="Assign Employee Salary Edit" component={EditAssignEmpSalary} />
+      <Stack.Screen name="Assign Employee Salary" component={AssignEmpList} />
 
       {/*  */}
 
