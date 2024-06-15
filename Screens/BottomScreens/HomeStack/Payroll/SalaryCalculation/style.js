@@ -7,38 +7,74 @@ const styles = StyleSheet.create({
         marginTop: '5%'
     },
 
-    DonetContainer: { 
-        backgroundColor: '#fff', 
-        // height: 423, 
-        borderRadius: 15, 
-        // justifyContent: 'space-between' 
+    dateChanger: {
+        margin: "5%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10
     },
 
-    mentions: { 
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        gap: 20 
+    DonetContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
     },
 
-    gpay: { 
-        width: 20, 
-        height: 20, 
-        backgroundColor: '#0A63F2', 
-        borderRadius: 3 
+    mentions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20
     },
 
-    npay: { 
-        width: 20, 
-        height: 20, 
-        backgroundColor: '#F20A8C', 
-        borderRadius: 3 
+    gpay: {
+        width: 20,
+        height: 20,
+        backgroundColor: '#0A63F2',
+        borderRadius: 3
     },
-    
-    deduc: { width: 20, height: 20, backgroundColor: '#3B609D', borderRadius: 3 },
-    countboxview: { marginTop: '10%', flexDirection: 'row', justifyContent: 'space-between' },
-    countbox:{ backgroundColor: '#fff', height: 87, borderRadius: 8, width: "45%", alignItems: 'center', justifyContent: 'center', gap: 10 },
-    head:{ color: '#00275C', fontWeight: '600', fontSize: 16, textAlign: 'center' },
-    val:{ color: '#00275C', fontWeight: '700', fontSize: 24, textAlign: 'center' },
+
+    npay: {
+        width: 20,
+        height: 20,
+        backgroundColor: '#F20A8C',
+        borderRadius: 3
+    },
+
+    deduc: {
+        width: 20,
+        height: 20,
+        backgroundColor: '#3B609D',
+        borderRadius: 3
+    },
+
+    countboxview: {
+        marginTop: '10%',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    countbox: {
+        backgroundColor: '#fff',
+        height: 87,
+        borderRadius: 8,
+        width: "45%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10
+    },
+
+    head: {
+        color: '#00275C',
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center'
+    },
+
+    val: {
+        color: '#00275C',
+        fontWeight: '700',
+        fontSize: 24,
+        textAlign: 'center'
+    },
 
     topic: {
         color: '#00275C',

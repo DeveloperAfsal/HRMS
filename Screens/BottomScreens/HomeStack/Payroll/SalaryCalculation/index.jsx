@@ -5,6 +5,7 @@ import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
 import DonutChart from './Donet/index';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format, addMonths, subMonths } from 'date-fns';
 import styles from "./style";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -63,12 +64,40 @@ const SalaryCalculation = () => {
 
     // 
 
+    // handleDateChange
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setStartDate(date);
+        }
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    const showPreviousMonth = () => {
+        setStartDate(subMonths(startDate, 1));
+    };
+
+    const showNextMonth = () => {
+        setStartDate(addMonths(startDate, 1));
+    };
+
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+
+    // 
+
     const fetchData = async () => {
         setLoadData(true)
         try {
             const apiUrl = 'https://ocean21.in/api/public/api/salary_calculation';
             const response = await axios.post(apiUrl, {
-                yearmonth: "2024-05"
+                yearmonth: formattedStartDate
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -88,7 +117,7 @@ const SalaryCalculation = () => {
         try {
             const apiUrl = 'https://ocean21.in/api/public/api/graph_salary_calculation';
             const response = await axios.post(apiUrl, {
-                yearmonth: "2024-05"
+                yearmonth: formattedStartDate
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -111,7 +140,7 @@ const SalaryCalculation = () => {
     useEffect(() => {
         fetchData();
         fetch();
-    }, [])
+    }, [startDate])
 
     // Export-Excel 
 
@@ -336,8 +365,22 @@ const SalaryCalculation = () => {
                     </View>
                 </View>
 
-                <View style={{ margin: "5%" }}>
-                    <Text style={styles.topic}>April 2024</Text>
+                <View style={styles.dateChanger}>
+                    <ArrowLeftIcon width={20} height={16} color={'#0A62F1'} onPress={showPreviousMonth} />
+                    <View>
+                        <Text onPress={showDatepicker} style={{ color: '#00275C', fontWeight: '700', fontSize: 20 }}>
+                            {format(startDate, 'MMMM yyyy')}
+                        </Text>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={startDate}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
+                            />
+                        )}
+                    </View>
+                    <ArrowRightIcon width={20} height={16} color={'#0A62F1'} onPress={showNextMonth} />
                 </View>
 
                 <ScrollView horizontal={true}>
