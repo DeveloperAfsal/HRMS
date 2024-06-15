@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     },
 
     selectedOption: {
-        backgroundColor: '#E1F1FC',
+        // backgroundColor: '#E1F1FC',
     },
 
     dropdownOptionText: {

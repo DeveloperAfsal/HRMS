@@ -161,6 +161,8 @@ const LeavePolicy = ({ navigation }) => {
     const [showleaveTypeDropdown, setShowleaveTypeDropdown] = useState(false);
     const [leaveTypeError, setLeaveTypeError] = useState('');
 
+    console.log(leaveTypeDropdown,"leaveTypeDropdown")
+
     useEffect(() => {
 
         const apiUrl = 'https://ocean21.in/api/public/api/leave_type_list';
@@ -189,7 +191,7 @@ const LeavePolicy = ({ navigation }) => {
     }, []);
 
     const handleSelectLeave = (departmentName) => {
-        setSelectedleaveType(departmentName.leave_category_name);
+        setSelectedleaveType(departmentName.leave_type_name);
         setSelectedleaveTypeId(departmentName.id)
         setShowleaveTypeDropdown(false);
     };
@@ -314,9 +316,10 @@ const LeavePolicy = ({ navigation }) => {
                 fetchData();
                 setLoad(false);
                 Handlerefresh();
+                Alert.alert("successfull",response.data.message)
             } else {
                 setLoad(false);
-                Alert.alert('Failed To Add:', response.data.message);
+                Alert.alert('Failed', response.data.message);
             }
 
         } catch (error) {
@@ -469,11 +472,11 @@ const LeavePolicy = ({ navigation }) => {
                                     key={index}
                                     style={[
                                         styles.dropdownOption,
-                                        selectedleaveType === department.leave_category_name && styles.selectedOption
+                                        selectedleaveType === department.leave_type_name && styles.selectedOption
                                     ]}
                                     onPress={() => handleSelectLeave(department)}
                                 >
-                                    <Text style={styles.dropdownOptionText}>{department.leave_category_name}</Text>
+                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
