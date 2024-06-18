@@ -100,6 +100,16 @@ import AssignEmpSalary from "./Payroll/AssignEmployeeSalary";
 import AssignEmpList from "./Payroll/AssignEmployeelist";
 import EditAssignEmpSalary from "./Payroll/EditAssignEmpSalary";
 import SalaryCalculation from "./Payroll/SalaryCalculation";
+import MissedCount from "../HomeScreen/MissedCount";
+import VisitorCount from "../HomeScreen/VisitorCount";
+import LateCount from "../HomeScreen/LateCount";
+import PresentCount from "../HomeScreen/PresentCount";
+import AbsentCount from "../HomeScreen/AbsentCount";
+import PermissionCount from "../HomeScreen/PermissionCount";
+import HalfDayCount from "../HomeScreen/HalfDayCount";
+import LeaveCount from "../HomeScreen/LeaveCount";
+import ManualEntryCount from "../HomeScreen/ManualEntryCount";
+import OdCount from "../HomeScreen/ODCount";
 
 const Stack = createNativeStackNavigator();
 
@@ -148,6 +158,16 @@ const HomeStack = () => {
       />
 
       <Stack.Screen name="Announcement" component={Announcement} />
+      <Stack.Screen name="Missed Count" component={MissedCount} />
+      <Stack.Screen name="Visitor Count" component={VisitorCount} />
+      <Stack.Screen name="Late Count" component={LateCount} />
+      <Stack.Screen name="Present Count" component={PresentCount} />
+      <Stack.Screen name="Absent Count" component={AbsentCount} />
+      <Stack.Screen name="Permission Count" component={PermissionCount} />
+      <Stack.Screen name="HalfDay Count" component={HalfDayCount} />
+      <Stack.Screen name="Leave Count" component={LeaveCount} />
+      <Stack.Screen name="OnDuty Count" component={OdCount} />
+      <Stack.Screen name="ManualEntry Count" component={ManualEntryCount} />
 
       {/*  */}
 

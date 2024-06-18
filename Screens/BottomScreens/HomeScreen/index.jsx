@@ -677,14 +677,18 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}
+                                    onPress={() => navigation.navigate('Employee List')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Total Employee</Text>
                                         <Text style={styles.numbers}>{totalcount.total_employee_count}</Text>
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}  >
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={0.9}
+                                    onPress={() => navigation.navigate('Late Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Late</Text>
                                         <Text style={styles.numbers}>{totalcount.days_late}</Text>
@@ -695,14 +699,18 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1} >
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                    onPress={() => navigation.navigate('Present Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Present</Text>
                                         <Text style={styles.numbers}>{totalcount.days_present}</Text>
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1} >
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                    onPress={() => navigation.navigate('Absent Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Absent</Text>
                                         <Text style={styles.numbers}>{totalcount.days_absent}</Text>
@@ -713,14 +721,18 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                onPress={() => navigation.navigate('Permission Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Permission</Text>
                                         <Text style={styles.numbers}>{totalcount.days_permission}</Text>
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                onPress={() => navigation.navigate('HalfDay Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Half Day</Text>
                                         <Text style={styles.numbers}>{totalcount.days_halfday}</Text>
@@ -731,14 +743,18 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                onPress={() => navigation.navigate('Leave Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Leave</Text>
                                         <Text style={styles.numbers}>{totalcount.days_leave}</Text>
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                onPress={() => navigation.navigate('OnDuty Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>On Duty</Text>
                                         <Text style={styles.numbers}>{totalcount.days_onduty}</Text>
@@ -749,14 +765,18 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                    onPress={() => navigation.navigate('Missed Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Missed Count</Text>
                                         <Text style={styles.numbers}>{totalcount.total_missed_count}</Text>
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                onPress={() => navigation.navigate('ManualEntry Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Manual Entry</Text>
                                         <Text style={styles.numbers}>{totalcount.ManualEntryCount}</Text>
@@ -767,7 +787,9 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={styles.cardContainer}>
 
-                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}>
+                                <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
+                                    onPress={() => navigation.navigate('Visitor Count')}
+                                >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Total Visitors</Text>
                                         <Text style={styles.numbers}>{totalcount.days_permission}</Text>
