@@ -7,7 +7,7 @@ const SplashScreen = () => {
         <View style={styles.Splashcontainer}>
             <View style={styles.SplashimageContainer}>
                 <Image
-                    source={require('../../Assets/Image/EnterOTP.png')}
+                    source={require('../../Assets/Image/HREntityLogo.jpg')}
                     style={styles.Splashimage}
                     resizeMode="contain"
                 />

@@ -5,10 +5,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#20DDFE'
+        backgroundColor:'#fff'
     },
     SplashimageContainer: {
-        width: '30%',
+        width: '75%',
         aspectRatio: 1,
         backgroundColor: "transparent",
         padding: 10,

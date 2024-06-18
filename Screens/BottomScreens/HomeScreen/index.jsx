@@ -245,7 +245,7 @@ const HomeScreen = ({ navigation }) => {
                 setEditIcon(null);
             }
         } catch (error) {
-            console.error('Error fetching data Mood:', error);
+            // console.error('Error fetching data Mood:', error);
         }
     }
 
