@@ -51,7 +51,7 @@ const OdCount = () => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/viewemp_Details/OD';
+            const apiUrl = 'https://ocean21.in/api/public/api/viewemp_Details/ON';
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
