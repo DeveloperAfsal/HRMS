@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     EmployeeContainer: {
         marginVertical: "5%",
         width: '100%',
+        paddingHorizontal:'5%'
     },
 
     Card: {

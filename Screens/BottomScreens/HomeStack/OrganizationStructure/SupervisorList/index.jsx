@@ -29,6 +29,7 @@ const SupervisorList = ({ navigation }) => {
     // 
 
     const [selectedStatus, setSelectedStatus] = useState(null);
+    console.log(selectedStatus, "selectedStatus")
     const [showDropdown, setShowDropdown] = useState(false);
 
     const toggleDropdown = () => {
@@ -129,6 +130,7 @@ const SupervisorList = ({ navigation }) => {
             const response = await axios.post(apiUrl, {
                 departmentrole_id: selectedDepartmentId,
                 supervisor_id: selectedNameId,
+                status: selectedStatus,
                 created_by: data.userempid,
             }, {
                 headers: {
@@ -138,10 +140,11 @@ const SupervisorList = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 fetchData();
+                Alert.alert("Successfull", response.data.message);
                 setLoad(false);
                 Handlerefresh();
             } else {
-                Alert.alert("Failed To Add");
+                Alert.alert("Failed To Add", response.data.message);
                 setLoad(false);
                 console.error('Failed To Add:', response.data.error);
             }

@@ -110,6 +110,7 @@ import HalfDayCount from "../HomeScreen/HalfDayCount";
 import LeaveCount from "../HomeScreen/LeaveCount";
 import ManualEntryCount from "../HomeScreen/ManualEntryCount";
 import OdCount from "../HomeScreen/ODCount";
+import OrgIndvidual from "./OrganizationStructure/OrgIndvidual";
 
 const Stack = createNativeStackNavigator();
 
@@ -179,6 +180,7 @@ const HomeStack = () => {
       <Stack.Screen name="Supervisor List" component={SupervisorList} />
       <Stack.Screen name="Edit Supervisor List" component={EditSupervisorList} />
       <Stack.Screen name="ORG chart" component={OrgChart} />
+      <Stack.Screen name="ORG Indviduals" component={OrgIndvidual} />
 
       {/*  */}
 

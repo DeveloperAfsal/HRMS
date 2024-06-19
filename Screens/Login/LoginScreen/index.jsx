@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import EyeOpenIcon from '../../../Assets/Icons/eyeopen.svg';
 import EyeCloseIcon from '../../../Assets/Icons/EyeClose.svg';
@@ -127,7 +127,14 @@ const LoginScreen = ({ navigation }) => {
 
             <View style={styles.subContainer}>
                 <View style={styles.LogoContainer}>
-                    <Text style={styles.LogoText}>Logo</Text>
+                    {/* <Text style={styles.LogoText}>Logo</Text> */}
+                    <View style={styles.SplashimageContainer}>
+                        <Image
+                            source={require('../../../Assets/Image/HREntityLogo.jpg')}
+                            style={styles.Splashimage}
+                            resizeMode="contain"
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.fields}>

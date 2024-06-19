@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import styles from "./style";
 
-const OrgChart = () => {
+const OrgChart = ({ navigation }) => {
 
     // data from redux store 
 
@@ -38,10 +38,11 @@ const OrgChart = () => {
     }, []);
 
     const renderEmployee = (employee, level, isLast) => (
-
         <View key={employee.id}>
             <View style={styles.EmployeeContainer}>
-                <TouchableOpacity style={[styles.Card, { marginLeft: `${level * 15}%` }]}>
+                <TouchableOpacity style={[styles.Card, { marginLeft: `${level * 15}%` }]}
+                    onPress={() => navigation.navigate('ORG Indviduals', { Id: employee })}
+                >
                     <View style={styles.ImgCard}>
                         {employee.profile_img ? (
                             <Image source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }} style={styles.Img} />
@@ -56,24 +57,6 @@ const OrgChart = () => {
                 </TouchableOpacity>
             </View>
 
-            {employee.id == 1 && (
-                <View style={[styles.Line, { marginLeft: `${level * 15 + 15}%` }]} />
-            )}
-
-            {employee.id == 2 && (
-                <View style={[styles.Line1, { marginLeft: `${level * 20 + 25}%` }]} />
-            )}
-
-            {employee.id == 3 && (
-                <View style={[styles.Line1, { marginLeft: `${level * 20 + 25}%` }]} />
-            )}
-
-            {
-                employee.subordinates && employee.subordinates.length > 0 && (
-                    <View style={[styles.Line3]} />
-                )
-            }
-
             {employee.subordinates && employee.subordinates.length > 0 && (
                 employee.subordinates.map((subordinate, index) => (
                     <View key={subordinate.id}>
@@ -82,10 +65,6 @@ const OrgChart = () => {
                 ))
             )}
 
-            {/* Render Line3 for subordinates inside the subordinates */}
-            {employee.subordinates && employee.subordinates.length > 0 && (
-                <View style={[styles.Line4]} />
-            )}
         </View>
     );
 

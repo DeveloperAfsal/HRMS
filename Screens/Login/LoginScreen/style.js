@@ -3,6 +3,17 @@ import { SecondaryBlue, SubContainer, White, black } from "../../../Assets/Color
 
 
 const styles = StyleSheet.create({
+    SplashimageContainer: {
+        width: '90%',
+        aspectRatio: 1,
+        backgroundColor: "transparent",
+        // padding: 10,
+    },
+    Splashimage: {
+        flex: 1,
+        width: undefined,
+        height: undefined,
+    },
     backgroundImage: {
         width: "100%",
         height: "100%",
@@ -14,15 +25,13 @@ const styles = StyleSheet.create({
         width: "80%",
         alignItems: 'center',
         borderRadius: 20,
-        paddingTop: "10%",
-        paddingBottom: "10%",
-        paddingLeft: "5%",
-        paddingRight: "5%"
+        paddingVertical:'10%',
+        paddingHorizontal: '5%'
     },
     LogoContainer: {
         width: "50%",
         height: 72,
-        backgroundColor: '#C8ECFF',
+        backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 6,

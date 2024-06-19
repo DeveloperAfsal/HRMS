@@ -101,7 +101,7 @@ const JobOpenings = ({ navigation }) => {
                     <Text style={styles.Description}>Description</Text>
                     <Text style={styles.Des}>
                         {/* Remove HTML tags from description */}
-                        {job.description.replace(/<[^>]+>/g, '')}
+                        {job.description.replace(/<[^>]+>/g, '').slice(0, 300)}
                     </Text>
                 </View>
                 <View style={styles.ButtonView}>
