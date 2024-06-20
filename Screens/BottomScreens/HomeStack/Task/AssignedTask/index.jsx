@@ -15,6 +15,8 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { Linking } from 'react-native';
+
 
 const AssignedTask = () => {
 
@@ -514,6 +516,21 @@ const AssignedTask = () => {
         setShowEmployeeDropdown1(false);
     };
 
+    // 
+
+    const handlePreview = (UrlLink) => {
+
+        const baseUrl = 'https://ocean21.in/api/storage/app/';
+        const filePath = UrlLink;
+        const url = `${baseUrl}${filePath}`;
+
+         if (filePath && filePath !== "-") {
+            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+        } else {
+            Alert.alert('No File Located')
+        }
+    }
+
     return (
         <ScrollView>
             <View style={styles.Container}>
@@ -603,7 +620,7 @@ const AssignedTask = () => {
                                             <Text style={[styles.cell, styles.Status]}>{item.end_date}</Text>
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity
-                                                    // onPress={() => handlePreview(doc.template_file)}
+                                                    onPress={() => handlePreview(item.attachment)}
                                                     style={styles.listcontentviewbutton}>
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

@@ -16,6 +16,8 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { useFocusEffect } from "@react-navigation/native";
+import { Linking } from 'react-native';
+
 
 const TaskList = ({ navigation }) => {
 
@@ -600,6 +602,19 @@ const TaskList = ({ navigation }) => {
         closeEditModal1();
     };
 
+    const handlePreview = (UrlLink) => {
+
+        const baseUrl = 'https://ocean21.in/api/storage/app/';
+        const filePath = UrlLink;
+        const url = `${baseUrl}${filePath}`;
+
+         if (filePath && filePath !== "-") {
+            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+        } else {
+            Alert.alert('No File Located')
+        }
+    }
+
 
     return (
         <ScrollView>
@@ -692,7 +707,7 @@ const TaskList = ({ navigation }) => {
 
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity
-                                                    // onPress={() => handlePreview(doc.template_file)}
+                                                    onPress={() => handlePreview(item.attachment)}
                                                     style={styles.listcontentviewbutton}>
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

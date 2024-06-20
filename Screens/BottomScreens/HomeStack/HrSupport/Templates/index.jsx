@@ -9,7 +9,8 @@ import EditIcon from "../../../../../Assets/Icons/Edit.svg";
 import DownloadIcon from "../../../../../Assets/Icons/Download.svg";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import axios from "axios";
-import { WebView } from 'react-native-webview';
+import RNFS from "react-native-fs";
+import { Linking } from 'react-native';
 
 const Template = ({ navigation }) => {
 
@@ -109,8 +110,9 @@ const Template = ({ navigation }) => {
                 setDelData(false);
                 setReasonError('');
                 setReason('');
+                Alert.alert("Successfull", ResData.message)
             } else {
-                Alert.alert("Error", "Error While Submitting")
+                Alert.alert("Failed", ResData.message)
                 setModalVisible(false);
                 setDelData(false);
                 setReasonError('');
@@ -161,11 +163,11 @@ const Template = ({ navigation }) => {
         formData.append('status', selectedStatus);
         formData.append('created_by', data.userempid);
         if (docFile.length > 0) {
-            docFile.map((docFile, index) => {
+            docFile.map((file, index) => {
                 formData.append(`template_file`, {
-                    uri: docFile.uri,
-                    name: docFile.name,
-                    type: docFile.type,
+                    uri: file.uri,
+                    name: file.name,
+                    type: file.type,
                 });
             });
         }
@@ -207,15 +209,6 @@ const Template = ({ navigation }) => {
 
     // 
 
-    const [fileUrl, setFileUrl] = useState('');
-
-    const handleDownload = (filePath) => {
-        const fullUrl = `https://ocean21.in/api/storage/app/${filePath}`;
-        setFileUrl(fullUrl);
-    };
-
-    // 
-
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editedtitle, setEditedtitle] = useState('');
     const [editedStatus, setEditedStatus] = useState(null);
@@ -225,6 +218,7 @@ const Template = ({ navigation }) => {
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [EdocFile, setEdocFile] = useState([]);
     const [EditedocFile, seteditedocFile] = useState([]);
+    console.log(EditedocFile, "EditedocFile")
     const [selectedId, setSelectedId] = useState();
 
     const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
@@ -335,6 +329,54 @@ const Template = ({ navigation }) => {
         setShowModalDropdown(false);
     };
 
+    // 
+
+    useEffect(() => {
+        // Optional: Delete the file if it exists before downloading
+        const filePath = RNFS.DocumentDirectoryPath + '/example.pdf';
+        RNFS.unlink(filePath)
+            .then(() => {
+                console.log('Previous file deleted');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }, []);
+
+    const DownloadFile = (URLlink) => {
+        const url = `https://ocean21.in/api/storage/app/`;
+        const filePath = RNFS.DocumentDirectoryPath + URLlink;
+
+        RNFS.downloadFile({
+            fromUrl: url,
+            toFile: filePath,
+            background: true, // Enable downloading in the background (iOS only)
+            discretionary: true, // Allow the OS to control the timing and speed (iOS only)
+            progress: (res) => {
+                // Handle download progress updates if needed
+                const progress = (res.bytesWritten / res.contentLength) * 100;
+                console.log(`Progress: ${progress.toFixed(2)}%`);
+            },
+        })
+            .promise.then((response) => {
+                console.log('File downloaded!', response);
+            })
+            .catch((err) => {
+                console.log('Download error:', err);
+            });
+    };
+
+    const handlePreview = (UrlLink) => {
+        const baseUrl = 'https://ocean21.in/api/storage/app/';
+        const filePath = UrlLink;
+        const url = `${baseUrl}${filePath}`;
+        if (filePath && filePath !== "-") {
+            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+        } else {
+            Alert.alert('No File Located')
+        }
+    }
+
     return (
 
         <ScrollView>
@@ -444,69 +486,66 @@ const Template = ({ navigation }) => {
                         <Text style={styles.ShiftSlotContainerTitleText}>Template List</Text>
                     </View>
 
-                    <View>
+                    <ScrollView horizontal={true}>
 
-                        <View style={styles.listContainer}>
+                        <View style={styles.Tablecontainer}>
+                            {loadData ? (
+                                <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                            ) : (
+                                <View>
 
-                            <View style={styles.listHeader}>
-                                <Text style={styles.sno}>S.No</Text>
-                                <Text style={styles.RoleName}>Title</Text>
-                                <Text style={styles.RoleName}>Status</Text>
-                                <Text style={styles.Action}>Action</Text>
-                            </View>
+                                    <View style={[styles.row, styles.listHeader]}>
+                                        <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                        <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Title</Text>
+                                        <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Status</Text>
+                                        <Text style={[styles.header, styles.cell, styles.StartDate]}>Action</Text>
+                                    </View>
 
-                            {
-                                loadData ? <ActivityIndicator size={"large"} color={"#0A62F1"} style={styles.Activeindicator} /> :
-                                    templatelist.length === 0 ? (
+                                    {templatelist.length === 0 ? (
                                         <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                     ) : (
-                                        <>
-                                            {
-                                                templatelist.map((doc, index) => (
-                                                    <View key={index} style={styles.listcontent}>
-                                                        <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                                        <Text style={styles.listcontentRoleName}>{doc.title}</Text>
-                                                        <Text style={styles.listcontentStatus}>{doc.status}</Text>
-                                                        <View style={styles.listcontentButtonview}>
+                                        templatelist.map((item, index) => (
+                                            <View key={index} style={[styles.row, styles.listBody]}>
+                                                <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                                <Text style={[styles.cell, styles.DepartmentName]}>{item.title}</Text>
+                                                <Text style={[styles.cell, styles.EmployeeName]}>{item.status}</Text>
+                                                <View style={styles.listcontentButtonview}>
 
-                                                            <TouchableOpacity
-                                                                // onPress={() => handlePreview(doc.template_file)}
-                                                                style={styles.listcontentviewbutton}>
-                                                                <ViewIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => handlePreview(item.template_file)}
+                                                        style={styles.listcontentviewbutton}>
+                                                        <ViewIcon width={14} height={14} color={"#000"} />
+                                                    </TouchableOpacity>
 
-                                                            {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
-                                                                onPress={() => openEditModal(doc)}
-                                                                style={styles.listcontentdownloadbutton}>
-                                                                <EditIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity> : null}
+                                                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
+                                                        onPress={() => openEditModal(item)}
+                                                        style={styles.listcontentdownloadbutton}>
+                                                        <EditIcon width={14} height={14} color={"#000"} />
+                                                    </TouchableOpacity> : null}
 
-                                                            <TouchableOpacity
-                                                                onPress={() => handleDownload(doc.template_file)}
-                                                                style={styles.listcontenteditbutton}>
-                                                                <DownloadIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => DownloadFile(item.template_file)}
+                                                        style={styles.listcontenteditbutton}>
+                                                        <DownloadIcon width={14} height={14} color={"#000"} />
+                                                    </TouchableOpacity>
 
-                                                            {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
-                                                                onPress={() => HandleDelete(doc.id)}
-                                                                style={styles.listcontentdelbutton}>
-                                                                <DeleteIcon width={14} height={14} color={"#000"} />
-                                                            </TouchableOpacity> : null}
+                                                    {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity
+                                                        onPress={() => HandleDelete(item.id)}
+                                                        style={styles.listcontentdelbutton}>
+                                                        <DeleteIcon width={14} height={14} color={"#000"} />
+                                                    </TouchableOpacity> : null}
 
-                                                        </View>
-                                                    </View>
-                                                ))
-                                            }
-                                        </>
-                                    )
+                                                </View>
+                                            </View>
+                                        ))
+                                    )}
+
+                                </View>
+                            )
                             }
                         </View>
 
-                    </View>
-
-                    <View>
-                        <WebView source={{ uri: fileUrl }} style={styles.webView} />
-                    </View>
+                    </ScrollView>
 
                     <Modal
                         animationType="fade"

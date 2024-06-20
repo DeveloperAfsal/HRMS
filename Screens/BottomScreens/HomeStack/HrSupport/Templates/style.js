@@ -2,16 +2,63 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+
+    Tablecontainer: {
+        flexDirection: 'column',
+        flex: 1,
+        backgroundColor: "#fff",
+        borderRadius: 11,
+        borderWidth: 1,
+        borderColor: '#A4CED8',
+        width: "90%",
+        marginLeft: 20,
+        marginRight: 20,
+    },
+
+    row: {
+        flexDirection: 'row',
+        borderColor: '#ccc',
+    },
+
+    cell: {
+        flex: 1,
+        padding: 10,
+        textAlign: 'center',
+    },
+
+    sno: {
+        width: 80,
+    },
+
+    DepartmentName: {
+        width: 100
+    },
+
+    EmployeeName: {
+        width: 120
+    },
+
+    StartDate: {
+        width: 200
+    },
+
+    listBody: {
+        paddingVertical: '1%',
+        borderBottomWidth: 0.5,
+    },
+
     modaldropdown: {
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderColor: "#ccc",
     },
+
     dropdownOption: {
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
     },
+    
     dropdownOptionText: {
         fontSize: 16,
     },
@@ -234,14 +281,14 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    sno: {
-        width: 100,
-        textAlign: 'center',
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
-    },
+    // sno: {
+    //     width: 100,
+    //     textAlign: 'center',
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
 
     Action: {
         width: 100,
@@ -274,7 +321,7 @@ const styles = StyleSheet.create({
     },
 
     listcontentButtonview: {
-        width: 100,
+        width: 200,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',

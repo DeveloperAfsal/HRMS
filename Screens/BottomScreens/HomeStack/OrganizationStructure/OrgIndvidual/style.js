@@ -17,12 +17,14 @@ const styles = StyleSheet.create({
     date: {
         paddingVertical: '3%',
         fontWeight: '600',
-        fontSize: 15
+        fontSize: 15,
+        color: '#00275C'
     },
 
     ctc: {
         fontWeight: '400',
-        fontSize: 15
+        fontSize: 15,
+        color: '#00275C'
     },
 
     Card: {

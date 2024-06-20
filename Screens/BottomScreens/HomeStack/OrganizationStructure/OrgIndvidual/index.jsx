@@ -67,8 +67,8 @@ const OrgIndvidual = ({ route, navigation }) => {
                         <View>
                             <View style={{ width: 8, height: 8, borderRadius: 8, backgroundColor: '#0A62F1' }} />
                             {index !== details.length - 1 && (
-                                <View style={{ marginLeft: 3.5, height: 150, justifyContent: 'center' }}>
-                                    <Dash style={{ width: 1, height: 150, flexDirection: 'column' }} dashColor={'#0A62F1'} dashThickness={1} dashGap={1} />
+                                <View style={{ marginLeft: 3.5, height: 250, justifyContent: 'center' }}>
+                                    <Dash style={{ width: 1, height: 250, flexDirection: 'column' }} dashColor={'#0A62F1'} dashThickness={1.5} dashGap={3} />
                                 </View>
                             )}
                         </View>
