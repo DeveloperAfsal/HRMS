@@ -101,9 +101,10 @@ const RoleList = ({ navigation }) => {
                 if (response.data.status === "success") {
                     const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
-                    setDelData(false)
+                    setDelData(false);
+                    Alert.alert("SuccessFull", response.data.message);
                 } else {
-                    Alert.alert("Failed", "Failed to delete shift slot");
+                    Alert.alert("Failed", response.data.message);
                     setDelData(false)
                 }
             } catch (error) {

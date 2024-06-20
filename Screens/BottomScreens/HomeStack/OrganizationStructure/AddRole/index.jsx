@@ -19,21 +19,21 @@ const AddRole = ({ navigation }) => {
 
     const initialFieldsState = [
         { name: 'Dashboard', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
-        { name: 'ORG Structure', isChecked: false, subheadings: ['Add Role', 'Roles List', 'Supervisor List', 'Employee Level Category', 'Employee Document Type', 'ORG Chart'], checkboxes: Array(6).fill(false) },
-        { name: 'Leave & Attendance Policy', isChecked: false, subheadings: ['Add Shift Slot', 'Assign Employee Shift', 'Attendance Policy', 'Attendance Type', 'Attendance Location', 'Leave Policy Type', 'Leave Policy Category'], checkboxes: Array(7).fill(false) },
-        { name: 'Employee', isChecked: false, subheadings: ['Add Employee', 'Employee List', 'Employee Confirmation'], checkboxes: Array(3).fill(false) },
-        { name: 'Attendance', isChecked: false, subheadings: ['Daily Attendance', 'Monthly Attendance', 'Monthly Attendance Calendar View', 'Monthly List'], checkboxes: Array(4).fill(false) },
-        { name: 'HR Support', isChecked: false, subheadings: ['Approvals Request', 'Templates', 'Job Openings'], checkboxes: Array(3).fill(false) },
-        { name: 'TL Approval', isChecked: false, subheadings: ['Leave Approval', 'OT Approval'], checkboxes: Array(2).fill(false) },
-        { name: 'Help Desk', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
-        { name: 'Assets', isChecked: false, subheadings: ['Assets Type', 'Add Asset', 'Asset List'], checkboxes: Array(3).fill(false) },
-        { name: 'Events', isChecked: false, subheadings: ['Add Event', 'Event List'], checkboxes: Array(2).fill(false) },
-        { name: 'Meetings', isChecked: false, subheadings: ['Add Meeting', 'Meeting List'], checkboxes: Array(2).fill(false) },
-        { name: 'Team Task', isChecked: false, subheadings: ['Add Project', 'Project List', 'Add Task', 'Tasks - Employee View', 'Tasks List', 'Tasks Progress'], checkboxes: Array(6).fill(false) },
-        { name: 'Pay Roll', isChecked: false, subheadings: ['Salary Calculation', 'Generate Payslip', 'Payroll List'], checkboxes: Array(3).fill(false) },
+        { name: 'ORGStructure', isChecked: false, subheadings: ['add_Role', 'roles_list', 'supervisor_list', 'empLevel_Category', 'emp_DocumentType', 'org_Chart'], checkboxes: Array(6).fill(false) },
+        { name: 'LeaveAndAttendancePolicy', isChecked: false, subheadings: ['addShiftSlot', 'assignEmployeeShift', 'attendancePolicy', 'attendanceType', 'attendanceLocation', 'leavePolicyType', 'leavePolicyCategory', '"leavePolicy"'], checkboxes: Array(7).fill(false) },
+        { name: 'Employee', isChecked: false, subheadings: ['Add_Employee', 'Emp_loyeeList', 'Employee_Confirmation'], checkboxes: Array(3).fill(false) },
+        { name: 'Attendance', isChecked: false, subheadings: ['DailyAttendance', 'Monthly_Attendance', 'Monthly_AttendanceCalendar', 'Monthly_List'], checkboxes: Array(4).fill(false) },
+        { name: 'HRSupport', isChecked: false, subheadings: ['Approval_List', 'Template', 'Job_Opening'], checkboxes: Array(3).fill(false) },
+        { name: 'TLApproval', isChecked: false, subheadings: ['Leave_Approval', 'OT_Approval'], checkboxes: Array(2).fill(false) },
+        { name: 'HelpDesk', isChecked: false, subheadings: ['Issue_Type', 'Raise_Ticket', 'Tickets_List', 'Assigned_List'], checkboxes: Array(0).fill(false) },
+        { name: 'Assets', isChecked: false, subheadings: ['Assets_Type', 'Assign_Asset', 'Asset_List'], checkboxes: Array(3).fill(false) },
+        { name: 'Events', isChecked: false, subheadings: ['Add_Event', 'Event_List'], checkboxes: Array(2).fill(false) },
+        { name: 'Meeting', isChecked: false, subheadings: ['Add_Meeting', 'Meeting_List'], checkboxes: Array(2).fill(false) },
+        { name: 'TeamTask', isChecked: false, subheadings: ['Add_Project', 'Project_List', 'Add_task', 'Task_List', 'Assigned_Task', 'TL_Assigned_Task'], checkboxes: Array(6).fill(false) },
+        { name: 'Payroll', isChecked: false, subheadings: ['OverTimeCalculation', 'Assign Employee Salary', 'Salarycalculation', 'Generate_payslip', 'Payslip_list'], checkboxes: Array(3).fill(false) },
         { name: 'Holiday', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
-        { name: 'Visitor Management', isChecked: false, subheadings: ['Add Visitors', 'Visitors Log'], checkboxes: Array(2).fill(false) },
-        { name: 'Logs', isChecked: false, subheadings: ['Activity Log', 'Employee Activity Log'], checkboxes: Array(2).fill(false) },
+        { name: 'Visitiormanagement', isChecked: false, subheadings: ['Add_visitor', 'Visitor_log'], checkboxes: Array(2).fill(false) },
+        { name: 'Logs', isChecked: false, subheadings: ['Activity_Log', 'Employee_ActivityLog'], checkboxes: Array(2).fill(false) },
 
     ];
 
@@ -138,10 +138,12 @@ const AddRole = ({ navigation }) => {
             if (response.data.status === "success") {
                 setLoad(false);
                 navigation.navigate('Roles List');
+                Alert.alert("SuccessFull", response.data.message);
                 setFields(initialFieldsState);
                 setRoleName('');
             } else if (response.data.status === "error") {
                 setNameError(response.data.message);
+                Alert.alert("Failed", response.data.message);
                 setLoad(false);
             } else {
                 setLoad(false);
@@ -192,7 +194,7 @@ const AddRole = ({ navigation }) => {
                     {fields.map((field, fieldIndex) => (
                         <View key={fieldIndex}>
                             <View style={styles.checkView}>
-                                {['Dashboard', 'Help Desk', 'Holiday'].includes(field.name) && (
+                                {['Dashboard', 'Holiday'].includes(field.name) && (
                                     <CheckBox
                                         disabled={false}
                                         value={field.isChecked}

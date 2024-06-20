@@ -51,6 +51,7 @@ const JobOpenings = ({ navigation }) => {
                 Alert.alert("Successfull", ResData.message)
                 fetchData();
                 setDesignation('');
+                richText.current?.setContentHTML('');
                 setNofVacancies('');
                 setDescription('');
                 setload(false);
@@ -61,6 +62,7 @@ const JobOpenings = ({ navigation }) => {
 
         } catch (error) {
             console.log(error)
+            setload(false);
         }
     }
 
@@ -115,6 +117,12 @@ const JobOpenings = ({ navigation }) => {
                 </View>
             </View>
         ));
+    };
+
+    // 
+
+    const handleChangeText = (text) => {
+        setDescription(text);
     };
 
     return (
@@ -177,6 +185,8 @@ const JobOpenings = ({ navigation }) => {
                                         ref={richText}
                                         style={styles.richTextEditor1}
                                         placeholder="Start writing here..."
+                                        onChange={(text) => handleChangeText(text)}
+                                        initialContentHTML={description}
                                     />
 
                                     <RichToolbar
@@ -188,10 +198,6 @@ const JobOpenings = ({ navigation }) => {
                                             actions.heading1,
                                             actions.insertBulletsList,
                                             actions.insertOrderedList,
-                                            // actions.insertLink,
-                                            // actions.setStrikethrough,
-                                            // actions.setSubscript,
-                                            // actions.setSuperscript,
                                         ]}
                                         iconMap={{
                                             [actions.setBold]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>B</Text>,

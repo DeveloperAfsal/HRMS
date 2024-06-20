@@ -55,9 +55,9 @@ const DonutChart = ({ gpay, npay, deduction }) => {
           absolute
           hasLegend={false} // Disable default legend
         />
-        <Svg height={chartHeight} width={screenWidth} style={styles.svgContainer}>
+        {/* <Svg height={chartHeight} width={screenWidth} style={styles.svgContainer}>
           <Circle cx={centerX} cy={centerY} r={holeRadius} fill="white" />
-        </Svg>
+        </Svg> */}
       </View>
       <View style={styles.legendContainer}>
         {chart.map((item, index) => (
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  // chartWrapper: {
-  //   position: 'relative',
-  // },
+  chartWrapper: {
+    position: 'relative',
+  },
 
   svgContainer: {
     position: 'absolute',
