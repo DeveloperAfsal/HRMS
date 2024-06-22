@@ -8,6 +8,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ForgotPassword from "../../Screens/Login/ForgotPass/index.jsx";
 import ResetPassword from "../../Screens/Login/ResetPass/index.jsx";
 import Otp from "../../Screens/Login/OtpScreen/index.jsx";
+import { Alert } from "react-native";
+import LottieAlertSucess from "../../Assets/Alerts/Success";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +27,7 @@ const AppNav = ({ navigation }) => {
     // data from redux store
 
     const { data } = useSelector((state) => state.login)
+
 
     // Api call
 
@@ -47,30 +51,49 @@ const AppNav = ({ navigation }) => {
         fetchData();
     }, []);
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+
 
     return (
+        <>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {
+                    !loading ?
+                        (
+                            data != null ? (
+                                <Stack.Screen name="AppNavigator" component={AppNavigator} />
+                            ) :
+                                (
+                                    <Stack.Screen name="Login Screen" component={LoginScreen} />
+                                )
+                        ) : (
+                            <Stack.Screen name="SplashScreen" component={SplashScreen} />
+                        )
+                }
 
-            {
-                !loading ?
-                    (
-                        data != null ? (
-                            <Stack.Screen name="AppNavigator" component={AppNavigator} />
-                        ) :
-                            (
-                                <Stack.Screen name="Login Screen" component={LoginScreen} />
-                            )
-                    ) : (
-                        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-                    )
-            }
+                <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+                <Stack.Screen name="Reset Password" component={ResetPassword} />
+                <Stack.Screen name="Otp" component={Otp} />
 
-            <Stack.Screen name="Forgot Password" component={ForgotPassword} />
-            <Stack.Screen name="Reset Password" component={ResetPassword} />
-            <Stack.Screen name="Otp" component={Otp} />
+            </Stack.Navigator>
 
-        </Stack.Navigator>
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../Assets/Alerts/tick.json')}
+                title="SuccessFully Logged In"
+            />
+
+        </>
+
 
     )
 }

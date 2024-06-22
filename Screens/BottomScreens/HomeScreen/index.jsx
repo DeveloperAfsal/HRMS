@@ -243,7 +243,6 @@ const HomeScreen = ({ navigation }) => {
             const responseData = response.data.data;
 
             if (responseData) {
-                console.log(responseData, "responseData");
                 setEditIcon(responseData);
             } else {
                 console.log("No data found");
@@ -565,7 +564,6 @@ const HomeScreen = ({ navigation }) => {
             });
 
             const responseData = response.data;
-            console.log(responseData, "responseData")
 
             if (responseData.status === "success") {
                 handleShowAlert(responseData);

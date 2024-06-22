@@ -5,6 +5,9 @@ import LeftArrowIcon from '../../../Assets/Icons/leftarrow.svg';
 import axios from 'axios';
 import { White } from "../../../Assets/Colors";
 import { useDispatch } from "react-redux";
+import LottieAlertSucess from "../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../Assets/Alerts/Catch";
 
 const ForgotPassword = ({ navigation }) => {
 
@@ -42,10 +45,11 @@ const ForgotPassword = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 setLoad(false);
-                navigation.navigate('Otp')
+                handleShowAlert()
             } else {
                 setLoad(false);
-                Alert.alert("Login failed");
+                // Alert.alert("Login failed");
+                handleShowAlert1();
                 console.error('Login failed:', response.data.error);
             }
 
@@ -53,7 +57,8 @@ const ForgotPassword = ({ navigation }) => {
 
         catch (error) {
             setLoad(false);
-            Alert.alert("Error during Mail", "Check The Login Credentials");
+            // Alert.alert("Error during Mail", "Check The Login Credentials");
+            handleShowAlert2();
             console.error('Error during login:', error);
         }
 
@@ -66,6 +71,34 @@ const ForgotPassword = ({ navigation }) => {
     const handleEmailChange = (text) => {
         setEmail(text);
         dispatch({ type: 'SET_EMAIL', payload: text });
+    };
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Otp')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
     };
 
     return (
@@ -113,6 +146,24 @@ const ForgotPassword = ({ navigation }) => {
                     <Text style={styles.backButtonText}>Go Back</Text>
                 </TouchableOpacity>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../Assets/Alerts/tick.json')}
+                title="SuccessFully Logged In"
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../Assets/Alerts/Close.json')}
+                title="Failed To Login"
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data Check Login Credential"
+            />
 
         </ImageBackground>
     )

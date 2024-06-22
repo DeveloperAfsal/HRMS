@@ -7,6 +7,9 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { White } from "../../../Assets/Colors";
+import LottieAlertSucess from "../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../Assets/Alerts/Catch";
 
 const LoginScreen = ({ navigation }) => {
 
@@ -63,6 +66,7 @@ const LoginScreen = ({ navigation }) => {
             if (response && response.data && response.data.token) {
 
                 setLoad(false);
+
                 const data = response.data;
 
                 const val = {
@@ -104,14 +108,42 @@ const LoginScreen = ({ navigation }) => {
 
             } else {
                 setLoad(false);
-                Alert.alert("Login failed");
+                // Alert.alert("Login failed");
+                handleShowAlert1();
                 console.error('Login failed:', response.data.error);
             }
         } catch (error) {
             setLoad(false);
-            Alert.alert("Error during login", "Check The Login Credentials");
+            // Alert.alert("Error during login", "Check The Login Credentials");
+            handleShowAlert2();
             console.error('Error during login:', error);
         }
+    };
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
     };
 
     return (
@@ -214,7 +246,27 @@ const LoginScreen = ({ navigation }) => {
 
             </View>
 
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../Assets/Alerts/tick.json')}
+                title="SuccessFully Logged In"
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../Assets/Alerts/Close.json')}
+                title="Failed To Login"
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data Check Login Credential"
+            />
+
         </ImageBackground>
+
+
 
     )
 }

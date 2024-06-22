@@ -130,7 +130,12 @@ const styles = StyleSheet.create({
     inputfieldpass: {
         paddingLeft: 15,
         width: "90%",
-    }
+    },
+    errorText: {
+        color: "red",
+        paddingVertical: '3%',
+        width: "90%"
+    },
 });
 
 export default styles;

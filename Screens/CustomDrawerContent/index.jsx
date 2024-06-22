@@ -154,8 +154,6 @@ const CustomDrawerContent = ({ navigation }) => {
                 if (res.status === 200) {
                     const roleData = res.data.data;
 
-                    console.log('roleData.permission:', roleData.permission);
-
                     let parsedPermissions;
                     try {
                         parsedPermissions = JSON.parse(roleData.permission);
