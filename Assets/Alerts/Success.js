@@ -47,13 +47,12 @@ const styles = StyleSheet.create({
 
     animationtick: {
         width: 150,
-        height: 120,
+        height: 150,
     },
 
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginTop: 16,
         textAlign: 'center',
         paddingBottom:'10%',
     },

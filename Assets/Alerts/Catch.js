@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,
-        // justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
 
     animationclose: {
-        width: 150,
-        height: 150,
+        width: 120,
+        height: 120,
     },
 
     title: {
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 16,
         textAlign: 'center',
+        paddingBottom:"10%"
     },
 
 });

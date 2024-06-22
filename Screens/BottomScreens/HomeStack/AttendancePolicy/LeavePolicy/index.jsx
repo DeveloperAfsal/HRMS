@@ -8,6 +8,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 
 const LeavePolicy = ({ navigation }) => {
@@ -161,7 +164,7 @@ const LeavePolicy = ({ navigation }) => {
     const [showleaveTypeDropdown, setShowleaveTypeDropdown] = useState(false);
     const [leaveTypeError, setLeaveTypeError] = useState('');
 
-    console.log(leaveTypeDropdown,"leaveTypeDropdown")
+    console.log(leaveTypeDropdown, "leaveTypeDropdown")
 
     useEffect(() => {
 
@@ -316,14 +319,17 @@ const LeavePolicy = ({ navigation }) => {
                 fetchData();
                 setLoad(false);
                 Handlerefresh();
-                Alert.alert("successfull",response.data.message)
+                // Alert.alert("successfull",response.data.message)
+                handleShowAlert(response.data);
             } else {
                 setLoad(false);
-                Alert.alert('Failed', response.data.message);
+                // Alert.alert('Failed', response.data.message);
+                handleShowAlert1(response.data);
             }
 
         } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
             setLoad(false);
         }
@@ -380,13 +386,16 @@ const LeavePolicy = ({ navigation }) => {
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false);
-                    Alert.alert("Deleted", response.data.message);
+                    // Alert.alert("Deleted", response.data.message);
+                    handleShowAlert(response.data);
                 } else {
-                    Alert.alert("Failed", response.data.message);
+                    // Alert.alert("Failed", response.data.message);
+                    handleShowAlert1(response.data);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -409,6 +418,37 @@ const LeavePolicy = ({ navigation }) => {
             MonthlyCount: item.monthly_count,
         })
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
         <ScrollView>
@@ -708,6 +748,25 @@ const LeavePolicy = ({ navigation }) => {
                         </View>
                     </View>
                 </Modal>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
+
             </View>
 
         </ScrollView>

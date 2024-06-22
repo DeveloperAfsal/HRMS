@@ -5,6 +5,9 @@ import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EditEmployeeShift = ({ navigation, route }) => {
 
@@ -181,15 +184,17 @@ const EditEmployeeShift = ({ navigation, route }) => {
 
             if (response.data.status === "success") {
                 SetLoad(false);
-                navigation.navigate('Assign Employee shift')
+                handleShowAlert(response.data);
             } else {
-                Alert.alert("Failed To Add");
+                // Alert.alert("Failed To Add");
+                handleShowAlert1(response.data);
                 SetLoad(false);
                 console.error('Failed To Add:', response.data.error);
             }
 
         } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
             SetLoad(false);
         }
@@ -265,6 +270,38 @@ const EditEmployeeShift = ({ navigation, route }) => {
         }
 
     }, [datalist, Slot, DepartmentName, Employee]);
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Assign Employee shift')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -528,6 +565,24 @@ const EditEmployeeShift = ({ navigation, route }) => {
                 </View>
 
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 

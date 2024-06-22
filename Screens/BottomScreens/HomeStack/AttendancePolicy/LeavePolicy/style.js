@@ -489,8 +489,10 @@ const styles = StyleSheet.create({
     },
 
     listBody: {
-        paddingVertical: '1%'
-    }
+        paddingVertical: '1%',
+        alignItems: 'center',
+        borderBottomWidth: 0.5,
+    },
 })
 
 export default styles;

@@ -4,6 +4,12 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
+    listBody: {
+        paddingVertical: '1%',
+        alignItems: 'center',
+        borderBottomWidth: 0.5,
+    },
+
     PolicyContainer: {
         alignItems: 'center',
         paddingBottom: '5%'
@@ -367,7 +373,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
-        paddingVertical: '3%',
+        paddingVertical: '2%',
         width: "90%"
     },
     Activeindicator: {

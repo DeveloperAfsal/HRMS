@@ -6,6 +6,9 @@ import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import styles from "../LeaveType/style";
 import axios from 'axios';
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const OvertimeType = () => {
 
@@ -95,15 +98,18 @@ const OvertimeType = () => {
                 setShiftSlot('');
                 setSelectedStatus("Selected Status");
                 fetchData();
+                handleShowAlert(response.data);
             } else {
                 setLoad(false);
-                Alert.alert("Failed To Add");
+                // Alert.alert("Failed To Add");
+                handleShowAlert1(response.data);
                 console.error('Failed To Add:', response.data.error);
             }
 
         } catch (error) {
             setLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
@@ -185,13 +191,16 @@ const OvertimeType = () => {
                 if (response.data.status === "success") {
                     const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
-                    setDelData(false)
+                    setDelData(false);
+                    handleShowAlert(response.data);
                 } else {
-                    Alert.alert("Failed", "Failed to delete shift slot");
+                    // Alert.alert("Failed", "Failed to delete shift slot");
+                    handleShowAlert1(response.data);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -259,21 +268,55 @@ const OvertimeType = () => {
                 setEditedShiftSlot('');
                 setEditedStatus(null);
                 fetchData();
+                handleShowAlert(response.data);
             } else {
                 setEditLoad(false);
-                Alert.alert("Failed To Update");
+                // Alert.alert("Failed To Update");
+                handleShowAlert1(response.data);
                 console.error('Failed To Update:', response.data.error);
             }
 
         } catch (error) {
             setEditLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
         closeEditModal();
     };
 
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
         <ScrollView>
@@ -510,6 +553,24 @@ const OvertimeType = () => {
                             </View>
                         </View>
                     </Modal>
+
+                    <LottieAlertSucess
+                        visible={isAlertVisible}
+                        animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                        title={resMessage}
+                    />
+
+                    <LottieAlertError
+                        visible={isAlertVisible1}
+                        animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                        title={resMessageFail}
+                    />
+
+                    <LottieCatchError
+                        visible={isAlertVisible2}
+                        animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                        title="Error While Fetching Data"
+                    />
 
                 </>
 

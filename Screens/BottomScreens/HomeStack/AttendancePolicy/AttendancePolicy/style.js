@@ -367,6 +367,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
+    listBody: {
+        paddingVertical: '1%',
+        alignItems: 'center',
+        borderBottomWidth: 0.5,
+    },
+
     sno: {
         width: 100,
     },

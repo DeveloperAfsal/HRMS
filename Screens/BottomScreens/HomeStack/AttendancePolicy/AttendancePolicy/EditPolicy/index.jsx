@@ -6,6 +6,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
 const EditPolicy = ({ route, navigation }) => {
 
@@ -422,16 +425,18 @@ const EditPolicy = ({ route, navigation }) => {
             });
 
             if (response.data.status === "success") {
-                navigation.navigate('Attendance Policy')
+                handleShowAlert(response.data);
                 SetLoad(false);
             } else {
-                Alert.alert("Failed To Add");
+                // Alert.alert("Failed To Add");
+                handleShowAlert1(response.data);
                 SetLoad(false);
                 console.error('Failed To Add:', response.data.error);
             }
 
         } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
             SetLoad(false);
         }
@@ -466,6 +471,38 @@ const EditPolicy = ({ route, navigation }) => {
             setLateDeduction3(datalist.late3_deduction);
         }
     }, [datalist]);
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Attendance Policy')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
 
     return (
@@ -903,13 +940,31 @@ const EditPolicy = ({ route, navigation }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={()=>navigation.navigate('Attendance Policy')}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
         </ScrollView>
