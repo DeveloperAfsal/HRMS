@@ -9,6 +9,9 @@ import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EditEvent = ({ navigation, route }) => {
 
@@ -361,21 +364,53 @@ const EditEvent = ({ navigation, route }) => {
 
             if (responsedata.status === "success") {
                 setLoad(false);
-                Alert.alert('Successful', responsedata.message);
+                // Alert.alert('Successful', responsedata.message);
+                handleShowAlert(responsedata.message);
                 Handlerefresh();
-                navigation.navigate('Event List');
             } else {
-                Alert.alert('Failed', responsedata.message);
+                // Alert.alert('Failed', responsedata.message);
+                handleShowAlert1(responsedata.message);
                 setLoad(false);
             }
         } catch (error) {
             console.error('Error:', error);
-            Alert.alert('Network Request Failed', error.message);
+            // Alert.alert('Network Request Failed', error.message);
+            handleShowAlert2();
             setLoad(false);
         }
     }
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
 
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Event List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
 
     return (
@@ -580,7 +615,7 @@ const EditEvent = ({ navigation, route }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Add Event
+                                        Update Event
                                     </Text>
                             }
                         </TouchableOpacity>
@@ -595,6 +630,25 @@ const EditEvent = ({ navigation, route }) => {
                     </View>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
+
             </View>
 
         </ScrollView>
