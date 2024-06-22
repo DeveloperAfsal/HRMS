@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ImageBackground, Modal, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Button, Image, ImageBackground, Modal, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import NetInfo from '@react-native-community/netinfo';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,6 +16,10 @@ import SmileIcon from "../../../Assets/Emo/smile.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
+import LottieView from 'lottie-react-native';
+import LottieAlertSucess from "../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../Assets/Alerts/Catch";
 
 
 const HomeScreen = ({ navigation }) => {
@@ -204,13 +208,14 @@ const HomeScreen = ({ navigation }) => {
 
             if (responseData.status === "success") {
                 setMood(responseData);
-                Alert.alert("Successful", responseData.message);
+                handleShowAlert(responseData);
             } else {
-                Alert.alert("Failed", responseData.message);
+                handleShowAlert1(responseData)
             }
 
         } catch (error) {
             console.error('Error posting Mood:', error);
+            handleShowAlert2();
         } finally {
             setMoodLoad(false);
         }
@@ -304,21 +309,6 @@ const HomeScreen = ({ navigation }) => {
     };
 
     // CustomAlert
-
-    const [showAlert, setShowAlert] = useState(false);
-
-    const handlecheckout = () => {
-        setShowAlert(true);
-    };
-
-    const handleCancel = () => {
-        setShowAlert(false);
-    };
-
-    const handleConfirm = () => {
-        setShowAlert(false);
-        performCheckOut();
-    };
 
     const [allowedipAddress, setAllowedipAddress] = useState([]);
     const [useripaddress, setUseripaddress] = useState('');
@@ -578,7 +568,7 @@ const HomeScreen = ({ navigation }) => {
             console.log(responseData, "responseData")
 
             if (responseData.status === "success") {
-                Alert.alert("Successfull", responseData.message);
+                handleShowAlert(responseData);
                 setDelAnnouncement(false);
                 setModalVisible(false);
                 setAnnounceMentdes('');
@@ -586,17 +576,50 @@ const HomeScreen = ({ navigation }) => {
                 setStartDate(new Date());
                 Annlist();
             } else {
-                Alert.alert("Failed", responseData.message)
+                handleShowAlert1(responseData);
                 setDelAnnouncement(false);
             }
 
         } catch (error) {
+            handleShowAlert2();
             console.error('Error fetching data:', error);
             setDelAnnouncement(false);
         }
 
-
     }
+
+    // 
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -722,7 +745,7 @@ const HomeScreen = ({ navigation }) => {
                             <View style={styles.cardContainer}>
 
                                 <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
-                                onPress={() => navigation.navigate('Permission Count')}
+                                    onPress={() => navigation.navigate('Permission Count')}
                                 >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Permission</Text>
@@ -731,7 +754,7 @@ const HomeScreen = ({ navigation }) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
-                                onPress={() => navigation.navigate('HalfDay Count')}
+                                    onPress={() => navigation.navigate('HalfDay Count')}
                                 >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Half Day</Text>
@@ -744,7 +767,7 @@ const HomeScreen = ({ navigation }) => {
                             <View style={styles.cardContainer}>
 
                                 <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
-                                onPress={() => navigation.navigate('Leave Count')}
+                                    onPress={() => navigation.navigate('Leave Count')}
                                 >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Leave</Text>
@@ -753,7 +776,7 @@ const HomeScreen = ({ navigation }) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
-                                onPress={() => navigation.navigate('OnDuty Count')}
+                                    onPress={() => navigation.navigate('OnDuty Count')}
                                 >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>On Duty</Text>
@@ -775,7 +798,7 @@ const HomeScreen = ({ navigation }) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.CountContainerWidth} activeOpacity={1}
-                                onPress={() => navigation.navigate('ManualEntry Count')}
+                                    onPress={() => navigation.navigate('ManualEntry Count')}
                                 >
                                     <View style={styles.counterCards}>
                                         <Text style={styles.fontStyle}>Manual Entry</Text>
@@ -1078,7 +1101,29 @@ const HomeScreen = ({ navigation }) => {
 
             </View>
 
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
+
+
         </ScrollView>
+
+
 
     )
 }

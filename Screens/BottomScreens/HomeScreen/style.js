@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     modalTextHeading: {
         fontSize: 16,
         fontWeight: '800',
-        // textAlign: 'center',
+        textAlign: 'center',
         color: "#000",
         paddingBottom: '10%',
     },
