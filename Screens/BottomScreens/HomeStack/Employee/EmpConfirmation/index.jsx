@@ -12,6 +12,9 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EmpConfirmation = () => {
 
@@ -175,15 +178,18 @@ const EmpConfirmation = () => {
             if (response.data.status === "success") {
                 setEditLoad(false);
                 fetchData();
+                handleShowAlert(response.data);
             } else {
                 setEditLoad(false);
-                Alert.alert("Failed To Update");
-                console.error('Failed To Update:', response.data.error);
+                // Alert.alert("Failed To Update");
+                handleShowAlert1(response.data);
+                console.error('Failed To Update:', response.data.message);
             }
 
         } catch (error) {
             setEditLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
@@ -311,6 +317,37 @@ const EmpConfirmation = () => {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const pages = [...Array(totalPages).keys()].map(num => num + 1);
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -552,6 +589,25 @@ const EmpConfirmation = () => {
                     </TouchableOpacity>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
+
             </View>
         </View>
 

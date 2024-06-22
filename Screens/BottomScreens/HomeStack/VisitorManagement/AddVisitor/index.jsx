@@ -9,6 +9,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const AddVisitor = ({ navigation }) => {
 
@@ -285,16 +288,18 @@ const AddVisitor = ({ navigation }) => {
             if (responsedata.status === "success") {
                 SetLoad(false);
                 onCancel();
-                Alert.alert('Successfull', responsedata.message);
-                navigation.navigate('Visitor log')
+                // Alert.alert('Successfull', responsedata.message);
+                handleShowAlert(responsedata);
             } else {
                 SetLoad(false);
-                Alert.alert('Failed', responsedata.message)
+                // Alert.alert('Failed', responsedata.message)
+                handleShowAlert1(responsedata);
             }
 
         } catch (error) {
             SetLoad(false);
-            Alert.alert('Error', error)
+            // Alert.alert('Error', error)
+            handleShowAlert2();
         }
     }
 
@@ -311,6 +316,38 @@ const AddVisitor = ({ navigation }) => {
         setSelectedDepartments('Select Department');
         setSelectedMember('Select Member');
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Visitor log')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -574,6 +611,24 @@ const AddVisitor = ({ navigation }) => {
 
                 </View>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 

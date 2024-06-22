@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     },
 
     listBody: {
-        paddingVertical: '2%'
+        paddingVertical: '2%',
+        borderBottomWidth:0.5
     },
 
     Tablecontainer: {

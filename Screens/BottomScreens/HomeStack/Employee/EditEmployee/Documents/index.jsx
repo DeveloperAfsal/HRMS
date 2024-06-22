@@ -8,6 +8,9 @@ import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import DocumentPicker from 'react-native-document-picker';
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
 const Documents = ({
     navigation,
@@ -389,13 +392,16 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                navigation.navigate('Employee List');
-                Alert.alert('Submitted', 'Employee Details Updated');
+                // Alert.alert('Submitted', 'Employee Details Updated');
+                handleShowAlert(responsedata.data);
                 setLoad(false);
+            } else {
+                handleShowAlert1(responsedata.data)
             }
 
         } catch (error) {
-            Alert.alert('Failed to add Employee', error);
+            // Alert.alert('Failed to add Employee', error);
+            handleShowAlert2();
             setLoad(false);
         }
 
@@ -406,6 +412,38 @@ const Documents = ({
     const HandleCancel = () => {
         navigation.navigate('Employee List');
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Employee List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -535,6 +573,24 @@ const Documents = ({
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </View>
 
