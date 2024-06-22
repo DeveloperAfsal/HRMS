@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     modalContainer1: {
         width: "90%",
         height:200,
-        padding: 20,
+        paddingHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,
         justifyContent: 'center',
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     },
 
     animationclose: {
-        width: 70,
-        height: 70,
+        width: 120,
+        height: 120,
     },
 
     title: {

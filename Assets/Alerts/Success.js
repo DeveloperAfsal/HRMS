@@ -37,17 +37,17 @@ const styles = StyleSheet.create({
 
     modalContainer1: {
         width: "90%",
-        height: 250,
+        height: 200,
         paddingHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,
-        // justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
 
     animationtick: {
         width: 150,
-        height: 150,
+        height: 120,
     },
 
     title: {
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 16,
         textAlign: 'center',
+        paddingBottom:'10%',
     },
 
     message: {

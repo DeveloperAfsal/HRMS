@@ -3,6 +3,9 @@ import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity
 import styles from "./style";
 import { useSelector } from "react-redux";
 import CheckBox from '@react-native-community/checkbox';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 import axios from "axios";
 
 const AddRole = ({ navigation }) => {
@@ -137,23 +140,27 @@ const AddRole = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 setLoad(false);
-                navigation.navigate('Roles List');
-                Alert.alert("SuccessFull", response.data.message);
+                // navigation.navigate('Roles List');
+                // Alert.alert("SuccessFull", response.data.message);
+                handleShowAlert(response.data);
                 setFields(initialFieldsState);
                 setRoleName('');
             } else if (response.data.status === "error") {
                 setNameError(response.data.message);
-                Alert.alert("Failed", response.data.message);
+                // Alert.alert("Failed", response.data.message);
+                handleShowAlert1(response.data);
                 setLoad(false);
             } else {
                 setLoad(false);
-                Alert.alert("Failed To Add");
+                // Alert.alert("Failed To Add");
+                handleShowAlert1(response.data);
                 console.error('Failed To Add:', response.data.error);
             }
 
         } catch (error) {
             setLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials.");
+            handleShowAlert2();
+            // Alert.alert("Error during submit", "Check The Input Credentials.");
             console.error('Error during submit:', error);
         }
     }
@@ -162,6 +169,38 @@ const AddRole = ({ navigation }) => {
         setFields(initialFieldsState);
         setRoleName('');
         setNameError('');
+    };
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Roles List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
     };
 
     return (
@@ -242,6 +281,24 @@ const AddRole = ({ navigation }) => {
                     </View>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

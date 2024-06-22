@@ -317,18 +317,21 @@ const Announcement = () => {
 
             if (response.data.status === "success") {
                 setEditLoad(false);
-                Alert.alert("Successfull", response.data.message);
+                // Alert.alert("Successfull", response.data.message);
+                handleShowAlert(response.data);
                 setEditModalVisible(false);
                 setStartDate(new Date());
                 fetchData();
             } else {
                 setEditLoad(false);
-                Alert.alert("Failed", response.data.message);
+                // Alert.alert("Failed", response.data.message);
+                handleShowAlert1(response.data);
             }
 
         } catch (error) {
             setEditLoad(false);
-            Alert.alert("Failed", error);
+            // Alert.alert("Failed", error);
+            handleShowAlert2();
         }
 
         closeEditModal();

@@ -10,6 +10,9 @@ import { useCallback } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const SupervisorList = ({ navigation }) => {
 
@@ -29,7 +32,6 @@ const SupervisorList = ({ navigation }) => {
     // 
 
     const [selectedStatus, setSelectedStatus] = useState(null);
-    console.log(selectedStatus, "selectedStatus")
     const [showDropdown, setShowDropdown] = useState(false);
 
     const toggleDropdown = () => {
@@ -77,6 +79,7 @@ const SupervisorList = ({ navigation }) => {
     const [supervisorNameDropdown, setSupervisorNameDropdown] = useState([]);
     const [selectedName, setSelectedName] = useState(null);
     const [selectedNameId, setSelectedNameId] = useState(null);
+    console.log(selectedNameId,"selectedNameId")
     const [showSupervisorNameDropdown, setShowSupervisorNameDropdown] = useState(false);
 
 
@@ -130,7 +133,7 @@ const SupervisorList = ({ navigation }) => {
             const response = await axios.post(apiUrl, {
                 departmentrole_id: selectedDepartmentId,
                 supervisor_id: selectedNameId,
-                status: selectedStatus,
+                status: selectedStatus === "Selected Status" ? null : selectedStatus,
                 created_by: data.userempid,
             }, {
                 headers: {
@@ -140,17 +143,20 @@ const SupervisorList = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 fetchData();
-                Alert.alert("Successfull", response.data.message);
+                // Alert.alert("Successfull", response.data.message);
+                handleShowAlert(response.data);
                 setLoad(false);
                 Handlerefresh();
             } else {
-                Alert.alert("Failed To Add", response.data.message);
+                // Alert.alert("Failed To Add", response.data.message);
+                handleShowAlert1(response.data);
                 setLoad(false);
                 console.error('Failed To Add:', response.data.error);
             }
 
         } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
+            // Alert.alert("Error during submit", "Check The Input Credentials");
             console.error('Error during submit:', error);
             setLoad(false);
         }
@@ -163,6 +169,8 @@ const SupervisorList = ({ navigation }) => {
         setSelectedDepartment('Select Department Name');
         setSelectedName('Select Name');
         setSelectedStatus("Selected Status");
+        setSelectedNameId(null);
+        setSelectedDepartmentId(null);
     }
 
     // Api call for Delete
@@ -218,13 +226,16 @@ const SupervisorList = ({ navigation }) => {
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false);
-                    Alert.alert("Deleted", response.data.message);
+                    // Alert.alert("Deleted", response.data.message);
+                    handleShowAlert(response.data);
                 } else {
-                    Alert.alert("Failed", response.data.message);
+                    // Alert.alert("Failed", response.data.message);
+                    handleShowAlert1(response.data);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -244,6 +255,38 @@ const SupervisorList = ({ navigation }) => {
                 Id: item.id,
             })
     }
+
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
 
     return (
@@ -450,6 +493,24 @@ const SupervisorList = ({ navigation }) => {
                         </View>
                     </View>
                 </Modal>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

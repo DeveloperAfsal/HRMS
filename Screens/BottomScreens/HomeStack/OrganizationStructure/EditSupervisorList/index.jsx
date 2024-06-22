@@ -6,6 +6,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EditSupervisorList = ({ navigation, route }) => {
 
@@ -166,14 +169,16 @@ const EditSupervisorList = ({ navigation, route }) => {
             });
 
             if (response.data.status === "success") {
-                navigation.navigate('Supervisor List')
+                handleShowAlert(response.data)
             } else {
                 setLoad(false);
-                Alert.alert('Failed To Add:', response.data.message);
+                handleShowAlert1(response.data);
+                // Alert.alert('Failed To Add:', response.data.message);
             }
 
         } catch (error) {
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
             setLoad(false);
         }
@@ -186,7 +191,37 @@ const EditSupervisorList = ({ navigation, route }) => {
         navigation.navigate('Supervisor List')
     }
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
 
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res.message)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Supervisor List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res.message);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -283,6 +318,24 @@ const EditSupervisorList = ({ navigation, route }) => {
                     </View>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 
