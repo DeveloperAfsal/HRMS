@@ -6,6 +6,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const GeneratePayslip = ({ navigation }) => {
 
@@ -275,20 +278,54 @@ const GeneratePayslip = ({ navigation }) => {
             const responseData = response.data;
 
             if (responseData.status === "success") {
-                Alert.alert("Successfull", responseData.message);
-                navigation.navigate('Payslip List')
+                // Alert.alert("Successfull", responseData.message);
+                handleShowAlert(responseData.message);
                 SetLoad(false);
             } else {
-                Alert.alert("Failed", responseData.message);
+                // Alert.alert("Failed", responseData.message);
+                handleShowAlert1(responseData.message);
                 SetLoad(false);
             }
 
         } catch (error) {
             console.error('Error fetching data:', error);
+            handleShowAlert2();
             SetLoad(false);
         }
 
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Payslip List')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -618,6 +655,24 @@ const GeneratePayslip = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
+                    <LottieAlertSucess
+                        visible={isAlertVisible}
+                        animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                        title={resMessage}
+                    />
+
+                    <LottieAlertError
+                        visible={isAlertVisible1}
+                        animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                        title={resMessageFail}
+                    />
+
+                    <LottieCatchError
+                        visible={isAlertVisible2}
+                        animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                        title="Error While Fetching Data"
+                    />
 
                 </View>
             </View>
