@@ -6,6 +6,9 @@ import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import styles from "./style";
 import axios from 'axios';
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const IssueType = () => {
 
@@ -91,15 +94,18 @@ const IssueType = () => {
                 setShiftSlot('');
                 setSelectedStatus(null);
                 fetchData();
-                Alert.alert("Successfull", response.data.message);
+                // Alert.alert("Successfull", response.data.message);
+                handleShowAlert(response.data.message);
             } else {
                 setLoad(false);
-                Alert.alert("Failed", response.data.message);
+                // Alert.alert("Failed", response.data.message);
+                handleShowAlert1(response.data.message);
             }
 
         } catch (error) {
             setLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
@@ -180,14 +186,17 @@ const IssueType = () => {
                 if (response.data.status === "success") {
                     const updatedDataList = Datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
-                    Alert.alert("SuccessFull", response.data.message);
+                    // Alert.alert("SuccessFull", response.data.message);
+                    handleShowAlert(response.data.message);
                     setDelData(false)
                 } else {
-                    Alert.alert("Failed", response.data.message);
+                    // Alert.alert("Failed", response.data.message);
+                    handleShowAlert1(response.data.message);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -239,20 +248,54 @@ const IssueType = () => {
                 setEditLoad(false);
                 setEditedShiftSlot('');
                 fetchData();
-                Alert.alert("SuccessFull", response.data.message);
+                // Alert.alert("SuccessFull", response.data.message);
+                handleShowAlert(response.data.message);
             } else {
                 setEditLoad(false);
-                Alert.alert("Failed", response.data.message);
+                // Alert.alert("Failed", response.data.message);
+                handleShowAlert1(response.data.message);
                 console.error('Failed To Update:', response.data.error);
             }
 
         } catch (error) {
             setEditLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
         closeEditModal();
+    };
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
     };
 
 
@@ -492,6 +535,24 @@ const IssueType = () => {
                         </View>
                     </Modal>
                 </>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 
