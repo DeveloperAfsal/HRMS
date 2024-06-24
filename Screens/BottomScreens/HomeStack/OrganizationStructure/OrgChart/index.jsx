@@ -39,7 +39,7 @@ const OrgChart = ({ navigation }) => {
 
     const renderEmployee = (employee, level, isLast) => (
         <View key={employee.id}>
-            <View style={styles.EmployeeContainer}>
+            <View style={[styles.EmployeeContainer, level === 0 && { marginTop: "10%" }]}>
                 <TouchableOpacity style={[styles.Card, { marginLeft: `${level * 15}%` }]}
                     onPress={() => navigation.navigate('ORG Indviduals', { Id: employee })}
                 >
@@ -55,6 +55,13 @@ const OrgChart = ({ navigation }) => {
                         <Text style={styles.Role}>{employee.role_name}</Text>
                     </View>
                 </TouchableOpacity>
+                {!(isLast && (!employee.subordinates || employee.subordinates.length === 0)) && (
+                    <View style={{alignItems:'flex-end',width: "60%"}}>
+                        <View style={{ alignItems: 'center', width: "25%"}}>
+                            <View style={styles.Card1}></View>
+                        </View>
+                    </View>
+                )}
             </View>
 
             {employee.subordinates && employee.subordinates.length > 0 && (
@@ -64,7 +71,6 @@ const OrgChart = ({ navigation }) => {
                     </View>
                 ))
             )}
-
         </View>
     );
 

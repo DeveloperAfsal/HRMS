@@ -57,9 +57,10 @@ const styles = StyleSheet.create({
     // },
 
     EmployeeContainer: {
-        marginVertical: "5%",
+        // marginVertical: "5%",
         width: '100%',
-        paddingHorizontal: '5%'
+        paddingHorizontal: '5%',
+        // backgroundColor:'red'
     },
 
     Card: {
@@ -73,6 +74,13 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
+        zIndex: 1,
+    },
+
+    Card1: {
+        backgroundColor: '#00275C',
+        width: 2,
+        height: 50,
         zIndex: 1,
     },
 
