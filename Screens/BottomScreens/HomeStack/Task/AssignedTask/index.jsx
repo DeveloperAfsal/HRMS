@@ -16,6 +16,9 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { Linking } from 'react-native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 
 const AssignedTask = () => {
@@ -252,13 +255,16 @@ const AssignedTask = () => {
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false);
-                    Alert.alert("Deleted", "Deleted Successfully");
+                    // Alert.alert("Deleted", "Deleted Successfully");
+                    handleShowAlert(response.data.message);
                 } else {
-                    Alert.alert("Failed", "Failed to delete shift slot");
+                    // Alert.alert("Failed", "Failed to delete shift slot");
+                    handleShowAlert1(response.data.message);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -531,6 +537,37 @@ const AssignedTask = () => {
         }
     }
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
+
     return (
         <ScrollView>
             <View style={styles.Container}>
@@ -630,11 +667,11 @@ const AssignedTask = () => {
                                                 <Text style={[styles.cell, item.priority === "Low" ? styles.PriorityLow : item.priority === "Medium" ? styles.PriorityMedium : item.priority === "High" ? styles.PriorityHigh : null]}>{item.priority}</Text>
                                             </View>
                                             <View style={styles.listcontentButtonview}>
-                                                <TouchableOpacity style={styles.listcontenteditbutton}
+                                                {/* <TouchableOpacity style={styles.listcontenteditbutton}
                                                 // onPress={() => openEditModal(item)}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
                                                 {(data.userrole == 1 || data.userrole == 2) ? <TouchableOpacity style={styles.listcontentdelbutton}
                                                     onPress={() => HandleDelete(item.id)}
                                                 >
@@ -970,6 +1007,24 @@ const AssignedTask = () => {
 
                     </View>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
         </ScrollView>

@@ -6,6 +6,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DocumentPicker from 'react-native-document-picker';
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 
 const EditTask = ({ route, navigation }) => {
@@ -370,21 +373,54 @@ const EditTask = ({ route, navigation }) => {
 
             if (responsedata.status === "success") {
                 setLoad(false);
-                navigation.navigate('Task List')
-                Alert.alert("Successfull", responsedata.message);
+                // Alert.alert("Successfull", responsedata.message);
+                handleShowAlert(responsedata.message);
             } else {
-                Alert.alert("Failed To Add", responsedata.message);
+                // Alert.alert("Failed To Add", responsedata.message);
+                handleShowAlert1(responsedata.message);
                 setLoad(false);
                 console.error('Failed To Add:', responsedata.error);
             }
 
         } catch (error) {
-            console.log(error, "error");
+            // console.log(error, "error");
+            handleShowAlert2();
             setLoad(false);
         }
 
     }
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Task List')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -717,6 +753,23 @@ const EditTask = ({ route, navigation }) => {
 
                 </View>
 
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

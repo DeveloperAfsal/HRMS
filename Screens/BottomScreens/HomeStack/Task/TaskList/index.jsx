@@ -17,6 +17,9 @@ import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { useFocusEffect } from "@react-navigation/native";
 import { Linking } from 'react-native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 
 const TaskList = ({ navigation }) => {
@@ -255,13 +258,16 @@ const TaskList = ({ navigation }) => {
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false);
-                    Alert.alert("Deleted", "Deleted Successfully");
+                    // Alert.alert("Deleted", "Deleted Successfully");
+                    handleShowAlert(response.data.message);
                 } else {
-                    Alert.alert("Failed", "Failed to delete shift slot");
+                    // Alert.alert("Failed", "Failed to delete shift slot");
+                    handleShowAlert1(response.data.message);
                     setDelData(false)
                 }
             } catch (error) {
-                Alert.alert("Error", "Error while deleting shift slot");
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
                 console.error('Error deleting shift slot:', error);
                 setDelData(false)
             }
@@ -608,12 +614,43 @@ const TaskList = ({ navigation }) => {
         const filePath = UrlLink;
         const url = `${baseUrl}${filePath}`;
 
-         if (filePath && filePath !== "-") {
+        if (filePath && filePath !== "-") {
             Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
         } else {
             Alert.alert('No File Located')
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
 
     return (
@@ -1159,6 +1196,24 @@ const TaskList = ({ navigation }) => {
 
                     </View>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
         </ScrollView>
