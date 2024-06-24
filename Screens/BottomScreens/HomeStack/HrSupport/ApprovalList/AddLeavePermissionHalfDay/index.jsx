@@ -7,6 +7,9 @@ import styles from "./style";
 import { useSelector } from "react-redux";
 import DocumentPicker from 'react-native-document-picker';
 import axios from "axios";
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
 const AddLeavePermissionHalfDay = ({ navigation }) => {
 
@@ -382,19 +385,53 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
             if (responsedata.status === 'success') {
                 setLoad(false);
-                Alert.alert('Success', responsedata.message);
-                navigation.navigate('Approvals List');
+                // Alert.alert('Success', responsedata.message);
+                handleShowAlert(responsedata.message);
             } else {
-                console.log('Error')
+                // console.log('Error')
+                handleShowAlert1(responsedata.message);
                 setLoad(false);
             }
 
         } catch (error) {
             setLoad(false);
-            console.log('error', error)
+            // console.log('error', error)
+            handleShowAlert2();
         }
 
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Approvals List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -670,6 +707,24 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

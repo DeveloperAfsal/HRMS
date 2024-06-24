@@ -11,6 +11,9 @@ import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import axios from "axios";
 import RNFS from "react-native-fs";
 import { Linking } from 'react-native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const Template = ({ navigation }) => {
 
@@ -110,9 +113,11 @@ const Template = ({ navigation }) => {
                 setDelData(false);
                 setReasonError('');
                 setReason('');
-                Alert.alert("Successfull", ResData.message)
+                // Alert.alert("Successfull", ResData.message)
+                handleShowAlert(ResData.message);
             } else {
-                Alert.alert("Failed", ResData.message)
+                // Alert.alert("Failed", ResData.message)
+                handleShowAlert1(ResData.message);
                 setModalVisible(false);
                 setDelData(false);
                 setReasonError('');
@@ -120,7 +125,8 @@ const Template = ({ navigation }) => {
             }
 
         } catch (error) {
-            console.log(error, "error");
+            // console.log(error, "error");
+            handleShowAlert2();
             setDelData(false);
         }
     }
@@ -191,18 +197,21 @@ const Template = ({ navigation }) => {
 
             if (responsedata.status === "success") {
                 setLoad(false);
-                Alert.alert("success", responsedata.message);
+                // Alert.alert("success", responsedata.message);
+                handleShowAlert(responsedata.message);
                 setTitle('');
                 setSelectedStatus(null);
                 setDocFile(null);
                 fetchData();
             } else {
                 setLoad(false);
-                Alert.alert("Error", responsedata.message)
+                // Alert.alert("Error", responsedata.message)
+                handleShowAlert1(responsedata.message);
             }
 
         } catch (error) {
-            console.log(error, "error");
+            // console.log(error, "error");
+            handleShowAlert2();
             setLoad(false);
         }
     }
@@ -303,17 +312,20 @@ const Template = ({ navigation }) => {
 
             if (responsedata.status === "success") {
                 setEditLoad(false);
-                Alert.alert("success", responsedata.message);
+                // Alert.alert("success", responsedata.message);
+                handleShowAlert(responsedata.message);
                 fetchData();
                 setEdocFile(null);
             } else {
                 setEditLoad(false);
-                Alert.alert("Error", responsedata.message)
+                // Alert.alert("Error", responsedata.message)
+                handleShowAlert1(responsedata.message);
             }
 
         } catch (error) {
             setEditLoad(false);
-            Alert.alert("Error during submit", "Check The Input Credentials");
+            // Alert.alert("Error during submit", "Check The Input Credentials");
+            handleShowAlert2();
             console.error('Error during submit:', error);
         }
 
@@ -376,6 +388,37 @@ const Template = ({ navigation }) => {
             Alert.alert('No File Located')
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -679,6 +722,24 @@ const Template = ({ navigation }) => {
                             </View>
                         </View>
                     </Modal>
+
+                    <LottieAlertSucess
+                        visible={isAlertVisible}
+                        animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                        title={resMessage}
+                    />
+
+                    <LottieAlertError
+                        visible={isAlertVisible1}
+                        animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                        title={resMessageFail}
+                    />
+
+                    <LottieCatchError
+                        visible={isAlertVisible2}
+                        animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                        title="Error While Fetching Data"
+                    />
 
                 </>
 

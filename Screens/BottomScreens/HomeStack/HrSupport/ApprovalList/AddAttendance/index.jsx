@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import styles from "../AddLeavePermissionHalfDay/style";
 import { Alert } from "react-native";
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
 
 const AddAttendance = ({ navigation }) => {
@@ -287,18 +290,52 @@ const AddAttendance = ({ navigation }) => {
             const ResData = response.data;
 
             if (ResData.status === 'success') {
-                Alert.alert('Success', ResData.message);
-                navigation.navigate('Approvals List');
+                // Alert.alert('Success', ResData.message);
+                handleShowAlert(ResData.message);
                 setLoad(false);
             } else {
-                console.log("Error")
+                // console.log("Error")
+                handleShowAlert1(ResData.message);
                 setLoad(false);
             }
         } catch (error) {
-            console.log(error)
+            // console.log(error);
+            handleShowAlert2();
             setLoad(true);
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Approvals List');
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -534,6 +571,24 @@ const AddAttendance = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

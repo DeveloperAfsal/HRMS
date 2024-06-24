@@ -189,7 +189,7 @@ const AssignedList = ({ navigation }) => {
     };
 
     const handlePreview = (UrlLink) => {
-        
+
         const baseUrl = 'https://ocean21.in/api/storage/app/';
         const filePath = UrlLink;
         const url = `${baseUrl}${filePath}`;
