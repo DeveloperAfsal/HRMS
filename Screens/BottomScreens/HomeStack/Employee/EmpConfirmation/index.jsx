@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 import SearchIcon from "../../../../../Assets/Icons/Search.svg";
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
@@ -15,6 +15,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
+import { useFocusEffect } from "@react-navigation/native";
 
 const EmpConfirmation = () => {
 
@@ -121,9 +122,11 @@ const EmpConfirmation = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     const handleEditSubmit = async () => {
 
@@ -149,12 +152,14 @@ const EmpConfirmation = () => {
                 setReasonError('');
             }
 
-            if (!NofDays) {
-                setNofDaysError('NofDays is required');
-                setEditLoad(false);
-                return;
-            } else {
-                setNofDaysError('');
+            if (editedStatus === "Extended") {
+                if (!NofDays) {
+                    setNofDaysError('NofDays is required');
+                    setEditLoad(false);
+                    return;
+                } else {
+                    setNofDaysError('');
+                }
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/employee_confirmation_update';

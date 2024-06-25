@@ -110,7 +110,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
     }, []);
 
     const handleSelectLeave = (departmentName) => {
-        setSelectedleaveType(departmentName.leave_category_name);
+        setSelectedleaveType(departmentName.leave_type_name);
         setSelectedleaveTypeId(departmentName.id)
         setShowleaveTypeDropdown(false);
     };
@@ -307,7 +307,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
                     </Text>
 
                     <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
+                        <Text>{selectedleaveType || 'Select Leave Type'}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
 
@@ -318,11 +318,11 @@ const EditLeavePolicy = ({ navigation, route }) => {
                                     key={index}
                                     style={[
                                         styles.dropdownOption,
-                                        selectedleaveType === department.leave_category_name && styles.selectedOption
+                                        selectedleaveType === department.leave_type_name && styles.selectedOption
                                     ]}
                                     onPress={() => handleSelectLeave(department)}
                                 >
-                                    <Text style={styles.dropdownOptionText}>{department.leave_category_name}</Text>
+                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -391,7 +391,7 @@ const EditLeavePolicy = ({ navigation, route }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Submit
+                                        Update
                                     </Text>
                             }
                         </TouchableOpacity>

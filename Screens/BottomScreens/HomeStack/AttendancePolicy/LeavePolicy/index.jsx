@@ -22,7 +22,6 @@ const LeavePolicy = ({ navigation }) => {
     // 
 
     const [datalist, setDatalist] = useState([]);
-    const [selectedShiftError, setSelectedShiftError] = useState('');
 
     // 
 
@@ -70,23 +69,31 @@ const LeavePolicy = ({ navigation }) => {
 
     // Date Formatter 
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
 
     // 
 
     const fetchData = async () => {
-        setLoadData(true)
+
+        setLoadData(true);
+
         try {
+
             const apiUrl = 'https://ocean21.in/api/public/api/view_leavepolicy';
+
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
                 }
             });
-            setLoadData(false)
+
+            setLoadData(false);
+
             const responseData = response.data.data;
+
             setDatalist(responseData);
+
         } catch (error) {
             setLoadData(false)
             console.error('Error fetching data:', error);
@@ -101,31 +108,31 @@ const LeavePolicy = ({ navigation }) => {
 
     // Api call for userrolelist
 
+
+    const [RoleError, setRoleError] = useState('');
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
-    const [RoleError, setRoleError] = useState('');
+    const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
-    const handleToggleDepartment = (departmentName, departmentId) => {
+    const handleToggleDepartment = async (departmentName, departmentId) => {
         if (selectedDepartments.includes(departmentName)) {
-
-            // If department is already selected, remove it from the selected list
             setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
             setSelectedDepartmentIds(selectedDepartmentIds.filter(id => id !== departmentId));
 
             // Clear selected employees when department is deselected
-            // setSelectedEmployees([]);
+            setSelectedEmployees([]);
 
         } else {
-
-            // If department is not selected, add it to the selected list
             setSelectedDepartments([...selectedDepartments, departmentName]);
             setSelectedDepartmentIds([...selectedDepartmentIds, departmentId]);
-
             // Fetch employee dropdown when department is selected
-            const selectedIdsAsNumbers = selectedDepartmentIds.map(id => parseInt(id, 10));
-            fetchEmployeeDropdown([...selectedIdsAsNumbers, departmentId]);
+            setSelectedDepartmentIds(selectedDepartmentIds => {
+                const selectedIdsAsNumbers = selectedDepartmentIds.map(id => parseInt(id, 10));
+                fetchEmployeeDropdown(selectedIdsAsNumbers);
+                return selectedDepartmentIds;
+            });
         }
     };
 
@@ -164,8 +171,6 @@ const LeavePolicy = ({ navigation }) => {
     const [showleaveTypeDropdown, setShowleaveTypeDropdown] = useState(false);
     const [leaveTypeError, setLeaveTypeError] = useState('');
 
-    console.log(leaveTypeDropdown, "leaveTypeDropdown")
-
     useEffect(() => {
 
         const apiUrl = 'https://ocean21.in/api/public/api/leave_type_list';
@@ -203,9 +208,20 @@ const LeavePolicy = ({ navigation }) => {
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
-    const [EmployeeError, setEmployeeError] = useState('');
+    const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
+    const [EmployeeError, setEmployeeError] = useState('');
+
+    const handleToggleEmployee = (employeeName, employeeNameID) => {
+        if (selectedEmployees.includes(employeeName)) {
+            setSelectedEmployees(selectedEmployees.filter(selectedEmployee => selectedEmployee !== employeeName));
+            setSelectedEmployeesIds(selectedEmployeesIds.filter(id => id !== employeeNameID));
+        } else {
+            setSelectedEmployees([...selectedEmployees, employeeName]);
+            setSelectedEmployeesIds([...selectedEmployeesIds, employeeNameID]);
+        }
+    };
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
 
@@ -228,22 +244,14 @@ const LeavePolicy = ({ navigation }) => {
         }
     };
 
-    const handleToggleEmployee = (employeeName, employeeNameID) => {
-        if (selectedEmployees.includes(employeeName)) {
-            setSelectedEmployees(selectedEmployees.filter(selectedEmployee => selectedEmployee !== employeeName));
-            setSelectedEmployeesIds(selectedEmployeesIds.filter(id => id !== employeeNameID));
-        } else {
-            setSelectedEmployees([...selectedEmployees, employeeName]);
-            setSelectedEmployeesIds([...selectedEmployeesIds, employeeNameID]);
-        }
-    };
-
     const Handlerefresh = () => {
         setStartDate(new Date());
         setEndDate(new Date());
         setSelectedleaveType('Select Leave Type');
         setSelectedDepartments([]);
+        setSelectedDepartmentIds([]);
         setSelectedEmployees([]);
+        setSelectedEmployeesIds([]);
         setLeavecount('');
         setMonthlycount('');
         setRoleError('');
@@ -260,6 +268,7 @@ const LeavePolicy = ({ navigation }) => {
 
             if (!selectedleaveType) {
                 setLeaveTypeError('Select Leave Type');
+                Alert.alert('Missing', "Check The Leave Type Field");
                 setLoad(false);
                 return;
             } else {
@@ -268,6 +277,7 @@ const LeavePolicy = ({ navigation }) => {
 
             if (!selectedDepartments.length) {
                 setRoleError('Select Role');
+                Alert.alert('Missing', "Check The Role Field");
                 setLoad(false);
                 return;
             } else {
@@ -276,6 +286,7 @@ const LeavePolicy = ({ navigation }) => {
 
             if (!selectedEmployees.length) {
                 setEmployeeError('Select Employee');
+                Alert.alert('Missing', "Check The Select Employee Field");
                 setLoad(false);
                 return;
             } else {
@@ -284,6 +295,7 @@ const LeavePolicy = ({ navigation }) => {
 
             if (!Leavecount) {
                 setLeavecountError('Enter Leave Count');
+                Alert.alert('Missing', "Check The Total Leave Count Field");
                 setLoad(false);
                 return;
             } else {
@@ -292,6 +304,7 @@ const LeavePolicy = ({ navigation }) => {
 
             if (!Monthlycount) {
                 setMonthlycountError('Enter Monthly Leave Count');
+                Alert.alert('Missing', "Check The Monthly Leave Count Field");
                 setLoad(false);
                 return;
             } else {
@@ -303,8 +316,8 @@ const LeavePolicy = ({ navigation }) => {
             const response = await axios.post(apiUrl, {
                 start_date: formattedStartDate,
                 end_date: formattedEndDate,
-                role_type: selectedDepartmentIds.toString(),
-                emp_id: selectedEmployeesIds.toString(),
+                role_type: selectedDepartmentIdsAsNumbers,
+                emp_id: selectedEmployeesIdsAsNumbers,
                 leave_type: selectedleaveTypeId,
                 leave_count: Leavecount,
                 monthly_count: Monthlycount,
@@ -315,16 +328,29 @@ const LeavePolicy = ({ navigation }) => {
                 },
             });
 
+            console.log(response.data, "response")
+
+            console.log( 
+                "start_date:", formattedStartDate,
+                "end_date:", formattedEndDate,
+                "role_type:", selectedDepartmentIdsAsNumbers,
+                "emp_id:", selectedEmployeesIdsAsNumbers,
+                "leave_type:", selectedleaveTypeId,
+                "leave_count:", Leavecount,
+                "monthly_count:", Monthlycount,
+                "created_by:", data.userempid
+            )
+
             if (response.data.status === "success") {
+                // Alert.alert("successfull",response.data.message)
+                handleShowAlert(response.data);
                 fetchData();
                 setLoad(false);
                 Handlerefresh();
-                // Alert.alert("successfull",response.data.message)
-                handleShowAlert(response.data);
             } else {
                 setLoad(false);
                 // Alert.alert('Failed', response.data.message);
-                handleShowAlert1(response.data);
+                handleShowAlert1(response.data.message);
             }
 
         } catch (error) {
@@ -390,7 +416,7 @@ const LeavePolicy = ({ navigation }) => {
                     handleShowAlert(response.data);
                 } else {
                     // Alert.alert("Failed", response.data.message);
-                    handleShowAlert1(response.data);
+                    handleShowAlert1(response.data.message);
                     setDelData(false)
                 }
             } catch (error) {
@@ -435,7 +461,7 @@ const LeavePolicy = ({ navigation }) => {
 
     const handleShowAlert1 = (res) => {
         setAlertVisible1(true);
-        setResMessageFail(res.message);
+        setResMessageFail(res);
         setTimeout(() => {
             setAlertVisible1(false);
         }, 2500);
@@ -478,6 +504,10 @@ const LeavePolicy = ({ navigation }) => {
                         )}
                     </View>
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.StatDateText}>
                         End Date
                     </Text>
@@ -496,12 +526,16 @@ const LeavePolicy = ({ navigation }) => {
                         )}
                     </View>
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.StatDateText}>
                         Leave Type
                     </Text>
 
                     <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
+                        <Text>{selectedleaveType || 'Select Leave Type'}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
 

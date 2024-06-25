@@ -38,7 +38,6 @@ const AddProject = ({ navigation }) => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
-
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
 

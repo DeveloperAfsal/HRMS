@@ -2,6 +2,15 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorText: {
+        color: "red",
+        paddingTop: 10,
+        // backgroundColor:'red',
+        width:"90%",
+        alignItems:'center',
+        justifyContent:'center'
+    },
+
     SupervisorContainer: {
         alignItems: 'center',
         paddingBottom: '5%'
@@ -34,7 +43,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 16,
         lineHeight: 21.28,
-        paddingVertical: '5%',
+        paddingVertical: '3%',
         width: "90%"
     },
 
@@ -42,7 +51,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 16,
         lineHeight: 21.28,
-        paddingVertical: '5%',
+        paddingVertical: '3%',
         width: "90%"
     },
 

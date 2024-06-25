@@ -402,6 +402,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!selectedShift) {
                 setSelectedShiftError('Shift is Required');
+                Alert.alert('Missing', "Check The Shift Field");
                 SetLoad(false);
                 return;
             } else {
@@ -410,6 +411,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!late1) {
                 setlate1Error('Late1 Field is Required');
+                Alert.alert('Missing', "Check The Late1 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -418,6 +420,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!late2) {
                 setlate2Error('Late2 Field is Required');
+                Alert.alert('Missing', "Check The Late2 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -426,6 +429,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!late3) {
                 setlate3Error('Late3 Field is Required');
+                Alert.alert('Missing', "Check The Late3 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -434,6 +438,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!lateDeduction1) {
                 setLateDeduction1Error('LateDeduction1 Field is Required');
+                Alert.alert('Missing', "Check The LateDeduction1 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -442,6 +447,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!lateDeduction2) {
                 setLateDeduction2Error('LateDeduction2 Field is Required');
+                Alert.alert('Missing', "Check The LateDeduction2 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -450,6 +456,7 @@ const AttendancePolicy = ({ navigation }) => {
 
             if (!lateDeduction3) {
                 setLateDeduction3Error('LateDeduction3 Field is Required');
+                Alert.alert('Missing', "Check The LateDeduction3 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -584,7 +591,7 @@ const AttendancePolicy = ({ navigation }) => {
 
                     <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
 
-                        <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
+                        <Text style={styles.TimeSlotTouchableText}>{selectedShift || "Select Shift"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>

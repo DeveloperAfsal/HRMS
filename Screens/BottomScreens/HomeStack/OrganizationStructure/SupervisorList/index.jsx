@@ -33,6 +33,7 @@ const SupervisorList = ({ navigation }) => {
 
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [statusError, setStatusError] = useState('');
 
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
@@ -75,12 +76,14 @@ const SupervisorList = ({ navigation }) => {
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
+    const [depError, setDepError] = useState('');
 
     const [supervisorNameDropdown, setSupervisorNameDropdown] = useState([]);
     const [selectedName, setSelectedName] = useState(null);
     const [selectedNameId, setSelectedNameId] = useState(null);
-    console.log(selectedNameId,"selectedNameId")
+    console.log(selectedNameId, "selectedNameId")
     const [showSupervisorNameDropdown, setShowSupervisorNameDropdown] = useState(false);
+    const [memError, setMemError] = useState('');
 
 
     useEffect(() => {
@@ -128,12 +131,39 @@ const SupervisorList = ({ navigation }) => {
 
         try {
 
+            if (!selectedDepartment) {
+                setDepError('Department Required ');
+                Alert.alert('Missing', "Check The Department Field");
+                setLoad(false);
+                return;
+            } else {
+                setDepError('');
+            }
+
+            if (!selectedName) {
+                setMemError('Supervisor Required ');
+                Alert.alert('Missing', "Check The Supervisor Field");
+                setLoad(false);
+                return;
+            } else {
+                setMemError('');
+            }
+
+            if (!selectedStatus) {
+                setStatusError('Status Required ');
+                Alert.alert('Missing', "Check The Status Field");
+                setLoad(false);
+                return;
+            } else {
+                setStatusError('');
+            }
+
             const apiUrl = 'https://ocean21.in/api/public/api/addsupervisor';
 
             const response = await axios.post(apiUrl, {
                 departmentrole_id: selectedDepartmentId,
                 supervisor_id: selectedNameId,
-                status: selectedStatus === "Selected Status" ? null : selectedStatus,
+                status: selectedStatus,
                 created_by: data.userempid,
             }, {
                 headers: {
@@ -256,7 +286,6 @@ const SupervisorList = ({ navigation }) => {
             })
     }
 
-
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -327,6 +356,10 @@ const SupervisorList = ({ navigation }) => {
                         </View>
                     )}
 
+                    <Text style={styles.errorText}>
+                        {depError}
+                    </Text>
+
                     <Text style={styles.DepartmentText}>
                         Supervisor Name
                     </Text>
@@ -356,6 +389,10 @@ const SupervisorList = ({ navigation }) => {
                         </View>
                     )}
 
+                    <Text style={styles.errorText}>
+                        {memError}
+                    </Text>
+
                     <Text style={styles.StatusText}>
                         Status
                     </Text>
@@ -382,6 +419,10 @@ const SupervisorList = ({ navigation }) => {
                         </View>
 
                     )}
+
+                    <Text style={styles.errorText}>
+                        {statusError}
+                    </Text>
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton} onPress={HandleSubmit}>

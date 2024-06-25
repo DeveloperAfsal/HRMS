@@ -268,6 +268,8 @@ const Announcement = () => {
     const [AnnounceMentdes, setAnnounceMentdes] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
+    const [AnnouncementErr, setAnnouncementErr] = useState('');
+    const [AnnounceMentdesErr, setAnnounceMentdesErr] = useState('');
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
@@ -300,6 +302,22 @@ const Announcement = () => {
         setEditLoad(true);
 
         try {
+
+            if (!AnnounceMentTitle) {
+                setAnnouncementErr(' Announcement Title Required ');
+                setEditLoad(false);
+                return;
+            } else {
+                setAnnouncementErr('');
+            }
+
+            if (!AnnounceMentdes) {
+                setAnnounceMentdesErr(' Announcement Description Required ');
+                setEditLoad(false);
+                return;
+            } else {
+                setAnnounceMentdesErr('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/update_announcement';
 
@@ -571,8 +589,8 @@ const Announcement = () => {
                             style={styles.modalInput}
                         />
 
-                        <Text style={styles.ModalerrorText}>
-                            { }
+                        <Text style={styles.errorText}>
+                            {AnnouncementErr}
                         </Text>
 
                         <Text style={styles.modalLabelText}>Description :</Text>
@@ -583,10 +601,9 @@ const Announcement = () => {
                             style={styles.modalInput}
                         />
 
-                        <Text style={styles.ModalerrorText}>
-                            { }
+                        <Text style={styles.errorText}>
+                            {AnnounceMentdesErr}
                         </Text>
-
 
                         <View style={styles.buttoncontainer}>
 
@@ -600,7 +617,7 @@ const Announcement = () => {
                                 {
                                     EditLoad ?
                                         <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                        <Text style={styles.modalSubmitButtonText}>Update</Text>
                                 }
                             </TouchableOpacity>
 

@@ -119,6 +119,7 @@ const AddRole = ({ navigation }) => {
 
             if (!nameError) {
                 setNameError('Role Name Required ');
+                Alert.alert('Missing', "Check The Role Name Field");
                 setLoad(false);
                 return;
             } else {

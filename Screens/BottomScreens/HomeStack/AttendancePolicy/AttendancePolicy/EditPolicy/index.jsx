@@ -322,9 +322,7 @@ const EditPolicy = ({ route, navigation }) => {
 
     const selectShift = (shift) => {
         setSelectedShift(shift.shift_slot);
-        console.log(shift.shift_slot);
         setSelectedShiftId(shift.id);
-        console.log(shift.id);
         setShowDropdown(false);
     };
 
@@ -346,6 +344,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!late1) {
                 setlate1Error('Late1 Field is Required');
+                Alert.alert('Missing', "Check The Late1 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -354,6 +353,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!late2) {
                 setlate2Error('Late2 Field is Required');
+                Alert.alert('Missing', "Check The Late2 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -362,6 +362,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!late3) {
                 setlate3Error('Late3 Field is Required');
+                Alert.alert('Missing', "Check The Late3 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -370,6 +371,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!lateDeduction1) {
                 setLateDeduction1Error('Late Deduction1 Field is Required');
+                Alert.alert('Missing', "Check The Late Deduction1 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -378,6 +380,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!lateDeduction2) {
                 setLateDeduction2Error('Late Deduction2 Field is Required');
+                Alert.alert('Missing', "Check The Late Deduction2 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -386,6 +389,7 @@ const EditPolicy = ({ route, navigation }) => {
 
             if (!lateDeduction3) {
                 setLateDeduction3Error('Late Deduction3 Field is Required');
+                Alert.alert('Missing', "Check The Late Deduction3 Field");
                 SetLoad(false);
                 return;
             } else {
@@ -448,6 +452,7 @@ const EditPolicy = ({ route, navigation }) => {
     useEffect(() => {
         setSelectedShift(SpecName);
         if (datalist) {
+            setSelectedShiftId(datalist.shift_slot);
             setSelectedID(datalist.id);
             setActivity(datalist.status);
             setSlotFromTime(datalist.form_time);
@@ -935,12 +940,12 @@ const EditPolicy = ({ route, navigation }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Submit
+                                        Update
                                     </Text>
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton} onPress={()=>navigation.navigate('Attendance Policy')}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={() => navigation.navigate('Attendance Policy')}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>

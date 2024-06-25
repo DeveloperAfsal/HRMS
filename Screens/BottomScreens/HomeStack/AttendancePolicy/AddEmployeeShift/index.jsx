@@ -377,6 +377,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             if (!selectedDepartments.length) {
                 setSelectedShiftError('Select Department Name');
+                Alert.alert('Missing', "Check The Department Name Field");
                 SetLoad(false);
                 return;
             } else {
@@ -385,6 +386,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             if (!selectedEmployees.length) {
                 setEmployeeError('Select Employee Name');
+                Alert.alert('Missing', "Check The Employee Name Field");
                 SetLoad(false);
                 return;
             } else {
@@ -393,6 +395,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             if (!selectedShift) {
                 setSlotError('Select Shift Slot');
+                Alert.alert('Missing', "Check The Shift Slot Field");
                 SetLoad(false);
                 return;
             } else {
@@ -401,6 +404,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             if (!selectedDays.length) {
                 setWeekoffError('Week off Required');
+                Alert.alert('Missing', "Check The Week off Field");
                 SetLoad(false)
                 return;
             } else {
@@ -409,6 +413,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             if (!selectedStatus) {
                 setStatusError('Status Require');
+                Alert.alert('Missing', "Check The Status Field");
                 SetLoad(false)
                 return;
             } else {
@@ -583,7 +588,6 @@ const AddEmployeeShift = ({ navigation }) => {
                         {EmployeeError}
                     </Text>
 
-
                     <Text style={styles.StatDateText}>
                         Start Date
                     </Text>
@@ -603,7 +607,7 @@ const AddEmployeeShift = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        {}
+                        { }
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -625,7 +629,7 @@ const AddEmployeeShift = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        {}
+                        { }
                     </Text>
 
                     <Text style={styles.TimeSlotText}>

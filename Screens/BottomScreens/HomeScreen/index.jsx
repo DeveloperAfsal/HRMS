@@ -521,6 +521,8 @@ const HomeScreen = ({ navigation }) => {
     const [DelAnnouncement, setDelAnnouncement] = useState(false);
     const [AnnounceMentTitle, setAnnounceMentTitle] = useState('');
     const [AnnounceMentdes, setAnnounceMentdes] = useState('');
+    const [AnnouncementErr, setAnnouncementErr] = useState('');
+    const [AnnounceMentdesErr, setAnnounceMentdesErr] = useState('');
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
@@ -546,10 +548,26 @@ const HomeScreen = ({ navigation }) => {
         setModalVisible(false);
         setDelAnnouncement(false);
     }
-
+    //
     const addAnnouncement = async () => {
         setDelAnnouncement(true);
         try {
+
+            if (!AnnounceMentTitle) {
+                setAnnouncementErr(' Announcement Title Required ');
+                setDelAnnouncement(false);
+                return;
+            } else {
+                setAnnouncementErr('');
+            }
+
+            if (!AnnounceMentdes) {
+                setAnnounceMentdesErr(' Announcement Description Required ');
+                setDelAnnouncement(false);
+                return;
+            } else {
+                setAnnounceMentdesErr('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/addannouncement';
             const response = await axios.post(apiUrl, {
@@ -1058,7 +1076,7 @@ const HomeScreen = ({ navigation }) => {
                                     />
 
                                     <Text style={styles.errorText}>
-                                        { }
+                                        {AnnouncementErr}
                                     </Text>
 
                                     <Text style={styles.modalText}>description:</Text>
@@ -1070,7 +1088,7 @@ const HomeScreen = ({ navigation }) => {
                                     />
 
                                     <Text style={styles.errorText}>
-                                        { }
+                                        {AnnounceMentdesErr}
                                     </Text>
 
                                     <View style={styles.modalButtonContainer}>

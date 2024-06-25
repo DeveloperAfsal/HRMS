@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 21.28,
         paddingBottom: "3%",
-        paddingTop: "3%",
+        // paddingTop: "3%",
         width: "90%",
         color: "#2C2C2C",
     },
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         height: 42,
         borderRadius: 7,
         paddingHorizontal: '5%',
-        marginBottom:'3%',
+        // marginBottom:'3%',
         justifyContent: 'center',
     },
 
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
-        paddingVertical: '2%',
+        paddingVertical: '3%',
         width: "90%"
     },
     Activeindicator: {

@@ -75,7 +75,7 @@ const DocumentType = () => {
                 setShiftError('');
             }
 
-            if (selectedStatus === "Selected Status") {
+            if (!selectedStatus) {
                 setStatusError('Status is required');
                 setLoad(false);
                 return;
@@ -350,7 +350,7 @@ const DocumentType = () => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -360,10 +360,6 @@ const DocumentType = () => {
                     {showDropdown && (
 
                         <View style={styles.dropdown}>
-
-                            <TouchableOpacity onPress={() => selectStatus("Selected Status")} style={styles.dropdownOption}>
-                                <Text style={styles.dropdownOptionText}>Selected Status</Text>
-                            </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
                                 <Text style={styles.dropdownOptionText}>Active</Text>

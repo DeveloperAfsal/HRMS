@@ -2,6 +2,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+
+
     profileImage: {
         width: 50,
         height: 50,
@@ -362,6 +364,12 @@ const styles = StyleSheet.create({
     ModalerrorText: {
         color: "red",
         paddingTop: 10,
+    },
+
+    errorText: {
+        color: "red",
+        paddingBottom: '5%',
+        width: "90%"
     },
 
     modalContainer: {

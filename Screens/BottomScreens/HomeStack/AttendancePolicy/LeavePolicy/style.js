@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
-        paddingTop: 10,
+        paddingTop: "3%",
         width: "90%"
     },
     Activeindicator: {
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 16,
         lineHeight: 21.28,
-        paddingVertical: "5%",
+        paddingVertical: "3%",
         width: "90%",
         color: '#2C2C2C',
     },
