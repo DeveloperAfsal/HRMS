@@ -18,13 +18,16 @@ const RaiseTicket = ({ navigation }) => {
     const { data } = useSelector((state) => state.login);
 
     const [tickTitle, setTickTitle] = useState('');
+    const [tickTitleErr, setTickTitleErr] = useState('');
     const [description, setDescription] = useState('');
+    const [descriptionErr, setDescriptionErr] = useState('');
     const [load, SetLoad] = useState(false);
 
     // Function to handle document selection
 
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
 
     const handleDocumentSelection = async () => {
 
@@ -46,6 +49,7 @@ const RaiseTicket = ({ navigation }) => {
     // status
 
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [selectedStatusErr, setSelectedStatusErr] = useState(null);
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
 
     const toggleDropdownstatus = () => {
@@ -63,11 +67,15 @@ const RaiseTicket = ({ navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
     const [selectedDepartmentsId, setSelectedDepartmentsId] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
+
 
     const [departmentNameDropdown1, setDepartmentNameDropdown1] = useState([]);
     const [showDepartmentNameDropdown1, setShowDepartmentNameDropdown1] = useState(false);
     const [selectedDepartments1, setSelectedDepartments1] = useState('');
     const [selectedDepartmentsId1, setSelectedDepartmentsId1] = useState('');
+    const [selectedDepartmentsErr1, setSelectedDepartmentsErr1] = useState('');
+
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/userrolelist';
@@ -113,11 +121,14 @@ const RaiseTicket = ({ navigation }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
 
     const [employeeDropdown1, setEmployeeDropdown1] = useState([]);
     const [showEmployeeDropdown1, setShowEmployeeDropdown1] = useState(false);
     const [selectedMember1, setSelectedMember1] = useState('');
     const [selectedMemberId1, setSelectedMemberId1] = useState('');
+    const [selectedMemberErr1, setSelectedMemberErr1] = useState('');
+
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
 
@@ -206,6 +217,7 @@ const RaiseTicket = ({ navigation }) => {
     const [showIssTypeDropdown, setShowIssTypeDropdown] = useState(false);
     const [selectedIssType, setSelectedIssType] = useState('');
     const [selectedIssTypeId, setSelectedIssTypeId] = useState('');
+    const [selectedIssTypeErr, setSelectedIssTypeErr] = useState('');
 
     useEffect(() => {
         const issType = async () => {
@@ -243,31 +255,115 @@ const RaiseTicket = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('emp_id', selectedMemberId);
-        formData.append('ticket_id', tickId);
-        formData.append('ticket_title', tickTitle);
-        formData.append('issue_type', selectedIssTypeId);
-        formData.append('description', description);
-        formData.append('created_by', data.userempid);
-        formData.append('assign_dep', selectedDepartmentsId1);
-        formData.append('assign_empid', selectedMemberId1);
-        formData.append('status', selectedStatus);
-
-        if (docFile.length > 0) {
-            docFile.map((docFile, index) => {
-                formData.append(`attachment`, {
-                    uri: docFile.uri,
-                    name: docFile.name,
-                    type: docFile.type,
-                });
-            });
-        }
-        else {
-            formData.append('attachment', docFile);
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Name Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
         }
 
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Name Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!tickTitle) {
+            setTickTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The Title Field");
+            SetLoad(false);
+            return;
+        } else {
+            setTickTitleErr('');
+        }
+
+        if (!selectedIssType) {
+            setSelectedIssTypeErr('Select Issue Type');
+            Alert.alert('Missing', "Check The Issue Type Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedIssTypeErr('');
+        }
+
+        if (!description) {
+            setDescriptionErr('Enter Description');
+            Alert.alert('Missing', "Check The Description Field");
+            SetLoad(false);
+            return;
+        } else {
+            setDescriptionErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('choose File');
+            Alert.alert('Missing', "Check The Attachment Field");
+            SetLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
+        }
+
+        if (!selectedDepartments1) {
+            setSelectedDepartmentsErr1('Select Department Name');
+            Alert.alert('Missing', "Check The Assign Department Name Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr1('');
+        }
+
+        if (!selectedMember1) {
+            setSelectedMemberErr1('Select Member Name');
+            Alert.alert('Missing', "Check The Assign Employee Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr1('');
+        }
+
+        if (!selectedStatus) {
+            setSelectedStatusErr('Select Status');
+            Alert.alert('Missing', "Check The Status Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedStatusErr('');
+        }
 
         try {
+
+            formData.append('emp_id', selectedMemberId);
+            formData.append('ticket_id', tickId);
+            formData.append('ticket_title', tickTitle);
+            formData.append('issue_type', selectedIssTypeId);
+            formData.append('description', description);
+            formData.append('created_by', data.userempid);
+            formData.append('assign_dep', selectedDepartmentsId1);
+            formData.append('assign_empid', selectedMemberId1);
+            formData.append('status', selectedStatus);
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((docFile, index) => {
+                        formData.append(`attachment`, {
+                            uri: docFile.uri,
+                            name: docFile.name,
+                            type: docFile.type,
+                        });
+                    });
+                }
+                else {
+                    formData.append('attachment', docFile);
+                }
+            }
+
+
             const response = await fetch('https://ocean21.in/api/public/api/manual_raiseticket', {
                 method: 'POST',
                 headers: {
@@ -351,7 +447,7 @@ const RaiseTicket = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedDepartments ? selectedDepartments : 'Select Department'}
+                            {selectedDepartments || 'Select Department'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -374,7 +470,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -386,7 +482,7 @@ const RaiseTicket = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedMember ? selectedMember : 'Select Member'}
+                            {selectedMember || 'Select Member'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -409,7 +505,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -437,7 +533,7 @@ const RaiseTicket = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {tickTitleErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -470,7 +566,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedIssTypeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -484,7 +580,7 @@ const RaiseTicket = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {descriptionErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -504,6 +600,10 @@ const RaiseTicket = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
+                    <Text style={styles.errorText}>
+                        {docFileErr}
+                    </Text>
 
                     <Text style={styles.ShiftSlotText}>
                         Assign Department
@@ -537,7 +637,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr1}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -572,7 +672,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr1}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -609,7 +709,7 @@ const RaiseTicket = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedStatusErr}
                     </Text>
 
                     <View style={styles.buttonview}>

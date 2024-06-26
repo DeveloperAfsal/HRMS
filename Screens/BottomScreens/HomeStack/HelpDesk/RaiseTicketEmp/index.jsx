@@ -18,13 +18,17 @@ const RaiseTicketEmp = ({ navigation }) => {
     const { data } = useSelector((state) => state.login);
 
     const [tickTitle, setTickTitle] = useState('');
+    const [tickTitleErr, setTickTitleErr] = useState('');
     const [description, setDescription] = useState('');
+    const [descriptionErr, setDescriptionErr] = useState('');
+
     const [load, SetLoad] = useState(false);
 
     // Function to handle document selection
 
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
 
     const handleDocumentSelection = async () => {
 
@@ -206,6 +210,7 @@ const RaiseTicketEmp = ({ navigation }) => {
     const [showIssTypeDropdown, setShowIssTypeDropdown] = useState(false);
     const [selectedIssType, setSelectedIssType] = useState('');
     const [selectedIssTypeId, setSelectedIssTypeId] = useState('');
+    const [selectedIssTypeErr, setSelectedIssTypeErr] = useState('');
 
     useEffect(() => {
         const issType = async () => {
@@ -243,28 +248,66 @@ const RaiseTicketEmp = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('emp_id', data.userempid);
-        formData.append('ticket_id', tickId);
-        formData.append('ticket_title', tickTitle);
-        formData.append('issue_type', selectedIssTypeId);
-        formData.append('description', description);
-        formData.append('created_by', data.userempid);
-
-        if (docFile.length > 0) {
-            docFile.map((docFile, index) => {
-                formData.append(`attachment`, {
-                    uri: docFile.uri,
-                    name: docFile.name,
-                    type: docFile.type,
-                });
-            });
-        }
-        else {
-            formData.append('attachment', docFile);
+        if (!tickTitle) {
+            setTickTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The Title Field");
+            SetLoad(false);
+            return;
+        } else {
+            setTickTitleErr('');
         }
 
+        if (!selectedIssType) {
+            setSelectedIssTypeErr('Select Issue Type');
+            Alert.alert('Missing', "Check The Issue Type Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedIssTypeErr('');
+        }
+
+        if (!description) {
+            setDescriptionErr('Enter Description');
+            Alert.alert('Missing', "Check The Description Field");
+            SetLoad(false);
+            return;
+        } else {
+            setDescriptionErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('choose File');
+            Alert.alert('Missing', "Check The Attachment Field");
+            SetLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
+        }
 
         try {
+
+            formData.append('emp_id', data.userempid);
+            formData.append('ticket_id', tickId);
+            formData.append('ticket_title', tickTitle);
+            formData.append('issue_type', selectedIssTypeId);
+            formData.append('description', description);
+            formData.append('created_by', data.userempid);
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((file, index) => {
+                        formData.append(`attachment`, {
+                            uri: file.uri,
+                            name: file.name,
+                            type: file.type,
+                        });
+                    });
+                }
+                else {
+                    formData.append('attachment', docFile);
+                }
+            }
+
             const response = await fetch('https://ocean21.in/api/public/api/addemployee_raise_ticket', {
                 method: 'POST',
                 headers: {
@@ -365,8 +408,9 @@ const RaiseTicketEmp = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {tickTitleErr}
                     </Text>
+
 
                     <Text style={styles.ShiftSlotText}>
                         Issue Type
@@ -398,7 +442,7 @@ const RaiseTicketEmp = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedIssTypeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -412,7 +456,7 @@ const RaiseTicketEmp = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {descriptionErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -432,6 +476,10 @@ const RaiseTicketEmp = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
+                    <Text style={styles.errorText}>
+                        {docFileErr}
+                    </Text>
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton}

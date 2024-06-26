@@ -69,12 +69,21 @@ const IssueType = () => {
         setLoad(true)
 
         try {
+
             if (!shiftSlot) {
-                setShiftError('Asset type is required');
+                setShiftError('Issue type is required');
                 setLoad(false);
                 return;
             } else {
                 setShiftError('');
+            }
+
+            if (!selectedStatus) {
+                setStatusError('Status is required');
+                setLoad(false);
+                return;
+            } else {
+                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_issue_type';
@@ -231,6 +240,22 @@ const IssueType = () => {
 
         try {
 
+            if (!editedshiftError) {
+                setEditedShiftError('Issue type is required');
+                setLoad(false);
+                return;
+            } else {
+                setEditedShiftError('');
+            }
+
+            if (!editedStatus) {
+                setEditedstatusError('Status is required');
+                setLoad(false);
+                return;
+            } else {
+                setEditedstatusError('');
+            }
+
             const apiUrl = 'https://ocean21.in/api/public/api/update_issuetype';
 
             const response = await axios.put(apiUrl, {
@@ -322,7 +347,7 @@ const IssueType = () => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {shiftError}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -481,7 +506,7 @@ const IssueType = () => {
                                 />
 
                                 <Text style={styles.ModalerrorText}>
-                                    { }
+                                    {editedshiftError}
                                 </Text>
 
                                 <Text style={styles.modalLabelText}>Status</Text>
@@ -525,7 +550,7 @@ const IssueType = () => {
                                         {
                                             EditLoad ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                                <Text style={styles.modalSubmitButtonText}>Update</Text>
                                         }
                                     </TouchableOpacity>
 
