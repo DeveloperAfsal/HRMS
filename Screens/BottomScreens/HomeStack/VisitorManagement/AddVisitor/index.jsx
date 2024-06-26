@@ -22,18 +22,25 @@ const AddVisitor = ({ navigation }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [documentList, setDocumentList] = useState([]);
     const [selectedDocument, setSelectedDocument] = useState([]);
+    const [selectedDocumentErr, setSelectedDocumentErr] = useState('');
     const [selectedDocumentId, setSelectedDocumentId] = useState(null);
 
 
     const [name, setName] = useState('');
+    const [nameErr, setNameErr] = useState('');
     const [mobileNumber, setmobileNumber] = useState('');
+    const [mobileNumberErr, setmobileNumberErr] = useState('');
     const [idNumber, setIdNumber] = useState('');
+    const [idNumberErr, setIdNumberErr] = useState('');
     const [mail, setMail] = useState('');
+    const [mailErr, setMailErr] = useState('');
     const [location, setLocation] = useState('');
+    const [locationErr, setLocationErr] = useState('');
     const [load, SetLoad] = useState(false);
 
     // 
     const [selectedImage, setSelectedImage] = useState([]);
+    const [selectedImageErr, setSelectedImageErr] = useState([]);
 
     const renderSelectedImage = () => {
         return (
@@ -137,6 +144,7 @@ const AddVisitor = ({ navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentsId, setSelectedDepartmentsId] = useState('');
 
     useEffect(() => {
@@ -174,6 +182,7 @@ const AddVisitor = ({ navigation }) => {
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
@@ -206,6 +215,7 @@ const AddVisitor = ({ navigation }) => {
     // slotfromTime
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -223,6 +233,7 @@ const AddVisitor = ({ navigation }) => {
     // slotToTime
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -243,36 +254,137 @@ const AddVisitor = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('visitor_name', name);
-        formData.append('mobile_number', mobileNumber);
-        formData.append('id_proof', selectedDocumentId);
-        formData.append('id_number', idNumber);
-        formData.append('email_id', mail);
-        formData.append('whom_to_visit', selectedMemberId);
-        formData.append('location', location);
-        formData.append('in_time', slotfromTime);
-        formData.append('out_time', slotToTime);
-
-        if (selectedImage.length > 0) {
-            selectedImage.map((image, index) => {
-                const imageUriParts = image.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`profile_img`, {
-                    uri: image,
-                    name: imageName,
-                    type: 'image/jpeg',
-                });
-            });
-        }
-        else {
-            formData.append('profile_img', selectedImage);
+        if (!name) {
+            setNameErr('Enter Name');
+            Alert.alert('Missing', "Check The Name Field");
+            SetLoad(false);
+            return;
+        } else {
+            setNameErr('');
         }
 
-        formData.append('department', selectedDepartmentsId);
-        formData.append('created_by', data.userempid);
+        if (selectedImage.length == "0") {
+            setSelectedImageErr('Select Image');
+            Alert.alert('Missing', "Check The Image Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedImageErr('');
+        }
 
+        if (!mobileNumber) {
+            setmobileNumberErr('Enter Mobile Number');
+            Alert.alert('Missing', "Check The Mobile Number Field");
+            SetLoad(false);
+            return;
+        } else {
+            setmobileNumberErr('');
+        }
+
+        if (selectedDocument.length == "0") {
+            setSelectedDocumentErr('Select ID');
+            Alert.alert('Missing', "Check The ID Proof Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDocumentErr('');
+        }
+
+        if (!idNumber) {
+            setIdNumberErr('Enter Id Proof Number');
+            Alert.alert('Missing', "Check The Id Proof Number Field");
+            SetLoad(false);
+            return;
+        } else {
+            setIdNumberErr('');
+        }
+
+        if (!mail) {
+            setMailErr('Enter Mail');
+            Alert.alert('Missing', "Check The Mail Field");
+            SetLoad(false);
+            return;
+        } else {
+            setMailErr('');
+        }
+
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!location) {
+            setLocationErr('Enter Location');
+            Alert.alert('Missing', "Check Location Field");
+            SetLoad(false);
+            return;
+        } else {
+            setLocationErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
 
         try {
+
+            formData.append('visitor_name', name);
+            formData.append('mobile_number', mobileNumber);
+            formData.append('id_proof', selectedDocumentId);
+            formData.append('id_number', idNumber);
+            formData.append('email_id', mail);
+            formData.append('whom_to_visit', selectedMemberId);
+            formData.append('location', location);
+            formData.append('in_time', slotfromTime);
+            formData.append('out_time', slotToTime);
+
+            if (selectedImage) {
+                if (selectedImage.length > 0) {
+                    selectedImage.map((image, index) => {
+                        const imageUriParts = image.split('/');
+                        const imageName = imageUriParts[imageUriParts.length - 1];
+                        formData.append(`profile_img`, {
+                            uri: image,
+                            name: imageName,
+                            type: 'image/jpeg',
+                        });
+                    });
+                }
+                else {
+                    formData.append('profile_img', selectedImage);
+                }
+            }
+
+            formData.append('department', selectedDepartmentsId);
+            formData.append('created_by', data.userempid);
+
             const response = await fetch('https://ocean21.in/api/public/api/add_visitor', {
                 method: 'POST',
                 headers: {
@@ -367,7 +479,7 @@ const AddVisitor = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {nameErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -388,6 +500,10 @@ const AddVisitor = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
+                    <Text style={styles.errorText}>
+                        {selectedImageErr}
+                    </Text>
+
                     <Text style={styles.ShiftSlotText}>
                         Mobile Number
                     </Text>
@@ -399,7 +515,7 @@ const AddVisitor = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {mobileNumberErr}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -428,7 +544,7 @@ const AddVisitor = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDocumentErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -442,7 +558,7 @@ const AddVisitor = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {idNumberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -456,7 +572,7 @@ const AddVisitor = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {mailErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -491,7 +607,7 @@ const AddVisitor = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -526,7 +642,7 @@ const AddVisitor = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -540,7 +656,7 @@ const AddVisitor = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {locationErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -562,7 +678,7 @@ const AddVisitor = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotfromTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -584,7 +700,7 @@ const AddVisitor = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotToTimeErr}
                     </Text>
 
                     <View style={styles.buttonview}>
