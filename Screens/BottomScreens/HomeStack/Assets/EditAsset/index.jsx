@@ -21,13 +21,16 @@ const EditAsset = ({ route, navigation }) => {
     const { data } = useSelector((state) => state.login);
 
     const [assetDetails, setAssetsDetails] = useState('');
+    const [assetDetailsErr, setAssetsDetailsErr] = useState('');
     const [assetValue, setAssetsValue] = useState('');
+    const [assetValueErr, setAssetsValueErr] = useState('');
     const [remarks, setRemarks] = useState('');
-
+    const [remarksErr, setRemarksErr] = useState('');
     const [datalist, setDatalist] = useState([]);
 
     const [load, SetLoad] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [selectedStatusErr, setSelectedStatusErr] = useState('');
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
 
     // status
@@ -47,6 +50,8 @@ const EditAsset = ({ route, navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
     const [selectedDepartmentsId, setSelectedDepartmentsId] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
+
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/userrolelist';
@@ -84,6 +89,8 @@ const EditAsset = ({ route, navigation }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
+
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
 
@@ -165,6 +172,7 @@ const EditAsset = ({ route, navigation }) => {
     const [assetTypeDropdown, setAssetTypeDropdown] = useState([]);
     const [showAssetTypeDropdown, setShowAssetTypeDropdown] = useState(false);
     const [selectedAssetTypes, setSelectedAssetTypes] = useState([]);
+    const [selectedAssetTypesErr, setSelectedAssetTypesErr] = useState([]);
     const [selectedAssetTypeIds, setSelectedAssetTypeIds] = useState([]);
     const Assetid = selectedAssetTypeIds.join(', ')
 
@@ -272,6 +280,69 @@ const EditAsset = ({ route, navigation }) => {
         SetLoad(true);
 
         try {
+
+            if (!selectedDepartments) {
+                setSelectedDepartmentsErr('Select Department Name');
+                Alert.alert('Missing', "Check The Department Field");
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedDepartmentsErr('');
+            }
+
+            if (!selectedMember) {
+                setSelectedMemberErr('Select Member Name');
+                Alert.alert('Missing', "Check The Member Field");
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedMemberErr('');
+            }
+
+            if (selectedAssetTypes.length == "0") {
+                setSelectedAssetTypesErr('Select Asset Type');
+                Alert.alert('Missing', "Check The Asset Type Field");
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedAssetTypesErr('');
+            }
+
+            if (!assetDetails) {
+                setAssetsDetailsErr('Enter Asset Details');
+                Alert.alert('Missing', "Check The Asset Details Field");
+                SetLoad(false);
+                return;
+            } else {
+                setAssetsDetailsErr('');
+            }
+
+            if (!assetValue) {
+                setAssetsValueErr('Enter Asset Value');
+                Alert.alert('Missing', "Check The Asset Value Field");
+                SetLoad(false);
+                return;
+            } else {
+                setAssetsValueErr('');
+            }
+
+            if (!selectedStatus) {
+                setSelectedStatusErr('Select Status');
+                Alert.alert('Missing', "Check The Status Field");
+                SetLoad(false);
+                return;
+            } else {
+                setSelectedStatusErr('');
+            }
+
+            if (!remarks) {
+                setRemarksErr('Enter Remarks');
+                Alert.alert('Missing', "Check The Remarks Field");
+                SetLoad(false);
+                return;
+            } else {
+                setRemarksErr('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/update_assign_asset';
 
@@ -387,7 +458,7 @@ const EditAsset = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -422,7 +493,7 @@ const EditAsset = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -461,7 +532,7 @@ const EditAsset = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedAssetTypesErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -475,7 +546,7 @@ const EditAsset = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {assetDetailsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -489,7 +560,7 @@ const EditAsset = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {assetValueErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -586,7 +657,7 @@ const EditAsset = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedStatusErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -600,7 +671,7 @@ const EditAsset = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {remarksErr}
                     </Text>
 
                     <View style={styles.buttonview}>

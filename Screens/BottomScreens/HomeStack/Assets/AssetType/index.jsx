@@ -202,6 +202,14 @@ const AssetType = () => {
 
         try {
 
+            if (!editedShiftSlot) {
+                setShiftError1('Asset type is required');
+                setEditLoad(false);
+                return;
+            } else {
+                setShiftError1('');
+            }
+
             const apiUrl = 'https://ocean21.in/api/public/api/update_asset_type';
 
             const response = await axios.put(apiUrl, {
@@ -318,7 +326,7 @@ const AssetType = () => {
                     />
 
                     <Text style={styles.errorText}>
-                        {shiftError}
+                        { }
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -332,7 +340,7 @@ const AssetType = () => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {shiftError}
                     </Text>
 
 
@@ -465,8 +473,8 @@ const AssetType = () => {
                                     style={styles.modalInput}
                                 />
 
-                                <Text style={styles.ModalerrorText}>
-                                    { }
+                                <Text style={styles.errorText}>
+                                    {shiftError1}
                                 </Text>
 
                                 <View style={styles.buttoncontainer}>
@@ -479,7 +487,7 @@ const AssetType = () => {
                                         {
                                             EditLoad ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                                <Text style={styles.modalSubmitButtonText}>Update</Text>
                                         }
                                     </TouchableOpacity>
 
