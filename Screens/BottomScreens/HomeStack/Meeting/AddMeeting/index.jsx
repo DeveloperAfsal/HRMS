@@ -19,8 +19,11 @@ const Addmeeting = ({ navigation }) => {
     // 
 
     const [title, setTitle] = useState('');
+    const [titleErr, setTitleErr] = useState('');
     const [agenda, setAgenda] = useState('');
+    const [agendaErr, setAgendaErr] = useState('');
     const [remarks, setRemarks] = useState('');
+    const [remarksErr, setRemarksErr] = useState('');
     const [load, setLoad] = useState(false);
 
     // Department
@@ -29,6 +32,7 @@ const Addmeeting = ({ navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
     const handleToggleDepartment = async (departmentName, departmentId) => {
@@ -85,6 +89,7 @@ const Addmeeting = ({ navigation }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [EmployeeError, setEmployeeError] = useState('');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -141,6 +146,7 @@ const Addmeeting = ({ navigation }) => {
     // slotfromTime
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -158,6 +164,7 @@ const Addmeeting = ({ navigation }) => {
     // slotToTime
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -190,6 +197,69 @@ const Addmeeting = ({ navigation }) => {
     const meetingAdd = async () => {
 
         setLoad(true);
+
+        if (!title) {
+            setTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The title Field");
+            setLoad(false);
+            return;
+        } else {
+            setTitleErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!agenda) {
+            setAgendaErr('Enter Agenda');
+            Alert.alert('Missing', "Check The Agenda Field");
+            setLoad(false);
+            return;
+        } else {
+            setAgendaErr('');
+        }
+
+        if (!remarks) {
+            setRemarksErr('Enter remarks');
+            Alert.alert('Missing', "Check The remarks Field");
+            setLoad(false);
+            return;
+        } else {
+            setRemarksErr('');
+        }
 
         try {
 
@@ -283,7 +353,7 @@ const Addmeeting = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {titleErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -318,7 +388,7 @@ const Addmeeting = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -355,7 +425,7 @@ const Addmeeting = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -399,7 +469,7 @@ const Addmeeting = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotfromTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -421,7 +491,7 @@ const Addmeeting = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotToTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -435,7 +505,7 @@ const Addmeeting = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {agendaErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -449,7 +519,7 @@ const Addmeeting = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {remarksErr}
                     </Text>
 
                     <View style={styles.buttonview}>

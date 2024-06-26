@@ -23,8 +23,11 @@ const Editmeeting = ({ navigation, route }) => {
     // 
 
     const [title, setTitle] = useState('');
+    const [titleErr, setTitleErr] = useState('');
     const [agenda, setAgenda] = useState('');
+    const [agendaErr, setAgendaErr] = useState('');
     const [remarks, setRemarks] = useState('');
+    const [remarksErr, setRemarksErr] = useState('');
     const [load, setLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
 
@@ -33,6 +36,7 @@ const Editmeeting = ({ navigation, route }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
@@ -90,6 +94,7 @@ const Editmeeting = ({ navigation, route }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [EmployeeError, setEmployeeError] = useState('');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -145,6 +150,7 @@ const Editmeeting = ({ navigation, route }) => {
     // slotfromTime
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -162,6 +168,7 @@ const Editmeeting = ({ navigation, route }) => {
     // slotToTime
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -236,6 +243,69 @@ const Editmeeting = ({ navigation, route }) => {
     const meetingAdd = async () => {
 
         setLoad(true);
+
+        if (!title) {
+            setTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The title Field");
+            setLoad(false);
+            return;
+        } else {
+            setTitleErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!agenda) {
+            setAgendaErr('Enter Agenda');
+            Alert.alert('Missing', "Check The Agenda Field");
+            setLoad(false);
+            return;
+        } else {
+            setAgendaErr('');
+        }
+
+        if (!remarks) {
+            setRemarksErr('Enter remarks');
+            Alert.alert('Missing', "Check The remarks Field");
+            setLoad(false);
+            return;
+        } else {
+            setRemarksErr('');
+        }
 
         try {
 
@@ -330,7 +400,7 @@ const Editmeeting = ({ navigation, route }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {titleErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -365,7 +435,7 @@ const Editmeeting = ({ navigation, route }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -402,7 +472,7 @@ const Editmeeting = ({ navigation, route }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -446,7 +516,7 @@ const Editmeeting = ({ navigation, route }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotfromTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -468,7 +538,7 @@ const Editmeeting = ({ navigation, route }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotToTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -482,7 +552,7 @@ const Editmeeting = ({ navigation, route }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {agendaErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -496,7 +566,7 @@ const Editmeeting = ({ navigation, route }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {remarksErr}
                     </Text>
 
                     <View style={styles.buttonview}>

@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorText: {
+        color: "red",
+        paddingTop: 10,
+        width: "90%"
+    },
+
     Input: {
         borderWidth: 1,
         borderColor: '#515151',
