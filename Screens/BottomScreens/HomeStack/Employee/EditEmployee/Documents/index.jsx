@@ -392,16 +392,16 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                // Alert.alert('Submitted', 'Employee Details Updated');
-                handleShowAlert(responsedata.data);
+                Alert.alert('Submitted', 'Employee Details Updated');
+                // handleShowAlert(responsedata.data);
                 setLoad(false);
             } else {
-                handleShowAlert1(responsedata.data)
+                // handleShowAlert1(responsedata.data)
             }
 
         } catch (error) {
-            // Alert.alert('Failed to add Employee', error);
-            handleShowAlert2();
+            Alert.alert('Failed to add Employee', error);
+            // handleShowAlert2();d
             setLoad(false);
         }
 

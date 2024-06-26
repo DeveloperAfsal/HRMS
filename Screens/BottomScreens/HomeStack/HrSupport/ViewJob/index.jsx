@@ -28,12 +28,40 @@ const ViewJob = ({ navigation, route }) => {
     const [editedVacancies, setEditedVacancies] = useState('');
     const [editedDesignation, setEditedDesignation] = useState('');
     const [editedDes, setEditedDes] = useState('');
+    const [designationEditErr, setDesignationEditErr] = useState('');
+    const [descriptionEditErr, setDescriptionEditErr] = useState('');
+    const [nofVacanciesEditError, setNofVacanciesEditError] = useState('');
+
 
     // 
 
     const handleEditSubmit = async () => {
 
         setEditLoad(true);
+
+        if (!editedDesignation) {
+            setDesignationEditErr('Enter designation');
+            setEditLoad(false);
+            return;
+        } else {
+            setDesignationEditErr('');
+        }
+
+        if (!editedVacancies) {
+            setNofVacanciesEditError('Enter Vacancies');
+            setEditLoad(false);
+            return;
+        } else {
+            setNofVacanciesEditError('');
+        }
+
+        if (!editedDes) {
+            setDescriptionEditErr('Enter Description');
+            setEditLoad(false);
+            return;
+        } else {
+            setDescriptionEditErr('');
+        }
 
         try {
 
@@ -281,6 +309,10 @@ const ViewJob = ({ navigation, route }) => {
                                 style={styles.modalInput}
                             />
 
+                            <Text style={styles.errorText}>
+                                {designationEditErr}
+                            </Text>
+
                             <Text style={styles.modalLabelText}>No. of Vacancies</Text>
 
                             <TextInput
@@ -289,6 +321,10 @@ const ViewJob = ({ navigation, route }) => {
                                 style={styles.modalInput}
                             />
 
+                            <Text style={styles.errorText}>
+                                {nofVacanciesEditError}
+                            </Text>
+
                             <Text style={styles.modalLabelText}>Description</Text>
 
                             <TextInput
@@ -296,6 +332,10 @@ const ViewJob = ({ navigation, route }) => {
                                 onChangeText={(text) => setEditedDes(text)}
                                 style={styles.modalInput}
                             />
+
+                            <Text style={styles.errorText}>
+                                {descriptionEditErr}
+                            </Text>
 
                             <View style={styles.buttoncontainer}>
 

@@ -69,6 +69,7 @@ const EmpLeaveReq = ({ navigation }) => {
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const [selectedCategoryErr,setSelectedCategoryErr] = useState('');
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_category_list';
@@ -301,9 +302,11 @@ const EmpLeaveReq = ({ navigation }) => {
 
     const Handlerefresh = () => {
         setSelectedleaveType(null);
+        setSelectedCategory(null);
         setSelectedLocation(null);
-        setSelectedShift(null);
-        setStartDate(new Date());
+        setStartDate(null);
+        setEndDate(null);
+        setDocFile();
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
         setReason('');
@@ -345,6 +348,15 @@ const EmpLeaveReq = ({ navigation }) => {
 
         try {
 
+            if (!selectedCategory) {
+                setSelectedCategoryErr('Select Category Name');
+                Alert.alert('Missing', "Check The Category Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedCategoryErr('');
+            }
+
             const response = await fetch('https://ocean21.in/api/public/api/add_employee_leave_request', {
                 method: 'POST',
                 headers: {
@@ -369,7 +381,9 @@ const EmpLeaveReq = ({ navigation }) => {
                 } else if (selectedCategory === "Half Day") {
                     navigation.navigate('HalfDay Request');
                 }
+                Handlerefresh();
             } else {
+                Alert.alert('Failed', responsedata.message);
                 console.log('Error')
                 setLoad(false);
             }
@@ -401,7 +415,7 @@ const EmpLeaveReq = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedCategory ? selectedCategory : 'Select Category'}
+                            {selectedCategory || 'Select Category'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -432,7 +446,7 @@ const EmpLeaveReq = ({ navigation }) => {
                     </Text>
 
                     <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
+                        <Text>{selectedleaveType || 'Select Leave Type'}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
 
@@ -466,7 +480,7 @@ const EmpLeaveReq = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedLocation ? selectedLocation : 'Select Location'}
+                            {selectedLocation || 'Select Location'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 

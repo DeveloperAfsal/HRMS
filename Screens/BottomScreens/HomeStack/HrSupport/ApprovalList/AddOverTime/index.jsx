@@ -16,6 +16,7 @@ const AddOvertime = ({ navigation }) => {
 
     const { data } = useSelector((state) => state.login);
     const [Reason, setReason] = useState('');
+    const [ReasonErr, setReasonErr] = useState('');
     const [load, setLoad] = useState(false);
 
     // Department
@@ -23,6 +24,7 @@ const AddOvertime = ({ navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/userrolelist';
@@ -61,6 +63,8 @@ const AddOvertime = ({ navigation }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
+
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
 
@@ -95,6 +99,8 @@ const AddOvertime = ({ navigation }) => {
     const [showTypeDropdown, setShowTypeDropdown] = useState(false);
     const [selectedType, setSelectedType] = useState('');
     const [selectedTypeId, setSelectedTypeId] = useState('');
+    const [selectedTypeErr, setSelectedTypeErr] = useState('');
+
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_type_list';
@@ -133,6 +139,8 @@ const AddOvertime = ({ navigation }) => {
     const [showLocationDropdown, setShowLocationDropdown] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedLocationId, setSelectedLocationId] = useState('');
+    const [selectedLocationErr, setSelectedLocationErr] = useState('');
+
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/attendance_location_list';
@@ -171,6 +179,8 @@ const AddOvertime = ({ navigation }) => {
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
+    const [startDateErr, setStartDateErr] = useState(null);
+
 
     const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
 
@@ -188,6 +198,7 @@ const AddOvertime = ({ navigation }) => {
     // From Time 
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotfromTimeErr] = useState(null);
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -205,6 +216,7 @@ const AddOvertime = ({ navigation }) => {
     // To Time 
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState(null);
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -225,6 +237,7 @@ const AddOvertime = ({ navigation }) => {
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedShiftErr, setSelectedShiftErr] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -258,6 +271,87 @@ const AddOvertime = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoad(true);
         try {
+
+            if (!selectedDepartments) {
+                setSelectedDepartmentsErr('Select Department Name');
+                Alert.alert('Missing', "Check The Department Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedDepartmentsErr('');
+            }
+
+            if (!selectedMember) {
+                setSelectedMemberErr('Select Member Name');
+                Alert.alert('Missing', "Check The Member Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedMemberErr('');
+            }
+
+            if (!selectedType) {
+                setSelectedTypeErr('Select Type');
+                Alert.alert('Missing', "Check The Type Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedTypeErr('');
+            }
+
+            if (!selectedLocation) {
+                setSelectedLocationErr('Select Loactaion');
+                Alert.alert('Missing', "Check The Loactaion Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedLocationErr('');
+            }
+
+            if (!selectedShift) {
+                setSelectedShiftErr('Select Shift');
+                Alert.alert('Missing', "Check The Shift Field");
+                setLoad(false);
+                return;
+            } else {
+                setSelectedShiftErr('');
+            }
+
+            if (!startDate) {
+                setStartDateErr('Select Date');
+                Alert.alert('Missing', "Check The Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setStartDateErr('');
+            }
+
+            if (slotfromTime == '00:00:00') {
+                setSlotfromTimeErr('Select From Time');
+                Alert.alert('Missing', "Check The From Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotfromTimeErr('');
+            }
+
+            if (slotToTime == '00:00:00') {
+                setSlotToTimeErr('Select To Time');
+                Alert.alert('Missing', "Check The To Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotToTimeErr('');
+            }
+
+            if (!Reason) {
+                setReasonErr('Enter Reason');
+                Alert.alert('Missing', "Check The Reason Field");
+                setLoad(false);
+                return;
+            } else {
+                setReasonErr('');
+            }
 
             const apiUrl = `https://ocean21.in/api/public/api/add_otmenualentry`;
 
@@ -366,6 +460,10 @@ const AddOvertime = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedDepartmentsErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Select Member
                 </Text>
@@ -397,6 +495,10 @@ const AddOvertime = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedMemberErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Select Type
                 </Text>
@@ -426,6 +528,10 @@ const AddOvertime = ({ navigation }) => {
                         </ScrollView>
                     </View>
                 )}
+
+                <Text style={styles.errorText}>
+                    {selectedTypeErr}
+                </Text>
 
                 <Text style={styles.subHeading}>
                     Location
@@ -458,6 +564,10 @@ const AddOvertime = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedLocationErr}
+                </Text>
+
                 <Text style={styles.TimeSlotText}>
                     Shift Slot
                 </Text>
@@ -481,6 +591,11 @@ const AddOvertime = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedShiftErr}
+                </Text>
+
+
                 <Text style={styles.subHeading}>
                     Date
                 </Text>
@@ -498,6 +613,10 @@ const AddOvertime = ({ navigation }) => {
                         />
                     )}
                 </View>
+
+                <Text style={styles.errorText}>
+                    {startDateErr}
+                </Text>
 
                 <Text style={styles.subHeading}>
                     From Time
@@ -517,6 +636,10 @@ const AddOvertime = ({ navigation }) => {
                     )}
                 </View>
 
+                <Text style={styles.errorText}>
+                    {slotfromTimeErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     To Time
                 </Text>
@@ -535,6 +658,10 @@ const AddOvertime = ({ navigation }) => {
                     )}
                 </View>
 
+                <Text style={styles.errorText}>
+                    {slotToTimeErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Reason
                 </Text>
@@ -544,6 +671,10 @@ const AddOvertime = ({ navigation }) => {
                     onChangeText={(text) => setReason(text)}
                     style={styles.Reason}
                 />
+
+                <Text style={styles.errorText}>
+                    {ReasonErr}
+                </Text>
 
                 <View style={[styles.fullWidth, styles.Row, styles.Left]}>
 

@@ -17,6 +17,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const { data } = useSelector((state) => state.login);
     const [Reason, setReason] = useState('');
+    const [ReasonErr, setReasonErr] = useState('');
     const [shiftId, setShiftId] = useState('');
     const [shiftName, setShiftName] = useState('');
     const [load, setLoad] = useState(false);
@@ -27,6 +28,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/userrolelist';
@@ -67,6 +69,8 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
+
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
 
@@ -100,6 +104,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [showTypeDropdown, setShowTypeDropdown] = useState(false);
     const [selectedType, setSelectedType] = useState('');
     const [selectedTypeId, setSelectedTypeId] = useState('');
+    const [selectedTypeErr, setSelectedTypeErr] = useState('');
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_type_list';
@@ -140,6 +145,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const [selectedCategoryErr, setSelectedCategoryErr] = useState('');
     console.log(selectedCategory, "selectedCategory")
 
     useEffect(() => {
@@ -179,6 +185,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
     const formattedStartDate = startDate ?
         `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
         "";
@@ -199,6 +206,8 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const [showDatePicker2, setShowDatePicker2] = useState(false);
     const [date, setDate] = useState(null);
+    const [dateErr, setdateErr] = useState('');
+
     const formatteddate = date ?
         `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` :
         "";
@@ -219,6 +228,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const [showDatePicker1, setShowDatePicker1] = useState(false);
     const [endDate, setEndDate] = useState(null);
+    const [endDateErr, setEndDateErr] = useState(null);
     const formattedendDate = endDate ?
         `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` :
         "";
@@ -238,6 +248,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     // From Time 
 
     const [slotfromTime, setSlotfromTime] = useState(null);
+    const [slotfromTimeErr, setSlotfromTimeErr] = useState(null);
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -255,6 +266,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     // To Time 
 
     const [slotToTime, setSlotToTime] = useState(null);
+    const [slotToTimeErr, setSlotToTimeErr] = useState(null);
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -317,6 +329,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     // Function to handle document selection
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
 
     const handleDocumentSelection = async () => {
 
@@ -341,33 +354,139 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('emp_id', selectedMemberId);
-        formData.append('hr_id', data.userempid);
-        formData.append('request_type', selectedCategoryId);
-        formData.append('request_category', selectedTypeId);
-        formData.append('leave_reason', Reason);
-        formData.append('slot_id', shiftId);
-        formData.append('from_date', formatteddate);
-        formData.append('to_date', formattedendDate);
-        formData.append('permission_date', formattedStartDate);
-        formData.append('permission_timefrom', slotfromTime);
-        formData.append('permission_timeto', slotToTime);
-
-        if (docFile.length > 0) {
-            docFile.map((docFile, index) => {
-                formData.append(`leave_document`, {
-                    uri: docFile.uri,
-                    name: docFile.name,
-                    type: docFile.type,
-                });
-            });
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
         }
-        else {
-            formData.append('leave_document', docFile);
+
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!selectedType) {
+            setSelectedTypeErr('Select Type');
+            Alert.alert('Missing', "Check The Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedTypeErr('');
+        }
+
+        if (!selectedCategory) {
+            setSelectedCategoryErr('Select Category');
+            Alert.alert('Missing', "Check The Category Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedCategoryErr('');
+        }
+
+        if (selectedCategory === "Leave") {
+            if (!date) {
+                setdateErr('Select From Date');
+                Alert.alert('Missing', "Check From Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setdateErr('');
+            }
+
+            if (!endDate) {
+                setEndDateErr('Select To Date');
+                Alert.alert('Missing', "Check To Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setEndDateErr('');
+            }
+        }
+
+        if (selectedCategory === "Permission" || selectedCategory === "Half Day") {
+            if (!startDate) {
+                setStartDateErr('Select Date');
+                Alert.alert('Missing', "Check The Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setStartDateErr('');
+            }
+
+            if (!slotfromTime) {
+                setSlotfromTimeErr('Select From Time');
+                Alert.alert('Missing', "Check The From Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotfromTimeErr('');
+            }
+
+            if (!slotToTime) {
+                setSlotToTimeErr('Select To Time');
+                Alert.alert('Missing', "Check The To Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotToTimeErr('');
+            }
+        }
+
+        if (!Reason) {
+            setReasonErr('Enter Reason');
+            Alert.alert('Missing', "Check The Reason Field");
+            setLoad(false);
+            return;
+        } else {
+            setReasonErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('Choose file');
+            Alert.alert('Missing', "Check File Field");
+            setLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
         }
 
 
         try {
+
+            formData.append('emp_id', selectedMemberId);
+            formData.append('hr_id', data.userempid);
+            formData.append('request_type', selectedCategoryId);
+            formData.append('request_category', selectedTypeId);
+            formData.append('leave_reason', Reason);
+            formData.append('slot_id', shiftId);
+            formData.append('from_date', formatteddate);
+            formData.append('to_date', formattedendDate);
+            formData.append('permission_date', formattedStartDate);
+            formData.append('permission_timefrom', slotfromTime);
+            formData.append('permission_timeto', slotToTime);
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((docFile, index) => {
+                        formData.append(`leave_document`, {
+                            uri: docFile.uri,
+                            name: docFile.name,
+                            type: docFile.type,
+                        });
+                    });
+                }
+                else {
+                    formData.append('leave_document', docFile);
+                }
+            }
+
 
             const response = await fetch('https://ocean21.in/api/public/api/add_menualentry', {
                 method: 'POST',
@@ -448,7 +567,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}
                 >
                     <Text style={styles.StatusTouchableText}>
-                        {selectedDepartments ? selectedDepartments : 'Select Department'}
+                        {selectedDepartments || 'Select Department'}
                     </Text>
                     <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -470,6 +589,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedDepartmentsErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Select Member
                 </Text>
@@ -479,7 +602,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     style={styles.StatusTouchable}>
 
                     <Text style={styles.StatusTouchableText}>
-                        {selectedMember ? selectedMember : 'Select Member'}
+                        {selectedMember || 'Select Member'}
                     </Text>
                     <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -501,6 +624,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedMemberErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Select Type
                 </Text>
@@ -510,7 +637,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     style={styles.StatusTouchable}>
 
                     <Text style={styles.StatusTouchableText}>
-                        {selectedType ? selectedType : 'Select Type'}
+                        {selectedType || 'Select Type'}
                     </Text>
                     <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -532,6 +659,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     </View>
                 )}
 
+                <Text style={styles.errorText}>
+                    {selectedTypeErr}
+                </Text>
+
                 <Text style={styles.subHeading}>
                     Select Category
                 </Text>
@@ -541,7 +672,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     style={styles.StatusTouchable}>
 
                     <Text style={styles.StatusTouchableText}>
-                        {selectedCategory ? selectedCategory : 'Select Category'}
+                        {selectedCategory || 'Select Category'}
                     </Text>
                     <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -562,6 +693,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                         </ScrollView>
                     </View>
                 )}
+
+                <Text style={styles.errorText}>
+                    {selectedCategoryErr}
+                </Text>
 
                 {
                     selectedCategory === "Permission" || selectedCategory === "Half Day" ?
@@ -584,6 +719,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                                 )}
                             </View>
 
+                            <Text style={styles.errorText}>
+                                {startDateErr}
+                            </Text>
+
                             <Text style={styles.subHeading}>
                                 From Time
                             </Text>
@@ -602,6 +741,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                                 )}
                             </View>
 
+                            <Text style={styles.errorText}>
+                                {slotfromTimeErr}
+                            </Text>
+
                             <Text style={styles.subHeading}>
                                 To Time
                             </Text>
@@ -619,6 +762,9 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                                     />
                                 )}
                             </View>
+                            <Text style={styles.errorText}>
+                                {slotToTimeErr}
+                            </Text>
                         </> : null
                 }
 
@@ -643,6 +789,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                                 )}
                             </View>
 
+                            <Text style={styles.errorText}>
+                                {dateErr}
+                            </Text>
+
                             <Text style={styles.subHeading}>
                                 To Date
                             </Text>
@@ -660,6 +810,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                                     />
                                 )}
                             </View>
+
+                            <Text style={styles.errorText}>
+                                {endDateErr}
+                            </Text>
                         </> : null
                 }
 
@@ -672,6 +826,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     onChangeText={(text) => setReason(text)}
                     style={styles.Reason}
                 />
+
+                <Text style={styles.errorText}>
+                    {ReasonErr}
+                </Text>
 
                 <Text style={styles.subHeading}>
                     Select File
@@ -688,6 +846,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                <Text style={styles.errorText}>
+                    {docFileErr}
+                </Text>
 
                 <View style={[styles.fullWidth, styles.Row, styles.Left]}>
 

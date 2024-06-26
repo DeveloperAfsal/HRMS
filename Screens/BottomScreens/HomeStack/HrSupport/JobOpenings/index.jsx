@@ -22,17 +22,44 @@ const JobOpenings = ({ navigation }) => {
     const [load, setload] = useState(false);
     const [loadData, setLoadData] = useState(false);
     const [designation, setDesignation] = useState('');
+    const [designationErr, setDesignationErr] = useState('');
     const [nofVacancies, setNofVacancies] = useState('');
     const [description, setDescription] = useState('');
-    const [designationError, setDesignationError] = useState('');
+    const [descriptionErr, setDescriptionErr] = useState('');
     const [nofVacanciesError, setNofVacanciesError] = useState('');
     const [datalist, setDatalist] = useState([]);
 
     // Add
 
     const HandleSubmit = async () => {
+
         setload(true);
+
         try {
+
+            if (!designation) {
+                setDesignationErr('Enter designation');
+                setload(false);
+                return;
+            } else {
+                setDesignationErr('');
+            }
+
+            if (!nofVacancies) {
+                setNofVacanciesError('Enter Vacancies');
+                setload(false);
+                return;
+            } else {
+                setNofVacanciesError('');
+            }
+
+            if (!description) {
+                setDescriptionErr('Enter Description');
+                setload(false);
+                return;
+            } else {
+                setDescriptionErr('');
+            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_jobopening';
 
@@ -187,7 +214,7 @@ const JobOpenings = ({ navigation }) => {
                                 />
 
                                 <Text style={styles.errorText}>
-                                    {designationError}
+                                    {designationErr}
                                 </Text>
 
                                 <Text style={styles.ShiftSlotText}>
@@ -245,6 +272,10 @@ const JobOpenings = ({ navigation }) => {
                                     />
                                 </SafeAreaView>
 
+                                <Text style={styles.errorText}>
+                                    {descriptionErr}
+                                </Text>
+
                                 <View style={styles.buttonview}>
                                     <TouchableOpacity style={styles.submitbutton}
                                         onPress={HandleSubmit}
@@ -284,22 +315,22 @@ const JobOpenings = ({ navigation }) => {
             </View>
 
             <LottieAlertSucess
-                    visible={isAlertVisible}
-                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
-                    title={resMessage}
-                />
+                visible={isAlertVisible}
+                animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
 
-                <LottieAlertError
-                    visible={isAlertVisible1}
-                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
-                    title={resMessageFail}
-                />
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
 
-                <LottieCatchError
-                    visible={isAlertVisible2}
-                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
-                    title="Error While Fetching Data"
-                />
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 

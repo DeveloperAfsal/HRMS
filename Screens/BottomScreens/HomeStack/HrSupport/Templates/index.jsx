@@ -29,6 +29,7 @@ const Template = ({ navigation }) => {
     const [title, setTitle] = useState();
     const [titleError, setTitleError] = useState();
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
     const [Reason, setReason] = useState('');
     const [slotToDelete, setSlotToDelete] = useState(null);
     const [templatelist, setTemplatelist] = useState([]);
@@ -147,6 +148,7 @@ const Template = ({ navigation }) => {
 
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
+    const [statusErr, setStatusErr] = useState('');
 
     const toggleDropdownstatus = () => {
         setShowDropdownstatus(!showDropdownstatus);
@@ -165,23 +167,50 @@ const Template = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('title', title);
-        formData.append('status', selectedStatus);
-        formData.append('created_by', data.userempid);
-        if (docFile.length > 0) {
-            docFile.map((file, index) => {
-                formData.append(`template_file`, {
-                    uri: file.uri,
-                    name: file.name,
-                    type: file.type,
-                });
-            });
-        }
-        else {
-            formData.append('template_file', docFile);
-        }
-
         try {
+
+            if (!title) {
+                setTitleError('Select Title');
+                setLoad(false);
+                return;
+            } else {
+                setTitleError('');
+            }
+
+            if (!selectedStatus) {
+                setStatusErr('Select Status');
+                setLoad(false);
+                return;
+            } else {
+                setStatusErr('');
+            }
+
+            if (!docFile) {
+                setDocFileErr('Select Doc File');
+                setLoad(false);
+                return;
+            } else {
+                setDocFileErr('');
+            }
+
+            formData.append('title', title);
+            formData.append('status', selectedStatus);
+            formData.append('created_by', data.userempid);
+            // formData.append('template_file', docFile);
+
+            if (docFile.length > 0) {
+                docFile.map((item, index) => {
+                    formData.append(`template_file`, {
+                        uri: item.uri,
+                        name: item.name,
+                        type: item.type,
+                    });
+                });
+            }
+            else {
+                formData.append('template_file', docFile);
+            }
+
 
             const response = await fetch('https://ocean21.in/api/public/api/hr_addtemplates', {
                 method: 'POST',
@@ -220,19 +249,21 @@ const Template = ({ navigation }) => {
 
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editedtitle, setEditedtitle] = useState('');
+    const [editedtitleErr, setEditedtitleErr] = useState('');
     const [editedStatus, setEditedStatus] = useState(null);
     const [editedshiftError, setEditedShiftError] = useState('');
     const [editedstatusError, setEditedstatusError] = useState('');
     const [EditLoad, setEditLoad] = useState(false);
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [EdocFile, setEdocFile] = useState([]);
+    console.log(EdocFile, "EdocFile")
     const [EditedocFile, seteditedocFile] = useState([]);
     console.log(EditedocFile, "EditedocFile")
     const [selectedId, setSelectedId] = useState();
 
     const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
     const fileName = filePath.split('/').pop();
-    console.log(fileName, "EdocFile")
+    console.log(fileName, "fileName")
 
     // Api call For EditButton
 
@@ -257,7 +288,7 @@ const Template = ({ navigation }) => {
     const openEditModal = (slot) => {
         setEditedtitle(slot.title);
         setEditedStatus(slot.status);
-        seteditedocFile(slot.template_file);
+        seteditedocFile(slot?.template_file);
         setEditModalVisible(true);
         setSelectedId(slot.id);
     };
@@ -273,30 +304,38 @@ const Template = ({ navigation }) => {
 
     const handleEditSubmit = async () => {
 
-
         setEditLoad(true);
 
         const formData = new FormData();
-        formData.append('id', selectedId);
-        formData.append('title', editedtitle);
-        formData.append('status', editedStatus);
-        formData.append('updated_by', data.userempid);
-
-        if (EdocFile.length > 0) {
-            EdocFile.map((file, index) => {
-                formData.append(`template_file`, {
-                    uri: file.uri,
-                    name: file.name,
-                    type: 'image/jpeg',
-                });
-            });
-        } else {
-            formData.append('template_file', EdocFile);
-        }
-
-        formData.append('old_templatepath', EditedocFile);
 
         try {
+
+            if (!editedtitle) {
+                setEditedtitleErr('Select Title');
+                setEditLoad(false);
+                return;
+            } else {
+                setEditedtitleErr('');
+            }
+
+            formData.append('id', selectedId);
+            formData.append('title', editedtitle);
+            formData.append('status', editedStatus);
+            formData.append('updated_by', data.userempid);
+
+            if (EdocFile) {
+                if (EdocFile.length > 0) {
+                    EdocFile.map((file, index) => {
+                        formData.append(`template_file`, {
+                            uri: file.uri,
+                            name: file.name,
+                            type: 'image/jpeg',
+                        });
+                    });
+                }
+            }
+
+            formData.append('old_templatepath', EditedocFile);
 
             const response = await fetch('https://ocean21.in/api/public/api/hr_template_update', {
                 method: 'POST',
@@ -318,7 +357,7 @@ const Template = ({ navigation }) => {
                 setEdocFile(null);
             } else {
                 setEditLoad(false);
-                // Alert.alert("Error", responsedata.message)
+                // Alert.alert("Error", responsedata.message);
                 handleShowAlert1(responsedata.message);
             }
 
@@ -476,7 +515,7 @@ const Template = ({ navigation }) => {
                             )}
 
                             <Text style={styles.errorText}>
-                                {/* {titleError} */}
+                                {statusErr}
                             </Text>
 
                             <Text style={styles.ShiftSlotText}>
@@ -497,6 +536,9 @@ const Template = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
 
+                            <Text style={styles.errorText}>
+                                {docFileErr}
+                            </Text>
 
                             <View style={styles.buttonview}>
                                 <TouchableOpacity style={styles.submitbutton}
@@ -648,7 +690,7 @@ const Template = ({ navigation }) => {
                                 />
 
                                 <Text style={styles.ModalerrorText}>
-                                    {editedshiftError}
+                                    {editedtitleErr}
                                 </Text>
 
                                 <Text style={styles.modalLabelText}>Status</Text>

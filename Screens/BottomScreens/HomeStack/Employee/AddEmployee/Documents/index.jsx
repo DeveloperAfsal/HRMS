@@ -370,14 +370,17 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (response.status === "success") {
-                handleShowAlert(response);
+                // handleShowAlert(response);
+                Alert.alert("Successfull", response.message)
+                navigation.navigate('Employee List');
             } else {
-                handleShowAlert1(response);
+                // handleShowAlert1(response);
+                Alert.alert("Failed", response.message)
             }
 
         } catch (error) {
-            // Alert.alert('Failed to add Employee', error)
-            handleShowAlert2();
+            Alert.alert('Failed to add Employee', error)
+            // handleShowAlert2();
         }
 
     }
