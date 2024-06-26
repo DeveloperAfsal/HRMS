@@ -22,7 +22,9 @@ const AddEvent = ({ navigation }) => {
     // 
 
     const [title, setTitle] = useState('');
+    const [titleErr, setTitleErr] = useState('');
     const [agenda, setAgenda] = useState('');
+    const [agendaErr, setAgendaErr] = useState('');
     const [load, setLoad] = useState(false);
 
     // Department
@@ -31,6 +33,7 @@ const AddEvent = ({ navigation }) => {
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
     const handleToggleDepartment = async (departmentName, departmentId) => {
@@ -87,6 +90,7 @@ const AddEvent = ({ navigation }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [EmployeeError, setEmployeeError] = useState('');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -143,6 +147,7 @@ const AddEvent = ({ navigation }) => {
     // slotfromTime
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -160,6 +165,7 @@ const AddEvent = ({ navigation }) => {
     // slotToTime
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -179,6 +185,7 @@ const AddEvent = ({ navigation }) => {
     // Select Image
 
     const [selectedImage, setSelectedImage] = useState([]);
+    const [selectedImageErr, setSelectedImageErr] = useState('');
 
     const compressImage = async (image) => {
         try {
@@ -268,31 +275,96 @@ const AddEvent = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('e_title', title);
-        formData.append('e_teams', selectedDepartmentIdsAsNumbers);
-        formData.append('e_members', selectedEmployeesIdsAsNumbers);
-        formData.append('e_date', formattedStartDate);
-        formData.append('e_start_time', slotfromTime);
-        formData.append('e_end_time', slotToTime);
-        formData.append('e_agenda', agenda);
-        formData.append('created_by', data.userempid);
-
-        if (selectedImage.length > 0) {
-            selectedImage.map((image, index) => {
-                const imageUriParts = image.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`e_attachment`, {
-                    uri: image,
-                    name: imageName,
-                    type: 'image/jpeg',
-                });
-            });
+        if (!title) {
+            setTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The title Field");
+            setLoad(false);
+            return;
         } else {
-            formData.append('e_attachment', selectedImage);
+            setTitleErr('');
         }
 
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!agenda) {
+            setAgendaErr('Enter Agenda');
+            Alert.alert('Missing', "Check The Agenda Field");
+            setLoad(false);
+            return;
+        } else {
+            setAgendaErr('');
+        }
+
+        if (selectedImage.length == "0") {
+            setSelectedImageErr('Choose Image');
+            Alert.alert('Missing', "Check The Attachment Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedImageErr('');
+        }
 
         try {
+
+            formData.append('e_title', title);
+            formData.append('e_teams', selectedDepartmentIdsAsNumbers);
+            formData.append('e_members', selectedEmployeesIdsAsNumbers);
+            formData.append('e_date', formattedStartDate);
+            formData.append('e_start_time', slotfromTime);
+            formData.append('e_end_time', slotToTime);
+            formData.append('e_agenda', agenda);
+            formData.append('created_by', data.userempid);
+
+            if (selectedImage) {
+                if (selectedImage.length > 0) {
+                    selectedImage.map((image, index) => {
+                        const imageUriParts = image.split('/');
+                        const imageName = imageUriParts[imageUriParts.length - 1];
+                        formData.append(`e_attachment`, {
+                            uri: image,
+                            name: imageName,
+                            type: 'image/jpeg',
+                        });
+                    });
+                } else {
+                    formData.append('e_attachment', selectedImage);
+                }
+            }
+
             const response = await fetch('https://ocean21.in/api/public/api/add_event', {
                 method: 'POST',
                 headers: {
@@ -375,7 +447,7 @@ const AddEvent = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {titleErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -410,7 +482,7 @@ const AddEvent = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -447,7 +519,7 @@ const AddEvent = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -491,7 +563,7 @@ const AddEvent = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotfromTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -513,7 +585,7 @@ const AddEvent = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotToTimeErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -527,7 +599,7 @@ const AddEvent = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {agendaErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -550,6 +622,9 @@ const AddEvent = ({ navigation }) => {
 
                     </View>
 
+                    <Text style={styles.errorText}>
+                        {selectedImageErr}
+                    </Text>
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton}

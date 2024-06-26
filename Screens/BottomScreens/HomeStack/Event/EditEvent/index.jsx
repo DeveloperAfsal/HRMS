@@ -26,7 +26,9 @@ const EditEvent = ({ navigation, route }) => {
     // 
 
     const [title, setTitle] = useState('');
+    const [titleErr, setTitleErr] = useState('');
     const [agenda, setAgenda] = useState('');
+    const [agendaErr, setAgendaErr] = useState('');
     const [load, setLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
 
@@ -35,6 +37,7 @@ const EditEvent = ({ navigation, route }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
@@ -92,6 +95,7 @@ const EditEvent = ({ navigation, route }) => {
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [EmployeeError, setEmployeeError] = useState('');
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -148,6 +152,7 @@ const EditEvent = ({ navigation, route }) => {
     // slotfromTime
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -165,6 +170,7 @@ const EditEvent = ({ navigation, route }) => {
     // slotToTime
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -184,6 +190,7 @@ const EditEvent = ({ navigation, route }) => {
     // Select Image
 
     const [selectedImage, setSelectedImage] = useState([]);
+    const [selectedImageErr, setSelectedImageErr] = useState('');
     const [showInitialImage, setShowInitialImage] = useState(true);
 
     const compressImage = async (image) => {
@@ -323,34 +330,99 @@ const EditEvent = ({ navigation, route }) => {
         setLoad(true);
 
         const formData = new FormData();
-        formData.append('id', SpecId.id);
-        formData.append('e_title', title);
-        formData.append('e_teams', selectedDepartmentIdsAsNumbers);
-        formData.append('e_members', selectedEmployeesIdsAsNumbers);
-        formData.append('e_date', formattedStartDate);
-        formData.append('e_start_time', slotfromTime);
-        formData.append('e_end_time', slotToTime);
-        formData.append('e_agenda', agenda);
-        formData.append('updated_by', data.userempid);
-        formData.append('oldimg_path', datalist.e_image);
 
-        if (selectedImage.length > 0 && !selectedImage.includes(datalist.e_image)) {
-            // Only add the image if it has been changed
-            selectedImage.forEach((image, index) => {
-                const imageUriParts = image.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`e_image`, {
-                    uri: image,
-                    name: imageName,
-                    type: 'image/jpeg',
-                });
-            });
+        if (!title) {
+            setTitleErr('Enter Title');
+            Alert.alert('Missing', "Check The title Field");
+            setLoad(false);
+            return;
         } else {
-            // If the image is not changed, include the existing image URL
-            formData.append('e_image', datalist.e_image);
+            setTitleErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!agenda) {
+            setAgendaErr('Enter Agenda');
+            Alert.alert('Missing', "Check The Agenda Field");
+            setLoad(false);
+            return;
+        } else {
+            setAgendaErr('');
+        }
+
+        if (selectedImage.length == "0") {
+            setSelectedImageErr('Choose Image');
+            Alert.alert('Missing', "Check The Attachment Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedImageErr('');
         }
 
         try {
+
+            formData.append('id', SpecId.id);
+            formData.append('e_title', title);
+            formData.append('e_teams', selectedDepartmentIdsAsNumbers);
+            formData.append('e_members', selectedEmployeesIdsAsNumbers);
+            formData.append('e_date', formattedStartDate);
+            formData.append('e_start_time', slotfromTime);
+            formData.append('e_end_time', slotToTime);
+            formData.append('e_agenda', agenda);
+            formData.append('updated_by', data.userempid);
+            formData.append('oldimg_path', datalist.e_image);
+
+            if (selectedImage.length > 0 && !selectedImage.includes(datalist.e_image)) {
+                // Only add the image if it has been changed
+                selectedImage.forEach((image, index) => {
+                    const imageUriParts = image.split('/');
+                    const imageName = imageUriParts[imageUriParts.length - 1];
+                    formData.append(`e_image`, {
+                        uri: image,
+                        name: imageName,
+                        type: 'image/jpeg',
+                    });
+                });
+            } else {
+                // If the image is not changed, include the existing image URL
+                formData.append('e_image', datalist.e_image);
+            }
+
             const response = await fetch('https://ocean21.in/api/public/api/update_event', {
                 method: 'POST',
                 headers: {
@@ -431,7 +503,7 @@ const EditEvent = ({ navigation, route }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {titleErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -466,7 +538,7 @@ const EditEvent = ({ navigation, route }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatusText}>
@@ -503,7 +575,7 @@ const EditEvent = ({ navigation, route }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -583,7 +655,7 @@ const EditEvent = ({ navigation, route }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {agendaErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -605,6 +677,10 @@ const EditEvent = ({ navigation, route }) => {
                         </TouchableOpacity>
 
                     </View>
+
+                    <Text style={styles.errorText}>
+                        {selectedImageErr}
+                    </Text>
 
 
                     <View style={styles.buttonview}>
