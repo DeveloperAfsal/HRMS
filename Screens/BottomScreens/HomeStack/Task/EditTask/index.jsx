@@ -22,12 +22,16 @@ const EditTask = ({ route, navigation }) => {
     const SpecId = route.params.Id;
 
     const [tname, setTname] = useState('');
+    const [tnameErr, setTnameErr] = useState('');
     const [pworktype, setPworktype] = useState('');
+    const [pworktypeErr, setPworktypeErr] = useState('');
     const [des, setDes] = useState('');
+    const [desErr, setDesErr] = useState('');
     const [TaskId, setTaskId] = useState('');
     const [prolist, setProlist] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [selectedProjectErr, setSelectedProjectErr] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
     const fetchTask = async () => {
@@ -77,6 +81,7 @@ const EditTask = ({ route, navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -96,6 +101,7 @@ const EditTask = ({ route, navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
@@ -208,6 +214,7 @@ const EditTask = ({ route, navigation }) => {
 
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [editedStatus, setEditedStatus] = useState(null);
+    const [editedStatusErr, setEditedStatusErr] = useState(null);
 
     const toggleModalDropdown = () => {
         setShowModalDropdown(!showModalDropdown);
@@ -221,8 +228,11 @@ const EditTask = ({ route, navigation }) => {
     // 
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
     const [showModalDropdown1, setShowModalDropdown1] = useState(false);
     const [editedStatus1, setEditedStatus1] = useState(null);
+    const [editedStatus1Err, setEditedStatus1Err] = useState(null);
+
 
     const toggleModalDropdown1 = () => {
         setShowModalDropdown1(!showModalDropdown1);
@@ -325,39 +335,120 @@ const EditTask = ({ route, navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('id', SpecId.id);
-        formData.append('t_id', TaskId);
-        formData.append('t_name', tname);
-        formData.append('p_name', selectedProjectId);
-        formData.append('p_work_type', pworktype);
-        formData.append('department', selectedDepartmentIdsAsNumbers);
-        formData.append('assign_to', selectedEmployeesIdsAsNumbers);
-        formData.append('start_date', formattedStartDate);
-        formData.append('end_date', formattedEndDate);
-        formData.append('priority', editedStatus1);
-        formData.append('description', des);
-        formData.append('status', editedStatus);
-        formData.append('updated_by', data.userempid);
-        formData.append('oldimg_path', datalist.attachment);
-        formData.append('p_reason', "-");
-
-        if (docFile.length > 0 && !docFile.includes(datalist.attachment)) {
-            // Only add the image if it has been changed
-            docFile.forEach((image, index) => {
-                const imageUriParts = image.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`attachment`, {
-                    uri: image,
-                    name: imageName,
-                    type: 'image/jpeg',
-                });
-            });
+        if (!tname) {
+            setTnameErr('Enter Task Name');
+            Alert.alert('Missing', "Check The Task Field");
+            setLoad(false);
+            return;
         } else {
-            // If the image is not changed, include the existing image URL
-            formData.append('attachment', datalist.attachment);
+            setTnameErr('');
+        }
+
+        if (!selectedProject) {
+            setSelectedProjectErr('Select Project Name');
+            Alert.alert('Missing', "Check The Project Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedProjectErr('');
+        }
+
+        if (!pworktype) {
+            setPworktypeErr('Enter Project Work Type');
+            Alert.alert('Missing', "Check The Project Work Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setPworktypeErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!editedStatus) {
+            setEditedStatusErr('Select Task Status');
+            Alert.alert('Missing', "Check The Task Status Field");
+            setLoad(false);
+            return;
+        } else {
+            setEditedStatusErr('');
+        }
+
+        if (!editedStatus1) {
+            setEditedStatus1Err('Select Priority');
+            Alert.alert('Missing', "Check The Priority Field");
+            setLoad(false);
+            return;
+        } else {
+            setEditedStatus1Err('');
+        }
+
+        if (!des) {
+            setDesErr('Enter Description');
+            Alert.alert('Missing', "Check The Description Field");
+            setLoad(false);
+            return;
+        } else {
+            setDesErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('Choose File');
+            Alert.alert('Missing', "Check The Attachment Field");
+            setLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
         }
 
         try {
+
+            formData.append('id', SpecId.id);
+            formData.append('t_id', TaskId);
+            formData.append('t_name', tname);
+            formData.append('p_name', selectedProjectId);
+            formData.append('p_work_type', pworktype);
+            formData.append('department', selectedDepartmentIdsAsNumbers);
+            formData.append('assign_to', selectedEmployeesIdsAsNumbers);
+            formData.append('start_date', formattedStartDate);
+            formData.append('end_date', formattedEndDate);
+            formData.append('priority', editedStatus1);
+            formData.append('description', des);
+            formData.append('status', editedStatus);
+            formData.append('updated_by', data.userempid);
+            formData.append('oldimg_path', datalist.attachment);
+            formData.append('p_reason', "-");
+
+            if (docFile.length > 0 && !docFile.includes(datalist.attachment)) {
+                // Only add the image if it has been changed
+                docFile.forEach((image, index) => {
+                    const imageUriParts = image.split('/');
+                    const imageName = imageUriParts[imageUriParts.length - 1];
+                    formData.append(`attachment`, {
+                        uri: image,
+                        name: imageName,
+                        type: 'image/jpeg',
+                    });
+                });
+            } else {
+                // If the image is not changed, include the existing image URL
+                formData.append('attachment', datalist.attachment);
+            }
 
             const response = await fetch('https://ocean21.in/api/public/api/update_task_list', {
                 method: 'POST',
@@ -459,7 +550,7 @@ const EditTask = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {tnameErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -488,7 +579,7 @@ const EditTask = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedProjectErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -502,7 +593,7 @@ const EditTask = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {pworktypeErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -537,7 +628,7 @@ const EditTask = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -556,7 +647,7 @@ const EditTask = ({ route, navigation }) => {
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
 
-                    {showEmployeeDropdown && (  
+                    {showEmployeeDropdown && (
                         <View style={styles.dropdown}>
                             {employeeDropdown.map((employee, index) => (
                                 <TouchableOpacity
@@ -574,7 +665,7 @@ const EditTask = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -657,7 +748,7 @@ const EditTask = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {editedStatusErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -692,7 +783,7 @@ const EditTask = ({ route, navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {editedStatus1Err}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -706,7 +797,7 @@ const EditTask = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {desErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -727,6 +818,10 @@ const EditTask = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
 
+                    <Text style={styles.errorText}>
+                        {docFileErr}
+                    </Text>
+
                     <View style={styles.buttonview}>
 
                         <TouchableOpacity style={styles.submitbutton}
@@ -736,7 +831,7 @@ const EditTask = ({ route, navigation }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Submit
+                                        Update
                                     </Text>
                             }
                         </TouchableOpacity>

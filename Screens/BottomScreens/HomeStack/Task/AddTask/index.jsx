@@ -18,12 +18,16 @@ const AddTask = ({ navigation }) => {
     const { data } = useSelector((state) => state.login);
 
     const [tname, setTname] = useState('');
+    const [tnameErr, setTnameErr] = useState('');
     const [pworktype, setPworktype] = useState('');
+    const [pworktypeErr, setPworktypeErr] = useState('');
     const [des, setDes] = useState('');
+    const [desErr, setDesErr] = useState('');
     const [TaskId, setTaskId] = useState('');
     const [prolist, setProlist] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [selectedProjectErr, setSelectedProjectErr] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
     const fetchTask = async () => {
@@ -73,6 +77,7 @@ const AddTask = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -92,6 +97,7 @@ const AddTask = ({ navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
@@ -204,6 +210,7 @@ const AddTask = ({ navigation }) => {
 
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [editedStatus, setEditedStatus] = useState(null);
+    const [editedStatusErr, setEditedStatusErr] = useState(null);
 
     const toggleModalDropdown = () => {
         setShowModalDropdown(!showModalDropdown);
@@ -217,8 +224,10 @@ const AddTask = ({ navigation }) => {
     // 
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
     const [showModalDropdown1, setShowModalDropdown1] = useState(false);
     const [editedStatus1, setEditedStatus1] = useState(null);
+    const [editedStatus1Err, setEditedStatus1Err] = useState(null);
 
     const toggleModalDropdown1 = () => {
         setShowModalDropdown1(!showModalDropdown1);
@@ -265,33 +274,116 @@ const AddTask = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('t_id', TaskId);
-        formData.append('t_name', tname);
-        formData.append('p_name', selectedProjectId);
-        formData.append('p_work_type', pworktype);
-        formData.append('department', selectedDepartmentIdsAsNumbers);
-        formData.append('assign_to', selectedEmployeesIdsAsNumbers);
-        formData.append('start_date', formattedStartDate);
-        formData.append('end_date', formattedEndDate);
-        formData.append('priority', editedStatus1);
-        formData.append('description', des);
-        formData.append('status', editedStatus);
-        formData.append('created_by', data.userempid);
-
-        if (docFile.length > 0) {
-            docFile.map((docFile, index) => {
-                formData.append(`attachment`, {
-                    uri: docFile.uri,
-                    name: docFile.name,
-                    type: docFile.type,
-                });
-            });
+        if (!tname) {
+            setTnameErr('Enter Task Name');
+            Alert.alert('Missing', "Check The Task Field");
+            setLoad(false);
+            return;
+        } else {
+            setTnameErr('');
         }
-        else {
-            formData.append('attachment', docFile);
+
+        if (!selectedProject) {
+            setSelectedProjectErr('Select Project Name');
+            Alert.alert('Missing', "Check The Project Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedProjectErr('');
+        }
+
+        if (!pworktype) {
+            setPworktypeErr('Enter Project Work Type');
+            Alert.alert('Missing', "Check The Project Work Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setPworktypeErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!editedStatus) {
+            setEditedStatusErr('Select Task Status');
+            Alert.alert('Missing', "Check The Task Status Field");
+            setLoad(false);
+            return;
+        } else {
+            setEditedStatusErr('');
+        }
+
+        if (!editedStatus1) {
+            setEditedStatus1Err('Select Priority');
+            Alert.alert('Missing', "Check The Priority Field");
+            setLoad(false);
+            return;
+        } else {
+            setEditedStatus1Err('');
+        }
+
+        if (!des) {
+            setDesErr('Enter Description');
+            Alert.alert('Missing', "Check The Description Field");
+            setLoad(false);
+            return;
+        } else {
+            setDesErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('Choose File');
+            Alert.alert('Missing', "Check The Attachment Field");
+            setLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
         }
 
         try {
+
+            formData.append('t_id', TaskId);
+            formData.append('t_name', tname);
+            formData.append('p_name', selectedProjectId);
+            formData.append('p_work_type', pworktype);
+            formData.append('department', selectedDepartmentIdsAsNumbers);
+            formData.append('assign_to', selectedEmployeesIdsAsNumbers);
+            formData.append('start_date', formattedStartDate);
+            formData.append('end_date', formattedEndDate);
+            formData.append('priority', editedStatus1);
+            formData.append('description', des);
+            formData.append('status', editedStatus);
+            formData.append('created_by', data.userempid);
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((docFile, index) => {
+                        formData.append(`attachment`, {
+                            uri: docFile.uri,
+                            name: docFile.name,
+                            type: docFile.type,
+                        });
+                    });
+                }
+            }
+            else {
+                formData.append('attachment', docFile);
+            }
 
             const response = await fetch('https://ocean21.in/api/public/api/add_task', {
                 method: 'POST',
@@ -408,7 +500,7 @@ const AddTask = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {tnameErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -437,7 +529,7 @@ const AddTask = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedProjectErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -451,7 +543,7 @@ const AddTask = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {pworktypeErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -486,7 +578,7 @@ const AddTask = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -523,7 +615,7 @@ const AddTask = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -606,7 +698,7 @@ const AddTask = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {editedStatusErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -641,7 +733,7 @@ const AddTask = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {editedStatus1Err}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -655,7 +747,7 @@ const AddTask = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {desErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -675,6 +767,10 @@ const AddTask = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
+                    <Text style={styles.errorText}>
+                        {docFileErr}
+                    </Text>
 
                     <View style={styles.buttonview}>
 
