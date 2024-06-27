@@ -30,15 +30,21 @@ const AttendanceRequest = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [EditLoad, setEditLoad] = useState(false);
     const [holidayname, setHolidayname] = useState('');
+    const [holidaynameErr, setHolidaynameErr] = useState('');
     const [Addholidayname, setAddHolidayname] = useState('');
+    const [AddholidaynameErr, setAddHolidaynameErr] = useState('');
     const [WeekoffError, setWeekoffError] = useState('');
     const [showWeekoff, setShowWeekoff] = useState(false);
     const [showWeekoff1, setShowWeekoff1] = useState(false);
     const [selectedDay, setSelectedDay] = useState('');
+    const [selectedDayErr, setSelectedDayErr] = useState('');
     const [AddselectedDay, setAddSelectedDay] = useState('');
+    const [AddselectedDayErr, setAddSelectedDayErr] = useState('');
     const [selectedDayId, setSelectedDayId] = useState('');
     const [selectedStatus, setSelectedStatus] = useState(null);
+    const [selectedStatusErr, setSelectedStatusErr] = useState(null);
     const [selectedStatus1, setSelectedStatus1] = useState(null);
+    const [selectedStatus1Err, setSelectedStatus1Err] = useState('');
     const [showDropdownstatus, setShowDropdownstatus] = useState(false);
     const [showDropdownstatus1, setShowDropdownstatus1] = useState(false);
     const [statusError, setStatusError] = useState('');
@@ -246,8 +252,34 @@ const AttendanceRequest = () => {
     };
 
     const handleEditSubmit = async () => {
+
         setEditLoad(true);
+
         const formData = new FormData();
+
+        if (!Addholidayname) {
+            setAddHolidaynameErr('Enter Holiday Name');
+            setEditLoad(false);
+            return;
+        } else {
+            setAddHolidaynameErr('');
+        }
+
+        if (!AddselectedDay) {
+            setAddSelectedDayErr('Select Day');
+            setEditLoad(false);
+            return;
+        } else {
+            setAddSelectedDayErr('');
+        }
+
+        if (!selectedStatus1) {
+            setSelectedStatus1Err('Select Holiday Type');
+            setEditLoad(false);
+            return;
+        } else {
+            setSelectedStatus1Err('');
+        }
 
         formData.append('h_name', Addholidayname);
         formData.append('h_date', formattedStartDate1);
@@ -417,6 +449,30 @@ const AttendanceRequest = () => {
 
         setEditLoad(true);
 
+        if (!holidayname) {
+            setHolidaynameErr('Enter Holiday Name');
+            setEditLoad(false);
+            return;
+        } else {
+            setHolidaynameErr('');
+        }
+
+        if (!selectedDay) {
+            setSelectedDayErr('Select Day');
+            setEditLoad(false);
+            return;
+        } else {
+            setSelectedDayErr('');
+        }
+
+        if (!selectedStatus) {
+            setSelectedStatusErr('Select Holiday Type');
+            setEditLoad(false);
+            return;
+        } else {
+            setSelectedStatusErr('');
+        }
+
         try {
 
             const apiUrl = 'https://ocean21.in/api/public/api/edit_holiday';
@@ -529,7 +585,7 @@ const AttendanceRequest = () => {
                     onPress={toggleModal}
                 >
                     <Text style={styles.AddHolidayText}>
-                        Add Holiday
+                        + Add Holiday
                     </Text>
                 </TouchableOpacity>
             </View> : null}
@@ -607,7 +663,7 @@ const AttendanceRequest = () => {
                         />
 
                         <Text style={styles.ModalerrorText}>
-                            {/* {editedshiftError} */}
+                            {AddholidaynameErr}
                         </Text>
 
                         <Text style={styles.modalLabelText}>Date</Text>
@@ -625,6 +681,10 @@ const AttendanceRequest = () => {
                                 />
                             )}
                         </View>
+
+                        <Text style={styles.ModalerrorText}>
+                            { }
+                        </Text>
 
                         <Text style={styles.modalLabelText}>Day</Text>
 
@@ -708,7 +768,7 @@ const AttendanceRequest = () => {
                         )}
 
                         <Text style={styles.errorText}>
-                            {WeekoffError}
+                            {AddselectedDayErr}
                         </Text>
 
                         <Text style={styles.modalLabelText}>Select Holiday Type</Text>
@@ -739,7 +799,7 @@ const AttendanceRequest = () => {
                         )}
 
                         <Text style={styles.errorText}>
-                            {statusError}
+                            {selectedStatus1Err}
                         </Text>
 
                         <View style={styles.buttoncontainer}>
@@ -828,7 +888,7 @@ const AttendanceRequest = () => {
                         />
 
                         <Text style={styles.ModalerrorText}>
-                            {/* {editedshiftError} */}
+                            {holidaynameErr}
                         </Text>
 
                         <Text style={styles.modalLabelText}>Date</Text>
@@ -846,6 +906,10 @@ const AttendanceRequest = () => {
                                 />
                             )}
                         </View>
+
+                        <Text style={styles.ModalerrorText}>
+                            {}
+                        </Text>
 
                         <Text style={styles.modalLabelText}>Day</Text>
 
@@ -929,7 +993,7 @@ const AttendanceRequest = () => {
                         )}
 
                         <Text style={styles.errorText}>
-                            {WeekoffError}
+                            {selectedDayErr}
                         </Text>
 
                         <Text style={styles.modalLabelText}>Select Holiday Type</Text>
@@ -960,7 +1024,7 @@ const AttendanceRequest = () => {
                         )}
 
                         <Text style={styles.errorText}>
-                            {statusError}
+                            {selectedStatusErr}
                         </Text>
 
                         <View style={styles.buttoncontainer}>

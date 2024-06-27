@@ -333,6 +333,8 @@ const Template = ({ navigation }) => {
                         });
                     });
                 }
+            } else {
+                formData.append('template_file', EdocFile);
             }
 
             formData.append('old_templatepath', EditedocFile);
