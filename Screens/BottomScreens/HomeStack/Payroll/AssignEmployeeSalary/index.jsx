@@ -18,26 +18,42 @@ const AssignEmpSalary = ({ navigation }) => {
 
     const [load, SetLoad] = useState(false);
     const [ctc, setCtc] = useState('');
+    const [ctcErr, setCtcErr] = useState('');
     const [grossPay, setGrossPay] = useState('');
+    const [grossPayErr, setGrossPayErr] = useState('');
     const [netPay, setNetPay] = useState('');
+    const [netPayErr, setNetPayErr] = useState('');
     const [basic, setBasic] = useState('');
+    const [basicErr, setBasicErr] = useState('');
     const [hra, setHra] = useState('');
+    const [hraErr, setHraErr] = useState('');
     const [cAllowance, setCAllowance] = useState('');
+    const [cAllowanceErr, setCAllowanceErr] = useState('');
     const [tAllowance, setTAllowance] = useState('');
+    const [tAllowanceErr, setTAllowanceErr] = useState('');
     const [mAllowance, setMAllowance] = useState('');
+    const [mAllowanceErr, setMAllowanceErr] = useState('');
     const [oAllowance, setOAllowance] = useState('');
+    const [oAllowanceErr, setOAllowanceErr] = useState('');
     const [variable, setVariable] = useState('');
+    const [variableErr, setVariableErr] = useState('');
     const [pf, setPf] = useState('');
+    const [pfErr, setPfErr] = useState('');
     const [epf, setEpf] = useState('');
+    const [epfErr, setEpfErr] = useState('');
     const [esi, setEsi] = useState('');
+    const [esiErr, setEsiErr] = useState('');
     const [sAdvance, setSAdvance] = useState('');
+    const [sAdvanceErr, setSAdvanceErr] = useState('');
     const [oDeduction, setODeduction] = useState('');
+    const [oDeductionErr, setODeductionErr] = useState('');
 
     //
 
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentsId, setSelectedDepartmentsId] = useState('');
 
     useEffect(() => {
@@ -75,6 +91,7 @@ const AssignEmpSalary = ({ navigation }) => {
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
@@ -179,6 +196,168 @@ const AssignEmpSalary = ({ navigation }) => {
         // )
 
         SetLoad(true);
+
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!ctc) {
+            setCtcErr('Enter CTC');
+            Alert.alert('Missing', "Check The CTC Field");
+            SetLoad(false);
+            return;
+        } else {
+            setCtcErr('');
+        }
+
+        if (!grossPay) {
+            setGrossPayErr('Enter Gross Pay');
+            Alert.alert('Missing', "Check The Gross Pay Field");
+            SetLoad(false);
+            return;
+        } else {
+            setGrossPayErr('');
+        }
+
+        if (!netPay) {
+            setNetPayErr('Enter Net Pay');
+            Alert.alert('Missing', "Check The Net Pay Field");
+            SetLoad(false);
+            return;
+        } else {
+            setNetPayErr('');
+        }
+
+        if (!basic) {
+            setBasicErr('Enter Basic');
+            Alert.alert('Missing', "Check The Basic Field");
+            SetLoad(false);
+            return;
+        } else {
+            setBasicErr('');
+        }
+
+        if (!hra) {
+            setHraErr('Enter HRA');
+            Alert.alert('Missing', "Check The HRA Field");
+            SetLoad(false);
+            return;
+        } else {
+            setHraErr('');
+        }
+
+        if (!cAllowance) {
+            setCAllowanceErr('Enter Convenience Allowance');
+            Alert.alert('Missing', "Check The Convenience Allowance Field");
+            SetLoad(false);
+            return;
+        } else {
+            setCAllowanceErr('');
+        }
+
+        if (!tAllowance) {
+            setTAllowanceErr('Enter Transport Allowance');
+            Alert.alert('Missing', "Check The Transport Allowance Field");
+            SetLoad(false);
+            return;
+        } else {
+            setTAllowanceErr('');
+        }
+
+        if (!mAllowance) {
+            setMAllowanceErr('Enter Medical Allowance');
+            Alert.alert('Missing', "Check The Medical Allowance Field");
+            SetLoad(false);
+            return;
+        } else {
+            setMAllowanceErr('');
+        }
+
+        if (!oAllowance) {
+            setOAllowanceErr('Enter Other Allowance');
+            Alert.alert('Missing', "Check The Other Allowance Field");
+            SetLoad(false);
+            return;
+        } else {
+            setOAllowanceErr('');
+        }
+
+        if (!variable) {
+            setVariableErr('Enter variable');
+            Alert.alert('Missing', "Check The variable Field");
+            SetLoad(false);
+            return;
+        } else {
+            setVariableErr('');
+        }
+
+        if (!pf) {
+            setPfErr('Enter PF');
+            Alert.alert('Missing', "Check The PF Field");
+            SetLoad(false);
+            return;
+        } else {
+            setPfErr('');
+        }
+
+        if (!epf) {
+            setEpfErr('Enter EPF');
+            Alert.alert('Missing', "Check The EPF Field");
+            SetLoad(false);
+            return;
+        } else {
+            setEpfErr('');
+        }
+
+        if (!esi) {
+            setEsiErr('Enter ESI');
+            Alert.alert('Missing', "Check The ESI Field");
+            SetLoad(false);
+            return;
+        } else {
+            setEsiErr('');
+        }
+
+        if (!sAdvance) {
+            setSAdvanceErr('Enter Salary Advance');
+            Alert.alert('Missing', "Check The Salary Advance Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSAdvanceErr('');
+        }
+
+        if (!oDeduction) {
+            setODeductionErr('Enter Other Deduction');
+            Alert.alert('Missing', "Check The Other Deduction Field");
+            SetLoad(false);
+            return;
+        } else {
+            setODeductionErr('');
+        }
+
+        if (!selectedStatus) {
+            setStatusError('Select Status');
+            Alert.alert('Missing', "Check The Status Field");
+            SetLoad(false);
+            return;
+        } else {
+            setStatusError('');
+        }
 
         try {
 
@@ -304,7 +483,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -339,7 +518,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -397,7 +576,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {ctcErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -411,7 +590,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {grossPayErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -425,7 +604,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {netPayErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -439,7 +618,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {basicErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -453,7 +632,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {hraErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -467,7 +646,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {cAllowanceErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -481,7 +660,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {tAllowanceErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -495,7 +674,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {mAllowanceErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -509,7 +688,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {oAllowanceErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -523,7 +702,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {variableErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -537,7 +716,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {pfErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -551,7 +730,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {epfErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -565,7 +744,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {esiErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -579,7 +758,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {sAdvanceErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -593,7 +772,7 @@ const AssignEmpSalary = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {oDeductionErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>

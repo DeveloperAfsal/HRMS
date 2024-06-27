@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorText: {
+        color: "red",
+        paddingVertical: '3%',
+        width: "90%"
+    },
+
     Input: {
         borderWidth: 1,
         borderColor: '#515151',
@@ -87,7 +93,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 21.28,
         paddingBottom: "3%",
-        paddingTop: "3%",
         width: "90%"
     },
 

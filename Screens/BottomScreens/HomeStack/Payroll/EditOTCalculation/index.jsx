@@ -24,7 +24,9 @@ const EditOtCalculation = ({ route, navigation }) => {
     // 
 
     const [otRate, setOtRate] = useState('');
+    const [otRateErr, setOtRateErr] = useState('');
     const [otAmount, setOtAmount] = useState('');
+    const [otAmountErr, setOtAmountErr] = useState('');
     const [load, setLoad] = useState(false);
 
     // Department
@@ -338,6 +340,22 @@ const EditOtCalculation = ({ route, navigation }) => {
 
         setLoad(true);
 
+        if (!otRate) {
+            setOtRateErr('Enter OT Rate');
+            setLoad(false);
+            return;
+        } else {
+            setOtRateErr('');
+        }
+
+        if (!otAmount) {
+            setOtAmountErr('Enter OT Amount');
+            setLoad(false);
+            return;
+        } else {
+            setOtAmountErr('');
+        }
+
         try {
 
             const apiUrl = 'https://ocean21.in/api/public/api/update_overtime';
@@ -548,7 +566,7 @@ const EditOtCalculation = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {otRateErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -562,7 +580,7 @@ const EditOtCalculation = ({ route, navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {otAmountErr}
                     </Text>
 
                     <View style={styles.buttonview}>
@@ -573,7 +591,7 @@ const EditOtCalculation = ({ route, navigation }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Submit
+                                        Update
                                     </Text>
                             }
                         </TouchableOpacity>

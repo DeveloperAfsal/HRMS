@@ -51,6 +51,7 @@ const GeneratePayslip = ({ navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentsId, setSelectedDepartmentsId] = useState('');
 
     useEffect(() => {
@@ -88,6 +89,7 @@ const GeneratePayslip = ({ navigation }) => {
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState('');
 
     const fetchEmployeeDropdown = async (selectedDepartmentIdsAsNumbers) => {
@@ -120,7 +122,12 @@ const GeneratePayslip = ({ navigation }) => {
     // handleDateChange
 
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState('');
+    const formattedStartDate = startDate ?
+        `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}` :
+        "";
+    console.log(formattedStartDate, "formattedStartDate");
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
@@ -133,7 +140,21 @@ const GeneratePayslip = ({ navigation }) => {
         setShowDatePicker(true);
     };
 
-    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
+    // const [showDatePicker, setShowDatePicker] = useState(false);
+    // const [startDate, setStartDate] = useState(new Date());
+
+    // const handleDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setStartDate(date);
+    //     }
+    //     setShowDatePicker(Platform.OS === 'ios');
+    // };
+
+    // const showDatepicker = () => {
+    //     setShowDatePicker(true);
+    // };
+
+    // const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}`;
 
     const getData = async () => {
 
@@ -244,6 +265,33 @@ const GeneratePayslip = ({ navigation }) => {
     const AddAss = async () => {
 
         SetLoad(true);
+
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!startDate) {
+            setStartDateErr('Select Date');
+            Alert.alert('Missing', "Check The Date Field");
+            SetLoad(false);
+            return;
+        } else {
+            setStartDateErr('');
+        }
 
         try {
 
@@ -367,7 +415,7 @@ const GeneratePayslip = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedDepartmentsErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -402,16 +450,15 @@ const GeneratePayslip = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedMemberErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
                         Select Year Month
                     </Text>
 
-                    <View style={styles.inputs} >
+                    {/* <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {/* {startDate.toDateString()} &nbsp; */}
                             {format(startDate, 'yyyy-MM')}
                         </Text>
                         {showDatePicker && (
@@ -422,10 +469,25 @@ const GeneratePayslip = ({ navigation }) => {
                                 onChange={handleDateChange}
                             />
                         )}
+                    </View> */}
+
+                    <View style={styles.inputs} >
+                        <Text onPress={showDatepicker}>
+                            {/* {startDate.toDateString()} &nbsp; */}
+                            {startDate ? format(startDate, 'yyyy-MM') : "Select a start date"} &nbsp;
+                        </Text>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={startDate || new Date()}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
+                            />
+                        )}
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {startDateErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>

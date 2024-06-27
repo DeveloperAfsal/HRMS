@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorText: {
+        color: "red",
+        paddingTop: '5%',
+        width: "90%"
+    },
+
     PolicyContainerTitleHeader: {
         paddingTop: "5%",
         paddingBottom: "5%",
