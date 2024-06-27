@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
-        paddingVertical: '1%',
+        paddingVertical: '3%',
         width: "90%"
     },
     Activeindicator: {

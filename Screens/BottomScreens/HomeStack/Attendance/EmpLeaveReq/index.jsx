@@ -8,6 +8,9 @@ import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EmpLeaveReq = ({ navigation }) => {
 
@@ -19,6 +22,7 @@ const EmpLeaveReq = ({ navigation }) => {
 
     const [load, setLoad] = useState(false);
     const [Reason, setReason] = useState('');
+    const [ReasonErr, setReasonErr] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [shiftId, setShiftId] = useState('');
     const [shiftName, setShiftName] = useState('');
@@ -27,6 +31,7 @@ const EmpLeaveReq = ({ navigation }) => {
 
     const [leaveTypeDropdown, setLeaveTypeDropdown] = useState([]);
     const [selectedleaveType, setSelectedleaveType] = useState(null);
+    const [selectedleaveTypeErr, setSelectedleaveTypeErr] = useState(null);
     const [selectedleaveTypeId, setSelectedleaveTypeId] = useState(null);
     const [showleaveTypeDropdown, setShowleaveTypeDropdown] = useState(false);
 
@@ -69,7 +74,7 @@ const EmpLeaveReq = ({ navigation }) => {
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
-    const [selectedCategoryErr,setSelectedCategoryErr] = useState('');
+    const [selectedCategoryErr, setSelectedCategoryErr] = useState('');
 
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_category_list';
@@ -104,50 +109,11 @@ const EmpLeaveReq = ({ navigation }) => {
         setShowCategoryDropdown(false);
     };
 
-    // Location
-
-    const [LocationDropdown, setLocationDropdown] = useState([]);
-    const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState('');
-    const [selectedLocationId, setSelectedLocationId] = useState('');
-
-    useEffect(() => {
-        const apiUrl = 'https://ocean21.in/api/public/api/attendance_location_list';
-
-        const fetchData = async () => {
-
-            try {
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-
-                const responseData = response.data.data;
-
-                // console.log(responseData,"responseData")
-
-                setLocationDropdown(responseData);
-
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, [])
-
-    const handleSelectLocation = (item) => {
-        setSelectedLocation(item.attendance_location_name);
-        setSelectedLocationId(item.id);
-        setShowLocationDropdown(false);
-    };
-
     // handleDateChange
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
     const formattedStartDate = startDate ?
         `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
         "";
@@ -166,6 +132,7 @@ const EmpLeaveReq = ({ navigation }) => {
 
     const [showDatePicker1, setShowDatePicker1] = useState(false);
     const [endDate, setEndDate] = useState(null);
+    const [endDateErr, setEndDateErr] = useState(null);
     const formattedEndDate = endDate ?
         `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` :
         "";
@@ -184,6 +151,7 @@ const EmpLeaveReq = ({ navigation }) => {
 
     const [showDatePicker2, setShowDatePicker2] = useState(false);
     const [returnDate, setreturnDate] = useState(null);
+    const [returnDateErr, setreturnDateErr] = useState(null);
     const formattedReturnDate = returnDate ?
         `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}` :
         "";
@@ -203,6 +171,7 @@ const EmpLeaveReq = ({ navigation }) => {
     // From Time 
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -220,6 +189,7 @@ const EmpLeaveReq = ({ navigation }) => {
     // To Time 
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -280,6 +250,7 @@ const EmpLeaveReq = ({ navigation }) => {
     // Function to handle document selection
 
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
 
     const handleDocumentSelection = async () => {
 
@@ -303,10 +274,10 @@ const EmpLeaveReq = ({ navigation }) => {
     const Handlerefresh = () => {
         setSelectedleaveType(null);
         setSelectedCategory(null);
-        setSelectedLocation(null);
         setStartDate(null);
+        setreturnDate(null);
         setEndDate(null);
-        setDocFile();
+        setDocFile(null);
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
         setReason('');
@@ -320,42 +291,120 @@ const EmpLeaveReq = ({ navigation }) => {
 
         const formData = new FormData();
 
-        formData.append('emp_id', data.userempid);
-        formData.append('emp_name', data.username);
-        formData.append('request_type', selectedCategoryId);
-        formData.append('request_category', selectedleaveTypeId);
-        formData.append('leave_reason', Reason);
-        formData.append('shift_slot', shiftId);
-        formData.append('from_date', formattedEndDate);
-        formData.append('to_date', formattedReturnDate);
-        formData.append('permission_date', formattedStartDate);
-        formData.append('permission_timefrom', slotfromTime);
-        formData.append('permission_timeto', slotToTime);
-
-        if (docFile.length > 0) {
-            docFile.map((img, index) => {
-                formData.append(`attachement`, {
-                    uri: img.uri,
-                    name: img.name,
-                    type: img.type,
-                });
-            });
-        }
-        else {
-            formData.append('attachement', docFile);
+        if (!selectedleaveType) {
+            setSelectedleaveTypeErr('Select Type');
+            Alert.alert('Missing', "Check The Request Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedleaveTypeErr('');
         }
 
+        if (!selectedCategory) {
+            setSelectedCategoryErr('Select Category Name');
+            Alert.alert('Missing', "Check The Category Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedCategoryErr('');
+        }
 
-        try {
-
-            if (!selectedCategory) {
-                setSelectedCategoryErr('Select Category Name');
-                Alert.alert('Missing', "Check The Category Field");
+        if (selectedCategory === "Permission" || selectedCategory === "Half Day") {
+            if (!startDate) {
+                setStartDateErr('Select Date');
+                Alert.alert('Missing', "Check Date Field");
                 setLoad(false);
                 return;
             } else {
-                setSelectedCategoryErr('');
+                setStartDateErr('');
             }
+
+            if (!slotfromTime) {
+                setSlotFromTimeErr('Select From Time');
+                Alert.alert('Missing', "Check Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotFromTimeErr('');
+            }
+
+            if (!slotToTime) {
+                setSlotToTimeErr('Select To Time');
+                Alert.alert('Missing', "Check Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotToTimeErr('');
+            }
+        }
+
+        if (selectedCategory === "Leave" || selectedCategory === "Absent") {
+            if (!endDate) {
+                setEndDateErr('Select From Date');
+                Alert.alert('Missing', "Check From Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setEndDateErr('');
+            }
+
+            if (!returnDate) {
+                setreturnDateErr('Select To Date');
+                Alert.alert('Missing', "Check To Date Field");
+                setLoad(false);
+                return;
+            } else {
+                setreturnDateErr('');
+            }
+        }
+
+        if (!docFile) {
+            setDocFileErr('Choose File');
+            Alert.alert('Missing', "Check The Document Field");
+            setLoad(false);
+            return;
+        } else {
+            setDocFileErr('');
+        }
+
+        if (!Reason) {
+            setReasonErr('Enter Reason');
+            Alert.alert('Missing', "Check The Reason Field");
+            setLoad(false);
+            return;
+        } else {
+            setReasonErr('');
+        }
+
+        try {
+
+            formData.append('emp_id', data.userempid);
+            formData.append('emp_name', data.username);
+            formData.append('request_type', selectedCategoryId);
+            formData.append('request_category', selectedleaveTypeId);
+            formData.append('leave_reason', Reason);
+            formData.append('shift_slot', shiftId);
+            formData.append('from_date', formattedEndDate);
+            formData.append('to_date', formattedReturnDate);
+            formData.append('permission_date', formattedStartDate);
+            formData.append('permission_timefrom', slotfromTime);
+            formData.append('permission_timeto', slotToTime);
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((img, index) => {
+                        formData.append(`attachement`, {
+                            uri: img.uri,
+                            name: img.name,
+                            type: img.type,
+                        });
+                    });
+                }
+            }
+            else {
+                formData.append('attachement', docFile);
+            }
+
 
             const response = await fetch('https://ocean21.in/api/public/api/add_employee_leave_request', {
                 method: 'POST',
@@ -373,26 +422,60 @@ const EmpLeaveReq = ({ navigation }) => {
 
             if (responsedata.status === 'success') {
                 setLoad(false);
-                Alert.alert('Success', responsedata.message);
-                if (selectedCategory === "Permission") {
-                    navigation.navigate('Permission Request');
-                } else if (selectedCategory === "Leave") {
-                    navigation.navigate('Leave Request');
-                } else if (selectedCategory === "Half Day") {
-                    navigation.navigate('HalfDay Request');
-                }
-                Handlerefresh();
+                // Alert.alert('Success', responsedata.message);
+                handleShowAlert(responsedata.message);
             } else {
-                Alert.alert('Failed', responsedata.message);
+                // Alert.alert('Failed', responsedata.message);
+                handleShowAlert1(responsedata.message);
                 console.log('Error')
                 setLoad(false);
             }
 
         } catch (error) {
             setLoad(false);
-            console.log('error', error)
+            console.log('error', error);
+            handleShowAlert2();
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            if (selectedCategory === "Permission") {
+                navigation.navigate('Permission Request');
+            } else if (selectedCategory === "Leave") {
+                navigation.navigate('Leave Request');
+            } else if (selectedCategory === "Half Day") {
+                navigation.navigate('HalfDay Request');
+            }
+            Handlerefresh();
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -408,6 +491,36 @@ const EmpLeaveReq = ({ navigation }) => {
 
                     <Text style={styles.StatDateText}>
                         Request Type
+                    </Text>
+
+                    <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
+                        <Text>{selectedleaveType || 'Select Type'}</Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+                    </TouchableOpacity>
+
+                    {showleaveTypeDropdown && (
+                        <View style={styles.dropdown}>
+                            {leaveTypeDropdown.map((department, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={[
+                                        styles.dropdownOption,
+                                        selectedleaveType === department.leave_type_name && styles.selectedOption
+                                    ]}
+                                    onPress={() => handleSelectLeave(department)}
+                                >
+                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
+
+                    <Text style={styles.errorText}>
+                        {selectedleaveTypeErr}
+                    </Text>
+
+                    <Text style={styles.StatDateText}>
+                        Category
                     </Text>
 
                     <TouchableOpacity
@@ -438,100 +551,8 @@ const EmpLeaveReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedCategoryErr}
                     </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Category
-                    </Text>
-
-                    <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType || 'Select Leave Type'}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-                    </TouchableOpacity>
-
-                    {showleaveTypeDropdown && (
-                        <View style={styles.dropdown}>
-                            {leaveTypeDropdown.map((department, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedleaveType === department.leave_type_name && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleSelectLeave(department)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Location
-                    </Text>
-
-                    <TouchableOpacity
-                        onPress={() => setShowLocationDropdown(!showLocationDropdown)}
-                        style={styles.StatusTouchable}>
-
-                        <Text style={styles.StatusTouchableText}>
-                            {selectedLocation || 'Select Location'}
-                        </Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-
-                    </TouchableOpacity>
-
-                    {showLocationDropdown && (
-                        <View style={styles.dropdown}>
-                            <ScrollView>
-                                {LocationDropdown.map((item, index) => (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={styles.dropdownOption}
-                                        onPress={() => handleSelectLocation(item)}
-                                    >
-                                        <Text>{item.attendance_location_name}</Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </ScrollView>
-                        </View>
-                    )}
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    {/* <Text style={styles.StatDateText}>
-                        Shift Slot
-                    </Text>
-
-                    <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
-
-                        <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-
-                    </TouchableOpacity>
-
-                    {showDropdown && (
-                        <View style={styles.dropdown}>
-                            {shiftSlotList.map((shift, index) => (
-
-                                <TouchableOpacity key={index} onPress={() => selectShift(shift)} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>{shift.shift_slot}</Text>
-                                </TouchableOpacity>
-
-                            ))}
-                        </View>
-                    )}
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text> */}
 
                     {selectedCategory === "Permission" || selectedCategory === "Half Day" ?
                         <>
@@ -555,7 +576,7 @@ const EmpLeaveReq = ({ navigation }) => {
                             </View>
 
                             <Text style={styles.errorText}>
-                                { }
+                                {startDateErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -577,7 +598,7 @@ const EmpLeaveReq = ({ navigation }) => {
                             </View>
 
                             <Text style={styles.errorText}>
-                                { }
+                                {slotfromTimeErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -599,7 +620,7 @@ const EmpLeaveReq = ({ navigation }) => {
                             </View>
 
                             <Text style={styles.errorText}>
-                                { }
+                                {slotToTimeErr}
                             </Text>
                         </> : null
                     }
@@ -626,7 +647,7 @@ const EmpLeaveReq = ({ navigation }) => {
                             </View>
 
                             <Text style={styles.errorText}>
-                                { }
+                                {endDateErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -649,7 +670,7 @@ const EmpLeaveReq = ({ navigation }) => {
                             </View>
 
                             <Text style={styles.errorText}>
-                                { }
+                                {returnDateErr}
                             </Text>
                         </> : null
                     }
@@ -671,7 +692,7 @@ const EmpLeaveReq = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {docFileErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -685,7 +706,7 @@ const EmpLeaveReq = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {ReasonErr}
                     </Text>
 
                     <View style={styles.buttonview}>
@@ -709,6 +730,24 @@ const EmpLeaveReq = ({ navigation }) => {
                     </View>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
 
             </View>

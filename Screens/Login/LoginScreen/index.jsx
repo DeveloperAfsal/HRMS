@@ -220,14 +220,14 @@ const LoginScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.powerby}>
+                {/* <View style={styles.powerby}>
                     <Text style={styles.powerbyText}>Powered by</Text>
                 </View>
 
                 <View style={styles.powerdebyContent}>
                     <View style={styles.powerdebyContentIcon}></View>
                     <Text style={styles.powerdebyContentName}>ABCD</Text>
-                </View>
+                </View> */}
             </View>
 
             <View style={styles.endContainer}>

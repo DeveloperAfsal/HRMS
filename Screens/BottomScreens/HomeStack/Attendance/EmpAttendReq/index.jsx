@@ -7,6 +7,9 @@ import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EmpAttendReq = ({ navigation }) => {
 
@@ -18,9 +21,10 @@ const EmpAttendReq = ({ navigation }) => {
 
     const [load, setLoad] = useState(false);
     const [Reason, setReason] = useState('');
+    const [ReasonErr, setReasonErr] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
-    // Leave Type
+    // Leave Type 
 
     const [leaveTypeDropdown, setLeaveTypeDropdown] = useState([]);
     const [selectedleaveType, setSelectedleaveType] = useState(null);
@@ -105,6 +109,7 @@ const EmpAttendReq = ({ navigation }) => {
     const [LocationDropdown, setLocationDropdown] = useState([]);
     const [showLocationDropdown, setShowLocationDropdown] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('');
+    const [selectedLocationErr, setSelectedLocationErr] = useState('');
     const [selectedLocationId, setSelectedLocationId] = useState('');
 
     useEffect(() => {
@@ -145,6 +150,7 @@ const EmpAttendReq = ({ navigation }) => {
     const [shiftSlotList, setShiftSlotList] = useState([]);
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
+    const [selectedShiftErr, setSelectedShiftErr] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
     useEffect(() => {
@@ -197,6 +203,7 @@ const EmpAttendReq = ({ navigation }) => {
     // From Time 
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -214,6 +221,7 @@ const EmpAttendReq = ({ navigation }) => {
     // To Time 
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -230,6 +238,49 @@ const EmpAttendReq = ({ navigation }) => {
 
     // 
 
+    // Type
+
+    const [TypeDropdown, setTypeDropdown] = useState([]);
+    const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+    const [selectedType, setSelectedType] = useState('');
+    const [selectedTypeId, setSelectedTypeId] = useState('');
+    const [selectedTypeErr, setSelectedTypeErr] = useState('');
+
+
+    useEffect(() => {
+        const apiUrl = 'https://ocean21.in/api/public/api/attendance_type_list';
+
+        const fetchData = async () => {
+
+            try {
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+
+                // console.log(responseData,"responseData")
+
+                setTypeDropdown(responseData);
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [])
+
+    const handleSelectType = (item) => {
+        setSelectedType(item.attendance_type_name);
+        setSelectedTypeId(item.id);
+        setShowTypeDropdown(false);
+    };
+
+    // 
     const Handlerefresh = () => {
         setSelectedleaveType(null);
         setSelectedLocation(null);
@@ -246,6 +297,66 @@ const EmpAttendReq = ({ navigation }) => {
 
         setLoad(true);
 
+        if (!selectedType) {
+            setSelectedTypeErr('Select Request Type');
+            Alert.alert('Missing', "Check The Request Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedTypeErr('');
+        }
+
+        if (!selectedLocation) {
+            setSelectedLocationErr('Select Location');
+            Alert.alert('Missing', "Check The Location Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedLocationErr('');
+        }
+
+        if (!selectedShift) {
+            setSelectedShiftErr('Select Shift Slot');
+            Alert.alert('Missing', "Check The Shift Slot Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedShiftErr('');
+        }
+
+        if (selectedType !== "Check-Out Time Only") {
+            if (slotfromTime == "00:00:00") {
+                setSlotFromTimeErr('Select From Time');
+                Alert.alert('Missing', "Check The From Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotFromTimeErr('');
+            }
+        }
+
+
+        if (selectedType !== "Check-In Time Only") {
+            if (slotToTime == "00:00:00") {
+                setSlotToTimeErr('Select To Time');
+                Alert.alert('Missing', "Check The To Time Field");
+                setLoad(false);
+                return;
+            } else {
+                setSlotToTimeErr('');
+            }
+        }
+
+
+        if (!Reason) {
+            setReasonErr('Select Reason');
+            Alert.alert('Missing', "Check The Reason Field");
+            setLoad(false);
+            return;
+        } else {
+            setReasonErr('');
+        }
+
         try {
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_employee_attendance_request';
@@ -254,7 +365,7 @@ const EmpAttendReq = ({ navigation }) => {
                 emp_id: data.userempid,
                 emp_name: data.username,
                 emp_email: data.useremail,
-                request_type: selectedCategoryId,
+                request_type: selectedTypeId,
                 request_location: selectedLocationId,
                 request_date: formattedStartDate,
                 request_fromtime: slotfromTime,
@@ -270,19 +381,54 @@ const EmpAttendReq = ({ navigation }) => {
             const ResData = response.data;
 
             if (ResData.status === 'success') {
-                Alert.alert('Success', ResData.message);
-                navigation.navigate('Attendance Request');
+                // Alert.alert('Success', ResData.message);
+                handleShowAlert(ResData.message);
                 setLoad(false);
-                Handlerefresh();
             } else {
-                console.log("Error")
+                // console.log("Error")
+                handleShowAlert1(ResData.message);
                 setLoad(false);
             }
         } catch (error) {
             console.log(error)
+            handleShowAlert2();
             setLoad(true);
         }
     }
+
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Attendance Request');
+            Handlerefresh();
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -300,57 +446,35 @@ const EmpAttendReq = ({ navigation }) => {
                         Request Type
                     </Text>
 
-                    {/* <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-                    </TouchableOpacity>
-
-                    {showleaveTypeDropdown && (
-                        <View style={styles.dropdown}>
-                            {leaveTypeDropdown.map((department, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedleaveType === department.leave_type_name && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleSelectLeave(department)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )} */}
-
                     <TouchableOpacity
-                        onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                        onPress={() => setShowTypeDropdown(!showTypeDropdown)}
                         style={styles.StatusTouchable}>
-
                         <Text style={styles.StatusTouchableText}>
-                            {selectedCategory ? selectedCategory : 'Select Category'}
+                            {selectedType || 'Select Type'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
 
-                    {showCategoryDropdown && (
+                    {showTypeDropdown && (
                         <View style={styles.dropdown}>
                             <ScrollView>
-                                {CategoryDropdown.map((item, index) => (
+                                {TypeDropdown.map((item, index) => (
                                     <TouchableOpacity
                                         key={index}
                                         style={styles.dropdownOption}
-                                        onPress={() => handleSelectCategory(item)}
+                                        onPress={() => handleSelectType(item)}
                                     >
-                                        <Text>{item.leave_category_name}</Text>
+                                        <Text>{item.attendance_type_name}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
                         </View>
                     )}
 
+
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedTypeErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -362,7 +486,7 @@ const EmpAttendReq = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedLocation ? selectedLocation : 'Select Location'}
+                            {selectedLocation || 'Select Location'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -385,7 +509,7 @@ const EmpAttendReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedLocationErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -394,7 +518,7 @@ const EmpAttendReq = ({ navigation }) => {
 
                     <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
 
-                        <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
+                        <Text style={styles.TimeSlotTouchableText}>{selectedShift || "Select Shift"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -412,7 +536,7 @@ const EmpAttendReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedShiftErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -437,49 +561,58 @@ const EmpAttendReq = ({ navigation }) => {
                         { }
                     </Text>
 
-                    <Text style={styles.StatDateText}>
-                        From Time
-                    </Text>
+                    {
+                        selectedType === "Check-Out Time Only" ? null :
+                            <>
+                                <Text style={styles.StatDateText}>
+                                    From Time
+                                </Text>
 
-                    <View style={styles.inputs}>
-                        <Text onPress={showSlotFromTimepicker}>
-                            {slotfromTime} &nbsp;
-                        </Text>
-                        {showSlotFromTimePicker && (
-                            <DateTimePicker
-                                value={parse(slotfromTime, 'HH:mm:ss', new Date())}
-                                mode="time"
-                                display="default"
-                                onChange={handleSlotFromTimeChange}
-                            />
-                        )}
-                    </View>
+                                <View style={styles.inputs}>
+                                    <Text onPress={showSlotFromTimepicker}>
+                                        {slotfromTime} &nbsp;
+                                    </Text>
+                                    {showSlotFromTimePicker && (
+                                        <DateTimePicker
+                                            value={parse(slotfromTime, 'HH:mm:ss', new Date())}
+                                            mode="time"
+                                            display="default"
+                                            onChange={handleSlotFromTimeChange}
+                                        />
+                                    )}
+                                </View>
 
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
+                                <Text style={styles.errorText}>
+                                    {slotfromTimeErr}
+                                </Text>
+                            </>
+                    }
 
-                    <Text style={styles.StatDateText}>
-                        To Time
-                    </Text>
+                    {selectedType === "Check-In Time Only" ? null :
+                        <>
+                            <Text style={styles.StatDateText}>
+                                To Time
+                            </Text>
 
-                    <View style={styles.inputs}>
-                        <Text onPress={showSlotToTimepicker}>
-                            {slotToTime} &nbsp;
-                        </Text>
-                        {showSlotToTimePicker && (
-                            <DateTimePicker
-                                value={parse(slotToTime, 'HH:mm:ss', new Date())}
-                                mode="time"
-                                display="default"
-                                onChange={handleSlotToTimeChange}
-                            />
-                        )}
-                    </View>
+                            <View style={styles.inputs}>
+                                <Text onPress={showSlotToTimepicker}>
+                                    {slotToTime} &nbsp;
+                                </Text>
+                                {showSlotToTimePicker && (
+                                    <DateTimePicker
+                                        value={parse(slotToTime, 'HH:mm:ss', new Date())}
+                                        mode="time"
+                                        display="default"
+                                        onChange={handleSlotToTimeChange}
+                                    />
+                                )}
+                            </View>
 
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
+                            <Text style={styles.errorText}>
+                                {slotToTimeErr}
+                            </Text>
+                        </>
+                    }
 
                     <Text style={styles.StatDateText}>
                         Reason
@@ -492,7 +625,7 @@ const EmpAttendReq = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {ReasonErr}
                     </Text>
 
                     <View style={styles.buttonview}>
@@ -517,6 +650,23 @@ const EmpAttendReq = ({ navigation }) => {
 
                 </View>
 
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
             </View>
 

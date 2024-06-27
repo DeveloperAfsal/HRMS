@@ -7,6 +7,9 @@ import { format, parse } from 'date-fns';
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
 const EmpOvertimeReq = ({ navigation }) => {
 
@@ -18,6 +21,7 @@ const EmpOvertimeReq = ({ navigation }) => {
 
     const [load, setLoad] = useState(false);
     const [Reason, setReason] = useState('');
+    const [ReasonErr, setReasonErr] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
     // Leave Type
@@ -100,11 +104,53 @@ const EmpOvertimeReq = ({ navigation }) => {
         setShowCategoryDropdown(false);
     };
 
+    // Request Type
+
+    const [requestDropdown, setRequestDropdown] = useState([]);
+    const [showrequestDropdown, setShowrequestDropdown] = useState(false);
+    const [selectedrequest, setSelectedrequest] = useState('');
+    const [selectedrequestErr, setSelectedrequestErr] = useState('');
+    const [selectedrequestId, setSelectedrequestId] = useState('');
+
+    useEffect(() => {
+        const apiUrl = 'https://ocean21.in/api/public/api/overtime_type_list';
+
+        const fetchData = async () => {
+
+            try {
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                const responseData = response.data.data;
+
+                // console.log(responseData,"responseData")
+
+                setRequestDropdown(responseData);
+
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [])
+
+    const handleSelectrequest = (item) => {
+        setSelectedrequest(item.ot_type_name);
+        setSelectedrequestId(item.id);
+        setShowrequestDropdown(false);
+    };
+
     // Location
 
     const [LocationDropdown, setLocationDropdown] = useState([]);
     const [showLocationDropdown, setShowLocationDropdown] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('');
+    const [selectedLocationErr, setSelectedLocationErr] = useState('');
     const [selectedLocationId, setSelectedLocationId] = useState('');
 
     useEffect(() => {
@@ -145,6 +191,7 @@ const EmpOvertimeReq = ({ navigation }) => {
     const [shiftSlotList, setShiftSlotList] = useState([]);
     const [selectedShiftId, setSelectedShiftId] = useState(null);
     const [selectedShift, setSelectedShift] = useState(null);
+    const [selectedShiftErr, setSelectedShiftErr] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
     useEffect(() => {
@@ -197,6 +244,7 @@ const EmpOvertimeReq = ({ navigation }) => {
     // From Time 
 
     const [slotfromTime, setSlotFromTime] = useState('00:00:00');
+    const [slotfromTimeErr, setSlotFromTimeErr] = useState('');
     const [showSlotFromTimePicker, setShowSlotFromTimePicker] = useState(false);
 
     const handleSlotFromTimeChange = (event, time) => {
@@ -214,6 +262,7 @@ const EmpOvertimeReq = ({ navigation }) => {
     // To Time 
 
     const [slotToTime, setSlotToTime] = useState('00:00:00');
+    const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
 
     const handleSlotToTimeChange = (event, time) => {
@@ -246,13 +295,67 @@ const EmpOvertimeReq = ({ navigation }) => {
 
         setLoad(true);
 
+        if (!selectedrequest) {
+            setSelectedrequestErr('Select Request Type');
+            Alert.alert('Missing', "Check The Request Type Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedrequestErr('');
+        }
+
+        if (!selectedLocation) {
+            setSelectedLocationErr('Select Location');
+            Alert.alert('Missing', "Check The Location Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedLocationErr('');
+        }
+
+        if (!selectedShift) {
+            setSelectedShiftErr('Select Shift Slot');
+            Alert.alert('Missing', "Check The Shift Slot Field");
+            setLoad(false);
+            return;
+        } else {
+            setSelectedShiftErr('');
+        }
+
+        if (slotfromTime == "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            Alert.alert('Missing', "Check The From Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotFromTimeErr('');
+        }
+
+        if (slotToTime == "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            Alert.alert('Missing', "Check The To Time Field");
+            setLoad(false);
+            return;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!Reason) {
+            setReasonErr('Select Reason');
+            Alert.alert('Missing', "Check The Reason Field");
+            setLoad(false);
+            return;
+        } else {
+            setReasonErr('');
+        }
+
         try {
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_employee_ot_request';
 
             const response = await axios.post(apiUrl, {
                 emp_id: data.userempid,
-                request_type: selectedCategoryId,
+                request_type: selectedrequestId,
                 request_location: selectedLocationId,
                 request_date: formattedStartDate,
                 request_fromtime: slotfromTime,
@@ -268,19 +371,53 @@ const EmpOvertimeReq = ({ navigation }) => {
             const ResData = response.data;
 
             if (ResData.status === 'success') {
-                Alert.alert('Success', ResData.message);
-                navigation.navigate('OverTime Request');
+                // Alert.alert('Success', ResData.message);
                 setLoad(false);
-                Handlerefresh();
+                handleShowAlert(ResData.message);
             } else {
-                console.log("Error")
+                // console.log("Error")
+                handleShowAlert1(ResData.message);
                 setLoad(false);
             }
         } catch (error) {
-            console.log(error)
+            // console.log(error)
+            handleShowAlert2();
             setLoad(true);
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('OverTime Request');
+            Handlerefresh();
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -298,49 +435,28 @@ const EmpOvertimeReq = ({ navigation }) => {
                         Request Type
                     </Text>
 
-                    {/* <TouchableOpacity style={styles.Input} onPress={() => setShowleaveTypeDropdown(!showleaveTypeDropdown)}>
-                        <Text>{selectedleaveType ? selectedleaveType : 'Select Leave Type'}</Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-                    </TouchableOpacity>
-
-                    {showleaveTypeDropdown && (
-                        <View style={styles.dropdown}>
-                            {leaveTypeDropdown.map((department, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[
-                                        styles.dropdownOption,
-                                        selectedleaveType === department.leave_type_name && styles.selectedOption
-                                    ]}
-                                    onPress={() => handleSelectLeave(department)}
-                                >
-                                    <Text style={styles.dropdownOptionText}>{department.leave_type_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )} */}
 
                     <TouchableOpacity
-                        onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                        onPress={() => setShowrequestDropdown(!showrequestDropdown)}
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedCategory ? selectedCategory : 'Select Category'}
+                            {selectedrequest || 'Select Request Type'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
 
-                    {showCategoryDropdown && (
+                    {showrequestDropdown && (
                         <View style={styles.dropdown}>
                             <ScrollView>
-                                {CategoryDropdown.map((item, index) => (
+                                {requestDropdown.map((item, index) => (
                                     <TouchableOpacity
                                         key={index}
                                         style={styles.dropdownOption}
-                                        onPress={() => handleSelectCategory(item)}
+                                        onPress={() => handleSelectrequest(item)}
                                     >
-                                        <Text>{item.leave_category_name}</Text>
+                                        <Text>{item.ot_type_name}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
@@ -348,7 +464,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedrequestErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -360,7 +476,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                         style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedLocation ? selectedLocation : 'Select Location'}
+                            {selectedLocation || 'Select Location'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -383,7 +499,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedLocationErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -392,7 +508,7 @@ const EmpOvertimeReq = ({ navigation }) => {
 
                     <TouchableOpacity style={styles.TimeSlotTouchable} onPress={toggleDropdown}>
 
-                        <Text style={styles.TimeSlotTouchableText}>{selectedShift ? selectedShift : "Select Shift"}</Text>
+                        <Text style={styles.TimeSlotTouchableText}>{selectedShift || "Select Shift"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -410,7 +526,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {selectedShiftErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -454,7 +570,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotfromTimeErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -476,7 +592,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {slotToTimeErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -490,7 +606,7 @@ const EmpOvertimeReq = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {ReasonErr}
                     </Text>
 
                     <View style={styles.buttonview}>
@@ -514,6 +630,24 @@ const EmpOvertimeReq = ({ navigation }) => {
                     </View>
 
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
 
             </View>
