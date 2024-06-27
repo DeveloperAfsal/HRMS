@@ -30,6 +30,12 @@ const EditProject = ({ route, navigation }) => {
     const [pworktype, setPworktype] = useState('');
     const [des, setDes] = useState('');
     const [duration, setDuration] = useState('');
+    const [pnameErr, setPnameErr] = useState('');
+    const [ptypeErr, setPtypeErr] = useState('');
+    const [pcategoryErr, setPcategoryErr] = useState('');
+    const [pworktypeErr, setPworktypeErr] = useState('');
+    const [desErr, setDesErr] = useState('');
+    const [durationErr, setDurationErr] = useState('');
 
     const [cname, setCname] = useState('');
     const [ccompany, setCcompany] = useState('');
@@ -37,11 +43,18 @@ const EditProject = ({ route, navigation }) => {
     const [cemail, setCemail] = useState('');
     const [ccity, setCcity] = useState('');
     const [cstate, setCstate] = useState('');
+    const [cnameErr, setCnameErr] = useState('');
+    const [ccompanyErr, setCcompanyErr] = useState('');
+    const [ccontactErr, setCcontactErr] = useState('');
+    const [cemailErr, setCemailErr] = useState('');
+    const [ccityErr, setCcityErr] = useState('');
+    const [cstateErr, setCstateErr] = useState('');
 
     const [load, SetLoad] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedMemberErr, setSelectedMemberErr] = useState('');
     const [selectedEmployeesIds, setSelectedEmployeesIds] = useState([]);
     const selectedEmployeesIdsAsNumbers = selectedEmployeesIds.join(',');
 
@@ -61,6 +74,7 @@ const EditProject = ({ route, navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState([]);
+    const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
@@ -208,6 +222,7 @@ const EditProject = ({ route, navigation }) => {
 
     const [showModalDropdown, setShowModalDropdown] = useState(false);
     const [editedStatus, setEditedStatus] = useState(null);
+    const [editedStatusErr, setEditedStatusErr] = useState(null);
 
     const toggleModalDropdown = () => {
         setShowModalDropdown(!showModalDropdown);
@@ -248,6 +263,141 @@ const EditProject = ({ route, navigation }) => {
     const HandleSubmit = async () => {
 
         SetLoad(true);
+
+        if (!pname) {
+            setPnameErr('Select Project Name');
+            Alert.alert('Missing', "Check The Project Field");
+            SetLoad(false);
+            return;
+        } else {
+            setPnameErr('');
+        }
+
+        if (!ptype) {
+            setPtypeErr('Select Project Type');
+            Alert.alert('Missing', "Check The Project Type");
+            SetLoad(false);
+            return;
+        } else {
+            setPtypeErr('');
+        }
+
+        if (!pcategory) {
+            setPcategoryErr('Select Project Category');
+            Alert.alert('Missing', "Check The Project Category");
+            SetLoad(false);
+            return;
+        } else {
+            setPcategoryErr('');
+        }
+
+        if (!pworktype) {
+            setPworktypeErr('Select Project Work Type');
+            Alert.alert('Missing', "Check The Project Work Type");
+            SetLoad(false);
+            return;
+        } else {
+            setPworktypeErr('');
+        }
+
+        if (selectedDepartments.length == "0") {
+            setSelectedDepartmentsErr('Select Department Name');
+            Alert.alert('Missing', "Check The Department Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (selectedEmployees.length == "0") {
+            setSelectedMemberErr('Select Member Name');
+            Alert.alert('Missing', "Check The Member Field");
+            SetLoad(false);
+            return;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!duration) {
+            setDurationErr('Select Duration');
+            Alert.alert('Missing', "Check The Duration");
+            SetLoad(false);
+            return;
+        } else {
+            setDurationErr('');
+        }
+
+        if (!editedStatus) {
+            setEditedStatusErr('Select Status');
+            Alert.alert('Missing', "Check The Status");
+            SetLoad(false);
+            return;
+        } else {
+            setEditedStatusErr('');
+        }
+
+        if (!des) {
+            setDesErr('Select Description');
+            Alert.alert('Missing', "Check The Description");
+            SetLoad(false);
+            return;
+        } else {
+            setDesErr('');
+        }
+
+        if (!cname) {
+            setCnameErr('Select Client Name');
+            Alert.alert('Missing', "Check The Client Name");
+            SetLoad(false);
+            return;
+        } else {
+            setCnameErr('');
+        }
+
+        if (!ccompany) {
+            setCcompanyErr('Select Client Company');
+            Alert.alert('Missing', "Check The Client Company");
+            SetLoad(false);
+            return;
+        } else {
+            setCcompanyErr('');
+        }
+
+        if (!ccontact) {
+            setCcontactErr('Select Contact No');
+            Alert.alert('Missing', "Check The Contact No");
+            SetLoad(false);
+            return;
+        } else {
+            setCcontactErr('');
+        }
+
+        if (!cemail) {
+            setCemailErr('Select Client Email');
+            Alert.alert('Missing', "Check The Client Email");
+            SetLoad(false);
+            return;
+        } else {
+            setCemailErr('');
+        }
+
+        if (!ccity) {
+            setCcityErr('Select Client City');
+            Alert.alert('Missing', "Check The Client City");
+            SetLoad(false);
+            return;
+        } else {
+            setCcityErr('');
+        }
+
+        if (!cstate) {
+            setCstateErr('Select Client State');
+            Alert.alert('Missing', "Check The Client State");
+            SetLoad(false);
+            return;
+        } else {
+            setCstateErr('');
+        }
 
         try {
 
@@ -356,7 +506,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {pnameErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -370,7 +520,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {ptypeErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -384,7 +534,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {pcategoryErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -398,7 +548,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {pworktypeErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -433,7 +583,7 @@ const EditProject = ({ route, navigation }) => {
                             )}
 
                             <Text style={styles.errorText}>
-                                { }
+                                {selectedDepartmentsErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -470,7 +620,7 @@ const EditProject = ({ route, navigation }) => {
                             )}
 
                             <Text style={styles.errorText}>
-                                { }
+                                {selectedMemberErr}
                             </Text>
 
 
@@ -529,7 +679,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {durationErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -568,7 +718,7 @@ const EditProject = ({ route, navigation }) => {
                             )}
 
                             <Text style={styles.errorText}>
-                                { }
+                                {editedStatusErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -582,7 +732,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {desErr}
                             </Text>
 
                         </View>
@@ -609,7 +759,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {cnameErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -623,7 +773,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {ccompanyErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -637,7 +787,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {ccontactErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -651,7 +801,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {cemailErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -665,7 +815,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {ccityErr}
                             </Text>
 
                             <Text style={styles.StatDateText}>
@@ -679,7 +829,7 @@ const EditProject = ({ route, navigation }) => {
                             />
 
                             <Text style={styles.errorText}>
-                                { }
+                                {cstateErr}
                             </Text>
 
                             <View style={styles.buttonview}>
