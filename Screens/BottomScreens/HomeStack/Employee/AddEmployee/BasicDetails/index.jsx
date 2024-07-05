@@ -12,7 +12,7 @@ import axios from "axios";
 import CheckBox from '@react-native-community/checkbox';
 
 
-const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
+const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelectedImageErr, selectedImageErr }) => {
 
     const dispatch = useDispatch();
 
@@ -217,6 +217,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.employeeId}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Employee Picture
             </Text>
@@ -235,6 +239,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
 
             </View>
 
+            <Text style={styles.errorText}>
+                {selectedImageErr}
+            </Text>
+
             <Text style={styles.subHeading}>
                 First Name
             </Text>
@@ -245,6 +253,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 onChangeText={(text) => handleFieldsChange('firstName', text)}
             />
 
+            <Text style={styles.errorText}>
+                {!Employee.firstName ? "First Name Required" : null}
+            </Text>
+
             <Text style={styles.subHeading}>
                 Last Name
             </Text>
@@ -254,6 +266,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.lastName}
                 onChangeText={(text) => handleFieldsChange('lastName', text)}
             />
+
+            <Text style={styles.errorText}>
+                {!Employee.lastName ? "lastName Required" : null}
+            </Text>
 
             <Text style={styles.subHeading}>
                 Gender
@@ -286,6 +302,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Status
             </Text>
@@ -313,6 +333,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Phone Number
             </Text>
@@ -323,6 +347,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 onChangeText={(text) => handleFieldsChange('phoneNumber', text)}
                 keyboardType="number-pad"
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Whatsapp Number
@@ -335,6 +363,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 keyboardType="number-pad"
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Email ID
             </Text>
@@ -344,6 +376,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.email}
                 onChangeText={(text) => handleFieldsChange('email', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Date Of Birth
@@ -363,6 +399,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 )}
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Current Address
             </Text>
@@ -372,6 +412,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.currentAddress}
                 onChangeText={(text) => handleFieldsChange('currentAddress', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Permanent Address
@@ -393,6 +437,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 <Text style={{ fontWeight: '400', fontSize: 13, lineHeight: 17.29 }}>Same as current address</Text>
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Parent / Guardian Name
             </Text>
@@ -402,6 +450,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.parentName}
                 onChangeText={(text) => handleFieldsChange('parentName', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Marital Status
@@ -434,6 +486,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Spouse Name
             </Text>
@@ -443,6 +499,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.spouseName}
                 onChangeText={(text) => handleFieldsChange('spouseName', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Aadhar Number
@@ -455,6 +515,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 keyboardType="number-pad"
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 PAN Number
             </Text>
@@ -464,6 +528,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage }) => {
                 value={Employee.panNumber}
                 onChangeText={(text) => handleFieldsChange('panNumber', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={styles.fullWidth}>
                 <TouchableOpacity style={styles.NextButton} onPress={onEmpDetails}>

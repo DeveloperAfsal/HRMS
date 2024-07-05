@@ -244,6 +244,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.hrms_emp_id}
                     />
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Employee Picture
                     </Text>
@@ -262,6 +266,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
                     </View>
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         First Name
                     </Text>
@@ -272,6 +280,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         onChangeText={(text) => updateEmployeeField('first_name', text)}
                     />
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Last Name
                     </Text>
@@ -281,6 +293,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.last_name}
                         onChangeText={(text) => updateEmployeeField('last_name', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <Text style={styles.subHeading}>
                         Gender
@@ -313,6 +329,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
                     )}
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Status
                     </Text>
@@ -340,6 +360,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
                     )}
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Phone Number
                     </Text>
@@ -350,6 +374,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         onChangeText={(text) => updateEmployeeField('mobile_no', text)}
                         keyboardType="number-pad"
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <Text style={styles.subHeading}>
                         Whatsapp Number
@@ -362,6 +390,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         keyboardType="number-pad"
                     />
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Email ID
                     </Text>
@@ -371,6 +403,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.email}
                         onChangeText={(text) => updateEmployeeField('email', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <Text style={styles.subHeading}>
                         Date Of Birth
@@ -390,6 +426,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         )}
                     </View>
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Current Address
                     </Text>
@@ -400,6 +440,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         onChangeText={(text) => updateEmployeeField('current_address', text)}
                     />
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Permanent Address
                     </Text>
@@ -409,6 +453,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.address}
                         onChangeText={(text) => updateEmployeeField('address', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     {/* <View style={{ width: "90%", paddingTop: '2%', flexDirection: 'row', alignItems: 'center' }}>
                         <CheckBox
@@ -429,6 +477,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.parents}
                         onChangeText={(text) => updateEmployeeField('parents', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <Text style={styles.subHeading}>
                         Marital Status
@@ -461,6 +513,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
                     )}
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         Spouse Name
                     </Text>
@@ -470,6 +526,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.spouse_name}
                         onChangeText={(text) => updateEmployeeField('spouse_name', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <Text style={styles.subHeading}>
                         Aadhar Number
@@ -482,6 +542,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         keyboardType="number-pad"
                     />
 
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
                     <Text style={styles.subHeading}>
                         PAN Number
                     </Text>
@@ -491,6 +555,10 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         value={employee.pan_number}
                         onChangeText={(text) => updateEmployeeField('pan_number', text)}
                     />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
 
                     <View style={styles.fullWidth}>
                         <TouchableOpacity style={styles.NextButton} onPress={onEmpDetails}>

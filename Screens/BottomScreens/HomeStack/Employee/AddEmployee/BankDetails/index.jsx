@@ -50,6 +50,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                 onChangeText={(text) => handleFieldsChange('bankAccountNumber', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Bank Name
             </Text>
@@ -59,6 +63,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                 value={Employee.bankName}
                 onChangeText={(text) => handleFieldsChange('bankName', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Bank Branch
@@ -70,6 +78,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                 onChangeText={(text) => handleFieldsChange('bankBranch', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 IFSC Code
             </Text>
@@ -79,6 +91,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                 value={Employee.ifscCode}
                 onChangeText={(text) => handleFieldsChange('ifscCode', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Select Account Type
@@ -110,6 +126,10 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
                 </View>
 
             )}
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevEmpRole}>

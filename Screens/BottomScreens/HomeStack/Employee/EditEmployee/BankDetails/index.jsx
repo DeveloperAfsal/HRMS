@@ -43,6 +43,10 @@ const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
                 onChangeText={(text) => updateEmployeeField('bank_accountnumber', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Bank Name
             </Text>
@@ -52,6 +56,10 @@ const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
                 value={employee.bank_name}
                 onChangeText={(text) => updateEmployeeField('bank_name', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Bank Branch
@@ -63,6 +71,10 @@ const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
                 onChangeText={(text) => updateEmployeeField('bank_branch', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 IFSC Code
             </Text>
@@ -72,6 +84,10 @@ const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
                 value={employee.ifsc_code}
                 onChangeText={(text) => updateEmployeeField('ifsc_code', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Select Account Type
@@ -103,6 +119,10 @@ const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
                 </View>
 
             )}
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevEmpRole}>

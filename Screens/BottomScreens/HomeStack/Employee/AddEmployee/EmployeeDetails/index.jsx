@@ -181,6 +181,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 </View>
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Date Of Joining
             </Text>
@@ -199,6 +203,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 )}
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Probation Period
@@ -209,6 +216,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 value={Employee.probationPeriod}
                 onChangeText={(text) => handleFieldsChange('probationPeriod', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Confirmation Date
@@ -228,6 +239,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 )}
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Employee Agreement Period
             </Text>
@@ -237,6 +252,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 value={Employee.employeeAgreementPeriod}
                 onChangeText={(text) => handleFieldsChange('employeeAgreementPeriod', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Notice Period
             </Text>
@@ -247,6 +267,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 onChangeText={(text) => handleFieldsChange('noticePeriod', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 CTC
             </Text>
@@ -256,6 +280,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 value={Employee.ctc}
                 onChangeText={(text) => handleFieldsChange('ctc', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Gross Salary
             </Text>
@@ -266,6 +295,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 onChangeText={(text) => handleFieldsChange('grossSalary', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Net Salary
             </Text>
@@ -275,6 +308,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                 value={Employee.netSalary}
                 onChangeText={(text) => handleFieldsChange('netSalary', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Last Working Day
@@ -293,6 +330,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                     />
                 )}
             </View>
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 PF
@@ -334,6 +375,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             onChangeText={(text) => handleFieldsChange('uanNumber', text)}
                         />
 
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
+
                         <Text style={styles.subHeading}>
                             Employee PF Contribution
                         </Text>
@@ -344,6 +389,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             onChangeText={(text) => handleFieldsChange('employeePfContribution', text)}
                         />
 
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
+
                         <Text style={styles.subHeading}>
                             Employer PF Contribution
                         </Text>
@@ -353,9 +402,17 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             value={Employee.employerPfContribution}
                             onChangeText={(text) => handleFieldsChange('employerPfContribution', text)}
                         />
+
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
                     </>
                     : null
             }
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 ESI
@@ -397,6 +454,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             onChangeText={(text) => handleFieldsChange('esiNumber', text)}
                         />
 
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
+
                         <Text style={styles.subHeading}>
                             Employee ESI Contribution
                         </Text>
@@ -407,6 +468,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             onChangeText={(text) => handleFieldsChange('employeeEsiContribution', text)}
                         />
 
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
+
                         <Text style={styles.subHeading}>
                             Employer ESI Contribution
                         </Text>
@@ -416,9 +481,17 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                             value={Employee.employerEsiContribution}
                             onChangeText={(text) => handleFieldsChange('employerEsiContribution', text)}
                         />
+
+                        <Text style={styles.errorText}>
+                            { }
+                        </Text>
                     </>
                     : null
             }
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevBasicDetails}>

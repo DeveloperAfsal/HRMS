@@ -191,6 +191,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 </View>
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Date Of Joining
             </Text>
@@ -209,6 +213,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 )}
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Probation Period
             </Text>
@@ -218,6 +226,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 value={employee.probation_period}
                 onChangeText={(text) => updateEmployeeField('probation_period', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Confirmation Date
@@ -237,6 +249,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 )}
             </View>
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Employee Agreement Period
             </Text>
@@ -246,6 +262,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 value={employee.emp_aggrement}
                 onChangeText={(text) => updateEmployeeField('emp_aggrement', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Notice Period
@@ -257,6 +277,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 onChangeText={(text) => updateEmployeeField('notices_period', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 CTC
             </Text>
@@ -266,6 +290,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 value={employee.ctc}
                 onChangeText={(text) => updateEmployeeField('ctc', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Gross Salary
             </Text>
@@ -276,6 +305,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 onChangeText={(text) => updateEmployeeField('emp_grosssalary', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Net Salary
             </Text>
@@ -285,6 +318,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                 value={employee.emp_salary}
                 onChangeText={(text) => updateEmployeeField('emp_salary', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Last Working Day
@@ -303,6 +340,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                     />
                 )}
             </View>
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 PF
@@ -367,6 +408,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                     : null
             }
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 ESI
             </Text>
@@ -429,6 +474,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
                     </>
                     : null
             }
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevBasicDetails}>

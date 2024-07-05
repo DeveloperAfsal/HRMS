@@ -158,6 +158,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 </View>
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Designation
             </Text>
@@ -167,6 +171,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 value={Employee.designation}
                 onChangeText={(text) => handleFieldsChange('designation', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Select Supervisor
@@ -195,6 +203,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 )
             }
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Official Email ID
             </Text>
@@ -204,6 +216,11 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 value={Employee.officialEmail}
                 onChangeText={(text) => handleFieldsChange('officialEmail', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Password
             </Text>
@@ -213,6 +230,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 value={Employee.password}
                 onChangeText={(text) => handleFieldsChange('password', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Check-in / Check-out
@@ -247,6 +268,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Overtime
             </Text>
@@ -276,6 +301,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Late Allowed
@@ -287,6 +315,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 onChangeText={(text) => handleFieldsChange('lateAllowed', text)}
             />
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Permission Allowed
             </Text>
@@ -296,6 +328,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
                 value={Employee.permissionAllowed}
                 onChangeText={(text) => handleFieldsChange('permissionAllowed', text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevEmpDetails}>

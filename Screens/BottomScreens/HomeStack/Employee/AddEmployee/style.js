@@ -3,6 +3,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorText: {
+        color: "red",
+        paddingBottom: '5%',
+        width: "90%"
+    },
+
     Page: {
         width: '100%',
         alignItems: 'center',

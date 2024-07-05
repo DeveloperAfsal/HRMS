@@ -456,6 +456,10 @@ const Documents = ({
                 </View>
             )}
 
+            <Text style={styles.errorText}>
+                { }
+            </Text>
+
             <Text style={styles.subHeading}>
                 Document Name
             </Text>
@@ -467,6 +471,10 @@ const Documents = ({
                 value={docName}
                 onChangeText={(text) => setDocName(text)}
             />
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <Text style={styles.subHeading}>
                 Select File
@@ -483,6 +491,10 @@ const Documents = ({
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <Text style={styles.errorText}>
+                { }
+            </Text>
 
             <View style={styles.fullWidth}>
                 <TouchableOpacity style={styles.NextButton}

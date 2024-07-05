@@ -48,6 +48,7 @@ const AddEmployee = () => {
     }
 
     const [selectedImage, setSelectedImage] = useState([]);
+    const [selectedImageErr, setSelectedImageErr] = useState([]);
     const [documentType, setDocumentType] = useState([]);
     const [documentName, setDocumentName] = useState([]);
     const [documentFile, setDocumentFile] = useState([]);
