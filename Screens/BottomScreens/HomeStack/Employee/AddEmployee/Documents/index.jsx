@@ -457,7 +457,7 @@ const Documents = ({
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {selectedDocument.length == "0" ? "Document Type Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -473,7 +473,7 @@ const Documents = ({
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!docName ? "Document Name Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -493,7 +493,7 @@ const Documents = ({
             </View>
 
             <Text style={styles.errorText}>
-                { }
+                {!docFile ? "Select File" : null}
             </Text>
 
             <View style={styles.fullWidth}>

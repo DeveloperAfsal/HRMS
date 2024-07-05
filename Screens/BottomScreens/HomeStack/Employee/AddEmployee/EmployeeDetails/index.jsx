@@ -182,7 +182,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.employeeCategory ? "Selected Category Type" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -218,7 +218,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.probationPeriod ? "Selected probationPeriod" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -254,7 +254,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.employeeAgreementPeriod ? "employeeAgreementPeriod Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -268,7 +268,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.noticePeriod ? "noticePeriod Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -282,7 +282,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.ctc ? "ctc Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -296,7 +296,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.grossSalary ? "grossSalary Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -310,7 +310,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.netSalary ? "netSalary Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -376,7 +376,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.uanNumber ? "uanNumber Required" : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -390,7 +390,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.employeePfContribution ? "employeePfContribution Required" : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -404,14 +404,14 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.employerPfContribution ? "employerPfContribution Required" : null}
                         </Text>
                     </>
                     : null
             }
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.providentFund ? "providentFund Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -455,7 +455,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.esiNumber ? "esiNumber Required" : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -469,7 +469,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.employeeEsiContribution ? "employeeEsiContribution Required" : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -483,14 +483,14 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            { }
+                            {!Employee.employerEsiContribution ? "employerEsiContribution Required" : null}
                         </Text>
                     </>
                     : null
             }
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.esi ? "esi Required" : null}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>

@@ -51,7 +51,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.bankAccountNumber ? "bankAccountNumber Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -65,7 +65,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.bankName ? "bankName Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -79,7 +79,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.bankBranch ? "bankBranch Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -93,7 +93,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.ifscCode ? "ifscCode Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -128,7 +128,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.accountType ? "accountType Required" : null}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>

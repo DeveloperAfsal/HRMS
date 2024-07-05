@@ -159,7 +159,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.userRole ? "userRole Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -173,7 +173,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.designation ? "designation Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -204,7 +204,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             }
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.supervisor ? "supervisor Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -218,7 +218,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.officialEmail ? "officialEmail Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -232,7 +232,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.password ? "password Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -269,7 +269,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.checkinCheckout ? "checkinCheckout Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -302,7 +302,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.overtime ? "overtime Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -316,7 +316,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.lateAllowed ? "lateAllowed Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -330,7 +330,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.permissionAllowed ? "permissionAllowed Required" : null}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
