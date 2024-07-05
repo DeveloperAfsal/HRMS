@@ -303,7 +303,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.gender ? "Gender Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -334,7 +334,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.status ? "status Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -349,7 +349,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.phoneNumber ? "phoneNumber Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -364,7 +364,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.whatsappNumber ? "whatsappNumber Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -378,7 +378,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.email ? "email Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -414,7 +414,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.currentAddress ? "currentAddress Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -438,7 +438,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             </View>
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.permanentAddress ? "permanentAddress Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -452,7 +452,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.parentName ? "parentName Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -487,7 +487,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.maritalStatus ? "maritalStatus Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -501,7 +501,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.spouseName ? "spouseName Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -516,7 +516,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.aadharNumber ? "aadharNumber Required" : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -530,7 +530,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                { }
+                {!Employee.panNumber ? "panNumber Required" : null}
             </Text>
 
             <View style={styles.fullWidth}>
