@@ -109,7 +109,11 @@ const Documents = ({
             setDocFile('');
 
         } else {
-            setSelectedDocumentErr('Select Document Type');
+            if (selectedDocument.length == "0") {
+                setSelectedDocumentErr('Select Document Type');
+            } else {
+                setSelectedDocumentErr(null);
+            }
             setDocNameErr('Document Name Required');
             setDocFileErr('Document File Required');
             Alert.alert('Data not addded')

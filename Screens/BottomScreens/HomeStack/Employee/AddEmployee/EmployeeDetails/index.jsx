@@ -363,7 +363,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.providentFund ? "providentFund Required" : null}
+                {validation ? (!Employee.providentFund ? "providentFund Required" : null) : null}
             </Text>
 
             {
