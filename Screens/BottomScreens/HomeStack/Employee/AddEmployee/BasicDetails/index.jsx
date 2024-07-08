@@ -12,7 +12,7 @@ import axios from "axios";
 import CheckBox from '@react-native-community/checkbox';
 
 
-const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelectedImageErr, selectedImageErr }) => {
+const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedImageErr, validation }) => {
 
     const dispatch = useDispatch();
 
@@ -240,7 +240,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             </View>
 
             <Text style={styles.errorText}>
-                {selectedImageErr}
+                {validation ? selectedImageErr : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -254,7 +254,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.firstName ? "First Name Required" : null}
+                {validation ? (!Employee.firstName ? "First Name Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -268,7 +268,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.lastName ? "lastName Required" : null}
+                {validation ? (!Employee.lastName ? "lastName Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -303,7 +303,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.gender ? "Gender Required" : null}
+                {validation ? (!Employee.gender ? "Gender Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -334,7 +334,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.status ? "status Required" : null}
+                {validation ? (!Employee.status ? "status Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -349,7 +349,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.phoneNumber ? "phoneNumber Required" : null}
+                {validation ? (!Employee.phoneNumber ? "phoneNumber Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -364,7 +364,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.whatsappNumber ? "whatsappNumber Required" : null}
+                {validation ? (!Employee.whatsappNumber ? "whatsappNumber Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -378,7 +378,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.email ? "email Required" : null}
+                {validation ? (!Employee.email ? "email Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -414,7 +414,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.currentAddress ? "currentAddress Required" : null}
+                {validation ? (!Employee.currentAddress ? "currentAddress Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -438,7 +438,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             </View>
 
             <Text style={styles.errorText}>
-                {!Employee.permanentAddress ? "permanentAddress Required" : null}
+                {validation ? (!Employee.permanentAddress ? "permanentAddress Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -452,7 +452,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.parentName ? "parentName Required" : null}
+                {validation ? (!Employee.parentName ? "parentName Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -482,27 +482,37 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
                         <Text style={styles.dropdownOptionText}>Divorce</Text>
                     </TouchableOpacity>
 
+                    <TouchableOpacity onPress={() => selectMstatus("Widowed")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Widowed</Text>
+                    </TouchableOpacity>
+
                 </View>
 
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.maritalStatus ? "maritalStatus Required" : null}
+                {validation ? (!Employee.maritalStatus ? "maritalStatus Required" : null) : null}
             </Text>
 
-            <Text style={styles.subHeading}>
-                Spouse Name
-            </Text>
+            {
+                Employee.maritalStatus === "Married" ?
+                    <>
+                        <Text style={styles.subHeading}>
+                            Spouse Name
+                        </Text>
 
-            <TextInput
-                style={styles.input}
-                value={Employee.spouseName}
-                onChangeText={(text) => handleFieldsChange('spouseName', text)}
-            />
+                        <TextInput
+                            style={styles.input}
+                            value={Employee.spouseName}
+                            onChangeText={(text) => handleFieldsChange('spouseName', text)}
+                        />
 
-            <Text style={styles.errorText}>
-                {!Employee.spouseName ? "spouseName Required" : null}
-            </Text>
+                        <Text style={styles.errorText}>
+                            {!Employee.spouseName ? "spouseName Required" : null}
+                        </Text>
+                    </> : null
+
+            }
 
             <Text style={styles.subHeading}>
                 Aadhar Number
@@ -516,7 +526,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.aadharNumber ? "aadharNumber Required" : null}
+                {validation ? (!Employee.aadharNumber ? "aadharNumber Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -530,7 +540,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, setSelect
             />
 
             <Text style={styles.errorText}>
-                {!Employee.panNumber ? "panNumber Required" : null}
+                {validation ? (!Employee.panNumber ? "panNumber Required" : null) : null}
             </Text>
 
             <View style={styles.fullWidth}>

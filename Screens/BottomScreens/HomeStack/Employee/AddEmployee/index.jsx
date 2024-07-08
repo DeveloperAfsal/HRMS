@@ -53,6 +53,7 @@ const AddEmployee = () => {
     const [documentName, setDocumentName] = useState([]);
     const [documentFile, setDocumentFile] = useState([]);
     const [documents, setDocuments] = useState([]);
+    const [validation, setValidation] = useState(false);
 
 
     return (
@@ -157,25 +158,33 @@ const AddEmployee = () => {
                             onEmpDetails={handleNextEmpDetails}
                             selectedImage={selectedImage}
                             setSelectedImage={setSelectedImage}
+                            selectedImageErr={selectedImageErr}
+                            validation={validation}
                         />
                     }
                     {
                         activeComponent === 'EmployeeDetails' &&
                         <EmployeeDetails
                             onEmpRole={handleNextEmpRole}
-                            onprevBasicDetails={handlePrevBasicDetails} />
+                            onprevBasicDetails={handlePrevBasicDetails}
+                            validation={validation}
+                        />
                     }
                     {
                         activeComponent === 'EmployeeRole' &&
                         <EmployeeRole
                             onBankDetails={handleNextBankDetails}
-                            onprevEmpDetails={handlePrevEmpDetails} />
+                            onprevEmpDetails={handlePrevEmpDetails}
+                            validation={validation}
+                        />
                     }
                     {
                         activeComponent === 'BankDetails' &&
                         <BankDetails
                             onDetails={handleNextDocuments}
-                            onprevEmpRole={handlePrevEmpRole} />
+                            onprevEmpRole={handlePrevEmpRole}
+                            validation={validation}
+                        />
                     }
                     {
                         activeComponent === 'Documents' &&
@@ -191,6 +200,8 @@ const AddEmployee = () => {
                             setDocumentType={setDocumentType}
                             setDocumentName={setDocumentName}
                             setDocumentFile={setDocumentFile}
+                            setSelectedImageErr={setSelectedImageErr}
+                            setValidation={setValidation}
                         />
                     }
 

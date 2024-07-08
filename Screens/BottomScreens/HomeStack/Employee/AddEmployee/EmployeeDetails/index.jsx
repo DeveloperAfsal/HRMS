@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
+const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
 
     const dispatch = useDispatch();
 
@@ -182,7 +182,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.employeeCategory ? "Selected Category Type" : null}
+                {validation ? (Employee.employeeCategory.length == "0" ? "Selected Category Type" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -218,7 +218,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.probationPeriod ? "Selected probationPeriod" : null}
+                {/* {!Employee.probationPeriod ? "Selected probationPeriod" : null} */}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -254,7 +254,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.employeeAgreementPeriod ? "employeeAgreementPeriod Required" : null}
+                {/* {!Employee.employeeAgreementPeriod ? "employeeAgreementPeriod Required" : null} */}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -268,7 +268,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.noticePeriod ? "noticePeriod Required" : null}
+                {validation ? (!Employee.noticePeriod ? "noticePeriod Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -282,7 +282,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.ctc ? "ctc Required" : null}
+                {validation ? (!Employee.ctc ? "ctc Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -296,7 +296,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.grossSalary ? "grossSalary Required" : null}
+                {validation ? (!Employee.grossSalary ? "grossSalary Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -310,7 +310,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.netSalary ? "netSalary Required" : null}
+                {validation ? (!Employee.netSalary ? "netSalary Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -362,6 +362,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                {!Employee.providentFund ? "providentFund Required" : null}
+            </Text>
+
             {
                 Employee.providentFund === "Applicable" ?
                     <>
@@ -376,7 +380,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.uanNumber ? "uanNumber Required" : null}
+                            {validation ? (!Employee.uanNumber ? "uanNumber Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -390,7 +394,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.employeePfContribution ? "employeePfContribution Required" : null}
+                            {validation ? (!Employee.employeePfContribution ? "employeePfContribution Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -404,15 +408,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.employerPfContribution ? "employerPfContribution Required" : null}
+                            {validation ? (!Employee.employerPfContribution ? "employerPfContribution Required" : null) : null}
                         </Text>
                     </>
                     : null
             }
-
-            <Text style={styles.errorText}>
-                {!Employee.providentFund ? "providentFund Required" : null}
-            </Text>
 
             <Text style={styles.subHeading}>
                 ESI
@@ -441,6 +441,10 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
 
             )}
 
+            <Text style={styles.errorText}>
+                {validation ? (!Employee.esi ? "esi Required" : null) : null}
+            </Text>
+
             {
                 Employee.esi === "Applicable" ?
                     <>
@@ -455,7 +459,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.esiNumber ? "esiNumber Required" : null}
+                            {validation ? (!Employee.esiNumber ? "esiNumber Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -469,7 +473,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.employeeEsiContribution ? "employeeEsiContribution Required" : null}
+                            {validation ? (!Employee.employeeEsiContribution ? "employeeEsiContribution Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -483,15 +487,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails }) => {
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.employerEsiContribution ? "employerEsiContribution Required" : null}
+                            {validation ? (!Employee.employerEsiContribution ? "employerEsiContribution Required" : null) : null}
                         </Text>
                     </>
                     : null
             }
-
-            <Text style={styles.errorText}>
-                {!Employee.esi ? "esi Required" : null}
-            </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
                 <TouchableOpacity style={styles.PrevButton} onPress={onprevBasicDetails}>

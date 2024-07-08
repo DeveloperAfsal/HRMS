@@ -6,7 +6,7 @@ import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import { useDispatch, useSelector } from "react-redux";
 
-const BankDetails = ({ onDetails, onprevEmpRole }) => {
+const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
 
     const dispatch = useDispatch();
 
@@ -51,7 +51,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.bankAccountNumber ? "bankAccountNumber Required" : null}
+                {validation ? (!Employee.bankAccountNumber ? "bankAccountNumber Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -65,7 +65,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.bankName ? "bankName Required" : null}
+                {validation ? (!Employee.bankName ? "bankName Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -79,7 +79,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.bankBranch ? "bankBranch Required" : null}
+                {validation ? (!Employee.bankBranch ? "bankBranch Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -93,7 +93,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.ifscCode ? "ifscCode Required" : null}
+                {validation ? (!Employee.ifscCode ? "ifscCode Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -128,7 +128,7 @@ const BankDetails = ({ onDetails, onprevEmpRole }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.accountType ? "accountType Required" : null}
+                {validation ? (!Employee.accountType ? "accountType Required" : null) : null}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>

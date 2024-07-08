@@ -7,7 +7,7 @@ import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
+const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
 
     const dispatch = useDispatch();
 
@@ -159,7 +159,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.userRole ? "userRole Required" : null}
+                {validation ? (Employee.userRole.length == "0" ? "userRole Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -173,7 +173,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.designation ? "designation Required" : null}
+                {validation ? (!Employee.designation ? "designation Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -204,7 +204,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             }
 
             <Text style={styles.errorText}>
-                {!Employee.supervisor ? "supervisor Required" : null}
+                {validation ? (Employee.supervisor.length == "0" ? "supervisor Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -218,7 +218,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.officialEmail ? "officialEmail Required" : null}
+                {validation ? (!Employee.officialEmail ? "officialEmail Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -232,7 +232,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.password ? "password Required" : null}
+                {validation ? (!Employee.password ? "password Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -269,7 +269,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.checkinCheckout ? "checkinCheckout Required" : null}
+                {validation ? (!Employee.checkinCheckout ? "checkinCheckout Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -302,7 +302,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             )}
 
             <Text style={styles.errorText}>
-                {!Employee.overtime ? "overtime Required" : null}
+                {/* {!Employee.overtime ? "overtime Required" : null} */}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -316,7 +316,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.lateAllowed ? "lateAllowed Required" : null}
+                {/* {!Employee.lateAllowed ? "lateAllowed Required" : null} */}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -330,7 +330,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails }) => {
             />
 
             <Text style={styles.errorText}>
-                {!Employee.permissionAllowed ? "permissionAllowed Required" : null}
+                {/* {!Employee.permissionAllowed ? "permissionAllowed Required" : null} */}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>
