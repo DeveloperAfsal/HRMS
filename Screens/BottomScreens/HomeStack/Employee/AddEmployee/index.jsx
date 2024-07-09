@@ -55,7 +55,6 @@ const AddEmployee = () => {
     const [documents, setDocuments] = useState([]);
     const [validation, setValidation] = useState(false);
 
-
     return (
         <ScrollView>
 

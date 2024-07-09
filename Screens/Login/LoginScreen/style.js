@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
         borderColor: '#FCFCFC',
     },
     ForgotPassword: {
+        paddingTop:'2%',
         width: "100%",
         alignItems: 'flex-end'
     },
@@ -134,7 +135,12 @@ const styles = StyleSheet.create({
     errorText: {
         color: "red",
         paddingVertical: '3%',
-        width: "90%"
+        width: "90%",
+    },
+    errorText1: {
+        color: "red",
+        // paddingVertical: '3%',
+        width: "90%",
     },
 });
 

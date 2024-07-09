@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     Row: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
+        gap: 10
     },
 
     Inputcontainer: {

@@ -483,12 +483,12 @@ const HomeScreen = ({ navigation }) => {
 
     const [announcementList, setAnnouncementList] = useState([]);
 
-    const formatDate = (dateString) => {
-        const today = new Date();
-        const date = new Date(dateString);
+    // const formatDate = (dateString) => {
+    //     const today = new Date();
+    //     const date = new Date(dateString);
 
-        return date.toDateString() === today.toDateString() ? 'Today' : dateString;
-    };
+    //     return date.toDateString() === today.toDateString() ? 'Today' : dateString;
+    // };
 
     const Annlist = async () => {
 
@@ -643,72 +643,75 @@ const HomeScreen = ({ navigation }) => {
 
             <View>
 
-                <>
-                    <View style={styles.topcontainer}>
+                {
+                    (data.userrole == 1 || data.userrole == 2) ? null :
+                        <>
+                            <View style={styles.topcontainer}>
 
-                        <View style={styles.card}>
+                                <View style={styles.card}>
 
-                            <ImageBackground
-                                source={require('../../../Assets/Image/Card-bg.jpg')}
-                                style={styles.backgroundImage}
-                            >
-
-                                <View style={styles.overlay}>
-
-                                    <Text style={styles.datetime}>{currentDay}, {currentDate}</Text>
-
-                                    <TouchableOpacity
-                                        onPress={checkWiFiConnection}
+                                    <ImageBackground
+                                        source={require('../../../Assets/Image/Card-bg.jpg')}
+                                        style={styles.backgroundImage}
                                     >
-                                        <View
-                                            style={[styles.button,
-                                            { backgroundColor: userAlreadyLoggedIn == 1 ? "#0A62F1" : "#19CDFE" }
-                                            ]}>
 
-                                            <View style={{ alignItems: 'center' }}>
-                                                <HandCursorIcon color={"#fff"} width={60} height={60} />
-                                                <Text style={styles.buttontext}>
-                                                    {userAlreadyLoggedIn == 1 ? 'Check Out' : 'Check In'}
-                                                </Text>
+                                        <View style={styles.overlay}>
+
+                                            <Text style={styles.datetime}>{currentDay}, {currentDate}</Text>
+
+                                            <TouchableOpacity
+                                                onPress={checkWiFiConnection}
+                                            >
+                                                <View
+                                                    style={[styles.button,
+                                                    { backgroundColor: userAlreadyLoggedIn == 1 ? "#0A62F1" : "#19CDFE" }
+                                                    ]}>
+
+                                                    <View style={{ alignItems: 'center' }}>
+                                                        <HandCursorIcon color={"#fff"} width={60} height={60} />
+                                                        <Text style={styles.buttontext}>
+                                                            {userAlreadyLoggedIn == 1 ? 'Check Out' : 'Check In'}
+                                                        </Text>
+                                                    </View>
+
+                                                </View>
+
+                                            </TouchableOpacity>
+
+                                            <View style={styles.clockcontainer}>
+                                                <View style={styles.clockCenter}>
+                                                    <ClockIcon />
+                                                    <Text style={styles.timetext}>In Time</Text>
+                                                    <Text style={styles.timenumbertext}>
+                                                        {loggedInTime}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={styles.clockCenter}>
+                                                    <ClockIcon />
+                                                    <Text style={styles.timetext}>Out Time</Text>
+                                                    <Text style={styles.timenumbertext}>
+                                                        {loggedOutTime}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={styles.clockCenter}>
+                                                    <ClockIcon />
+                                                    <Text style={styles.timetext}>Working Hrs</Text>
+                                                    <Text style={styles.timenumbertext}>
+                                                        {totalHours}
+                                                    </Text>
+                                                </View>
                                             </View>
-
                                         </View>
 
-                                    </TouchableOpacity>
+                                    </ImageBackground>
 
-                                    <View style={styles.clockcontainer}>
-                                        <View style={styles.clockCenter}>
-                                            <ClockIcon />
-                                            <Text style={styles.timetext}>In Time</Text>
-                                            <Text style={styles.timenumbertext}>
-                                                {loggedInTime}
-                                            </Text>
-                                        </View>
-
-                                        <View style={styles.clockCenter}>
-                                            <ClockIcon />
-                                            <Text style={styles.timetext}>Out Time</Text>
-                                            <Text style={styles.timenumbertext}>
-                                                {loggedOutTime}
-                                            </Text>
-                                        </View>
-
-                                        <View style={styles.clockCenter}>
-                                            <ClockIcon />
-                                            <Text style={styles.timetext}>Working Hrs</Text>
-                                            <Text style={styles.timenumbertext}>
-                                                {totalHours}
-                                            </Text>
-                                        </View>
-                                    </View>
                                 </View>
 
-                            </ImageBackground>
-
-                        </View>
-
-                    </View>
-                </>
+                            </View>
+                        </>
+                }
 
                 {
                     (data.userrole == 1 || data.userrole == 2) ?
@@ -839,66 +842,69 @@ const HomeScreen = ({ navigation }) => {
 
                         </View> : null}
 
-                <View style={styles.EmployeeModeBoardContainer}>
+                {
+                    (data.userrole == 1 || data.userrole == 2) ? null :
+                        <View style={styles.EmployeeModeBoardContainer}>
 
-                    <View style={styles.EmployeeModeBoard}>
+                            <View style={styles.EmployeeModeBoard}>
 
-                        <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
+                                <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
 
-                        <View style={styles.border}></View>
-                        <View style={styles.textview}>
-                            <Text style={styles.text}>What's your mood today? </Text>
+                                <View style={styles.border}></View>
+                                <View style={styles.textview}>
+                                    <Text style={styles.text}>What's your mood today? </Text>
+                                </View>
+
+                                {mood.status === "success" ? (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: '5%', gap: 10 }}>
+                                        <Text style={{ fontWeight: '400', fontSize: 14, color: "#000" }}>Hey! Your Mood Today</Text>
+                                        {editIcon && {
+                                            'face_shy': <SmileIcon />,
+                                            'happy': <LaughIcon />,
+                                            'happy_positive': <DepressedIcon />,
+                                            'love_happy': <HeartFeelIcon />,
+                                            'sad_smiley': <SadIcon />
+                                        }[editIcon.mood_name]}
+                                    </View>
+                                ) : (
+                                    <View style={styles.Emo}>
+                                        <TouchableOpacity onPress={() => selectEmoji('happy')} style={[styles.emojiButton, selectedEmoji === 'happy' && styles.selectedEmoji]}>
+                                            <LaughIcon />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => selectEmoji('happy_positive')} style={[styles.emojiButton, selectedEmoji === 'happy_positive' && styles.selectedEmoji]}>
+                                            <DepressedIcon />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => selectEmoji('love_happy')} style={[styles.emojiButton, selectedEmoji === 'love_happy' && styles.selectedEmoji]}>
+                                            <HeartFeelIcon />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => selectEmoji('sad_smiley')} style={[styles.emojiButton, selectedEmoji === 'sad_smiley' && styles.selectedEmoji]}>
+                                            <SadIcon />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => selectEmoji('face_shy')} style={[styles.emojiButton, selectedEmoji === 'face_shy' && styles.selectedEmoji]}>
+                                            <SmileIcon />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+
+                                {mood.status === "success" ? (
+                                    <View style={{ marginTop: '5%' }}>
+                                        <TouchableOpacity style={styles.buttonSubmit} onPress={Update}>
+                                            <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Update</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) : (
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity style={styles.buttonSubmit} onPress={MoodboardPost}>
+                                            {moodLoad ? <ActivityIndicator size={"small"} color={"#fff"} /> : <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Submit</Text>}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.buttonCancel} onPress={MoodCancel}>
+                                            <Text style={styles.EmployeeModeBoardbuttonCancelText}>Cancel</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            </View>
                         </View>
-
-                        {mood.status === "success" ? (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: '5%', gap: 10 }}>
-                                <Text style={{ fontWeight: '400', fontSize: 14, color: "#000" }}>Hey! Your Mood Today</Text>
-                                {editIcon && {
-                                    'face_shy': <SmileIcon />,
-                                    'happy': <LaughIcon />,
-                                    'happy_positive': <DepressedIcon />,
-                                    'love_happy': <HeartFeelIcon />,
-                                    'sad_smiley': <SadIcon />
-                                }[editIcon.mood_name]}
-                            </View>
-                        ) : (
-                            <View style={styles.Emo}>
-                                <TouchableOpacity onPress={() => selectEmoji('happy')} style={[styles.emojiButton, selectedEmoji === 'happy' && styles.selectedEmoji]}>
-                                    <LaughIcon />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => selectEmoji('happy_positive')} style={[styles.emojiButton, selectedEmoji === 'happy_positive' && styles.selectedEmoji]}>
-                                    <DepressedIcon />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => selectEmoji('love_happy')} style={[styles.emojiButton, selectedEmoji === 'love_happy' && styles.selectedEmoji]}>
-                                    <HeartFeelIcon />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => selectEmoji('sad_smiley')} style={[styles.emojiButton, selectedEmoji === 'sad_smiley' && styles.selectedEmoji]}>
-                                    <SadIcon />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => selectEmoji('face_shy')} style={[styles.emojiButton, selectedEmoji === 'face_shy' && styles.selectedEmoji]}>
-                                    <SmileIcon />
-                                </TouchableOpacity>
-                            </View>
-                        )}
-
-                        {mood.status === "success" ? (
-                            <View style={{ marginTop: '5%' }}>
-                                <TouchableOpacity style={styles.buttonSubmit} onPress={Update}>
-                                    <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Update</Text>
-                                </TouchableOpacity>
-                            </View>
-                        ) : (
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity style={styles.buttonSubmit} onPress={MoodboardPost}>
-                                    {moodLoad ? <ActivityIndicator size={"small"} color={"#fff"} /> : <Text style={styles.EmployeeModeBoardbuttonSubmitText}>Submit</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.buttonCancel} onPress={MoodCancel}>
-                                    <Text style={styles.EmployeeModeBoardbuttonCancelText}>Cancel</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    </View>
-                </View>
+                }
 
                 {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.EmployeeModeBoardListContainer}>
 
@@ -907,56 +913,55 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
                         <View style={styles.border}></View>
 
-                        <View style={styles.EmoCheck}>
+                            <View style={styles.EmoCheck}>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'All' && styles.selectedOption]}
-                                onPress={() => handleOptionClick('All')}>
-                                <Text style={styles.MoodBoardText}>All ({moodList.total_count})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'All' && styles.selectedOption]}
+                                    onPress={() => handleOptionClick('All')}>
+                                    <Text style={styles.MoodBoardText}>All ({moodList.total_count})</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'face_shy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                onPress={() => handleOptionClick('face_shy')}
-                            >
-                                <SmileIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.face_shy})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'face_shy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                    onPress={() => handleOptionClick('face_shy')}
+                                >
+                                    <SmileIcon width={20} height={20} />
+                                    <Text>({moodList.mood_counts.face_shy})</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                onPress={() => handleOptionClick('happy')}
-                            >
-                                <LaughIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.happy})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                    onPress={() => handleOptionClick('happy')}
+                                >
+                                    <LaughIcon width={20} height={20} />
+                                    <Text>({moodList.mood_counts.happy})</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'happy_positive' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                onPress={() => handleOptionClick('happy_positive')}
-                            >
-                                <DepressedIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.happy_positive})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'happy_positive' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                    onPress={() => handleOptionClick('happy_positive')}
+                                >
+                                    <DepressedIcon width={20} height={20} />
+                                    <Text>({moodList.mood_counts.happy_positive})</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'love_happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                onPress={() => handleOptionClick('love_happy')}
-                            >
-                                <HeartFeelIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.love_happy})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'love_happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                    onPress={() => handleOptionClick('love_happy')}
+                                >
+                                    <HeartFeelIcon width={20} height={20} />
+                                    <Text>({moodList.mood_counts.love_happy})</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={[styles.option, selectedOption === 'sad_smiley' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                onPress={() => handleOptionClick('sad_smiley')}
-                            >
-                                <SadIcon width={20} height={20} />
-                                <Text>({moodList.mood_counts.sad_smiley})</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.option, selectedOption === 'sad_smiley' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                    onPress={() => handleOptionClick('sad_smiley')}
+                                >
+                                    <SadIcon width={20} height={20} />
+                                    <Text>({moodList.mood_counts.sad_smiley})</Text>
+                                </TouchableOpacity>
 
-
-                        </View>
+                            </View>
 
                         <View>
                             {filteredData.slice(0, showAll ? transformedMoodboard.length : initialItemsToShow).map(item => (
@@ -1022,7 +1027,7 @@ const HomeScreen = ({ navigation }) => {
 
                                             <View style={styles.AnnouncementDataHeadr}>
                                                 <Text style={styles.AnnouncementDataHeadrTitle}>{item.a_title}</Text>
-                                                <Text style={styles.AnnouncementDataHeadrWhen}>{formatDate(item.a_validdate)}</Text>
+                                                <Text style={styles.AnnouncementDataHeadrWhen}>{item.created_at_formatted}</Text>
                                             </View>
 
                                             <View style={{ padding: '5%' }}>
@@ -1079,7 +1084,7 @@ const HomeScreen = ({ navigation }) => {
                                         {AnnouncementErr}
                                     </Text>
 
-                                    <Text style={styles.modalText}>description:</Text>
+                                    <Text style={styles.modalText}>Description:</Text>
 
                                     <TextInput
                                         value={AnnounceMentdes}
@@ -1092,8 +1097,8 @@ const HomeScreen = ({ navigation }) => {
                                     </Text>
 
                                     <View style={styles.modalButtonContainer}>
-                                        <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                            <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                        <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                            <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.modalDeleteButton}
                                             onPress={addAnnouncement}

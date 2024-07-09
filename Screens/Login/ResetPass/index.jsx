@@ -126,6 +126,7 @@ const ResetPassword = ({ navigation }) => {
                             placeholder="Enter new password"
                             style={styles.inputfield}
                             value={EmployeeId}
+                            secureTextEntry={!showEmployeeId}
                             onChangeText={(text) => setEmployeeId(text)}
                         />
 
@@ -182,13 +183,13 @@ const ResetPassword = ({ navigation }) => {
             <LottieAlertSucess
                 visible={isAlertVisible}
                 animationSource={require('../../../Assets/Alerts/tick.json')}
-                title="SuccessFully Logged In"
+                title="SuccessFull"
             />
 
             <LottieAlertError
                 visible={isAlertVisible1}
                 animationSource={require('../../../Assets/Alerts/Close.json')}
-                title="Failed To Login"
+                title="Failed"
             />
 
             <LottieCatchError

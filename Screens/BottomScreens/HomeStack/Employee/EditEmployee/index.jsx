@@ -57,10 +57,18 @@ const EditEmployee = ({ route, navigation }) => {
     const [documentName, setDocumentName] = useState([]);
     const [documentFile, setDocumentFile] = useState([]);
     const [documents, setDocuments] = useState([]);
+    const [validation, setValidation] = useState(false);
+    const [showFields, setShowFields] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [employee, setEmployee] = useState(null);
-    const [employeeDoc, setEmployeeDoc] = useState(null);
+    const [employeeDoc, setEmployeeDoc] = useState([]);
+    console.log(employeeDoc,"employeeDoc")
+
+    const [desg, setDesg] = useState('');
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -191,6 +199,7 @@ const EditEmployee = ({ route, navigation }) => {
                             setSelectedImage={setSelectedImage}
                             employee={employee}
                             setEmployee={setEmployee}
+                            validation={validation}
                         />
                     }
                     {
@@ -200,6 +209,7 @@ const EditEmployee = ({ route, navigation }) => {
                             onprevBasicDetails={handlePrevBasicDetails}
                             employee={employee}
                             setEmployee={setEmployee}
+                            validation={validation}
                         />
                     }
                     {
@@ -209,6 +219,15 @@ const EditEmployee = ({ route, navigation }) => {
                             onprevEmpDetails={handlePrevEmpDetails}
                             employee={employee}
                             setEmployee={setEmployee}
+                            validation={validation}
+                            showFields={showFields}
+                            setShowFields={setShowFields}
+                            desg={desg}
+                            setDesg={setDesg}
+                            showDatePicker={showDatePicker}
+                            setShowDatePicker={setShowDatePicker}
+                            startDate={startDate}
+                            setStartDate={setStartDate}
                         />
                     }
                     {
@@ -218,6 +237,7 @@ const EditEmployee = ({ route, navigation }) => {
                             onprevEmpRole={handlePrevEmpRole}
                             employee={employee}
                             setEmployee={setEmployee}
+                            validation={validation}
                         />
                     }
                     {
@@ -239,6 +259,10 @@ const EditEmployee = ({ route, navigation }) => {
                             employee={employee}
                             setEmployee={setEmployee}
                             navigation={navigation}
+                            setValidation={setValidation}
+                            showFields={showFields}
+                            formattedStartDate={formattedStartDate}
+                            desg={desg}
                         />
                     }
 

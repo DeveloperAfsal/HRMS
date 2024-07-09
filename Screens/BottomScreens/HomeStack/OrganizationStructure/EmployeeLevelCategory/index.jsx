@@ -74,7 +74,7 @@ const LevelCategory = () => {
                 setShiftError('');
             }
 
-            if (!selectedStatus) {
+            if (!selectedStatus || selectedStatus === "Select Status") {
                 setStatusError('Status is required');
                 setLoad(false);
                 return;

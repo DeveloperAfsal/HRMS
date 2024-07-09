@@ -117,7 +117,7 @@ const AddRole = ({ navigation }) => {
 
         try {
 
-            if (!nameError) {
+            if (!roleName) {
                 setNameError('Role Name Required ');
                 Alert.alert('Missing', "Check The Role Name Field");
                 setLoad(false);
@@ -215,10 +215,10 @@ const AddRole = ({ navigation }) => {
                     <View style={styles.Row}>
                         <View style={{ width: "40%", alignItems: 'center' }}>
                             <Text style={styles.AddroleText}>
-                                Add Role Name
+                                Add Role Name :
                             </Text>
                         </View>
-                        <View style={{ width: "60%" }}>
+                        <View style={{ width: "50%" }}>
                             <TextInput
                                 style={styles.TextInput}
                                 value={roleName}

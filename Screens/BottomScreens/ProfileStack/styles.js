@@ -84,12 +84,13 @@ const styles = StyleSheet.create({
 
     bodyline: {
         flexDirection: 'row',
+        justifyContent:'space-around',
         paddingVertical: '3%',
         width: '100%'
     },
 
     halfWidth: {
-        width: '50%'
+        width: '45%',
     },
 
     Editbutton: {

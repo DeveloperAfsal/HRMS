@@ -220,13 +220,12 @@ const styles = StyleSheet.create({
     EmployeeModeBoardListContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingBottom: "5%",
+        paddingVertical: "5%",
     },
 
     EmployeeListModeBoard: {
         width: "90%",
-        paddingTop: "5%",
-        paddingBottom: "5%",
+        paddingVertical: '5%',
         borderRadius: 19,
         backgroundColor: '#F4FDFF',
         alignItems: 'center',
@@ -235,8 +234,8 @@ const styles = StyleSheet.create({
     EmoCheck: {
         flexDirection: 'row',
         paddingTop: "5%",
-        paddingHorizontal: '5%',
-        justifyContent: 'space-between',
+        // paddingHorizontal: '5%',
+        // justifyContent: 'space-between',
         alignItems: 'center',
     },
 
@@ -325,7 +324,7 @@ const styles = StyleSheet.create({
 
     option: {
         paddingVertical: 5,
-        paddingHorizontal: 7,
+        paddingHorizontal: 5,
     },
 
     selectedOption: {
@@ -352,13 +351,16 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: '700',
         fontSize: 14,
-        lineHeight: 18.62
+        lineHeight: 18.62,
+        width: '68%',
     },
 
     AnnouncementDataHeadrWhen: {
         fontWeight: '400',
         fontSize: 15,
-        lineHeight: 19.95
+        lineHeight: 19.95,
+        width: '30%',
+        textAlign:'right'
     },
 
     ModalerrorText: {
@@ -431,6 +433,23 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#fff',
+    },
+
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
     },
 
     modalDeleteButton: {

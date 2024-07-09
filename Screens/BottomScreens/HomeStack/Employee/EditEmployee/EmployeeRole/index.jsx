@@ -6,8 +6,10 @@ import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import axios from "axios";
 import { useSelector } from "react-redux";
+import CheckBox from '@react-native-community/checkbox';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee }) => {
+const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee, setShowFields, showFields, desg, setDesg, showDatePicker, setShowDatePicker, startDate, setStartDate }) => {
 
     // data from redux store 
 
@@ -102,6 +104,9 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee }
         updateEmployeeField('emp_punch', index);
     };
 
+    // Designation fields 
+
+
     // 
 
     const [showOvertime, setShowOvertime] = useState(false);
@@ -124,6 +129,18 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee }
         setEmployee(updatedEmployee);
     };
 
+    // 
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setStartDate(date);
+        }
+        setShowDatePicker(Platform.OS === 'ios');
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
 
     return (
 
@@ -171,11 +188,61 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee }
                 onChangeText={(text) => updateEmployeeField('department_name', text)}
             />
 
+            <View style={{ width: "90%", paddingTop: '2%', flexDirection: 'row', alignItems: 'center' }}>
+                <CheckBox
+                    tintColors={{ true: '#20DDFE' }}
+                    style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
+                    value={showFields}
+                    onValueChange={(newValue) => setShowFields(newValue)}
+                />
+                <Text style={{ fontWeight: '400', fontSize: 13, lineHeight: 17.29 }}>Update Designation</Text>
+            </View>
+
             <Text style={styles.errorText}>
                 { }
             </Text>
 
-            <Text style={styles.subHeading}>
+            {showFields && (
+                <>
+                    <Text style={styles.subHeading1}>
+                        Date
+                    </Text>
+
+                    <View style={styles.inputs} >
+                        <Text onPress={showDatepicker}>
+                            {startDate.toDateString()} &nbsp;
+                        </Text>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={startDate}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
+                            />
+                        )}
+                    </View>
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+
+                    <Text style={styles.subHeading}>
+                        New Designation
+                    </Text>
+
+                    <TextInput
+                        style={styles.input}
+                        value={desg}
+                        onChangeText={(text) => setDesg(text)}
+                    />
+
+                    <Text style={styles.errorText}>
+                        { }
+                    </Text>
+                </>
+            )}
+
+            <Text style={styles.subHeading1}>
                 Select Supervisor
             </Text>
 

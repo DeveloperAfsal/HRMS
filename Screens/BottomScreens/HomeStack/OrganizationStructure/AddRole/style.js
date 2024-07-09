@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     Row: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
+        gap: 10
     },
 
     Inputcontainer: {
@@ -36,8 +38,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#515151',
         borderRadius: 7,
-        marginTop:'8%',
-        paddingLeft:'5%'
+        marginTop: '8%',
+        paddingLeft: '5%'
     },
 
     checkView: {
@@ -130,9 +132,9 @@ const styles = StyleSheet.create({
     errorText: {
         color: "red",
         paddingTop: 10,
-        width:"90%",
-        alignItems:'center',
-        justifyContent:'center'
+        width: "90%",
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 })
 

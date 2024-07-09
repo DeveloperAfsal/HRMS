@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1F5FF'
     },
     errorText:{
-        paddingTop:'2%'
+        paddingTop:'2%',
+        color:'red'
     }
 });
 

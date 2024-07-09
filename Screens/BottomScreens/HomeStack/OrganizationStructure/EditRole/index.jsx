@@ -171,7 +171,7 @@ const EditRole = ({ navigation, route }) => {
 
         setLoad(true);
 
-        if (!nameError) {
+        if (!roleName) {
             setNameError('Role Name Required');
             Alert.alert('Missing', "Check The Role Name Field");
             setLoad(false);
@@ -260,7 +260,7 @@ const EditRole = ({ navigation, route }) => {
                                 Edit Role Name
                             </Text>
                         </View>
-                        <View style={{ width: "60%" }}>
+                        <View style={{ width: "50%" }}>
                             <TextInput
                                 style={styles.TextInput}
                                 value={roleName}

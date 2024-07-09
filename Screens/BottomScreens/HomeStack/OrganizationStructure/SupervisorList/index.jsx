@@ -149,7 +149,7 @@ const SupervisorList = ({ navigation }) => {
                 setMemError('');
             }
 
-            if (!selectedStatus) {
+            if (!selectedStatus || selectedStatus === "Selected Status") {
                 setStatusError('Status Required ');
                 Alert.alert('Missing', "Check The Status Field");
                 setLoad(false);
@@ -399,7 +399,7 @@ const SupervisorList = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -445,7 +445,7 @@ const SupervisorList = ({ navigation }) => {
                 </View>
 
                 <View style={styles.SupervisorContainerTitle}>
-                    <Text style={styles.SupervisorContainerTitleText}>Employee Shift List</Text>
+                    <Text style={styles.SupervisorContainerTitleText}> Supervisor List</Text>
                 </View>
 
                 <ScrollView horizontal={true}>
@@ -516,8 +516,8 @@ const SupervisorList = ({ navigation }) => {
                                 {ReasonError}
                             </Text>
                             <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, Alert, ActivityIndicator, Modal } from "react-native";
 import styles from "../../AddEmployee/style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DeleteIcon from "../../../../../../Assets/Icons/Delete.svg";
+import EditIcon from "../../../../../../Assets/Icons/Edit.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg"
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -29,7 +30,12 @@ const Documents = ({
     setEmployeeDoc,
     setEmployee,
     employee,
+    formattedStartDate,
+    desg,
+    showFields,
 }) => {
+
+    console.log(documentType,"documentType")
 
     // data from redux store 
 
@@ -38,12 +44,14 @@ const Documents = ({
     // state
 
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showDropdown1, setShowDropdown1] = useState(false);
     const [documentList, setDocumentList] = useState([]);
-
     const [docFile, setDocFile] = useState();
     const [docName, setDocName] = useState();
     const [selectedDocument, setSelectedDocument] = useState([]);
     const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+    const [selectedDocument1, setSelectedDocument1] = useState([]);
+    const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
     const [load, setLoad] = useState(false);
 
     // Api call for Dropdown dropdown
@@ -72,8 +80,18 @@ const Documents = ({
         setShowDropdown(false);
     };
 
+    const selectDocument1 = (File) => {
+        setSelectedDocument1(File.document_name);
+        setSelectedDocumentId1(File.id);
+        setShowDropdown1(false);
+    };
+
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown);
+    }
+
+    const toggleDropdown1 = () => {
+        setShowDropdown1(!showDropdown1);
     }
 
     // 
@@ -81,7 +99,7 @@ const Documents = ({
     const addDocument = () => {
         if (selectedDocumentId && docName && docFile && selectedDocument) {
             const newDocument = {
-                document_name: selectedDocument,
+                document_name: docName,
                 document_type_id: selectedDocumentId,
                 document_type_name: selectedDocument,
                 emp_id: data.emp_id, // Assuming data.emp_id holds the employee ID
@@ -101,18 +119,85 @@ const Documents = ({
             setDocFile('');
 
         } else {
-            Alert.alert('Please fill in all fields');
+            Alert.alert('Please fill all fields');
         }
     };
 
+    // Api call for Delete
 
-    // Delete document from list
+    const [modalVisible, setModalVisible] = useState(false);
+    const [ReasonError, setReasonError] = useState('')
+    const [Reason, setReason] = useState('');
+    const [DelData, setDelData] = useState(false);
+    const [slotToDelete, setSlotToDelete] = useState(null);
 
-    const deleteDocument = (index) => {
-        const updatedEmployeeDoc = [...employeeDoc];
-        updatedEmployeeDoc.splice(index, 1);
-        setEmployeeDoc(updatedEmployeeDoc);
-    };
+    const HandleDelete = (slotId) => {
+        setSlotToDelete(slotId.id);
+        setModalVisible(true);
+    }
+
+    const cancelDelete = () => {
+        setSlotToDelete(null);
+        setModalVisible(false);
+        setReasonError('');
+        setReason('');
+        setDelData(false);
+    }
+
+    const confirmDelete = async () => {
+
+        setDelData(true)
+
+        if (slotToDelete) {
+
+            try {
+
+                if (!Reason) {
+                    setReasonError('Reason Required');
+                    setDelData(false);
+                    return;
+                } else {
+                    setReasonError('');
+                    setReason('');
+                }
+
+                const apiUrl = `https://ocean21.in/api/public/api/employee_single_docmentdelete`;
+
+                const response = await axios.post(apiUrl, {
+                    id: slotToDelete,
+                    updated_by: data.userempid,
+                    reason: Reason,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+
+                console.log(response, "response")
+
+                if (response.data.status === "success") {
+                    const updatedDataList = employeeDoc.filter(slot => slot.id !== slotToDelete);
+                    setEmployeeDoc(updatedDataList);
+                    setDelData(false);
+                    // Alert.alert("Deleted", "Deleted Successfully");
+                    handleShowAlert(response.data);
+                } else {
+                    // Alert.alert("Failed", "Failed to delete shift slot");
+                    handleShowAlert1(response.data);
+                    setDelData(false)
+                }
+            } catch (error) {
+                // Alert.alert("Error", "Error while deleting shift slot");
+                handleShowAlert2();
+                console.error('Error deleting shift slot:', error);
+                setDelData(false)
+            }
+            setSlotToDelete(null);
+            setModalVisible(false);
+        } else {
+            setDelData(false);
+        }
+    }
 
     // Function to handle document selection
 
@@ -132,6 +217,17 @@ const Documents = ({
             }
         }
 
+    };
+
+    // Delete document from list
+
+    const deleteDocument = (document_type_id) => {
+        const index = employeeDoc.findIndex(doc => doc.document_type_id === document_type_id);
+        if (index !== -1) {
+            const updatedDocs = [...employeeDoc];
+            updatedDocs.splice(index, 1);
+            setEmployeeDoc(updatedDocs);
+        }
     };
 
     // Handle Submit
@@ -175,7 +271,13 @@ const Documents = ({
         formData.append('permanent_address', employee.address);
         formData.append('parent_guardian_name', employee.parents);
         formData.append('marital_status', employee.marital_status);
-        formData.append('spouse_name', employee.spouse_name);
+
+        if (employee.marital_status === "Married") {
+            formData.append('spouse_name', employee.spouse_name);
+        } else {
+            formData.append('spouse_name', "-");
+        }
+
         formData.append('aadhar_no', employee.aadhar_number);
         formData.append('pan_no', employee.pan_number);
 
@@ -233,22 +335,30 @@ const Documents = ({
             formData.append('emp_pf', employee.emp_pf);
         }
 
-        if (!employee.uan_number) {
+        if (employee.emp_pf === "Applicable") {
+
+            if (!employee.uan_number) {
+                formData.append('uan_number', "-");
+            } else {
+                formData.append('uan_number', employee.uan_number);
+            }
+
+            if (!employee.employee_contribution) {
+                formData.append('employee_pf_contribution', "-");
+            } else {
+                formData.append('employee_pf_contribution', employee.employee_contribution);
+            }
+
+            if (!employee.employeer_contribution) {
+                formData.append('employer_pf_contribution', "-");
+            } else {
+                formData.append('employer_pf_contribution', employee.employeer_contribution);
+            }
+
+        } else {
             formData.append('uan_number', "-");
-        } else {
-            formData.append('uan_number', employee.uan_number);
-        }
-
-        if (!employee.employee_contribution) {
             formData.append('employee_pf_contribution', "-");
-        } else {
-            formData.append('employee_pf_contribution', employee.employee_contribution);
-        }
-
-        if (!employee.employeer_contribution) {
             formData.append('employer_pf_contribution', "-");
-        } else {
-            formData.append('employer_pf_contribution', employee.employeer_contribution);
         }
 
         if (!employee.emp_esi) {
@@ -257,22 +367,28 @@ const Documents = ({
             formData.append('emp_esi', employee.emp_esi);
         }
 
-        if (!employee.esi_number) {
+        if (employee.emp_esi === "Applicable") {
+            if (!employee.esi_number) {
+                formData.append('esi_number', "-");
+            } else {
+                formData.append('esi_number', employee.esi_number);
+            }
+
+            if (!employee.employee_esi_contribution) {
+                formData.append('employee_esi_contribution', "-");
+            } else {
+                formData.append('employee_esi_contribution', employee.employee_esi_contribution);
+            }
+
+            if (!employee.employeer_esi_contribution) {
+                formData.append('employer_esi_contribution', "-");
+            } else {
+                formData.append('employer_esi_contribution', employee.employeer_esi_contribution);
+            }
+        } else {
             formData.append('esi_number', "-");
-        } else {
-            formData.append('esi_number', employee.esi_number);
-        }
-
-        if (!employee.employee_esi_contribution) {
             formData.append('employee_esi_contribution', "-");
-        } else {
-            formData.append('employee_esi_contribution', employee.employee_esi_contribution);
-        }
-
-        if (!employee.employeer_esi_contribution) {
             formData.append('employer_esi_contribution', "-");
-        } else {
-            formData.append('employer_esi_contribution', employee.employeer_esi_contribution);
         }
 
         if (!employee.role_name) {
@@ -286,6 +402,21 @@ const Documents = ({
         } else {
             formData.append('designation', employee.department_name);
         }
+
+        formData.append('check_box', showFields);
+
+        if (showFields) {
+            formData.append('position_date', formattedStartDate);
+        } else {
+            formData.append('position_date', "-");
+        }
+
+        if (showFields) {
+            formData.append('new_position', desg);
+        } else {
+            formData.append('new_position', "-");
+        }
+
 
         if (!employee.supervisor_role_name) {
             formData.append('supervisor', "-");
@@ -392,16 +523,17 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                Alert.alert('Submitted', 'Employee Details Updated');
+                Alert.alert('Submitted', responsedata.message);
                 // handleShowAlert(responsedata.data);
                 setLoad(false);
             } else {
-                // handleShowAlert1(responsedata.data)
+                // handleShowAlert1(responsedata.data);
+                Alert.alert('Failed to add Employee', responsedata.message);
             }
 
         } catch (error) {
             Alert.alert('Failed to add Employee', error);
-            // handleShowAlert2();d
+            // handleShowAlert2();
             setLoad(false);
         }
 
@@ -421,7 +553,6 @@ const Documents = ({
         setResMessage(res.message)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Employee List');
         }, 2500);
     };
 
@@ -444,6 +575,134 @@ const Documents = ({
             setAlertVisible2(false);
         }, 3000);
     };
+
+    const availableDocumentList = documentList.filter(doc => !employeeDoc.find(d => d.type === doc.document_name));
+
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [editedtitle, setEditedtitle] = useState('');
+    const [empid, setEmpid] = useState('');
+    const [editedtitleErr, setEditedtitleErr] = useState('');
+    const [EditLoad, setEditLoad] = useState(false);
+    const [EdocFile, setEdocFile] = useState([]);
+    const [EditedocFile, seteditedocFile] = useState([]);
+    const [selectedId, setSelectedId] = useState();
+
+    const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
+    const fileName = filePath.split('/').pop();
+
+    // Api call For EditButton
+
+    const handleEditDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setEdocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
+
+    // Function to open edit modal and populate data
+
+    const openEditModal = (slot) => {
+        setEmpid(slot.emp_id);
+        setEditedtitle(slot.document_name);
+        seteditedocFile(slot?.document_img);
+        setSelectedDocument1(slot.document_type_name);
+        setEditModalVisible(true);
+        setSelectedId(slot.id);
+    };
+
+    // Function to close edit modal
+
+    const closeEditModal = () => {
+        setEditModalVisible(false);
+        setEdocFile(null);
+    };
+
+    // Function to handle edit submission
+
+    const handleEditSubmit = async () => {
+
+        setEditLoad(true);
+
+        const formData = new FormData();
+
+        try {
+
+            if (!editedtitle) {
+                setEditedtitleErr('Enter Name');
+                setEditLoad(false);
+                return;
+            } else {
+                setEditedtitleErr('');
+            }
+
+            formData.append('id', selectedId);
+            formData.append('emp_id', empid);
+            formData.append('emp_document_type', selectedDocument1);
+            formData.append('emp_document_name', editedtitle);
+
+            formData.append('updated_by', data.userempid);
+
+            if (EdocFile) {
+                if (EdocFile.length > 0) {
+                    EdocFile.map((file, index) => {
+                        formData.append(`emp_document_image`, {
+                            uri: file.uri,
+                            name: file.name,
+                            type: 'image/jpeg',
+                        });
+                    });
+                }
+            } else {
+                formData.append('emp_document_image', EdocFile);
+            }
+
+            formData.append('old_document_path', EditedocFile);
+
+            const response = await fetch('https://ocean21.in/api/public/api/update_employee_document', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
+
+            const responsedata = await response.json();
+
+            if (responsedata.status === "success") {
+                setEditLoad(false);
+                // const updatedDataList = [...employeeDoc];
+                // setEmployeeDoc(updatedDataList);
+                handleShowAlert(responsedata);
+                setEdocFile(null);
+                setTimeout(() => {
+                    navigation.navigate('Employee List')
+                }, 2500);
+            } else {
+                setEditLoad(false);
+                handleShowAlert1(responsedata);
+            }
+
+        } catch (error) {
+            setEditLoad(false);
+            handleShowAlert2();
+            console.error('Error during submit:', error);
+        }
+
+        closeEditModal();
+    };
+
+
 
     return (
 
@@ -468,7 +727,7 @@ const Documents = ({
 
             {showDropdown && (
                 <View style={styles.dropdown}>
-                    {documentList.map((File, index) => (
+                    {availableDocumentList.map((File, index) => (
 
                         <TouchableOpacity key={index} onPress={() => selectDocument(File)} style={styles.dropdownOption}>
                             <Text style={styles.dropdownOptionText}>{File.document_name}</Text>
@@ -544,7 +803,7 @@ const Documents = ({
                     </View>
 
                     {
-                        employeeDoc.length === 0 ? (
+                        employeeDoc.length == "0" ? (
                             <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                         ) : (
                             employeeDoc.map((doc, index) => (
@@ -552,9 +811,23 @@ const Documents = ({
                                     <Text style={styles.listcontentsno}>{index + 1}</Text>
                                     <Text style={styles.listcontentRoleName}>{doc.document_name}</Text>
                                     <View style={styles.listcontentButtonview}>
-                                        <TouchableOpacity onPress={() => deleteDocument(doc.id)} style={styles.listcontentdelbutton}>
-                                            <DeleteIcon width={14} height={14} color={"#000"} />
-                                        </TouchableOpacity>
+                                        {
+                                            doc.emp_id === undefined ?
+                                                (
+                                                    <TouchableOpacity onPress={() => deleteDocument(doc.document_type_id)} style={styles.listcontentdelbutton}>
+                                                        <DeleteIcon width={14} height={14} color={"#000"} />
+                                                    </TouchableOpacity>
+                                                ) : (
+                                                    <>
+                                                        <TouchableOpacity onPress={() => openEditModal(doc)} style={styles.listcontenteditbutton}>
+                                                            <EditIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity onPress={() => HandleDelete(doc)} style={styles.listcontentdelbutton}>
+                                                            <DeleteIcon width={14} height={14} color={"#000"} />
+                                                        </TouchableOpacity>
+                                                    </>
+                                                )
+                                        }
                                     </View>
                                 </View>
                             ))
@@ -603,6 +876,137 @@ const Documents = ({
                 animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
                 title="Error While Fetching Data"
             />
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                        <Text style={styles.modalText}>Reason:</Text>
+                        <TextInput
+                            value={Reason}
+                            onChangeText={(text) => setReason(text)}
+                            style={styles.Reason}
+                        />
+                        <Text style={styles.errorTextDelete}>
+                            {ReasonError}
+                        </Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                {
+                                    DelData ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                }
+
+
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={editModalVisible}
+                onRequestClose={closeEditModal}
+            >
+                <View style={styles.modalContainer}>
+
+                    <View style={styles.modalContent}>
+
+                        <Text style={styles.Heading}>Edit Document List</Text>
+
+                        <Text style={styles.ShiftSlotText}>Document Type</Text>
+
+                        <TouchableOpacity onPress={toggleDropdown1} style={styles.modalInput}>
+
+                            <Text style={styles.StatusTouchableText}>
+                                {selectedDocument1 && selectedDocument1.length > 0 ? selectedDocument1 : "Selected Document Type"}
+                            </Text>
+                            <DropdownIcon width={14} height={14} color={"#000"} />
+
+                        </TouchableOpacity>
+
+                        {/* Dropdown to show the options */}
+
+                        {showDropdown1 && (
+                            <View style={styles.Mdropdown}>
+                                {availableDocumentList.map((File, index) => (
+                                    <TouchableOpacity key={index} onPress={() => selectDocument1(File)} style={styles.dropdownOption}>
+                                        <Text style={styles.dropdownOptionText}>{File.document_name}</Text>
+                                    </TouchableOpacity>
+
+                                ))}
+                            </View>
+                        )}
+
+                        <Text style={styles.ModalerrorText}>
+                            { }
+                        </Text>
+
+                        <Text style={styles.ShiftSlotText}>Document Name</Text>
+
+                        <TextInput
+                            value={editedtitle}
+                            onChangeText={setEditedtitle}
+                            style={styles.modalInput}
+                        />
+
+                        <Text style={styles.ModalerrorText}>
+                            {editedtitleErr}
+                        </Text>
+
+                        <Text style={styles.ShiftSlotText}>
+                            Select File
+                        </Text>
+
+                        <Text
+                            style={styles.MDocFileName}
+                        >
+                            {EdocFile ? EdocFile[0]?.name : fileName}
+                        </Text>
+
+
+                        <View style={styles.MfullWidth}>
+                            <TouchableOpacity style={styles.UploadButton}
+                                onPress={handleEditDocumentSelection}
+                            >
+                                <Text style={styles.UploadButtonText}>
+                                    Select Document
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.Mbuttoncontainer}>
+
+                            <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit}>
+                                {
+                                    EditLoad ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                }
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
+                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
 
         </View>
 

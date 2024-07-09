@@ -29,7 +29,7 @@ const Announcement = () => {
 
     const [filterText, setFilterText] = useState('');
 
-    const itemsPerPage = 8;
+    const itemsPerPage = 5;
 
     const filteredData = datalist.filter(row => {
         const values = Object.values(row).map(value => String(value));
@@ -77,17 +77,15 @@ const Announcement = () => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Title', 'Description', 'Date', 'Created By', 'Status', 'Updated By'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.a_title,
+            rowData.a_description,
+            rowData.a_validdate,
+            rowData.created_name,
+            rowData.status,
+            rowData.updated_name,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -99,7 +97,7 @@ const Announcement = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Announcements.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -121,17 +119,15 @@ const Announcement = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Title', 'Description', 'Date', 'Created By', 'Status', 'Updated By'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.a_title,
+            rowData.a_description,
+            rowData.a_validdate,
+            rowData.created_name,
+            rowData.status,
+            rowData.updated_name,
         ]);
 
         const htmlContent = `
@@ -171,7 +167,7 @@ const Announcement = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Announcements',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -387,266 +383,266 @@ const Announcement = () => {
     };
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            <ScrollView horizontal={true}>
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
+                    />
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
+                    </View>
+                </View>
 
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
-                        <View>
+                <ScrollView horizontal={true}>
 
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Title</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Description</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>created By</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Status</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Updated By</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
+
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Title</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Description</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Created By</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Status</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>Updated By</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                                </View>
+
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.a_title}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.a_description}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.a_validdate}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.created_name}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.status}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.updated_name}</Text>
+                                            <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => openEditModal(item)}
+                                                >
+                                                    <EditIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.listcontentdelbutton}
+                                                    onPress={() => HandleDelete(item.id)}
+                                                >
+                                                    <DeleteIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    ))
+                                )}
+
+                            </View>
+                        )
+                        }
+                    </View>
+
+                </ScrollView>
+
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
+
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
+                        </TouchableOpacity>
+
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
+
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                            <Text style={styles.modalText}>Reason:</Text>
+                            <TextInput
+                                value={Reason}
+                                onChangeText={(text) => setReason(text)}
+                                style={styles.Reason}
+                            />
+                            <Text style={styles.errorTextDelete}>
+                                {ReasonError}
+                            </Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                    {
+                                        DelData ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                    }
+
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={editModalVisible}
+                    onRequestClose={closeEditModal}
+                >
+                    <View style={styles.modalContainer}>
+
+                        <View style={styles.modalContent}>
+
+                            <Text style={styles.Heading}>Edit Announcement</Text>
+
+                            <Text style={styles.modalLabelText}>Date :</Text>
+
+                            <View style={styles.modalInput} >
+                                <Text onPress={showDatepicker}>
+                                    {startDate.toDateString()} &nbsp;
+                                </Text>
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={startDate}
+                                        mode="date"
+                                        display="default"
+                                        onChange={handleDateChange}
+                                    />
+                                )}
                             </View>
 
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.a_title}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.a_description}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.a_validdate}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.created_name}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.status}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.updated_name}</Text>
-                                        <View style={styles.listcontentButtonview}>
-                                            <TouchableOpacity style={styles.listcontenteditbutton}
-                                                onPress={() => openEditModal(item)}
-                                            >
-                                                <EditIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.listcontentdelbutton}
-                                                onPress={() => HandleDelete(item.id)}
-                                            >
-                                                <DeleteIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                ))
-                            )}
-
-                        </View>
-                    )
-                    }
-                </View>
-
-            </ScrollView>
-
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
-
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
-                        >
-                            {page}
-                        </Text>
-                    ))}
-
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
-
-                </View>
-            </View>
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                        <Text style={styles.modalText}>Reason:</Text>
-                        <TextInput
-                            value={Reason}
-                            onChangeText={(text) => setReason(text)}
-                            style={styles.Reason}
-                        />
-                        <Text style={styles.errorTextDelete}>
-                            {ReasonError}
-                        </Text>
-                        <View style={styles.modalButtonContainer}>
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
-
-
-                                {
-                                    DelData ?
-                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                }
-
-
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={editModalVisible}
-                onRequestClose={closeEditModal}
-            >
-                <View style={styles.modalContainer}>
-
-                    <View style={styles.modalContent}>
-
-                        <Text style={styles.Heading}>Edit Announcement</Text>
-
-                        <Text style={styles.modalLabelText}>Date :</Text>
-
-                        <View style={styles.modalInput} >
-                            <Text onPress={showDatepicker}>
-                                {startDate.toDateString()} &nbsp;
+                            <Text style={styles.ModalerrorText}>
+                                { }
                             </Text>
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={startDate}
-                                    mode="date"
-                                    display="default"
-                                    onChange={handleDateChange}
-                                />
-                            )}
-                        </View>
 
-                        <Text style={styles.ModalerrorText}>
-                            { }
-                        </Text>
+                            <Text style={styles.modalLabelText}>Title :</Text>
 
-                        <Text style={styles.modalLabelText}>Title :</Text>
+                            <TextInput
+                                value={AnnounceMentTitle}
+                                onChangeText={(txt) => setAnnounceMentTitle(txt)}
+                                style={styles.modalInput}
+                            />
 
-                        <TextInput
-                            value={AnnounceMentTitle}
-                            onChangeText={(txt) => setAnnounceMentTitle(txt)}
-                            style={styles.modalInput}
-                        />
+                            <Text style={styles.errorText}>
+                                {AnnouncementErr}
+                            </Text>
 
-                        <Text style={styles.errorText}>
-                            {AnnouncementErr}
-                        </Text>
+                            <Text style={styles.modalLabelText}>Description :</Text>
 
-                        <Text style={styles.modalLabelText}>Description :</Text>
+                            <TextInput
+                                value={AnnounceMentdes}
+                                onChangeText={(txt) => setAnnounceMentdes(txt)}
+                                style={styles.modalInput}
+                            />
 
-                        <TextInput
-                            value={AnnounceMentdes}
-                            onChangeText={(txt) => setAnnounceMentdes(txt)}
-                            style={styles.modalInput}
-                        />
+                            <Text style={styles.errorText}>
+                                {AnnounceMentdesErr}
+                            </Text>
 
-                        <Text style={styles.errorText}>
-                            {AnnounceMentdesErr}
-                        </Text>
+                            <View style={styles.buttoncontainer}>
 
-                        <View style={styles.buttoncontainer}>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalSubmitButton}
+                                    onPress={handleEditSubmit}
+                                >
+                                    {
+                                        EditLoad ?
+                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                            <Text style={styles.modalSubmitButtonText}>Update</Text>
+                                    }
+                                </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.modalSubmitButton}
-                                onPress={handleEditSubmit}
-                            >
-                                {
-                                    EditLoad ?
-                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                        <Text style={styles.modalSubmitButtonText}>Update</Text>
-                                }
-                            </TouchableOpacity>
+                            </View>
 
                         </View>
-
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-            <LottieAlertSucess
-                visible={isAlertVisible}
-                animationSource={require('../../../../Assets/Alerts/tick.json')}
-                title={resMessage}
-            />
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
 
-            <LottieAlertError
-                visible={isAlertVisible1}
-                animationSource={require('../../../../Assets/Alerts/Close.json')}
-                title={resMessageFail}
-            />
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
 
-            <LottieCatchError
-                visible={isAlertVisible2}
-                animationSource={require('../../../../Assets/Alerts/Catch.json')}
-                title="Error While Fetching Data"
-            />
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
 
-        </View>
-
+            </View>
+        </ScrollView>
     )
 }
 

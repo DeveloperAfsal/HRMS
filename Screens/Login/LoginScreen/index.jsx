@@ -34,6 +34,8 @@ const LoginScreen = ({ navigation }) => {
 
     // handle login
 
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const handleLogin = async () => {
 
         setLoad(true)
@@ -66,6 +68,9 @@ const LoginScreen = ({ navigation }) => {
             if (response && response.data && response.data.token) {
 
                 setLoad(false);
+
+                handleShowAlert();
+                await delay(1000);
 
                 const data = response.data;
 
@@ -199,16 +204,15 @@ const LoginScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={styles.errorText}>
+                    <TouchableOpacity style={styles.ForgotPassword} onPress={handleForgotPassword}>
+                        <Text style={styles.ForgotPasswordText}>Forgot Password?</Text>
+                    </TouchableOpacity>
+
+                    <Text style={styles.errorText1}>
                         {passwordError}
                     </Text>
 
                 </View>
-
-
-                <TouchableOpacity style={styles.ForgotPassword} onPress={handleForgotPassword}>
-                    <Text style={styles.ForgotPasswordText}>Forgot Password?</Text>
-                </TouchableOpacity>
 
                 <View style={styles.loginView}>
                     <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>

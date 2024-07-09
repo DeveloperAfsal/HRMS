@@ -278,7 +278,7 @@ const EditSupervisorList = ({ navigation, route }) => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>

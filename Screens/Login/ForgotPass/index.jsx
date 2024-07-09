@@ -30,7 +30,7 @@ const ForgotPassword = ({ navigation }) => {
         try {
 
             if (!email) {
-                setEmployeeIdError('Employee ID is required');
+                setEmployeeIdError('Please entered valid mail id');
                 setLoad(false)
                 return;
             } else {
@@ -45,7 +45,8 @@ const ForgotPassword = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 setLoad(false);
-                handleShowAlert()
+                // handleShowAlert();
+                navigation.navigate('Otp')
             } else {
                 setLoad(false);
                 // Alert.alert("Login failed");
@@ -162,7 +163,7 @@ const ForgotPassword = ({ navigation }) => {
             <LottieCatchError
                 visible={isAlertVisible2}
                 animationSource={require('../../../Assets/Alerts/Catch.json')}
-                title="Error While Fetching Data Check Login Credential"
+                title="Please entered valid mail id"
             />
 
         </ImageBackground>

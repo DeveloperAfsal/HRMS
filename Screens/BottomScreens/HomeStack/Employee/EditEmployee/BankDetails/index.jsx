@@ -6,7 +6,7 @@ import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
 import DropdownIcon from "../../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import { useDispatch, useSelector } from "react-redux";
 
-const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee }) => {
+const BankDetails = ({ onDetails, onprevEmpRole, employee, setEmployee, validation }) => {
 
     const [showDropdown, setShowDropdown] = useState(false);
 

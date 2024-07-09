@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
     },
 
     DepartmentName: {
-        width: 100
+        width: 100,
+        textAlign:'left'
     },
 
     box: {
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
     },
 
     EmployeeName: {
-        width: 120
+        width: 120,
+        textAlign:'left'
     },
 
     StartDate: {
@@ -285,10 +287,27 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
     modalCancelButtonText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#fff',
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
     },
 
     modalDeleteButton: {
@@ -376,10 +395,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
+
     listcontentButtonview: {
         width: 100,
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
+        paddingTop:'1%',
         justifyContent: 'center',
         gap: 10,
     },

@@ -1,6 +1,27 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
+    },
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
     RolelistContainer: {
         alignItems: 'center',
         paddingTop: '10%',
@@ -28,7 +49,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 15,
         lineHeight: 19.95,
-        paddingLeft:"5%"
+        paddingLeft: "5%"
     },
     RoleName: {
         width: '45%',
@@ -52,7 +73,7 @@ const styles = StyleSheet.create({
     },
     listcontentsno: {
         width: '25%',
-        paddingLeft:"7%",
+        paddingLeft: "7%",
     },
     listcontentRoleName: {
         width: '45%',
@@ -107,9 +128,9 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         textAlign: 'center',
         color: "#000",
-        paddingBottom:'10%',
+        paddingBottom: '10%',
     },
-    Heading:{
+    Heading: {
         fontSize: 16,
         fontWeight: '800',
         textAlign: 'center',
@@ -124,15 +145,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    buttoncontainer:{
+    buttoncontainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:'10%'
+        paddingTop: '10%'
     },
     modalCancelButton: {
         backgroundColor: '#ccc',
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: 90,
         height: 34,
         borderRadius: 5,
@@ -144,8 +165,8 @@ const styles = StyleSheet.create({
     },
     modalDeleteButton: {
         backgroundColor: '#0A62F1',
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 5,
         width: 90,
         height: 34,
@@ -157,8 +178,8 @@ const styles = StyleSheet.create({
     },
     modalSubmitButton: {
         backgroundColor: '#0A62F1',
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 5,
         width: 90,
         height: 34,
@@ -175,22 +196,22 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingLeft: 20,
     },
-    modalInput:{
-        paddingLeft:20,
-        borderRadius:7,
-        borderWidth:0.5,
-        borderColor:"#515151",
+    modalInput: {
+        paddingLeft: 20,
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: "#515151",
         height: 42,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingRight: "5%",
         paddingLeft: "5%"
-        
+
     },
-    modalLabelText:{
-        paddingTop:'5%',
-        paddingBottom:'5%'
+    modalLabelText: {
+        paddingTop: '5%',
+        paddingBottom: '5%'
     },
 })
 

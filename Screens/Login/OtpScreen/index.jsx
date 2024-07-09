@@ -49,7 +49,7 @@ const Otp = ({ navigation }) => {
         try {
 
             if (!otp) {
-                setOtpError('Employee ID is required');
+                setOtpError('Please enter OTP');
                 setLoad(false)
                 return;
             } else {
@@ -65,7 +65,9 @@ const Otp = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 setLoad(false);
-                handleShowAlert();
+                // handleShowAlert();
+            navigation.navigate('Reset Password');
+
             } else {
                 setLoad(false);
                 // Alert.alert("Login failed");
@@ -163,13 +165,13 @@ const Otp = ({ navigation }) => {
             <LottieAlertError
                 visible={isAlertVisible1}
                 animationSource={require('../../../Assets/Alerts/Close.json')}
-                title="Failed To Login"
+                title="Please entered valid OTP"
             />
 
             <LottieCatchError
                 visible={isAlertVisible2}
                 animationSource={require('../../../Assets/Alerts/Catch.json')}
-                title="Error While Fetching Data Check Login Credential"
+                title="Please entered valid OTP"
             />
 
         </ImageBackground>

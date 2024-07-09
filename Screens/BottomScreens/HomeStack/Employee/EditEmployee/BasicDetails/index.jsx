@@ -21,7 +21,6 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
     const { data } = useSelector((state) => state.login);
     const { Employee } = useSelector((state) => state.Employee);
 
-
     const updateEmployeeFields = (updatedFields) => ({
         type: 'UPDATE_EMPLOYEE_FIELDS',
         payload: updatedFields
@@ -517,19 +516,25 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
                         { }
                     </Text>
 
-                    <Text style={styles.subHeading}>
-                        Spouse Name
-                    </Text>
+                    {
+                        employee.marital_status === "Married" ?
+                            <>
+                                <Text style={styles.subHeading}>
+                                    Spouse Name
+                                </Text>
 
-                    <TextInput
-                        style={styles.input}
-                        value={employee.spouse_name}
-                        onChangeText={(text) => updateEmployeeField('spouse_name', text)}
-                    />
+                                <TextInput
+                                    style={styles.input}
+                                    value={employee.spouse_name}
+                                    onChangeText={(text) => updateEmployeeField('spouse_name', text)}
+                                />
 
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
+                                <Text style={styles.errorText}>
+                                    { }
+                                </Text>
+                            </> :
+                            null
+                    }
 
                     <Text style={styles.subHeading}>
                         Aadhar Number
