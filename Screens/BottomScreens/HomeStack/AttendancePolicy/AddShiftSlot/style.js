@@ -1,6 +1,124 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
+    },
+
+    container: {
+        flexDirection: 'column',
+        flex: 1,
+        backgroundColor: "#fff",
+        borderRadius: 11,
+        borderWidth: 1,
+        borderColor: '#A4CED8',
+        width: "90%",
+        marginLeft: 20,
+        marginRight: 20,
+    },
+
+    Activeindicator: {
+        height: 100,
+        width: 400
+    },
+
+    row: {
+        flexDirection: 'row',
+        borderColor: '#ccc',
+        borderBottomWidth: 0.5,
+    },
+
+    listHeader: {
+        backgroundColor: '#E1F1FC',
+        borderTopLeftRadius: 11,
+        borderTopRightRadius: 11,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+
+    header: {
+        flex: 1,
+        padding: 10,
+        color: "#404040",
+        fontWeight: '600',
+        fontSize: 15,
+        lineHeight: 19.95,
+    },
+
+    cell: {
+        flex: 1,
+        padding: 10,
+        textAlign: 'center',
+    },
+
+    sno: {
+        width: 100,
+    },
+
+    DepartmentName: {
+        width: 100
+    },
+
+    EmployeeName: {
+        width: 100
+    },
+
+    Status: {
+        width: 100
+    },
+
+    Action: {
+        width: 100
+    },
+
+    listcontentButtonview: {
+        width: '25%',
+        paddingLeft: "5%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10
+    },
+
+    listcontenteditbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#76B700",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F0F6E5'
+    },
+
+    listcontentdelbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#FF7676",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFE0E0'
+    },
+
+    listBody: {
+        paddingVertical: '1%'
+    },
+    
     ShiftSlotContainer: {
         alignItems: 'center',
         paddingBottom: '5%'
@@ -124,97 +242,97 @@ const styles = StyleSheet.create({
     dropdownOptionText: {
         fontSize: 16,
     },
-    listContainer: {
-        backgroundColor: "#fff",
-        borderRadius: 11,
-        borderWidth: 1,
-        borderColor: '#A4CED8',
-        width: "90%",
-    },
-    listHeader: {
-        backgroundColor: '#E1F1FC',
-        borderTopLeftRadius: 11,
-        borderTopRightRadius: 11,
-        flexDirection: 'row',
-        width: '100%',
-        height: 44,
-        alignItems: 'center'
-    },
-    sno: {
-        width: '15%',
-        paddingLeft: "3%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
-    },
-    shift: {
-        width: '40%',
-        paddingLeft: "3%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
-    },
-    status: {
-        width: '20%',
-        paddingLeft: "2%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
-    },
-    Action: {
-        width: '25%',
-        paddingLeft: "7%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
-    },
-    listcontent: {
-        flexDirection: 'row',
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    listcontentsno: {
-        width: '15%',
-        paddingLeft: "5%"
-    },
-    listcontentShift: {
-        width: '40%',
-        paddingLeft: "3%"
-    },
-    listcontentstatus: {
-        width: '20%',
-        paddingLeft: "3%"
-    },
-    listcontentButtonview: {
-        width: '25%',
-        paddingLeft: "5%",
-        flexDirection: 'row',
-        gap: 10
-    },
-    listcontenteditbutton: {
-        width: 26,
-        height: 26,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: "#76B700",
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#F0F6E5'
-    },
-    listcontentdelbutton: {
-        width: 26,
-        height: 26,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: "#FF7676",
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FFE0E0'
-    },
+    // listContainer: {
+    //     backgroundColor: "#fff",
+    //     borderRadius: 11,
+    //     borderWidth: 1,
+    //     borderColor: '#A4CED8',
+    //     width: "90%",
+    // },
+    // listHeader: {
+    //     backgroundColor: '#E1F1FC',
+    //     borderTopLeftRadius: 11,
+    //     borderTopRightRadius: 11,
+    //     flexDirection: 'row',
+    //     width: '100%',
+    //     height: 44,
+    //     alignItems: 'center'
+    // },
+    // sno: {
+    //     width: '15%',
+    //     paddingLeft: "3%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // shift: {
+    //     width: '40%',
+    //     paddingLeft: "3%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // status: {
+    //     width: '20%',
+    //     paddingLeft: "2%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // Action: {
+    //     width: '25%',
+    //     paddingLeft: "7%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // listcontent: {
+    //     flexDirection: 'row',
+    //     paddingTop: 10,
+    //     paddingBottom: 10
+    // },
+    // listcontentsno: {
+    //     width: '15%',
+    //     paddingLeft: "5%"
+    // },
+    // listcontentShift: {
+    //     width: '40%',
+    //     paddingLeft: "3%"
+    // },
+    // listcontentstatus: {
+    //     width: '20%',
+    //     paddingLeft: "3%"
+    // },
+    // listcontentButtonview: {
+    //     width: '25%',
+    //     paddingLeft: "5%",
+    //     flexDirection: 'row',
+    //     gap: 10
+    // },
+    // listcontenteditbutton: {
+    //     width: 26,
+    //     height: 26,
+    //     borderRadius: 4,
+    //     borderWidth: 1,
+    //     borderColor: "#76B700",
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: '#F0F6E5'
+    // },
+    // listcontentdelbutton: {
+    //     width: 26,
+    //     height: 26,
+    //     borderRadius: 4,
+    //     borderWidth: 1,
+    //     borderColor: "#FF7676",
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: '#FFE0E0'
+    // },
     errorText: {
         color: "red",
         paddingTop: 10,

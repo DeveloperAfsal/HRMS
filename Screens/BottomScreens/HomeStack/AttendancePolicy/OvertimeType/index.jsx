@@ -66,14 +66,14 @@ const OvertimeType = () => {
 
         try {
             if (!shiftSlot) {
-                setShiftError('Leave Type is required');
+                setShiftError('OT Type is required');
                 setLoad(false);
                 return;
             } else {
                 setShiftError('');
             }
 
-            if (!selectedStatus) {
+            if (!selectedStatus || selectedStatus === "Select Status") {
                 setStatusError('Status is required');
                 setLoad(false);
                 return;
@@ -96,7 +96,7 @@ const OvertimeType = () => {
             if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
-                setSelectedStatus("Selected Status");
+                setSelectedStatus("Select Status");
                 fetchData();
                 handleShowAlert(response.data);
             } else {
@@ -349,7 +349,7 @@ const OvertimeType = () => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -401,40 +401,45 @@ const OvertimeType = () => {
                         <Text style={styles.ShiftSlotContainerTitleText}>OT Type List</Text>
                     </View>
 
-                    <View style={styles.listContainer}>
+                    <View style={styles.container}>
 
                         {
                             loadData ?
                                 <ActivityIndicator size={"small"} color={"#20DDFE"} style={styles.Activeindicator} /> :
                                 <>
-                                    <View style={styles.listHeader}>
-                                        <Text style={styles.sno}>S.No</Text>
-                                        <Text style={styles.shift}>OT Type</Text>
-                                        <Text style={styles.status}>Status</Text>
-                                        <Text style={styles.Action}>Action</Text>
-                                    </View>
+                                    <View>
 
-                                    {Datalist.length === 0 ? (
-                                        <Text style={{ textAlign: 'center', paddingVertical: '3%' }}>No data available</Text>
-                                    ) : (
-                                        Datalist.map((slot, index) => (
-                                            <View style={styles.listcontent} key={index}>
-                                                <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                                <Text style={styles.listcontentShift}>{slot.request_type_name}</Text>
-                                                <Text style={styles.listcontentstatus}>{slot.status}</Text>
+                                        <View style={[styles.row, styles.listHeader]}>
+                                            <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                            <Text style={[styles.header, styles.cell, styles.DepartmentName]}>OT Type</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
+                                        </View>
 
-                                                <View style={styles.listcontentButtonview}>
-                                                    <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => openEditModal(slot)}>
-                                                        <EditIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.listcontentdelbutton} onPress={() => HandleDelete(slot.id)}>
-                                                        <DeleteIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
+                                        {Datalist.length === 0 ? (
+                                            <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                        ) : (
+                                            Datalist.map((item, index) => (
+                                                <View key={index} style={[styles.row, styles.listBody]}>
+                                                    <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                                    <Text style={[styles.cell, styles.DepartmentName]}>{item.request_type_name}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+                                                    <View style={[styles.listcontentButtonview]}>
+                                                        <TouchableOpacity style={[styles.listcontenteditbutton]}
+                                                            onPress={() => openEditModal(item)}>
+                                                            <EditIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={[styles.listcontentdelbutton]}
+                                                            onPress={() => HandleDelete(item.id)}>
+                                                            <DeleteIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                    </View>
+
                                                 </View>
-                                            </View>
-                                        ))
-                                    )}
-
+                                            ))
+                                        )}
+                                    </View>
                                 </>
                         }
 
@@ -461,8 +466,8 @@ const OvertimeType = () => {
                                     {ReasonError}
                                 </Text>
                                 <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
@@ -490,8 +495,8 @@ const OvertimeType = () => {
 
                             <View style={styles.modalContent}>
 
-                                <Text style={styles.Heading}>Edit Request Type</Text>
-                                <Text style={styles.modalLabelText}>Request Type</Text>
+                                <Text style={styles.Heading}>Edit OT Type</Text>
+                                <Text style={styles.modalLabelText}>OT Type</Text>
 
                                 <TextInput
                                     value={editedShiftSlot}
@@ -536,8 +541,8 @@ const OvertimeType = () => {
 
                                 <View style={styles.buttoncontainer}>
 
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit}>

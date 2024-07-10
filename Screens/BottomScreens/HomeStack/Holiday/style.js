@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
+
     Container: {
         marginTop: '10%'
     },
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
 
     listBody: {
         paddingVertical: '2%',
-        borderBottomWidth:0.5
+        borderBottomWidth: 0.5
     },
 
     Tablecontainer: {

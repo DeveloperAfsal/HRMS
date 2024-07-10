@@ -68,14 +68,14 @@ const DocumentType = () => {
 
         try {
             if (!shiftSlot) {
-                setShiftError('Shift Slot is required');
+                setShiftError('Document Name required');
                 setLoad(false)
                 return;
             } else {
                 setShiftError('');
             }
 
-            if (!selectedStatus) {
+            if (!selectedStatus || selectedStatus === "Select Status") {
                 setStatusError('Status is required');
                 setLoad(false);
                 return;
@@ -98,7 +98,7 @@ const DocumentType = () => {
             if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
-                setSelectedStatus('Selected Status');
+                setSelectedStatus('Select Status');
                 handleShowAlert(response.data);
                 fetchData();
             } else {
@@ -238,7 +238,7 @@ const DocumentType = () => {
         setEditLoad(true);
         try {
             if (!editedShiftSlot) {
-                setEditedShiftError('Shift Slot is required');
+                setEditedShiftError('Document Name required');
                 setEditLoad(false);
                 return;
             } else {
@@ -350,7 +350,7 @@ const DocumentType = () => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -402,40 +402,45 @@ const DocumentType = () => {
                         <Text style={styles.ShiftSlotContainerTitleText}>Employee Document Type List</Text>
                     </View>
 
-                    <View style={styles.listContainer}>
+                    <View style={styles.container}>
 
                         {
                             loadData ?
                                 <ActivityIndicator size={"small"} color={"#20DDFE"} style={styles.Activeindicator} /> :
                                 <>
-                                    <View style={styles.listHeader}>
-                                        <Text style={styles.sno}>S.No</Text>
-                                        <Text style={styles.shift}>Document Name</Text>
-                                        <Text style={styles.status}>Status</Text>
-                                        <Text style={styles.Action}>Action</Text>
-                                    </View>
+                                    <View>
 
+                                        <View style={[styles.row, styles.listHeader]}>
+                                            <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                            <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Document Name</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
+                                        </View>
 
-                                    {Datalist.length === 0 ? (
-                                        <Text style={{ textAlign: 'center', paddingVertical: '3%' }}>No data available</Text>
-                                    ) : (
-                                        Datalist.map((slot, index) => (
-                                            <View style={styles.listcontent} key={index}>
-                                                <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                                <Text style={styles.listcontentShift}>{slot.document_name}</Text>
-                                                <Text style={styles.listcontentstatus}>{slot.status}</Text>
+                                        {Datalist.length === 0 ? (
+                                            <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                        ) : (
+                                            Datalist.map((item, index) => (
+                                                <View key={index} style={[styles.row, styles.listBody]}>
+                                                    <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                                    <Text style={[styles.cell, styles.DepartmentName]}>{item.document_name}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+                                                    <View style={[styles.listcontentButtonview]}>
+                                                        <TouchableOpacity style={[styles.listcontenteditbutton]}
+                                                            onPress={() => openEditModal(item)}>
+                                                            <EditIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={[styles.listcontentdelbutton]}
+                                                            onPress={() => HandleDelete(item.id)}>
+                                                            <DeleteIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                    </View>
 
-                                                <View style={styles.listcontentButtonview}>
-                                                    <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => openEditModal(slot)}>
-                                                        <EditIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.listcontentdelbutton} onPress={() => HandleDelete(slot.id)}>
-                                                        <DeleteIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
                                                 </View>
-                                            </View>
-                                        )))}
-
+                                            ))
+                                        )}
+                                    </View>
                                 </>
                         }
 
@@ -462,8 +467,8 @@ const DocumentType = () => {
                                     {ReasonError}
                                 </Text>
                                 <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
@@ -489,8 +494,8 @@ const DocumentType = () => {
                     >
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
-                                <Text style={styles.Heading}>Edit Shift Slot</Text>
-                                <Text style={styles.modalLabelText}>Shift Slot</Text>
+                                <Text style={styles.Heading}>Edit Employee Document Type</Text>
+                                <Text style={styles.modalLabelText}>Document Name</Text>
                                 <TextInput
                                     value={editedShiftSlot}
                                     onChangeText={setEditedShiftSlot}
@@ -529,8 +534,8 @@ const DocumentType = () => {
                                 </Text>
 
                                 <View style={styles.buttoncontainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit}>
                                         {

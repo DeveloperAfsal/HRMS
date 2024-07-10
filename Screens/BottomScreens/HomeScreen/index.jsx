@@ -92,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
             setTotalCount(responseData);
 
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching Count data:', error);
         }
 
     }
@@ -185,7 +185,7 @@ const HomeScreen = ({ navigation }) => {
             setMoodList(responseData);
 
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching MoodBoard data:', error);
         }
     }
 
@@ -332,7 +332,7 @@ const HomeScreen = ({ navigation }) => {
                 setUseripaddress(ipAddress);
 
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching IpAddress data:', error);
             }
         };
 
@@ -504,7 +504,7 @@ const HomeScreen = ({ navigation }) => {
             setAnnouncementList(responseData);
 
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching Announcement data:', error);
         }
 
     }
@@ -598,7 +598,7 @@ const HomeScreen = ({ navigation }) => {
 
         } catch (error) {
             handleShowAlert2();
-            console.error('Error fetching data:', error);
+            console.error('Error fetching AddAnnouncement data:', error);
             setDelAnnouncement(false);
         }
 

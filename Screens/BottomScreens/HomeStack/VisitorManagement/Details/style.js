@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
 
     employeeContainer: {
         alignItems: 'center',
+        marginBottom:'5%'
     },
 
     employeeCard: {

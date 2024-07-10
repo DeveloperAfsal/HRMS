@@ -136,6 +136,11 @@ const AddEmployeeShift = ({ navigation }) => {
         setShowDatePicker1(true);
     };
 
+    // Date Formatter 
+
+    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+
     // status
 
     const toggleDropdownstatus = () => {
@@ -246,11 +251,11 @@ const AddEmployeeShift = ({ navigation }) => {
                 });
 
                 if (response.data.status === "success") {
+                    handleShowAlert(response.data);
                     const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
                     setDatalist(updatedDataList);
                     setDelData(false);
                     // Alert.alert("Deleted", "Deleted Successfully");
-                    handleShowAlert(response.data);
                 } else {
                     // Alert.alert("Failed", "Failed to delete shift slot");
                     handleShowAlert1(response.data);
@@ -319,11 +324,6 @@ const AddEmployeeShift = ({ navigation }) => {
         }
     };
 
-    // Date Formatter 
-
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
-
     // 
 
     const Handlerefresh = () => {
@@ -333,7 +333,7 @@ const AddEmployeeShift = ({ navigation }) => {
         setSelectedEmployees([]);
         setSelectedShift(null);
         setSelectedDays([]);
-        setSelectedStatus("Selected Status");
+        setSelectedStatus("Select Status");
         setStatusError('');
         setWeekoffError('');
         setSlotError('');
@@ -411,7 +411,7 @@ const AddEmployeeShift = ({ navigation }) => {
                 setWeekoffError('');
             }
 
-            if (!selectedStatus) {
+            if (!selectedStatus || selectedStatus === "Select Status") {
                 setStatusError('Status Require');
                 Alert.alert('Missing', "Check The Status Field");
                 SetLoad(false)
@@ -439,10 +439,10 @@ const AddEmployeeShift = ({ navigation }) => {
             });
 
             if (response.data.status === "success") {
+                handleShowAlert(response.data);
                 fetchData();
                 SetLoad(false);
                 Handlerefresh();
-                handleShowAlert(response.data);
             } else {
                 // Alert.alert("Failed To Add");
                 handleShowAlert1(response.data);
@@ -602,6 +602,7 @@ const AddEmployeeShift = ({ navigation }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
+                                onClose={() => setShowDatePicker(false)}
                             />
                         )}
                     </View>
@@ -614,7 +615,7 @@ const AddEmployeeShift = ({ navigation }) => {
                         End Date
                     </Text>
 
-                    <View style={styles.inputs} >
+                    <View style={styles.inputs}>
                         <Text onPress={showDatepicker1}>
                             {endDate.toDateString()} &nbsp;
                         </Text>
@@ -624,6 +625,7 @@ const AddEmployeeShift = ({ navigation }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange1}
+                                onClose={() => setShowDatePicker1(false)}
                             />
                         )}
                     </View>
@@ -753,7 +755,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -792,7 +794,7 @@ const AddEmployeeShift = ({ navigation }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton} onPress={Handlerefresh}>
+                        <TouchableOpacity style={styles.cancelbutton}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
@@ -883,8 +885,8 @@ const AddEmployeeShift = ({ navigation }) => {
                                 {ReasonError}
                             </Text>
                             <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 

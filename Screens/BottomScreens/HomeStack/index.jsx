@@ -309,7 +309,7 @@ const HomeStack = () => {
 
       <Stack.Screen name="Activity Log" component={ActivityLog} />
       <Stack.Screen name="Employee Activity Log" component={EMPActiveLog} />
-      <Stack.Screen name="ViewDeatails" component={ViewDeatails} />
+      <Stack.Screen name="View Details" component={ViewDeatails} />
 
     </Stack.Navigator>
   );

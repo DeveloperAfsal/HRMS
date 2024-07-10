@@ -443,7 +443,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('AttendancePolicy')}>
                                 <View style={styles.Tab}>
                                     <LeavePolicyIcon width={22} height={22} color={'#000'} />
-                                    <Text style={styles.dropdownText}>Leave & Atten Policy</Text>
+                                    <Text style={styles.dropdownText}>Leave & Attendance Policy</Text>
                                 </View>
                                 {
                                     dropdowns.AttendancePolicy ? <DropupIcon width={15} height={15} color={'#000'} /> :

@@ -109,17 +109,13 @@ const EMPActiveLog = () => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Activity Done By', 'Message', 'Created At', 'Update At'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.created_name,
+            rowData.message,
+            rowData.created_at,
+            rowData.updated_at,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -131,7 +127,7 @@ const EMPActiveLog = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Employee_ActivityLog.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -153,17 +149,13 @@ const EMPActiveLog = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
+        const tableHead = ['S.No', 'Activity Done By', 'Message', 'Created At', 'Update At'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.created_name,
+            rowData.message,
+            rowData.created_at,
+            rowData.updated_at,
         ]);
 
         const htmlContent = `
@@ -203,7 +195,7 @@ const EMPActiveLog = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Employee_ActivityLog',
                 directory: RNFS.DocumentDirectoryPath,
             });
 

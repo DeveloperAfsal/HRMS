@@ -174,67 +174,73 @@ const VisitorLog = ({ navigation }) => {
                 ) : (
                     <>
                         {
-                            filteredData.map((employee, index) =>
+                            filteredData.length == "0" ?
 
-                            (
-                                <View key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}
+                                <>
+                                    <Text style={styles.name1}>No visitors found</Text>
+                                </> :
 
-                                >
-                                    <View key={index} >
-                                        <View style={styles.cardtop}>
-                                            <View>
-                                                {employee.profile_img ? (
-                                                    <Image
-                                                        source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }}
-                                                        style={styles.imageStyle}
+                                filteredData.map((employee, index) =>
 
-                                                    />
-                                                ) : (
-                                                    <View style={styles.iconStyle}>
-                                                        <ProfileIcon width={22} height={22} color={'#0A60F1'} />
+                                (
+                                    <View key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}>
+
+                                        <View key={index} >
+                                            <View style={styles.cardtop}>
+                                                <View>
+                                                    {employee.profile_img ? (
+                                                        <Image
+                                                            source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }}
+                                                            style={styles.imageStyle}
+
+                                                        />
+                                                    ) : (
+                                                        <View style={styles.iconStyle}>
+                                                            <ProfileIcon width={22} height={22} color={'#0A60F1'} />
+                                                        </View>
+                                                    )}
+
+
+                                                    <View style={styles.NameContainer}>
+                                                        <Text style={styles.name}>{employee.visitor_name}</Text>
                                                     </View>
-                                                )}
-
-
-                                                <View style={styles.NameContainer}>
-                                                    <Text style={styles.name}>{employee.visitor_name}</Text>
                                                 </View>
                                             </View>
+
+                                            <View style={styles.phoneEmail}>
+                                                <View style={styles.gap} >
+                                                    <Text style={styles.fontsize}>Phone Number :</Text>
+                                                    <Text style={styles.fontsize}>Email ID : </Text>
+                                                </View>
+                                                <View style={styles.gap} >
+                                                    <Text style={styles.fontsize}>   {employee.mobile_number}</Text>
+                                                    <Text style={styles.fontsize}>   {employee.email_id}</Text>
+                                                </View>
+                                            </View>
+
+                                            <View style={styles.Buttonview}>
+                                                <TouchableOpacity style={employee.out_time === '00:00:00' ? styles.Checkout : styles.CheckoutActive}
+                                                    onPress={() => Checkout(employee)}
+                                                >
+                                                    {
+                                                        EditLoad ?
+                                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                                                {employee.out_time === '00:00:00' ? null : <TickIcon width={14} height={14} />}
+                                                                <Text style={styles.CheckoutText}>Check out</Text>
+                                                            </View>
+                                                    }
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.ViewDetails}
+                                                    onPress={() => navigation.navigate('View Details', { Id: employee })}
+                                                >
+                                                    <Text style={styles.DetailsText}>View Details</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
 
-                                        <View style={styles.phoneEmail}>
-                                            <View style={styles.gap} >
-                                                <Text style={styles.fontsize}>Phone Number :</Text>
-                                                <Text style={styles.fontsize}>Email ID : </Text>
-                                            </View>
-                                            <View style={styles.gap} >
-                                                <Text style={styles.fontsize}>   {employee.mobile_number}</Text>
-                                                <Text style={styles.fontsize}>   {employee.email_id}</Text>
-                                            </View>
-                                        </View>
-
-                                        <View style={styles.Buttonview}>
-                                            <TouchableOpacity style={employee.out_time === null ? styles.Checkout : styles.CheckoutActive}
-                                                onPress={() => Checkout(employee)}
-                                            >
-                                                {
-                                                    EditLoad ?
-                                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                                                            {employee.out_time === null ? null : <TickIcon width={14} height={14} />}
-                                                            <Text style={styles.CheckoutText}>Check out</Text>
-                                                        </View>
-                                                }
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.ViewDetails}
-                                                onPress={() => navigation.navigate('ViewDeatails', { Id: employee })}
-                                            >
-                                                <Text style={styles.DetailsText}>View Details</Text>
-                                            </TouchableOpacity>
-                                        </View>
                                     </View>
-                                </View>
-                            ))
+                                ))
                         }
 
                     </>
@@ -242,22 +248,22 @@ const VisitorLog = ({ navigation }) => {
             </View>
 
             <LottieAlertSucess
-                    visible={isAlertVisible}
-                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
-                    title={resMessage}
-                />
+                visible={isAlertVisible}
+                animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
 
-                <LottieAlertError
-                    visible={isAlertVisible1}
-                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
-                    title={resMessageFail}
-                />
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
 
-                <LottieCatchError
-                    visible={isAlertVisible2}
-                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
-                    title="Error While Fetching Data"
-                />
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
     )

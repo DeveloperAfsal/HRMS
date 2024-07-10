@@ -248,6 +248,11 @@ const AddVisitor = ({ navigation }) => {
         setShowSlotToTimePicker(true);
     };
 
+    const isValidEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
     const visitorAdd = async () => {
 
         SetLoad(true);
@@ -304,6 +309,11 @@ const AddVisitor = ({ navigation }) => {
             Alert.alert('Missing', "Check The Mail Field");
             SetLoad(false);
             return;
+        } else if (!isValidEmail(mail)) {
+            setMailErr('Enter a valid mail id');
+            Alert.alert('Invalid Email', 'Enter a valid mail id');
+            SetLoad(false);
+            return false;
         } else {
             setMailErr('');
         }
@@ -344,14 +354,14 @@ const AddVisitor = ({ navigation }) => {
             setSlotFromTimeErr('');
         }
 
-        if (slotToTime == "00:00:00") {
-            setSlotToTimeErr('Select To Time');
-            Alert.alert('Missing', "Check The To Time Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSlotToTimeErr('');
-        }
+        // if (slotToTime == "00:00:00") {
+        //     setSlotToTimeErr('Select To Time');
+        //     Alert.alert('Missing', "Check The To Time Field");
+        //     SetLoad(false);
+        //     return;
+        // } else {
+        //     setSlotToTimeErr('');
+        // }
 
         try {
 
@@ -423,10 +433,10 @@ const AddVisitor = ({ navigation }) => {
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
         setSelectedImage([]);
-        setSelectedDocument("Selected Document Type");
+        setSelectedDocument(null);
         setIdNumber('');
-        setSelectedDepartments('Select Department');
-        setSelectedMember('Select Member');
+        setSelectedDepartments(null);
+        setSelectedMember(null);
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -510,6 +520,7 @@ const AddVisitor = ({ navigation }) => {
 
                     <TextInput
                         value={mobileNumber}
+                        keyboardType={"number-pad"}
                         onChangeText={(txt) => setmobileNumber(txt)}
                         style={styles.ShiftSlotTextInput}
                     />
@@ -567,6 +578,7 @@ const AddVisitor = ({ navigation }) => {
 
                     <TextInput
                         value={mail}
+                        keyboardType={"email-address"}
                         onChangeText={(txt) => setMail(txt)}
                         style={styles.ShiftSlotTextInput}
                     />
@@ -717,7 +729,7 @@ const AddVisitor = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => onCancel()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

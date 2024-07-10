@@ -67,7 +67,7 @@ const LevelCategory = () => {
 
         try {
             if (!shiftSlot) {
-                setShiftError('Shift Slot is required');
+                setShiftError('Level Name Required');
                 setLoad(false)
                 return;
             } else {
@@ -347,7 +347,7 @@ const LevelCategory = () => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -399,40 +399,45 @@ const LevelCategory = () => {
                         <Text style={styles.ShiftSlotContainerTitleText}>Employee Level Category List</Text>
                     </View>
 
-                    <View style={styles.listContainer}>
+                    <View style={styles.container}>
 
                         {
                             loadData ?
                                 <ActivityIndicator size={"small"} color={"#20DDFE"} style={styles.Activeindicator} /> :
                                 <>
-                                    <View style={styles.listHeader}>
-                                        <Text style={styles.sno}>S.No</Text>
-                                        <Text style={styles.shift}>Level Name</Text>
-                                        <Text style={styles.status}>Status</Text>
-                                        <Text style={styles.Action}>Action</Text>
-                                    </View>
+                                    <View>
 
-                                    {Datalist.length === 0 ? (
-                                        <Text style={{ textAlign: 'center', paddingVertical: '3%' }}>No data available</Text>
-                                    ) : (Datalist.map((slot, index) => (
-                                        <View style={styles.listcontent}
-                                            key={index}
-                                        >
-                                            <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                            <Text style={styles.listcontentShift}>{slot.level_name}</Text>
-                                            <Text style={styles.listcontentstatus}>{slot.status}</Text>
-
-                                            <View style={styles.listcontentButtonview}>
-                                                <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => openEditModal(slot)}>
-                                                    <EditIcon width={14} height={14} color={"#000"} />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={styles.listcontentdelbutton} onPress={() => HandleDelete(slot.id)}>
-                                                    <DeleteIcon width={14} height={14} color={"#000"} />
-                                                </TouchableOpacity>
-                                            </View>
+                                        <View style={[styles.row, styles.listHeader]}>
+                                            <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                            <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Level Name</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                            <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
                                         </View>
-                                    ))
-                                    )}
+
+                                        {Datalist.length === 0 ? (
+                                            <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                        ) : (
+                                            Datalist.map((item, index) => (
+                                                <View key={index} style={[styles.row, styles.listBody]}>
+                                                    <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                                    <Text style={[styles.cell, styles.DepartmentName]}>{item.level_name}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+                                                    <View style={[styles.listcontentButtonview]}>
+                                                        <TouchableOpacity style={[styles.listcontenteditbutton]}
+                                                            onPress={() => openEditModal(item)}>
+                                                            <EditIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={[styles.listcontentdelbutton]}
+                                                            onPress={() => HandleDelete(item.id)}>
+                                                            <DeleteIcon width={14} height={14} color="#000" />
+                                                        </TouchableOpacity>
+                                                    </View>
+
+                                                </View>
+                                            ))
+                                        )}
+                                    </View>
                                 </>
                         }
 
@@ -484,7 +489,7 @@ const LevelCategory = () => {
                     >
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
-                                <Text style={styles.Heading}>Edit Shift Slot</Text>
+                                <Text style={styles.Heading}>Edit Employee Level Category</Text>
                                 <Text style={styles.modalLabelText}>Shift Slot</Text>
                                 <TextInput
                                     value={editedShiftSlot}
@@ -524,8 +529,8 @@ const LevelCategory = () => {
                                 </Text>
 
                                 <View style={styles.buttoncontainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalSubmitButton} onPress={handleEditSubmit}>
                                         {

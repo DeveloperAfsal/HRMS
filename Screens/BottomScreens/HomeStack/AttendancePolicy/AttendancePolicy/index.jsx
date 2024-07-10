@@ -400,7 +400,7 @@ const AttendancePolicy = ({ navigation }) => {
 
         try {
 
-            if (!selectedShift) {
+            if (!selectedShift || selectedShift === "Select Shift") {
                 setSelectedShiftError('Shift is Required');
                 Alert.alert('Missing', "Check The Shift Field");
                 SetLoad(false);
@@ -1010,7 +1010,7 @@ const AttendancePolicy = ({ navigation }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={Handlerefresh}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>

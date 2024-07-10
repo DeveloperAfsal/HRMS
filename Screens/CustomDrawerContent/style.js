@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginVertical: 5,
         borderRadius: 3,
-        height: 48,
+        height: 58,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     dropdownText: {
         fontSize: 16,
         fontWeight: '400',
+        // backgroundColor:'red',
+        width:150
     },
 
     forSingle: {
