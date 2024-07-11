@@ -50,7 +50,7 @@ const ProfileStack = ({ route, navigation }) => {
         try {
             setLoading(true);
             const response = await axios.get(
-                `https://ocean21.in/api/public/api/employee_detailslitshow/${data.userrole}`,
+                `https://ocean21.in/api/public/api/employee_detailslitshow/${data.userempid}`,
                 {
                     headers: {
                         Authorization: `Bearer ${data.token}`

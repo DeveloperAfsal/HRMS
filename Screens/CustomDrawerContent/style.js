@@ -1,7 +1,7 @@
 import { Platform, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    
+
     profileview: {
         flexDirection: 'row',
         backgroundColor: "#1FDAFD",
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
 
     profileviewusername: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        width: "90%",
     },
 
     profileviewuserdepartmentname: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '400',
         // backgroundColor:'red',
-        width:150
+        width: 150
     },
 
     forSingle: {
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         borderBottomColor: '#D8D8D8',
         borderBottomWidth: 1,
-        
+
     },
 
     forsinglelable: {
@@ -79,13 +80,13 @@ const styles = StyleSheet.create({
     shadowContainer: {
         shadowColor: '#000000',
         shadowOffset: {
-          width: 0,
-          height: 7,
+            width: 0,
+            height: 7,
         },
         shadowOpacity: 0.25,
         shadowRadius: 30,
         elevation: 5, // For Android
-      },
+    },
 
     DrawerContentScrollView: {
         // marginTop: -6,

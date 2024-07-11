@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         backgroundColor: White,
         borderRadius: 8,
         padding: 20,
-        height: "20%",
+        // height: "20%",
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
