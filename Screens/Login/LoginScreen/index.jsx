@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
 
     // handle login
 
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const handleLogin = async () => {
 
@@ -69,8 +69,8 @@ const LoginScreen = ({ navigation }) => {
 
                 setLoad(false);
 
-                handleShowAlert();
-                await delay(1000);
+                // handleShowAlert();
+                // await delay(1500);
 
                 const data = response.data;
 

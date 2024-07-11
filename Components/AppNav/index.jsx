@@ -60,6 +60,12 @@ const AppNav = ({ navigation }) => {
         }, 2500);
     };
 
+    useEffect(() => {
+        if (data != null) {
+            handleShowAlert();
+        }
+    }, [data]);
+
 
 
     return (
