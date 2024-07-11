@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     Container: {
         marginTop: '10%',
         paddingHorizontal: '10%',
+        paddingBottom:'10%'
     },
 
     Button: {

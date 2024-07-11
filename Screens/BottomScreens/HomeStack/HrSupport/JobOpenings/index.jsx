@@ -225,6 +225,7 @@ const JobOpenings = ({ navigation }) => {
                                     value={nofVacancies}
                                     onChangeText={(txt) => setNofVacancies(txt)}
                                     style={styles.ShiftSlotTextInput}
+                                    keyboardType="number-pad"
                                 />
 
                                 <Text style={styles.errorText}>

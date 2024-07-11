@@ -442,8 +442,6 @@ const LeaveType = () => {
                                 </>
                         }
 
-
-
                     </View>
 
                     <Modal

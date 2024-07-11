@@ -345,7 +345,7 @@ const CustomDrawerContent = ({ navigation }) => {
                             />
                         </View>
 
-                        <View>
+                        <View style={{ width: '70%' }}>
                             <Text style={styles.profileviewusername}>{data.username}</Text>
                             <Text style={styles.profileviewuserdepartmentname}>{data.userdepartmentname}</Text>
                         </View>
@@ -775,8 +775,8 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                     {checkedNames.Assets.includes('Assign_Asset') && (
                                         <DrawerItem
-                                            label="Add Asset"
-                                            onPress={() => navigation.navigate('Add Asset')}
+                                            label="Assign Assets"
+                                            onPress={() => navigation.navigate('Assign Assets')}
                                         />
                                     )}
 

@@ -442,6 +442,7 @@ const Addmeeting = ({ navigation }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
+                                minimumDate={new Date()}
                             />
                         )}
                     </View>
@@ -502,6 +503,8 @@ const Addmeeting = ({ navigation }) => {
                         value={agenda}
                         onChangeText={(txt) => setAgenda(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -516,6 +519,8 @@ const Addmeeting = ({ navigation }) => {
                         value={remarks}
                         onChangeText={(txt) => setRemarks(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -536,7 +541,7 @@ const Addmeeting = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => Handlerefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

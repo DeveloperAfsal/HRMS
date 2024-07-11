@@ -93,6 +93,15 @@ const Template = ({ navigation }) => {
 
         try {
 
+            if (!Reason) {
+                setReasonError('Reason Required');
+                setDelData(false);
+                return;
+            } else {
+                setReasonError('');
+                setReason('');
+            }
+
             const apiUrl = `https://ocean21.in/api/public/api/hr_template_delete`;
 
             const response = await axios.post(apiUrl, {
@@ -461,6 +470,12 @@ const Template = ({ navigation }) => {
         }, 3000);
     };
 
+    const refresh = () => {
+        setTitle('');
+        setSelectedStatus(null);
+        setDocFile('');
+    }
+
     return (
 
         <ScrollView>
@@ -495,7 +510,7 @@ const Template = ({ navigation }) => {
 
                             <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
 
-                                <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                                <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                                 <DropdownIcon width={14} height={14} color={"#000"} />
 
                             </TouchableOpacity>
@@ -556,7 +571,7 @@ const Template = ({ navigation }) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.cancelbutton}
-                                    onPress={() => navigation.navigate('Dashboard')}
+                                    onPress={() => refresh()}
                                 >
                                     <Text style={styles.cancelbuttontext}>
                                         Cancel
@@ -652,9 +667,10 @@ const Template = ({ navigation }) => {
                                 <Text style={styles.errorTextDelete}>
                                     {ReasonError}
                                 </Text>
+
                                 <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
@@ -733,7 +749,8 @@ const Template = ({ navigation }) => {
                                 <Text
                                     style={styles.MDocFileName}
                                 >
-                                    {EdocFile ? EdocFile[0]?.name : fileName}
+                                    {/* {EdocFile ? EdocFile[0]?.name : fileName} */}
+                                    Afsal Haniya
                                 </Text>
 
 

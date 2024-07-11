@@ -352,14 +352,16 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 14,
         lineHeight: 18.62,
-        width: '68%',
+        width: '63%',
+        // backgroundColor:'red',
     },
 
     AnnouncementDataHeadrWhen: {
         fontWeight: '400',
         fontSize: 15,
         lineHeight: 19.95,
-        width: '30%',
+        width: '35%',
+        // backgroundColor:'red',
         textAlign:'right'
     },
 

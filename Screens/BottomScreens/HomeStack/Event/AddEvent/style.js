@@ -2,6 +2,35 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    MDocFileName: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        marginBottom: '5%',
+        borderRadius: 5,
+        padding: '3%',
+        // backgroundColor: '#D4E7EB',
+    },
+
+    DocFileName: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        marginBottom: '5%',
+        marginHorizontal: '5%',
+        borderRadius: 5,
+        padding: '3%',
+        width: '90%',
+        backgroundColor: '#D4E7EB',
+    },
+
+    DocFileNameHolder: {
+        width: '90%',
+        lineHeight: 21.28,
+        fontSize: 14,
+        marginBottom: '5%',
+    },
+
     errorText: {
         color: "red",
         paddingTop: 10,

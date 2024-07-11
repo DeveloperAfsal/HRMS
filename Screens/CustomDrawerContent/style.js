@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         width: "90%",
+        paddingVertical:'1%'
     },
 
     profileviewuserdepartmentname: {
@@ -22,7 +23,8 @@ const styles = StyleSheet.create({
     },
 
     imageview: {
-        marginRight: 16,
+        // marginRight: 16,
+        width:'30%'
     },
 
     imageStyle: {

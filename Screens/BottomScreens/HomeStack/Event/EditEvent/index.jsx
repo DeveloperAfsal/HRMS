@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "../AddEvent/style";
+import DocumentPicker from 'react-native-document-picker';
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -22,6 +23,7 @@ const EditEvent = ({ navigation, route }) => {
     // route
 
     const SpecId = route.params.Id;
+    console.log(SpecId, "SpecId")
 
     // 
 
@@ -31,6 +33,34 @@ const EditEvent = ({ navigation, route }) => {
     const [agendaErr, setAgendaErr] = useState('');
     const [load, setLoad] = useState(false);
     const [datalist, setDatalist] = useState([]);
+
+    const [EdocFile, setEdocFile] = useState([]);
+    console.log(EdocFile, "EdocFile")
+    const [EditedocFile, seteditedocFile] = useState([]);
+    console.log(EditedocFile, "EditedocFile")
+    const [selectedId, setSelectedId] = useState();
+
+    const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
+    const fileName = filePath.split('/').pop();
+    console.log(fileName, "fileName")
+
+    // 
+
+    const handleEditDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setEdocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
 
     // Department
 
@@ -320,6 +350,7 @@ const EditEvent = ({ navigation, route }) => {
         setSelectedDepartments(SpecId.teamname.split(','));
         setSelectedEmployees(SpecId.membername.split(','));
         setSelectedImage([datalist.e_image]);
+        seteditedocFile(datalist.e_image);
     }, [datalist])
 
 
@@ -664,15 +695,23 @@ const EditEvent = ({ navigation, route }) => {
 
                     <View style={styles.fullWidth}>
 
-                        <ScrollView horizontal contentContainerStyle={styles.scrollViewContainer}>
+                        {/* <ScrollView horizontal contentContainerStyle={styles.scrollViewContainer}>
                             {renderSelectedImage()}
-                        </ScrollView>
+                        </ScrollView> */}
+
+                        <Text
+                            style={styles.MDocFileName}
+                        >
+                            {EdocFile.length > 0 && EdocFile[0]?.name ? EdocFile[0].name : fileName}
+                        </Text>
 
                         <TouchableOpacity style={styles.UploadButton}
-                            onPress={handleFromGallery}
+                            // onPress={handleFromGallery}
+                            onPress={handleEditDocumentSelection}
                         >
                             <Text style={styles.UploadButtonText}>
-                                Choose Image
+                                {/* Choose Image */}
+                                Choose File
                             </Text>
                         </TouchableOpacity>
 

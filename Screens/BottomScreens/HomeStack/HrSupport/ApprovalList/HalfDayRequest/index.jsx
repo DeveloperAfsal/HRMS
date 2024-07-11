@@ -77,7 +77,7 @@ const HalfDayRequest = () => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason', 'status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
             rowData.emp_name,
@@ -88,6 +88,7 @@ const HalfDayRequest = () => {
             rowData.permission_timefrom,
             rowData.permission_timeto,
             rowData.leave_reason,
+            rowData.emp_status,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -99,7 +100,7 @@ const HalfDayRequest = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/HalfDay_Request_List.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -121,7 +122,7 @@ const HalfDayRequest = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason', 'status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
             rowData.emp_name,
@@ -132,6 +133,7 @@ const HalfDayRequest = () => {
             rowData.permission_timefrom,
             rowData.permission_timeto,
             rowData.leave_reason,
+            rowData.emp_status,
         ]);
 
         const htmlContent = `
@@ -171,7 +173,7 @@ const HalfDayRequest = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'HalfDay_Request_List',
                 directory: RNFS.DocumentDirectoryPath,
             });
 

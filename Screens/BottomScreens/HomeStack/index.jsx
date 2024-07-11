@@ -255,7 +255,7 @@ const HomeStack = () => {
       {/*  */}
 
       <Stack.Screen name="Asset List" component={AssetsList} />
-      <Stack.Screen name="Add Asset" component={AddAsset} />
+      <Stack.Screen name="Assign Assets" component={AddAsset} />
       <Stack.Screen name="Edit Asset" component={EditAsset} />
       <Stack.Screen name="Assets Type" component={AssetType} />
 

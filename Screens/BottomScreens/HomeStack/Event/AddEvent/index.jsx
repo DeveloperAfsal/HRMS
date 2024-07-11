@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
+import DocumentPicker from 'react-native-document-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -26,6 +27,10 @@ const AddEvent = ({ navigation }) => {
     const [agenda, setAgenda] = useState('');
     const [agendaErr, setAgendaErr] = useState('');
     const [load, setLoad] = useState(false);
+    const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
+
+
 
     // Department
 
@@ -256,6 +261,24 @@ const AddEvent = ({ navigation }) => {
 
     // 
 
+    const handleDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setDocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
+
+    // 
+
     const Handlerefresh = () => {
         setStartDate(new Date());
         setSelectedDepartments([]);
@@ -264,7 +287,8 @@ const AddEvent = ({ navigation }) => {
         setAgenda('');
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
-        setSelectedImage([]);
+        // setSelectedImage([]);
+        setDocFile('');
     }
 
     // 
@@ -329,14 +353,14 @@ const AddEvent = ({ navigation }) => {
             setAgendaErr('');
         }
 
-        if (selectedImage.length == "0") {
-            setSelectedImageErr('Choose Image');
-            Alert.alert('Missing', "Check The Attachment Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedImageErr('');
-        }
+        // if (selectedImage.length == "0") {
+        //     setSelectedImageErr('Choose Image');
+        //     Alert.alert('Missing', "Check The Attachment Field");
+        //     setLoad(false);
+        //     return;
+        // } else {
+        //     setSelectedImageErr('');
+        // }
 
         try {
 
@@ -349,20 +373,34 @@ const AddEvent = ({ navigation }) => {
             formData.append('e_agenda', agenda);
             formData.append('created_by', data.userempid);
 
-            if (selectedImage) {
-                if (selectedImage.length > 0) {
-                    selectedImage.map((image, index) => {
-                        const imageUriParts = image.split('/');
-                        const imageName = imageUriParts[imageUriParts.length - 1];
+            // if (selectedImage) {
+            //     if (selectedImage.length > 0) {
+            //         selectedImage.map((image, index) => {
+            //             const imageUriParts = image.split('/');
+            //             const imageName = imageUriParts[imageUriParts.length - 1];
+            //             formData.append(`e_attachment`, {
+            //                 uri: image,
+            //                 name: imageName,
+            //                 type: 'image/jpeg',
+            //             });
+            //         });
+            //     } else {
+            //         formData.append('e_attachment', selectedImage);
+            //     }
+            // }
+
+            if (docFile) {
+                if (docFile.length > 0) {
+                    docFile.map((item, index) => {
                         formData.append(`e_attachment`, {
-                            uri: image,
-                            name: imageName,
-                            type: 'image/jpeg',
+                            uri: item.uri,
+                            name: item.name,
+                            type: item.type,
                         });
                     });
-                } else {
-                    formData.append('e_attachment', selectedImage);
                 }
+            } else {
+                formData.append('e_attachment', docFile);
             }
 
             const response = await fetch('https://ocean21.in/api/public/api/add_event', {
@@ -536,6 +574,7 @@ const AddEvent = ({ navigation }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
+                                minimumDate={new Date()}
                             />
                         )}
                     </View>
@@ -608,22 +647,27 @@ const AddEvent = ({ navigation }) => {
 
                     <View style={styles.fullWidth}>
 
-                        <ScrollView horizontal contentContainerStyle={styles.scrollViewContainer}>
+                        {/* <ScrollView horizontal contentContainerStyle={styles.scrollViewContainer}>
                             {renderSelectedImage()}
-                        </ScrollView>
+                        </ScrollView> */}
+
+                        <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
+                            {docFile ? docFile[0].name : 'Select The Document'}
+                        </Text>
 
                         <TouchableOpacity style={styles.UploadButton}
-                            onPress={handleFromGallery}
+                            // onPress={handleFromGallery}
+                            onPress={handleDocumentSelection}
                         >
                             <Text style={styles.UploadButtonText}>
-                                Choose Image
+                                Choose File
                             </Text>
                         </TouchableOpacity>
 
                     </View>
 
                     <Text style={styles.errorText}>
-                        {selectedImageErr}
+                        {docFileErr}
                     </Text>
 
                     <View style={styles.buttonview}>
@@ -640,7 +684,7 @@ const AddEvent = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => Handlerefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

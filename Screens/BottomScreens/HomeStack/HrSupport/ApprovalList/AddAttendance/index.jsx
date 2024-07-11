@@ -62,6 +62,8 @@ const AddAttendance = ({ navigation }) => {
         setSelectedDepartments(item.role_name);
         setShowDepartmentNameDropdown(false);
         fetchEmployeeDropdown(item.id);
+        setSelectedMemberId('');
+        setSelectedMember('');
     };
 
     // Member
@@ -398,6 +400,22 @@ const AddAttendance = ({ navigation }) => {
         }
     }
 
+    const Onrefresh = () => {
+        setSelectedDepartments('');
+        setSelectedMember('');
+        setSelectedMemberId('');
+        setSelectedTypeId('');
+        setSelectedType('');
+        setSelectedLocationId('');
+        setSelectedLocation('');
+        setSelectedShiftId(null);
+        setSelectedShift(null);
+        setStartDate(new Date());
+        setSlotFromTime('00:00:00');
+        setSlotToTime('00:00:00');
+        setReason('');
+    }
+
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -408,6 +426,7 @@ const AddAttendance = ({ navigation }) => {
             setAlertVisible(false);
             navigation.navigate('Approvals List');
         }, 2500);
+        Onrefresh();
     };
 
     const [isAlertVisible1, setAlertVisible1] = useState(false);
@@ -677,6 +696,8 @@ const AddAttendance = ({ navigation }) => {
                     value={Reason}
                     onChangeText={(text) => setReason(text)}
                     style={styles.Reason}
+                    multiline={true}
+                    textAlignVertical="top"
                 />
 
                 <Text style={styles.errorText}>
@@ -694,7 +715,7 @@ const AddAttendance = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.PrevButton}
-                        onPress={() => navigation.navigate('Approvals List')}
+                        onPress={() => Onrefresh()}
                     >
                         <Text style={styles.PrevButtonText}>
                             Cancel

@@ -75,6 +75,8 @@ const AddAsset = ({ navigation }) => {
         setSelectedDepartments(item.role_name);
         setSelectedDepartmentsId(item.id);
         setShowDepartmentNameDropdown(false);
+        setSelectedMemberId('');
+        setSelectedMember('');
         fetchEmployeeDropdown(item.id);
     };
 
@@ -114,7 +116,12 @@ const AddAsset = ({ navigation }) => {
     // handleDateChange
 
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
+    const formattedStartDate = startDate ?
+        `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
+        "";
+    console.log(formattedStartDate, "formattedStartDate");
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
@@ -128,7 +135,12 @@ const AddAsset = ({ navigation }) => {
     };
 
     const [showDatePicker1, setShowDatePicker1] = useState(false);
-    const [endDate, setEndDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(null);
+    const [endDateErr, setEndDateErr] = useState(null);
+    const formattedEndDate = endDate ?
+        `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` :
+        "";
+    console.log(formattedEndDate, "formatteddate")
 
     const handleDateChange1 = (event, date) => {
         if (date !== undefined) {
@@ -142,7 +154,12 @@ const AddAsset = ({ navigation }) => {
     };
 
     const [showDatePicker2, setShowDatePicker2] = useState(false);
-    const [returnDate, setreturnDate] = useState(new Date());
+    const [returnDate, setreturnDate] = useState(null);
+    const [returnDateErr, setreturnDateErr] = useState(null);
+    const formattedReturnDate = returnDate ?
+        `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}` :
+        "";
+    console.log(formattedReturnDate, "formatteddate")
 
     const handleDateChange2 = (event, date) => {
         if (date !== undefined) {
@@ -154,10 +171,6 @@ const AddAsset = ({ navigation }) => {
     const showDatepicker2 = () => {
         setShowDatePicker2(true);
     };
-
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
-    const formattedReturnDate = `${returnDate.getFullYear()}-${returnDate.getMonth() + 1}-${returnDate.getDate()}`;
 
     // 
 
@@ -209,13 +222,14 @@ const AddAsset = ({ navigation }) => {
     const onRefresh = () => {
         setSelectedDepartments('');
         setSelectedMember('');
+        setSelectedAssetTypes([]);
         setSelectedAssetTypeIds([]);
         setAssetsDetails('');
         setAssetsValue('');
         setRemarks('');
-        setStartDate(new Date());
-        setEndDate(new Date());
-        setreturnDate(new Date());
+        setStartDate(null);
+        setEndDate(null);
+        setreturnDate(null);
         setSelectedStatus(null);
     }
 
@@ -287,6 +301,33 @@ const AddAsset = ({ navigation }) => {
         } else {
             setRemarksErr('');
         }
+
+        if (!startDate) {
+            setStartDateErr('Select Issue Date');
+            Alert.alert('Missing', "Check Issue Date Field");
+            SetLoad(false);
+            return;
+        } else {
+            setStartDateErr('');
+        }
+
+        if (!endDate) {
+            setEndDateErr('Select Valid Till Date');
+            Alert.alert('Missing', "Check Valid Till Field");
+            SetLoad(false);
+            return;
+        } else {
+            setEndDateErr('');
+        }
+
+        // if (!returnDate) {
+        //     setreturnDateErr('Select Return On Date');
+        //     Alert.alert('Missing', "Check Return On Date Field");
+        //     SetLoad(false);
+        //     return;
+        // } else {
+        //     setreturnDateErr('');
+        // }
 
         try {
 
@@ -368,6 +409,11 @@ const AddAsset = ({ navigation }) => {
         <ScrollView>
 
             <View style={styles.ShiftSlotContainer}>
+
+                <View style={styles.ShiftSlotContainerTitle}>
+                    <Text style={styles.ShiftSlotContainerTitleText}>Assign Assets Form</Text>
+                </View>
+
                 <View style={styles.Inputcontainer}>
 
                     <Text style={styles.ShiftSlotText}>
@@ -382,7 +428,6 @@ const AddAsset = ({ navigation }) => {
                             {selectedDepartments ? selectedDepartments : 'Select Department'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
-
                     </TouchableOpacity>
 
                     {showDepartmentNameDropdown && (
@@ -514,11 +559,12 @@ const AddAsset = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {startDate.toDateString()} &nbsp;
+                            {/* {startDate.toDateString()} &nbsp; */}
+                            {startDate ? startDate.toDateString() : "Select date"} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
-                                value={startDate}
+                                value={startDate || new Date()}
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
@@ -527,7 +573,7 @@ const AddAsset = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {startDateErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -536,11 +582,12 @@ const AddAsset = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker1}>
-                            {endDate.toDateString()} &nbsp;
+                            {/* {endDate.toDateString()} &nbsp; */}
+                            {endDate ? endDate.toDateString() : "Select date"} &nbsp;
                         </Text>
                         {showDatePicker1 && (
                             <DateTimePicker
-                                value={endDate}
+                                value={endDate || new Date()}
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange1}
@@ -549,7 +596,7 @@ const AddAsset = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {endDateErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -558,11 +605,12 @@ const AddAsset = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker2}>
-                            {returnDate.toDateString()} &nbsp;
+                            {/* {returnDate.toDateString()} &nbsp; */}
+                            {returnDate ? returnDate.toDateString() : "Select date"} &nbsp;
                         </Text>
                         {showDatePicker2 && (
                             <DateTimePicker
-                                value={returnDate}
+                                value={returnDate || new Date()}
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange2}
@@ -571,7 +619,7 @@ const AddAsset = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {returnDateErr}
                     </Text>
 
                     <Text style={styles.ShiftSlotText}>
@@ -580,7 +628,7 @@ const AddAsset = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -613,6 +661,8 @@ const AddAsset = ({ navigation }) => {
                         value={remarks}
                         onChangeText={(txt) => setRemarks(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -633,7 +683,7 @@ const AddAsset = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => onRefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

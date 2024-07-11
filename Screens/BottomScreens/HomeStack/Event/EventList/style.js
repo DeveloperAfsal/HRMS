@@ -2,6 +2,23 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
+    },
+
     box: {
         width: 50,
         height: 50,
@@ -10,6 +27,10 @@ const styles = StyleSheet.create({
 
     top: {
         marginHorizontal: '10%'
+    },
+
+    Agenda:{
+        width:'200'
     },
 
     Agenta: {
@@ -158,6 +179,10 @@ const styles = StyleSheet.create({
 
     Status: {
         width: 100
+    },
+
+    Status1: {
+        width: 200
     },
 
     Action: {

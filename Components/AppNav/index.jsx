@@ -64,7 +64,7 @@ const AppNav = ({ navigation }) => {
         if (data != null) {
             handleShowAlert();
         }
-    }, [data]);
+    }, []);
 
 
 

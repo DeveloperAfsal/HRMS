@@ -27,7 +27,6 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [departmentNameDropdown, setDepartmentNameDropdown] = useState([]);
     const [showDepartmentNameDropdown, setShowDepartmentNameDropdown] = useState(false);
     const [selectedDepartments, setSelectedDepartments] = useState('');
-    const [selectedMemberId, setSelectedMemberId] = useState('');
     const [selectedDepartmentsErr, setSelectedDepartmentsErr] = useState('');
 
     useEffect(() => {
@@ -59,9 +58,10 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const handleSelectDepartment = (item) => {
         setSelectedDepartments(item.role_name);
-        setSelectedMemberId(item.id)
         setShowDepartmentNameDropdown(false);
         fetchEmployeeDropdown(item.id);
+        setSelectedMemberId('');
+        setSelectedMember('');
     };
 
     // Member
@@ -69,6 +69,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
     const [employeeDropdown, setEmployeeDropdown] = useState([]);
     const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
     const [selectedMember, setSelectedMember] = useState('');
+    const [selectedMemberId, setSelectedMemberId] = useState('');
     const [selectedMemberErr, setSelectedMemberErr] = useState('');
 
 
@@ -95,6 +96,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     const handleSelectMember = (item) => {
         setSelectedMember(item.emp_name);
+        setSelectedMemberId(item.emp_id)
         setShowEmployeeDropdown(false);
     };
 
@@ -390,7 +392,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
             setSelectedCategoryErr('');
         }
 
-        if (selectedCategory === "Leave") {
+        if (selectedCategory === "Leave" || selectedCategory === "Absent") {
             if (!date) {
                 setdateErr('Select From Date');
                 Alert.alert('Missing', "Check From Date Field");
@@ -448,14 +450,14 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
             setReasonErr('');
         }
 
-        if (!docFile) {
-            setDocFileErr('Choose file');
-            Alert.alert('Missing', "Check File Field");
-            setLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('Choose file');
+        //     Alert.alert('Missing', "Check File Field");
+        //     setLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
 
         try {
@@ -482,9 +484,8 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                         });
                     });
                 }
-                else {
-                    formData.append('leave_document', docFile);
-                }
+            } else {
+                formData.append('leave_document', docFile);
             }
 
 
@@ -520,6 +521,23 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     }
 
+    const onRefresh = () => {
+        setSelectedMemberId('');
+        setSelectedMember('');
+        setSelectedDepartments('');
+        setSelectedType('');
+        setSelectedTypeId('');
+        setSelectedCategory('');
+        setSelectedCategoryId('');
+        setStartDate(null);
+        setDate(null);
+        setEndDate(null);
+        setSlotfromTime(null);
+        setSlotToTime(null);
+        setReason('');
+        setDocFile('');
+    }
+
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -529,6 +547,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
         setTimeout(() => {
             setAlertVisible(false);
             navigation.navigate('Approvals List');
+            onRefresh();
         }, 2500);
     };
 
@@ -769,7 +788,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                 }
 
                 {
-                    selectedCategory === "Leave" ?
+                    selectedCategory === "Leave" || selectedCategory === "Absent" ?
                         <>
                             <Text style={styles.subHeading}>
                                 From Date
@@ -825,6 +844,8 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     value={Reason}
                     onChangeText={(text) => setReason(text)}
                     style={styles.Reason}
+                    multiline={true}
+                    textAlignVertical="top"
                 />
 
                 <Text style={styles.errorText}>
@@ -862,7 +883,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.PrevButton}
-                        onPress={() => navigation.navigate('Approvals List')}
+                        onPress={() => onRefresh()}
                     >
                         <Text style={styles.PrevButtonText}>
                             Cancel

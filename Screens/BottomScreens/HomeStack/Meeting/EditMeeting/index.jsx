@@ -489,6 +489,7 @@ const Editmeeting = ({ navigation, route }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
+                                minimumDate={new Date()}
                             />
                         )}
                     </View>
@@ -549,6 +550,8 @@ const Editmeeting = ({ navigation, route }) => {
                         value={agenda}
                         onChangeText={(txt) => setAgenda(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -563,6 +566,8 @@ const Editmeeting = ({ navigation, route }) => {
                         value={remarks}
                         onChangeText={(txt) => setRemarks(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>

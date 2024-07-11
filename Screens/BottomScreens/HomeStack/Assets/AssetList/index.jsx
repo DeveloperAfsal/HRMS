@@ -111,7 +111,7 @@ const AssetsList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Asset_List.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -186,7 +186,7 @@ const AssetsList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Asset_List',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -352,12 +352,12 @@ const AssetsList = ({ navigation }) => {
                                     <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Employee Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Asset ID</Text>
                                     <Text style={[styles.header, styles.cell, styles.EndDate]}>Asset Type</Text>
-                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Asset Details</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot, styles.right]}>Asset Details</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>Asset Value</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Issue Date</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Valid Till</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Return On</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Remarks</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DateF]}>Issue Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DateF]}>Valid Till</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DateF]}>Return On</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot, styles.right]}>Remarks</Text>
 
                                     {
                                         data.userrole == 1 || data.userrole == 2 ?
@@ -378,12 +378,12 @@ const AssetsList = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.emp_name}</Text>
                                             <Text style={[styles.cell, styles.StartDate]}>{item.asset_id}</Text>
                                             <Text style={[styles.cell, styles.EndDate]}>{item.asset_name}</Text>
-                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.asset_details}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot, styles.right]}>{item.asset_details}</Text>
                                             <Text style={[styles.cell, styles.WeekOff]}>{item.asset_value}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.issue_date}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.valid_till}</Text>
-                                            <Text style={[styles.cell, styles.WeekOff]}>{item.return_on}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.remarks}</Text>
+                                            <Text style={[styles.cell, styles.DateF]}>{item.issue_date}</Text>
+                                            <Text style={[styles.cell, styles.DateF]}>{item.valid_till}</Text>
+                                            <Text style={[styles.cell, styles.DateF]}>{item.return_on}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot, styles.right]}>{item.remarks}</Text>
                                             {
                                                 data.userrole == 1 || data.userrole == 2 ?
                                                     <View style={styles.listcontentButtonview}>
@@ -423,8 +423,8 @@ const AssetsList = ({ navigation }) => {
                                                 {ReasonError}
                                             </Text>
                                             <View style={styles.modalButtonContainer}>
-                                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                                <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 

@@ -2,6 +2,18 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    ShiftSlotContainerTitle: {
+        paddingBottom: "5%",
+        width: "90%",
+    },
+    
+    ShiftSlotContainerTitleText: {
+        color: '#00275C',
+        fontWeight: '700',
+        lineHeight: 23.94,
+        fontSize: 18,
+    },
+
     errorText: {
         color: "red",
         paddingVertical: '3%',
@@ -116,7 +128,7 @@ const styles = StyleSheet.create({
         borderColor: '#515151',
         borderRadius: 7,
         paddingLeft: 15,
-        justifyContent:'center',
+        paddingTop: 10,
     },
 
     StatusText: {

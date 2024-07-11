@@ -123,7 +123,7 @@ const AttendanceRequest = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/holidaylist.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -191,7 +191,7 @@ const AttendanceRequest = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'HolidayList',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -505,7 +505,7 @@ const AttendanceRequest = () => {
                 setHolidayname('');
                 setStartDate(new Date());
                 setSelectedDay('');
-                setSelectedStatus('Selected Type');
+                setSelectedStatus(null);
                 fetchData();
                 handleShowAlert(response.data);
             } else {
@@ -784,7 +784,7 @@ const AttendanceRequest = () => {
 
                             <TouchableOpacity onPress={toggleDropdownstatus1} style={styles.modalInput}>
 
-                                <Text style={styles.StatusTouchableText}>{selectedStatus1 || "Selected Type"}</Text>
+                                <Text style={styles.StatusTouchableText}>{selectedStatus1 || "Select Type"}</Text>
                                 <DropdownIcon width={14} height={14} color={"#000"} />
 
                             </TouchableOpacity>
@@ -823,10 +823,10 @@ const AttendanceRequest = () => {
                                     }
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.modalCancelButton}
+                                <TouchableOpacity style={styles.modalCancelButton1}
                                     onPress={HandleCancel}
                                 >
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -1009,7 +1009,7 @@ const AttendanceRequest = () => {
 
                             <TouchableOpacity onPress={toggleDropdownstatus} style={styles.modalInput}>
 
-                                <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Type"}</Text>
+                                <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Type"}</Text>
                                 <DropdownIcon width={14} height={14} color={"#000"} />
 
                             </TouchableOpacity>
@@ -1048,10 +1048,10 @@ const AttendanceRequest = () => {
                                     }
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.modalCancelButton}
+                                <TouchableOpacity style={styles.modalCancelButton1}
                                     onPress={closeEditModal}
                                 >
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
 
                             </View>

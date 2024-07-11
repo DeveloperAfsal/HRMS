@@ -55,6 +55,8 @@ const AddOvertime = ({ navigation }) => {
         setSelectedDepartments(item.role_name);
         setShowDepartmentNameDropdown(false);
         fetchEmployeeDropdown(item.id);
+        setSelectedMemberId('');
+        setSelectedMember('');
     };
 
     // Member
@@ -103,7 +105,7 @@ const AddOvertime = ({ navigation }) => {
 
 
     useEffect(() => {
-        const apiUrl = 'https://ocean21.in/api/public/api/leave_type_list';
+        const apiUrl = 'https://ocean21.in/api/public/api/overtime_type_list';
 
         const fetchData = async () => {
 
@@ -128,7 +130,7 @@ const AddOvertime = ({ navigation }) => {
     }, [])
 
     const handleSelectType = (item) => {
-        setSelectedType(item.leave_type_name);
+        setSelectedType(item.ot_type_name);
         setSelectedTypeId(item.id);
         setShowTypeDropdown(false);
     };
@@ -391,6 +393,22 @@ const AddOvertime = ({ navigation }) => {
 
     }
 
+    const Onrefresh = () => {
+        setSelectedDepartments('');
+        setSelectedMember('');
+        setSelectedMemberId('');
+        setSelectedTypeId('');
+        setSelectedType('');
+        setSelectedLocationId('');
+        setSelectedLocation('');
+        setSelectedShiftId(null);
+        setSelectedShift(null);
+        setStartDate(new Date());
+        setSlotFromTime('00:00:00');
+        setSlotToTime('00:00:00');
+        setReason('');
+    }
+
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -401,6 +419,7 @@ const AddOvertime = ({ navigation }) => {
             setAlertVisible(false);
             navigation.navigate('Approvals List');
         }, 2500);
+        Onrefresh()
     };
 
     const [isAlertVisible1, setAlertVisible1] = useState(false);
@@ -522,7 +541,7 @@ const AddOvertime = ({ navigation }) => {
                                     style={styles.dropdownOption}
                                     onPress={() => handleSelectType(item)}
                                 >
-                                    <Text>{item.leave_type_name}</Text>
+                                    <Text>{item.ot_type_name}</Text>
                                 </TouchableOpacity>
                             ))}
                         </ScrollView>
@@ -670,6 +689,8 @@ const AddOvertime = ({ navigation }) => {
                     value={Reason}
                     onChangeText={(text) => setReason(text)}
                     style={styles.Reason}
+                    multiline={true}
+                    textAlignVertical="top"
                 />
 
                 <Text style={styles.errorText}>
@@ -687,7 +708,7 @@ const AddOvertime = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.PrevButton}
-                        onPress={() => navigation.navigate('Approvals List')}
+                        onPress={() => Onrefresh()}
                     >
                         <Text style={styles.PrevButtonText}>
                             Cancel
