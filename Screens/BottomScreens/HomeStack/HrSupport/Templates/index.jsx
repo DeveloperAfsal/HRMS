@@ -749,8 +749,7 @@ const Template = ({ navigation }) => {
                                 <Text
                                     style={styles.MDocFileName}
                                 >
-                                    {/* {EdocFile ? EdocFile[0]?.name : fileName} */}
-                                    Afsal Haniya
+                                    {EdocFile ? EdocFile[0]?.name : fileName}
                                 </Text>
 
 
