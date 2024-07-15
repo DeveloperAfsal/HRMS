@@ -582,7 +582,7 @@ const Editmeeting = ({ navigation, route }) => {
                                 load ?
                                     <ActivityIndicator size={"small"} color={"#fff"} /> :
                                     <Text style={styles.submitbuttonText}>
-                                        Edit Meeting
+                                        Update
                                     </Text>
                             }
                         </TouchableOpacity>

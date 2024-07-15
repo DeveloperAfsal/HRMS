@@ -113,7 +113,7 @@ const TaskList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Task_List.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -188,7 +188,7 @@ const TaskList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Task_List',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -707,7 +707,7 @@ const TaskList = ({ navigation }) => {
                             <View>
 
                                 <View style={[styles.row, styles.listHeader]}>
-                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell1, styles.sno]}>S.No</Text>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Task ID</Text>
                                     <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Task Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Name</Text>
@@ -716,12 +716,12 @@ const TaskList = ({ navigation }) => {
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.WeekOff]}>Department</Text> : null}
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Assigned To</Text> : null}
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Start Date</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>End Date</Text>
+                                    <Text style={[styles.header, styles.cell1, styles.Status]}>Start Date</Text>
+                                    <Text style={[styles.header, styles.cell1, styles.Status]}>End Date</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Task Status</Text> : null}
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Priority</Text>
-                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> : null}
+                                    <Text style={[styles.header, styles.cell1, styles.Status]}>Priority</Text>
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell1, styles.Status]}>Action</Text> : null}
                                     {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.StatusT]}>Task Status</Text>}
                                 </View>
 
@@ -730,7 +730,7 @@ const TaskList = ({ navigation }) => {
                                 ) : (
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
-                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell1, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.ticket_id}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.task_name}</Text>
                                             <Text style={[styles.cell, styles.StartDate]}>{item.project_name}</Text>

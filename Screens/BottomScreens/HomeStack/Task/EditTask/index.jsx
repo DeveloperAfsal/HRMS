@@ -233,6 +233,11 @@ const EditTask = ({ route, navigation }) => {
     const [editedStatus1, setEditedStatus1] = useState(null);
     const [editedStatus1Err, setEditedStatus1Err] = useState(null);
 
+    useEffect(() => {
+        if (typeof docFile === 'string') {
+            setDocFile([{ name: docFile.split('/').pop() }]);
+        }
+    }, [docFile]);
 
     const toggleModalDropdown1 = () => {
         setShowModalDropdown1(!showModalDropdown1);

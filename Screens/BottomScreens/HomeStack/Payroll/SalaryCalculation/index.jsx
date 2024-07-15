@@ -34,6 +34,8 @@ const SalaryCalculation = () => {
     const [tdays, setTdays] = useState(0);
     const [temp, setTemp] = useState(0)
 
+    console.log(gpay, "gpay", npay, "npay", deduction, "deduction")
+
     // 
 
     const [loadData, setLoadData] = useState(false);
@@ -170,7 +172,7 @@ const SalaryCalculation = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Salary_calculation_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -245,7 +247,7 @@ const SalaryCalculation = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: ' Salary_calculation_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 

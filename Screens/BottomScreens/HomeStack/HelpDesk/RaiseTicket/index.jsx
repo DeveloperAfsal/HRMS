@@ -300,14 +300,14 @@ const RaiseTicket = ({ navigation }) => {
             setDescriptionErr('');
         }
 
-        if (!docFile) {
-            setDocFileErr('choose File');
-            Alert.alert('Missing', "Check The Attachment Field");
-            SetLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('choose File');
+        //     Alert.alert('Missing', "Check The Attachment Field");
+        //     SetLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
         if (!selectedDepartments1) {
             setSelectedDepartmentsErr1('Select Department Name');
@@ -396,7 +396,20 @@ const RaiseTicket = ({ navigation }) => {
     }
 
     const onRefresh = () => {
-
+        setSelectedDepartmentsId('');
+        setSelectedDepartments('');
+        setSelectedDepartments1('');
+        setSelectedDepartmentsId1('');
+        setSelectedMemberId('');
+        setSelectedMemberId1('');
+        setSelectedMember('');
+        setSelectedMember1('');
+        setTickTitle('');
+        setSelectedIssTypeId('');
+        setSelectedIssType('');
+        setDescription('');
+        setDocFile('');
+        setSelectedStatus(null);
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -577,6 +590,8 @@ const RaiseTicket = ({ navigation }) => {
                         value={description}
                         onChangeText={(txt) => setDescription(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -683,7 +698,7 @@ const RaiseTicket = ({ navigation }) => {
                         onPress={toggleDropdownstatus}
                         style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -726,7 +741,7 @@ const RaiseTicket = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => onRefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

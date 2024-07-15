@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
+
     RequestContainer: {
         margin: '5%',
         flexDirection: 'row',

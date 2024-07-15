@@ -204,12 +204,18 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
     const [startDateErr, setStartDateErr] = useState(null);
 
     const handleDateChange = (event, date) => {
-        if (date !== undefined) {
+        // if (date !== undefined) {
+        //     setStartDate(date);
+        //     const formattedStartDate = formatDate(date);
+        //     handleFieldsChange('dob', formattedStartDate);
+        // }
+        // setShowDatePicker(Platform.OS === 'ios');
+        if (event.type === "set" && date) {
             setStartDate(date);
             const formattedStartDate = formatDate(date);
             handleFieldsChange('dob', formattedStartDate);
         }
-        setShowDatePicker(Platform.OS === 'ios');
+        setShowDatePicker(false);
     };
 
     const showDatepicker = () => {
@@ -324,7 +330,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
 
             <TouchableOpacity onPress={toggleDropdownGender} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.gender || "Selected Gender"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.gender || "Select Gender"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -337,8 +343,8 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
                         <Text style={styles.dropdownOptionText}>Male</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => selectGender("FeMale")} style={styles.dropdownOption}>
-                        <Text style={styles.dropdownOptionText}>FeMale</Text>
+                    <TouchableOpacity onPress={() => selectGender("Female")} style={styles.dropdownOption}>
+                        <Text style={styles.dropdownOptionText}>Female</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => selectGender("Others")} style={styles.dropdownOption}>
@@ -359,7 +365,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
 
             <TouchableOpacity onPress={toggleDropdownStatus} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.status || "Selected Status"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.status || "Select Status"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -525,7 +531,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
 
             <TouchableOpacity onPress={toggleDropdownMstatus} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.maritalStatus || "Selected Martial status"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.maritalStatus || "Select Marital status"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>

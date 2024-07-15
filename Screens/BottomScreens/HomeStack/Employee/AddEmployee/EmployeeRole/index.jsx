@@ -134,6 +134,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                 Employee Role
             </Text>
 
+            <Text style={styles.subHeading}>
+                User Role
+            </Text>
+
             <TouchableOpacity style={styles.Input} onPress={() => setShowDepartmentNameDropdown(!showDepartmentNameDropdown)}>
                 <Text style={styles.StatusTouchableText}>
                     {Employee.userRole && Employee.userRole.length > 0 ? Employee.userRole : "Select userRole"}
@@ -313,7 +317,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                 style={styles.input}
                 value={Employee.lateAllowed}
                 onChangeText={(text) => handleFieldsChange('lateAllowed', text)}
-                 keyboardType="number-pad"
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -328,7 +332,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                 style={styles.input}
                 value={Employee.permissionAllowed}
                 onChangeText={(text) => handleFieldsChange('permissionAllowed', text)}
-                 keyboardType="number-pad"
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>

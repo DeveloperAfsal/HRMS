@@ -483,7 +483,7 @@ const Eventlist = ({ navigation }) => {
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
                                 </View>
 
-                                {paginatedData.length === 0 ? (
+                                {paginatedData.length == 0 ? (
                                     <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                 ) : (
                                     paginatedData.map((item, index) => (

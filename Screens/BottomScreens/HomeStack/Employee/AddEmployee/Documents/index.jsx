@@ -162,6 +162,20 @@ const Documents = ({
 
         //append data
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(Employee.email)) {
+            Alert.alert('Invalid Email ID', "Please enter a valid email address");
+            setLoad(false);
+            return;
+        } 
+
+        if (!emailRegex.test(Employee.email)) {
+            Alert.alert('Invalid Email ID', "Please enter a valid email address");
+            setLoad(false);
+            return;
+        } 
+
         formData.append('employee_id', Employee.employeeId);
 
         if (selectedImage.length > 0) {

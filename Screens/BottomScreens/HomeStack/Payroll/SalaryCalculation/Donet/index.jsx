@@ -39,22 +39,26 @@ const DonutChart = ({ gpay, npay, deduction }) => {
   return (
     <View style={styles.container}>
       <View style={styles.chartWrapper}>
-        <PieChart
-          data={chart}
-          width={screenWidth}
-          height={chartHeight}
-          chartConfig={{
-            backgroundColor: '#ffffff',
-            backgroundGradientFrom: '#ffffff',
-            backgroundGradientTo: '#ffffff',
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
-          accessor="population"
-          backgroundColor="transparent"
-          center={[100, 0]} // Center the chart properly
-          absolute
-          hasLegend={false} // Disable default legend
-        />
+        {
+          gpay && npay && deduction ?
+            <PieChart
+              data={chart}
+              width={screenWidth}
+              height={chartHeight}
+              chartConfig={{
+                backgroundColor: '#ffffff',
+                backgroundGradientFrom: '#ffffff',
+                backgroundGradientTo: '#ffffff',
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              }}
+              accessor="population"
+              backgroundColor="transparent"
+              center={[100, 0]} // Center the chart properly
+              absolute
+              hasLegend={false}
+            /> :
+            <Text style={styles.topic}>No Data Found For Chart</Text>
+        }
         {/* <Svg height={chartHeight} width={screenWidth} style={styles.svgContainer}>
           <Circle cx={centerX} cy={centerY} r={holeRadius} fill="white" />
         </Svg> */}
@@ -74,6 +78,13 @@ const DonutChart = ({ gpay, npay, deduction }) => {
 };
 
 const styles = StyleSheet.create({
+
+  topic: {
+    color: '#00275C',
+    fontWeight: '700',
+    fontSize: 20,
+    paddingVertical:'10%'
+  },
 
   container: {
     alignItems: 'center',

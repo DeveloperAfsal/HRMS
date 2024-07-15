@@ -234,6 +234,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    inputs1: {
+        borderWidth: 1,
+        borderColor: '#515151',
+        width: '90%',
+        height: 150,
+        borderRadius: 7,
+        paddingHorizontal: '5%',
+        marginBottom: '3%',
+        justifyContent: 'center',
+    },
+
     listHeader: {
         backgroundColor: '#E1F1FC',
         borderTopLeftRadius: 11,

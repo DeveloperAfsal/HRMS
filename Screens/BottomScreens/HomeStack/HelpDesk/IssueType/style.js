@@ -124,77 +124,154 @@ const styles = StyleSheet.create({
     dropdownOptionText: {
         fontSize: 16,
     },
-    listContainer: {
-        backgroundColor: "#fff",
-        borderRadius: 11,
-        borderWidth: 1,
-        borderColor: '#A4CED8',
-        width: "90%",
+    // listContainer: {
+    //     backgroundColor: "#fff",
+    //     borderRadius: 11,
+    //     borderWidth: 1,
+    //     borderColor: '#A4CED8',
+    //     width: "90%",
+    // },
+    // listHeader: {
+    //     backgroundColor: '#E1F1FC',
+    //     borderTopLeftRadius: 11,
+    //     borderTopRightRadius: 11,
+    //     flexDirection: 'row',
+    //     width: '100%',
+    //     height: 44,
+    //     alignItems: 'center'
+    // },
+    // sno: {
+    //     width: '15%',
+    //     paddingLeft: "3%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // shift: {
+    //     width: '30%',
+    //     paddingLeft: "3%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // status: {
+    //     width: '30%',
+    //     paddingLeft: "2%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // Action: {
+    //     width: '25%',
+    //     paddingLeft: "7%",
+    //     color: "#404040",
+    //     fontWeight: '600',
+    //     fontSize: 15,
+    //     lineHeight: 19.95
+    // },
+    // listcontent: {
+    //     flexDirection: 'row',
+    //     paddingTop: 10,
+    //     paddingBottom: 10
+    // },
+    // listcontentsno: {
+    //     width: '15%',
+    //     paddingLeft: "5%"
+    // },
+    // listcontentShift: {
+    //     width: '30%',
+    //     paddingLeft: "3%"
+    // },
+    // listcontentstatus: {
+    //     width: '30%',
+    //     paddingLeft: "3%"
+    // },
+    // listcontentButtonview: {
+    //     width: '25%',
+    //     paddingLeft: "5%",
+    //     flexDirection: 'row',
+    //     gap: 10
+    // },
+    // listcontenteditbutton: {
+    //     width: 26,
+    //     height: 26,
+    //     borderRadius: 4,
+    //     borderWidth: 1,
+    //     borderColor: "#76B700",
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: '#F0F6E5'
+    // },
+    // listcontentdelbutton: {
+    //     width: 26,
+    //     height: 26,
+    //     borderRadius: 4,
+    //     borderWidth: 1,
+    //     borderColor: "#FF7676",
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: '#FFE0E0'
+    // },
+
+    row: {
+        flexDirection: 'row',
+        borderColor: '#ccc',
     },
+
     listHeader: {
         backgroundColor: '#E1F1FC',
         borderTopLeftRadius: 11,
         borderTopRightRadius: 11,
         flexDirection: 'row',
-        width: '100%',
-        height: 44,
         alignItems: 'center'
     },
+
+    header: {
+        flex: 1,
+        padding: 10,
+        color: "#404040",
+        fontWeight: '600',
+        fontSize: 15,
+        lineHeight: 19.95,
+    },
+
+    cell: {
+        flex: 1,
+        padding: 10,
+        textAlign: 'center',
+    },
+
     sno: {
-        width: '15%',
-        paddingLeft: "3%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
+        width: 100,
     },
-    shift: {
-        width: '30%',
-        paddingLeft: "3%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
+
+    DepartmentName: {
+        width: 100
     },
-    status: {
-        width: '30%',
-        paddingLeft: "2%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
+
+    EmployeeName: {
+        width: 100
     },
+
+    Status: {
+        width: 100
+    },
+
     Action: {
-        width: '25%',
-        paddingLeft: "7%",
-        color: "#404040",
-        fontWeight: '600',
-        fontSize: 15,
-        lineHeight: 19.95
+        width: 100
     },
-    listcontent: {
-        flexDirection: 'row',
-        paddingTop: 10,
-        paddingBottom: 10
-    },
-    listcontentsno: {
-        width: '15%',
-        paddingLeft: "5%"
-    },
-    listcontentShift: {
-        width: '30%',
-        paddingLeft: "3%"
-    },
-    listcontentstatus: {
-        width: '30%',
-        paddingLeft: "3%"
-    },
+
     listcontentButtonview: {
         width: '25%',
         paddingLeft: "5%",
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 10
     },
+
     listcontenteditbutton: {
         width: 26,
         height: 26,
@@ -205,6 +282,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#F0F6E5'
     },
+
     listcontentdelbutton: {
         width: 26,
         height: 26,
@@ -215,6 +293,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#FFE0E0'
     },
+
+    listBody: {
+        paddingVertical: '1%'
+    },
+
+    container: {
+        flexDirection: 'column',
+        flex: 1,
+        backgroundColor: "#fff",
+        borderRadius: 11,
+        borderWidth: 1,
+        borderColor: '#A4CED8',
+        width: "90%",
+        marginLeft: 20,
+        marginRight: 20,
+    },
+
     errorText: {
         color: "red",
         paddingTop: 10,

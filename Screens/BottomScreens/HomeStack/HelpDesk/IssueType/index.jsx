@@ -356,7 +356,7 @@ const IssueType = () => {
 
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -409,41 +409,44 @@ const IssueType = () => {
                         <Text style={styles.ShiftSlotContainerTitleText}>Issue Type List</Text>
                     </View>
 
-                    <View style={styles.listContainer}>
+                    <View style={styles.container}>
 
                         {
                             loadData ?
                                 <ActivityIndicator size={"small"} color={"#20DDFE"} style={styles.Activeindicator} /> :
-                                <>
-                                    <View style={styles.listHeader}>
-                                        <Text style={styles.sno}>S.No</Text>
-                                        <Text style={styles.shift}>Issue Type</Text>
-                                        <Text style={styles.status}>Status</Text>
-                                        <Text style={styles.Action}>Action</Text>
+                                <View>
+
+                                    <View style={[styles.row, styles.listHeader]}>
+                                        <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                        <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Issue Type</Text>
+                                        <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Status</Text>
+                                        <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
                                     </View>
 
                                     {Datalist.length === 0 ? (
-                                        <Text style={{ textAlign: 'center', paddingVertical: '3%' }}>No data available</Text>
+                                        <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                     ) : (
-                                        Datalist.map((slot, index) => (
-                                            <View style={styles.listcontent} key={index}>
-                                                <Text style={styles.listcontentsno}>{index + 1}</Text>
-                                                <Text style={styles.listcontentShift}>{slot.issue_type_name}</Text>
-                                                <Text style={styles.listcontentstatus}>{slot.status}</Text>
-
-                                                <View style={styles.listcontentButtonview}>
-                                                    <TouchableOpacity style={styles.listcontenteditbutton} onPress={() => openEditModal(slot)}>
-                                                        <EditIcon width={14} height={14} color={"#000"} />
+                                        Datalist.map((item, index) => (
+                                            <View key={index} style={[styles.row, styles.listBody]}>
+                                                <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                                <Text style={[styles.cell, styles.DepartmentName]}>{item.issue_type_name}</Text>
+                                                <Text style={[styles.cell, styles.EmployeeName]}>{item.status}</Text>
+                                                <View style={[styles.listcontentButtonview]}>
+                                                    <TouchableOpacity style={[styles.listcontenteditbutton]}
+                                                        onPress={() => openEditModal(item)}>
+                                                        <EditIcon width={14} height={14} color="#000" />
                                                     </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.listcontentdelbutton} onPress={() => HandleDelete(slot.id)}>
-                                                        <DeleteIcon width={14} height={14} color={"#000"} />
+                                                    <TouchableOpacity
+                                                        style={[styles.listcontentdelbutton]}
+                                                        onPress={() => HandleDelete(item.id)}>
+                                                        <DeleteIcon width={14} height={14} color="#000" />
                                                     </TouchableOpacity>
                                                 </View>
+
                                             </View>
                                         ))
                                     )}
-
-                                </>
+                                </View>
                         }
 
                     </View>

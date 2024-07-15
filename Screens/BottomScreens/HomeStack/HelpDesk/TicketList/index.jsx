@@ -107,7 +107,7 @@ const TicketList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Tickets_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -178,7 +178,7 @@ const TicketList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Tickets_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -311,204 +311,204 @@ const TicketList = ({ navigation }) => {
     };
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            {
-                (data.userrole == 1 || data.userrole == 2) ?
-                    <View>
-                        <TouchableOpacity style={styles.TicketButton} onPress={() => navigation.navigate('Raise Ticket')}>
-                            <Text style={styles.TicketButtonText}>
-                                Manual Ticket Raise
-                            </Text>
-                        </TouchableOpacity>
-                    </View> : null
-            }
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
+                    />
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
+                    </View>
+                </View>
 
-            <ScrollView horizontal={true}>
-
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
+                {
+                    (data.userrole == 1 || data.userrole == 2) ?
                         <View>
+                            <TouchableOpacity style={styles.TicketButton} onPress={() => navigation.navigate('Raise Ticket')}>
+                                <Text style={styles.TicketButtonText}>
+                                    Manual Ticket Raise
+                                </Text>
+                            </TouchableOpacity>
+                        </View> : null
+                }
 
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Employee Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Ticket ID</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Ticket Title</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Issue Type</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Assigned Department</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Assigned Employee</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
-                                {
-                                    (data.userrole == 1 || data.userrole == 2) ?
-                                        <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
-                                        :
-                                        null
-                                }
-                            </View>
+                <ScrollView horizontal={true}>
 
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.emp_name}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.ticket_id}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.ticket_title}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.issue_type_name}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.role_name}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.Assigned_empname}</Text>
-                                        <View style={styles.listcontentButtonview1}>
-                                            <TouchableOpacity
-                                                onPress={() => handlePreview(item.attachment)}
-                                                style={styles.listcontentviewbutton}>
-                                                <ViewIcon width={14} height={14} color={"#000"} />
-                                            </TouchableOpacity>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
+
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Employee Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Ticket ID</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Ticket Title</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Issue Type</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Assigned Department</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>Assigned Employee</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                    {
+                                        (data.userrole == 1 || data.userrole == 2) ?
+                                            <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text>
+                                            :
+                                            null
+                                    }
+                                </View>
+
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.emp_name}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.ticket_id}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.ticket_title}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.issue_type_name}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.role_name}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.Assigned_empname}</Text>
+                                            <View style={styles.listcontentButtonview1}>
+                                                <TouchableOpacity
+                                                    onPress={() => handlePreview(item.attachment)}
+                                                    style={styles.listcontentviewbutton}>
+                                                    <ViewIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+                                            <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+
+                                            {
+                                                (data.userrole == 1 || data.userrole == 2) ?
+                                                    <>
+                                                        <View style={styles.listcontentButtonview}>
+                                                            <TouchableOpacity style={styles.listcontenteditbutton}
+                                                                onPress={() => navigation.navigate('Edit Raise Ticket', { Id: item })}
+                                                            >
+                                                                <EditIcon width={14} height={14} color={"#000"} />
+                                                            </TouchableOpacity>
+                                                            <TouchableOpacity style={styles.listcontentdelbutton}
+                                                                onPress={() => HandleDelete(item.id)}
+                                                            >
+                                                                <DeleteIcon width={14} height={14} color={"#000"} />
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    </> :
+                                                    null
+                                            }
+
+
                                         </View>
-                                        <Text style={[styles.cell, styles.Status]}>{item.status}</Text>
+                                    ))
+                                )}
+
+                            </View>
+                        )
+                        }
+                    </View>
+
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => setModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                                <Text style={styles.modalText}>Reason:</Text>
+                                <TextInput
+                                    value={Reason}
+                                    onChangeText={(text) => setReason(text)}
+                                    style={styles.Reason}
+                                />
+                                <Text style={styles.errorTextDelete}>
+                                    {ReasonError}
+                                </Text>
+                                <View style={styles.modalButtonContainer}>
+                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
+                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
 
                                         {
-                                            (data.userrole == 1 || data.userrole == 2) ?
-                                                <>
-                                                    <View style={styles.listcontentButtonview}>
-                                                        <TouchableOpacity style={styles.listcontenteditbutton}
-                                                            onPress={() => navigation.navigate('Edit Raise Ticket', { Id: item })}
-                                                        >
-                                                            <EditIcon width={14} height={14} color={"#000"} />
-                                                        </TouchableOpacity>
-                                                        <TouchableOpacity style={styles.listcontentdelbutton}
-                                                            onPress={() => HandleDelete(item.id)}
-                                                        >
-                                                            <DeleteIcon width={14} height={14} color={"#000"} />
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </> :
-                                                null
+                                            DelData ?
+                                                <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                                <Text style={styles.modalDeleteButtonText}>Delete</Text>
                                         }
 
 
-                                    </View>
-                                ))
-                            )}
-
-                        </View>
-                    )
-                    }
-                </View>
-
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                            <Text style={styles.modalText}>Reason:</Text>
-                            <TextInput
-                                value={Reason}
-                                onChangeText={(text) => setReason(text)}
-                                style={styles.Reason}
-                            />
-                            <Text style={styles.errorTextDelete}>
-                                {ReasonError}
-                            </Text>
-                            <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
-
-
-                                    {
-                                        DelData ?
-                                            <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                            <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                    }
-
-
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
 
-            </ScrollView>
+                </ScrollView>
 
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
 
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
                         >
-                            {page}
-                        </Text>
-                    ))}
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
 
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
-            </View>
 
-            <LottieAlertSucess
+                <LottieAlertSucess
                     visible={isAlertVisible}
                     animationSource={require('../../../../../Assets/Alerts/tick.json')}
                     title={resMessage}
@@ -526,8 +526,8 @@ const TicketList = ({ navigation }) => {
                     title="Error While Fetching Data"
                 />
 
-        </View>
-
+            </View>
+        </ScrollView>
     )
 }
 

@@ -151,6 +151,10 @@ const AssignEmpSalary = ({ navigation }) => {
         setShowDatePicker1(true);
     };
 
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+
     const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
     const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
 
@@ -553,7 +557,7 @@ const AssignEmpSalary = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {startDate.toDateString()} &nbsp;
+                            {formatDate(startDate)} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -575,7 +579,7 @@ const AssignEmpSalary = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker1}>
-                            {endDate.toDateString()} &nbsp;
+                            {formatDate(endDate)} &nbsp;
                         </Text>
                         {showDatePicker1 && (
                             <DateTimePicker

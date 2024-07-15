@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 10,
-        width: '80%',
+        // width: '80%',
     },
 
     modalTextHeading: {

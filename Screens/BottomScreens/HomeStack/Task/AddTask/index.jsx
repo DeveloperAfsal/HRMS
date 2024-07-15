@@ -346,14 +346,14 @@ const AddTask = ({ navigation }) => {
             setDesErr('');
         }
 
-        if (!docFile) {
-            setDocFileErr('Choose File');
-            Alert.alert('Missing', "Check The Attachment Field");
-            setLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('Choose File');
+        //     Alert.alert('Missing', "Check The Attachment Field");
+        //     setLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
         try {
 
@@ -743,7 +743,9 @@ const AddTask = ({ navigation }) => {
                     <TextInput
                         value={des}
                         onChangeText={(txt) => setDes(txt)}
-                        style={styles.inputs}
+                        style={styles.inputs1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>

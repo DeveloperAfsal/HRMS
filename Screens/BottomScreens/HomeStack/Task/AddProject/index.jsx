@@ -35,6 +35,15 @@ const AddProject = ({ navigation }) => {
     const [ccompany, setCcompany] = useState('');
     const [ccontact, setCcontact] = useState('');
     const [cemail, setCemail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(true);
+
+    const handleEmailChange = (txt) => {
+        setCemail(txt);
+        // Email validation regular expression
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsValidEmail(emailRegex.test(txt));
+    };
+
     const [ccity, setCcity] = useState('');
     const [cstate, setCstate] = useState('');
     const [cnameErr, setCnameErr] = useState('');
@@ -197,6 +206,7 @@ const AddProject = ({ navigation }) => {
         setCname('');
         setCcompany('');
         setCemail('');
+        setCcity('');
         setCcontact('');
         setCemail('');
         setCstate('');
@@ -320,6 +330,16 @@ const AddProject = ({ navigation }) => {
         if (!cemail) {
             setCemailErr('Select Client Email');
             Alert.alert('Missing', "Check The Client Email");
+            SetLoad(false);
+            return;
+        } else {
+            setCemailErr('');
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(cemail)) {
+            setCemailErr('Invalid email format');
+            Alert.alert('Invalid Email', "Please enter a valid email address");
             SetLoad(false);
             return;
         } else {
@@ -684,7 +704,9 @@ const AddProject = ({ navigation }) => {
                     <TextInput
                         value={des}
                         onChangeText={(txt) => setDes(txt)}
-                        style={styles.inputs}
+                        style={styles.inputs1}
+                        textAlignVertical="top"
+                        multiline={true}
                     />
 
                     <Text style={styles.errorText}>
@@ -740,6 +762,7 @@ const AddProject = ({ navigation }) => {
                         value={ccontact}
                         onChangeText={(txt) => setCcontact(txt)}
                         style={styles.inputs}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -752,7 +775,7 @@ const AddProject = ({ navigation }) => {
 
                     <TextInput
                         value={cemail}
-                        onChangeText={(txt) => setCemail(txt)}
+                        onChangeText={handleEmailChange}
                         style={styles.inputs}
                     />
 

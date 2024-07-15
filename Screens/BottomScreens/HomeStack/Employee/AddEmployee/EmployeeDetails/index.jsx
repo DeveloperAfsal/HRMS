@@ -128,12 +128,12 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
     const [startDate, setStartDate] = useState(null);
 
     const handleDateChange = (event, date) => {
-        if (date !== undefined) {
+        if (event.type === "set" && date) {
             setStartDate(date);
             const formattedStartDate = formatDate(date);
             handleFieldsChange('dateOfJoining', formattedStartDate);
         }
-        setShowDatePicker(Platform.OS === 'ios');
+        setShowDatePicker(false);
     };
 
     const showDatepicker = () => {
@@ -176,12 +176,18 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
     const [startDate1, setStartDate1] = useState(null);
 
     const handleDateChange1 = (event, date) => {
-        if (date !== undefined) {
+        // if (date !== undefined) {
+        //     setStartDate1(date);
+        //     const formattedStartDate1 = formatDate(date);
+        //     handleFieldsChange('confirmationDate', formattedStartDate1);
+        // }
+        // setShowDatePicker1(Platform.OS === 'ios');
+        if (event.type === "set" && date) {
             setStartDate1(date);
             const formattedStartDate1 = formatDate(date);
             handleFieldsChange('confirmationDate', formattedStartDate1);
         }
-        setShowDatePicker1(Platform.OS === 'ios');
+        setShowDatePicker1(false);
     };
 
     const showDatepicker1 = () => {
@@ -202,12 +208,18 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
     const [startDate2, setStartDate2] = useState(null);
 
     const handleDateChange2 = (event, date) => {
-        if (date !== undefined) {
+        // if (date !== undefined) {
+        //     setStartDate2(date);
+        //     const formattedStartDate2 = formatDate(date);
+        //     handleFieldsChange('lastWorkingDay', formattedStartDate2);
+        // }
+        // setShowDatePicker2(Platform.OS === 'ios');
+        if (event.type === "set" && date) {
             setStartDate2(date);
             const formattedStartDate2 = formatDate(date);
             handleFieldsChange('lastWorkingDay', formattedStartDate2);
         }
-        setShowDatePicker2(Platform.OS === 'ios');
+        setShowDatePicker2(false);
     };
 
     const showDatepicker2 = () => {
@@ -260,7 +272,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                 <Text style={styles.StatusTouchableText}>
-                    {Employee.employeeCategory && Employee.employeeCategory.length > 0 ? Employee.employeeCategory : "Selected Category Type"}
+                    {Employee.employeeCategory && Employee.employeeCategory.length > 0 ? Employee.employeeCategory : "Select Category Type"}
                 </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
@@ -279,7 +291,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (Employee.employeeCategory.length == "0" ? "Selected Category Type" : null) : null}
+                {validation ? (Employee.employeeCategory.length == "0" ? "Select Category Type" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -485,7 +497,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
 
             <TouchableOpacity onPress={toggleDropdownPF} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.providentFund || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.providentFund || "Select Field"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -564,7 +576,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
 
             <TouchableOpacity onPress={toggleDropdownESI} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.esi || "Selected Field"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.esi || "Select Field"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>

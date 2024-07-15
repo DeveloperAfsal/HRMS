@@ -969,16 +969,18 @@ const CustomDrawerContent = ({ navigation }) => {
                                     )}
 
                                     {checkedNames.Payroll.includes('Payslip_list') && (
-                                        < DrawerItem
-                                            label="Payslip List"
-                                            onPress={() => navigation.navigate('Payslip List')}
-                                        />
+                                        (data.userrole == "1" || data.userrole == "2") ?
+                                            < DrawerItem
+                                                label="Payslip List"
+                                                onPress={() => navigation.navigate('Payslip List')}
+                                            /> : null
                                     )}
 
-                                    < DrawerItem
-                                        label="Employee Payslip"
-                                        onPress={() => navigation.navigate('Employee Payslip')}
-                                    />
+                                    {(data.userrole == "1" || data.userrole == "2") ? null :
+                                        < DrawerItem
+                                            label="Employee Payslip"
+                                            onPress={() => navigation.navigate('Employee Payslip')}
+                                        />}
 
                                 </>
                             )}

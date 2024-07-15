@@ -111,7 +111,7 @@ const PaySlip = ({ route, navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Payslip_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -192,7 +192,7 @@ const PaySlip = ({ route, navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Payslip_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -438,6 +438,8 @@ const PaySlip = ({ route, navigation }) => {
                             value={Reason}
                             onChangeText={(text) => setReason(text)}
                             style={styles.Reason}
+                            multiline={true}
+                            textAlignVertical="top"
                         />
                         <Text style={styles.errorTextDelete}>
                             {ReasonError}
@@ -448,13 +450,11 @@ const PaySlip = ({ route, navigation }) => {
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
-
                                 {
                                     DelData ?
                                         <ActivityIndicator size={"small"} color={"#fff"} /> :
                                         <Text style={styles.modalDeleteButtonText}>Delete</Text>
                                 }
-
 
                             </TouchableOpacity>
                         </View>

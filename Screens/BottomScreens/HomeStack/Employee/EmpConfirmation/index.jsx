@@ -247,7 +247,7 @@ const EmpConfirmation = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Employee ID', 'Employee Name', 'Designation', 'Date Of Joining', 'Confirmation', 'Status', 'Reason', 'Action'];
+        const tableHead = ['S.No', 'Employee ID', 'Employee Name', 'Designation', 'Date Of Joining', 'Confirmation', 'Status', 'Reason'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
             rowData.emp_id,
@@ -257,7 +257,6 @@ const EmpConfirmation = () => {
             rowData.confirmation_date,
             rowData.con_status,
             rowData.conf_reason,
-            '-'
         ]);
 
         const htmlContent = `
