@@ -110,7 +110,7 @@ const AssignEmpList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Assign_employee_salary_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -194,7 +194,7 @@ const AssignEmpList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Assign Employee Salary',
+                fileName: 'Assign_employee_salary_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
