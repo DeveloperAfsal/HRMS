@@ -151,8 +151,9 @@ const AssignEmpSalary = ({ navigation }) => {
         setShowDatePicker1(true);
     };
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
+
 
     // status
 
@@ -443,6 +444,31 @@ const AssignEmpSalary = ({ navigation }) => {
         }, 3000);
     };
 
+    const Onrefresh = () => {
+        setSelectedDepartmentsId('');
+        setSelectedDepartments('');
+        setSelectedMemberId('');
+        setSelectedMember('');
+        setStartDate(new Date());
+        setEndDate(new Date());
+        setCtc('');
+        setGrossPay('');
+        setNetPay('');
+        setBasic('');
+        setHra('');
+        setCAllowance('');
+        setTAllowance('');
+        setMAllowance('');
+        setOAllowance('');
+        setVariable('');
+        setPf('');
+        setEpf('');
+        setEsi('');
+        setSAdvance('');
+        setODeduction('');
+        setSelectedStatus(null);
+    }
+
     return (
 
         <ScrollView>
@@ -573,6 +599,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={ctc}
                         onChangeText={(txt) => setCtc(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -587,6 +614,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={grossPay}
                         onChangeText={(txt) => setGrossPay(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -601,6 +629,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={netPay}
                         onChangeText={(txt) => setNetPay(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -615,6 +644,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={basic}
                         onChangeText={(txt) => setBasic(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -629,6 +659,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={hra}
                         onChangeText={(txt) => setHra(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -643,6 +674,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={cAllowance}
                         onChangeText={(txt) => setCAllowance(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -657,6 +689,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={tAllowance}
                         onChangeText={(txt) => setTAllowance(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -671,6 +704,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={mAllowance}
                         onChangeText={(txt) => setMAllowance(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -685,6 +719,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={oAllowance}
                         onChangeText={(txt) => setOAllowance(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -699,6 +734,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={variable}
                         onChangeText={(txt) => setVariable(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -713,6 +749,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={pf}
                         onChangeText={(txt) => setPf(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -727,6 +764,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={epf}
                         onChangeText={(txt) => setEpf(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -741,6 +779,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={esi}
                         onChangeText={(txt) => setEsi(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -755,6 +794,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={sAdvance}
                         onChangeText={(txt) => setSAdvance(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -769,6 +809,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         value={oDeduction}
                         onChangeText={(txt) => setODeduction(txt)}
                         style={styles.ShiftSlotTextInput}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
@@ -781,7 +822,7 @@ const AssignEmpSalary = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Selected Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -822,7 +863,7 @@ const AssignEmpSalary = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => Onrefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

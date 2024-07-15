@@ -53,6 +53,7 @@ const EditEmployee = ({ route, navigation }) => {
     }
 
     const [selectedImage, setSelectedImage] = useState([]);
+    const [documentId, setDocumentId] = useState([]);
     const [documentType, setDocumentType] = useState([]);
     const [documentName, setDocumentName] = useState([]);
     const [documentFile, setDocumentFile] = useState([]);
@@ -63,8 +64,6 @@ const EditEmployee = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [employee, setEmployee] = useState(null);
     const [employeeDoc, setEmployeeDoc] = useState([]);
-    console.log(employeeDoc,"employeeDoc")
-
     const [desg, setDesg] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
@@ -87,6 +86,7 @@ const EditEmployee = ({ route, navigation }) => {
                 setEmployee(resData);
                 setEmployeeDoc(resDoc);
                 setLoading(false);
+
             } catch (error) {
                 console.log(error.message);
                 setLoading(false);
@@ -250,6 +250,8 @@ const EditEmployee = ({ route, navigation }) => {
                             documentFile={documentFile}
                             documentName={documentName}
                             documentType={documentType}
+                            documentId={documentId}
+                            setDocumentId={setDocumentId}
                             setDocuments={setDocuments}
                             setDocumentType={setDocumentType}
                             setDocumentName={setDocumentName}
@@ -263,6 +265,11 @@ const EditEmployee = ({ route, navigation }) => {
                             showFields={showFields}
                             formattedStartDate={formattedStartDate}
                             desg={desg}
+                            // filesets={filesets}
+                            // documentIdget={documentIds}
+                            // selectedDocumentTypes={selectedDocumentTypes}
+                            // documentNames={documentNames}
+                            // selectedFiles={selectedFiles}
                         />
                     }
 

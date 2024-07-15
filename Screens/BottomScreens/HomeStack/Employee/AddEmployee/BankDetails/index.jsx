@@ -48,6 +48,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
                 style={styles.input}
                 value={Employee.bankAccountNumber}
                 onChangeText={(text) => handleFieldsChange('bankAccountNumber', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>

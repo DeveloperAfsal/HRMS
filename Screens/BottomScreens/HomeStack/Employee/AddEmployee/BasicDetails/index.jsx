@@ -12,7 +12,7 @@ import axios from "axios";
 import CheckBox from '@react-native-community/checkbox';
 
 
-const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedImageErr, validation }) => {
+const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedImageErr, validation, setDob }) => {
 
     const dispatch = useDispatch();
 
@@ -167,15 +167,48 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
 
     // handleDateChange
 
+    // const [showDatePicker, setShowDatePicker] = useState(false);
+    // const [selectedDate, setSelectedDate] = useState(new Date());
+
+    // const handleDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setSelectedDate(date);
+    //     }
+    //     const formattedStartDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
+    //     handleFieldsChange('dob', formattedStartDate);
+    //     setShowDatePicker(Platform.OS === 'ios');
+    // };
+
+    // const showDatepicker = () => {
+    //     setShowDatePicker(true);
+    // };
+
+    // const formattedDOB = Employee.dob
+    //     ? new Date(Employee.dob).toISOString().slice(0, 10)
+    //     : selectedDate.toISOString().slice(0, 10);
+
+    // useEffect(() => {
+    //     setDob(formattedDOB);
+    // }, [formattedDOB])
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
-            setSelectedDate(date);
+            setStartDate(date);
+            const formattedStartDate = formatDate(date);
+            handleFieldsChange('dob', formattedStartDate);
         }
-        const formattedStartDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-        handleFieldsChange('dob', formattedStartDate);
         setShowDatePicker(Platform.OS === 'ios');
     };
 
@@ -183,7 +216,14 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
         setShowDatePicker(true);
     };
 
-    const formattedDOB = Employee.dob ? new Date(Employee.dob).toDateString() : selectedDate.toDateString();
+    const formattedDOB = Employee.dob
+        ? formatDate(new Date(Employee.dob))
+        : formatDate(startDate);
+
+    useEffect(() => {
+        setDob(formattedDOB);
+    }, [formattedDOB]);
+
 
     //    
 
@@ -197,6 +237,13 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             handleFieldsChange('permanentAddress', '');
         }
     };
+
+    const getFormattedTodayDate = () => {
+        const today = new Date();
+        return today.toISOString().slice(0, 10);
+    };
+
+    const todayFormatted = getFormattedTodayDate();
 
 
     return (
@@ -385,7 +432,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
                 Date Of Birth
             </Text>
 
-            <View style={styles.inputs}>
+            {/* <View style={styles.inputs}>
                 <Text onPress={showDatepicker}>
                     {formattedDOB}
                 </Text>
@@ -395,12 +442,29 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
                         mode="date"
                         display="default"
                         onChange={handleDateChange}
+                        maximumDate={new Date()}
+                    />
+                )}
+            </View> */}
+
+            <View style={styles.inputs} >
+                <Text onPress={showDatepicker}>
+                    {/* {startDate.toDateString()} &nbsp; */}
+                    {/* {startDate ? startDate.toDateString() : "Select Date Of Birth"} &nbsp; */}
+                    {startDate ? formatDate(startDate) : Employee.dob ? Employee.dob : "Select Date Of Birth"} &nbsp;
+                </Text>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={startDate || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
                     />
                 )}
             </View>
 
             <Text style={styles.errorText}>
-                { }
+                {validation ? (!Employee.dob ? "Date Of Birth Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>

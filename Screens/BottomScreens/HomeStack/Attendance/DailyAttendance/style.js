@@ -62,13 +62,13 @@ const styles = StyleSheet.create({
     inputs: {
         borderWidth: 1,
         borderColor: '#A4CED8',
-        width: '40%',
+        width: '30%',
         height: 42,
         borderRadius: 7,
-        paddingHorizontal: '5%',
-        marginHorizontal: '5%',
-        marginBottom: '3%',
+        // paddingHorizontal: '5%',
+        margin: '5%',
         justifyContent: 'center',
+        alignItems:'center'
     },
 
     ButtonContainer: {

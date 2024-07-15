@@ -107,7 +107,8 @@ const ViewJob = ({ navigation, route }) => {
     const openEditModal = (Item) => {
         setEditedDesignation(Item.designation);
         setEditedVacancies(Item.no_of_vacancies);
-        setEditedDes(Item.description);
+        const plainText = Item.description.replace(/<\/?[^>]+(>|$)/g, ""); 
+        setEditedDes(plainText);
         setEditModalVisible(true);
     };
 
@@ -267,10 +268,10 @@ const ViewJob = ({ navigation, route }) => {
                                 {ReasonError}
                             </Text>
                             <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton}
+                                <TouchableOpacity style={styles.modalCancelButton1}
                                     onPress={cancelDelete}
                                 >
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}
                                 >
@@ -330,7 +331,8 @@ const ViewJob = ({ navigation, route }) => {
                             <TextInput
                                 value={editedDes}
                                 onChangeText={(text) => setEditedDes(text)}
-                                style={styles.modalInput}
+                                style={styles.modalInput1}
+                                multiline={true}
                             />
 
                             <Text style={styles.errorText}>

@@ -80,17 +80,19 @@ const TLOtRequest = () => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Type', 'Location', 'Shift Slot', 'From Time', 'To Time', 'Total Hours', 'Reason','status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.emp_name,
+            rowData.e_name,
             rowData.departmentName,
-            rowData.category_name,
+            rowData.request_type_name,
+            rowData.request_location,
             rowData.shift_slot,
-            rowData.permission_date,
-            rowData.permission_timefrom,
-            rowData.permission_timeto,
-            rowData.leave_reason,
+            rowData.request_fromtime,
+            rowData.request_totime,
+            rowData.total_hrs,
+            rowData.request_reason,
+            rowData.request_status,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -102,7 +104,7 @@ const TLOtRequest = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/TLot_request_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -124,17 +126,19 @@ const TLOtRequest = () => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Name', 'Department', 'Category', 'Shift Slot', 'From Date', 'From Time', 'To Time', 'Reason'];
+        const tableHead = ['S.No', 'Name', 'Department', 'Type', 'Location', 'Shift Slot', 'From Time', 'To Time', 'Total Hours', 'Reason','status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.emp_name,
+            rowData.e_name,
             rowData.departmentName,
-            rowData.category_name,
+            rowData.request_type_name,
+            rowData.request_location,
             rowData.shift_slot,
-            rowData.permission_date,
-            rowData.permission_timefrom,
-            rowData.permission_timeto,
-            rowData.leave_reason,
+            rowData.request_fromtime,
+            rowData.request_totime,
+            rowData.total_hrs,
+            rowData.request_reason,
+            rowData.request_status,
         ]);
 
         const htmlContent = `
@@ -174,7 +178,7 @@ const TLOtRequest = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'TLot_request_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -290,163 +294,163 @@ const TLOtRequest = () => {
     };
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            <ScrollView horizontal={true}>
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
+                    />
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
+                    </View>
+                </View>
 
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
-                        <View>
+                <ScrollView horizontal={true}>
 
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Department</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>Type</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Location</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Shift Slot</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>Total Hours</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
+
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Department</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Type</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Location</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Shift Slot</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>Total Hours</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
+                                </View>
+
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.e_name}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.departmentName}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.request_type_name}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.request_location}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.shift_slot}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.request_date}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.request_fromtime}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.request_totime}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.total_hrs}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.request_reason}</Text>
+                                            {
+                                                item.request_status === "Pending" ?
+                                                    <View style={styles.listcontentButtonview}>
+                                                        <TouchableOpacity style={styles.listcontenteditbutton}
+                                                            onPress={() => HandleConfirm(item)}
+                                                        >
+                                                            <TickIcon width={14} height={14} />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity style={styles.listcontentdelbutton}
+                                                            onPress={() => HandleCancel(item)}
+                                                        >
+                                                            <CloseIcon width={14} height={14} />
+                                                        </TouchableOpacity>
+                                                    </View> :
+                                                    <Text style={[styles.cell, styles.Status]}>{item.request_status}</Text>
+                                            }
+                                        </View>
+                                    ))
+                                )}
+
                             </View>
 
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.e_name}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.departmentName}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.request_type_name}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.request_location}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.shift_slot}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.request_date}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.request_fromtime}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.request_totime}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.total_hrs}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.request_reason}</Text>
-                                        {
-                                            item.request_status === "Pending" ?
-                                                <View style={styles.listcontentButtonview}>
-                                                    <TouchableOpacity style={styles.listcontenteditbutton}
-                                                        onPress={() => HandleConfirm(item)}
-                                                    >
-                                                        <TickIcon width={14} height={14} />
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity style={styles.listcontentdelbutton}
-                                                        onPress={() => HandleCancel(item)}
-                                                    >
-                                                        <CloseIcon width={14} height={14} />
-                                                    </TouchableOpacity>
-                                                </View> :
-                                                <Text style={[styles.cell, styles.Status]}>{item.request_status}</Text>
-                                        }
-                                    </View>
-                                ))
-                            )}
+                        )
+                        }
+                    </View>
 
-                        </View>
+                </ScrollView>
 
-                    )
-                    }
-                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
 
-            </ScrollView>
-
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
-
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
                         >
-                            {page}
-                        </Text>
-                    ))}
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
 
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
+
+                <LottieAlertSucess
+                    visible={isAlertVisible}
+                    animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                    title={resMessage}
+                />
+
+                <LottieAlertError
+                    visible={isAlertVisible1}
+                    animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                    title={resMessageFail}
+                />
+
+                <LottieCatchError
+                    visible={isAlertVisible2}
+                    animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                    title="Error While Fetching Data"
+                />
+
             </View>
-
-            <LottieAlertSucess
-                visible={isAlertVisible}
-                animationSource={require('../../../../../Assets/Alerts/tick.json')}
-                title={resMessage}
-            />
-
-            <LottieAlertError
-                visible={isAlertVisible1}
-                animationSource={require('../../../../../Assets/Alerts/Close.json')}
-                title={resMessageFail}
-            />
-
-            <LottieCatchError
-                visible={isAlertVisible2}
-                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
-                title="Error While Fetching Data"
-            />
-
-        </View>
-
+        </ScrollView>
     )
 }
 

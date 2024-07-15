@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import styles from "../style";
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../../Assets/Icons/leftarrow.svg";
@@ -26,8 +26,12 @@ const Documents = ({
     documents,
     setSelectedImageErr,
     setValidation,
-    navigation
+    navigation,
+    dob,
+    doj
 }) => {
+
+    console.log(documents, "documents")
 
     const dispatch = useDispatch();
 
@@ -49,6 +53,8 @@ const Documents = ({
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [documentList, setDocumentList] = useState([]);
+
+    const [load, setLoad] = useState(false);
 
     const [docFile, setDocFile] = useState();
     const [docFileErr, setDocFileErr] = useState();
@@ -105,18 +111,12 @@ const Documents = ({
             setDocumentFile(prevDocumentFiles => [...prevDocumentFiles, docFile[0]]);
 
             setSelectedDocument([]);
+            setSelectedDocumentId([]);
             setDocName('');
             setDocFile('');
 
         } else {
-            if (selectedDocument.length == "0") {
-                setSelectedDocumentErr('Select Document Type');
-            } else {
-                setSelectedDocumentErr(null);
-            }
-            setDocNameErr('Document Name Required');
-            setDocFileErr('Document File Required');
-            Alert.alert('Data not addded')
+            Alert.alert('Data not addded', "Add All the Fields")
         }
     };
 
@@ -153,28 +153,14 @@ const Documents = ({
 
     const HandleSubmit = async () => {
 
+        setLoad(true);
         setValidation(true);
-        setSelectedImageErr('Image Field Required')
+
+        // setSelectedImageErr('Image Field Required')
 
         const formData = new FormData();
 
         //append data
-
-        // if (Employee.employeeId && Employee.firstName && Employee.lastName && Employee.gender && Employee.status && Employee.phoneNumber
-        //     && Employee.whatsappNumber && Employee.email && Employee.dob && Employee.currentAddress && Employee.permanentAddress &&
-        //     Employee.parentName && Employee.maritalStatus && Employee.spouseName && Employee.aadharNumber && Employee.panNumber && Employee.selectedemployeeCategory
-        //     && Employee.dateOfJoining && Employee.probationPeriod && Employee.confirmationDate && Employee.employeeAgreementPeriod &&
-        //     Employee.noticePeriod && Employee.ctc && Employee.grossSalary && Employee.netSalary && Employee.lastWorkingDay && Employee.providentFund &&
-        //     Employee.esi && Employee.esiNumber && Employee.employeeEsiContribution &&
-        //     Employee.employerEsiContribution && Employee.selectedRoleId && Employee.designation && Employee.selectedsupervisorId &&
-        //     Employee.officialEmail && Employee.password && Employee.checkinCheckoutId && Employee.overtime && Employee.lateAllowed &&
-        //     Employee.permissionAllowed && Employee.bankAccountNumber && Employee.bankName &&
-        //     Employee.bankBranch && Employee.ifscCode && Employee.accountType
-        // ) {
-
-        // } else {
-        //     Alert.alert('Alert', "check All The Mandatory Fields")
-        // }
 
         formData.append('employee_id', Employee.employeeId);
 
@@ -200,23 +186,24 @@ const Documents = ({
         formData.append('mobile_number', Employee.phoneNumber);
         formData.append('whatsapp_number', Employee.whatsappNumber);
         formData.append('email_id', Employee.email);
-        formData.append('date_of_birth', Employee.dob);
+        formData.append('date_of_birth', dob);
         formData.append('current_address', Employee.currentAddress);
         formData.append('permanent_address', Employee.permanentAddress);
         formData.append('parent_guardian_name', Employee.parentName);
         formData.append('marital_status', Employee.maritalStatus);
-        formData.append('spouse_name', Employee.spouseName);
+
+        if (Employee.maritalStatus === "Married") {
+            formData.append('spouse_name', Employee.spouseName);
+        } else {
+            formData.append('spouse_name', "-");
+        }
+
         formData.append('aadhar_no', Employee.aadharNumber);
         formData.append('pan_no', Employee.panNumber);
 
         formData.append('employee_category', Employee.selectedemployeeCategory);
 
-
-        if (!Employee.dateOfJoining) {
-            formData.append('doj', "-");
-        } else {
-            formData.append('doj', Employee.dateOfJoining);
-        }
+        formData.append('doj', doj);
 
         if (!Employee.probationPeriod) {
             formData.append('probation_period', "-");
@@ -224,7 +211,11 @@ const Documents = ({
             formData.append('probation_period', Employee.probationPeriod);
         }
 
-        formData.append('confiramation_date', Employee.confirmationDate);
+        if (!Employee.confirmationDate) {
+            formData.append('confiramation_date', '');
+        } else {
+            formData.append('confiramation_date', Employee.confirmationDate);
+        }
 
         if (!Employee.employeeAgreementPeriod) {
             formData.append('employee_agree_period', "-");
@@ -256,7 +247,11 @@ const Documents = ({
             formData.append('net_salary', Employee.netSalary);
         }
 
-        formData.append('last_working_day', Employee.lastWorkingDay);
+        if (!Employee.lastWorkingDay) {
+            formData.append('last_working_day', '-');
+        } else {
+            formData.append('last_working_day', Employee.lastWorkingDay);
+        }
 
         if (!Employee.providentFund) {
             formData.append('emp_pf', "-");
@@ -282,6 +277,10 @@ const Documents = ({
             } else {
                 formData.append('employer_pf_contribution', Employee.employerPfContribution);
             }
+        } else {
+            formData.append('uan_number', "-");
+            formData.append('employee_pf_contribution', "-");
+            formData.append('employer_pf_contribution', "-");
         }
 
         if (!Employee.esi) {
@@ -308,6 +307,10 @@ const Documents = ({
             } else {
                 formData.append('employer_esi_contribution', Employee.employerEsiContribution);
             }
+        } else {
+            formData.append('esi_number', "-");
+            formData.append('employee_esi_contribution', "-");
+            formData.append('employer_esi_contribution', "-");
         }
 
         if (!Employee.selectedRoleId) {
@@ -422,18 +425,19 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                // handleShowAlert(response);
-                Alert.alert("Successfull", responsedata.message)
-                navigation.navigate('Employee List');
-                setValidation(false);
+                setLoad(false);
+                handleShowAlert(responsedata);
+                // Alert.alert("Successfull", responsedata.message)
             } else {
-                // handleShowAlert1(responsedata);
-                Alert.alert("Failed", responsedata.message)
+                setLoad(false);
+                handleShowAlert1(responsedata);
+                // Alert.alert("Failed", responsedata.message)
             }
 
         } catch (error) {
-            Alert.alert('Failed to add Employee', error)
-            // handleShowAlert2();
+            // Alert.alert('Failed to add Employee', error);
+            setLoad(false);
+            handleShowAlert2();
         }
 
     }
@@ -453,6 +457,7 @@ const Documents = ({
         setTimeout(() => {
             setAlertVisible(false);
             navigation.navigate('Employee List');
+            setValidation(false);
         }, 2500);
     };
 
@@ -605,9 +610,12 @@ const Documents = ({
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.NextButton} onPress={HandleSubmit}>
-                    <Text style={styles.NextButtonText}>
-                        Submit
-                    </Text>
+                    {
+                        load ? <ActivityIndicator size={"small"} color={"#fff"} /> :
+                            <Text style={styles.NextButtonText}>
+                                Submit
+                            </Text>
+                    }
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.PrevButton} onPress={HandleCancel}>

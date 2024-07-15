@@ -2,6 +2,23 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    modalCancelButton1: {
+        // backgroundColor: '#ccc',
+        borderColor:'#0A62F1',
+        borderWidth:1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
+    },
+
     errorText: {
         color: "red",
         paddingTop: 10,
@@ -170,6 +187,19 @@ const styles = StyleSheet.create({
         borderWidth:0.5,
         borderColor:"#515151",
         height: 42,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: "5%",
+        paddingLeft: "5%"
+        
+    },
+    modalInput1:{
+        paddingLeft:20,
+        borderRadius:7,
+        borderWidth:0.5,
+        borderColor:"#515151",
+        // height: 42,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

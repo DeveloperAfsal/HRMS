@@ -313,6 +313,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                 style={styles.input}
                 value={Employee.lateAllowed}
                 onChangeText={(text) => handleFieldsChange('lateAllowed', text)}
+                 keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -327,6 +328,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                 style={styles.input}
                 value={Employee.permissionAllowed}
                 onChangeText={(text) => handleFieldsChange('permissionAllowed', text)}
+                 keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>

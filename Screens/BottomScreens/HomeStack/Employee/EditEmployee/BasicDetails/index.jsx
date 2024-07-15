@@ -183,15 +183,26 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
     // handleDateChange
 
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
             setSelectedDate(date);
+            const formattedStartDate = formatDate(date);
+            updateEmployeeField('dob', formattedStartDate);
         }
-        const formattedStartDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-        updateEmployeeField('dob', formattedStartDate);
+        // const formattedStartDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
+        // updateEmployeeField('dob', formattedStartDate);
         setShowDatePicker(Platform.OS === 'ios');
     };
 
@@ -199,7 +210,9 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
         setShowDatePicker(true);
     };
 
-    const formattedDOB = Employee.dob ? new Date(Employee.dob).toDateString() : selectedDate.toDateString();
+    const formattedDOB = Employee.dob
+        ? formatDate(new Date(Employee.dob))
+        : formatDate(selectedDate);
 
     //    
 
@@ -413,7 +426,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, employee,
 
                     <View style={styles.inputs}>
                         <Text onPress={showDatepicker}>
-                            {employee.dob}
+                            {formattedDOB}
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker

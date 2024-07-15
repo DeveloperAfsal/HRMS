@@ -13,11 +13,14 @@ import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
+
 const Documents = ({
     navigation,
     onprevBankDetails,
     selectedImage,
     setSelectedImage,
+    setDocumentId,
+    documentId,
     documentFile,
     documentName,
     documentType,
@@ -33,9 +36,37 @@ const Documents = ({
     formattedStartDate,
     desg,
     showFields,
+    // selectedFiles,
+    // documentNames,
+    // selectedDocumentTypes,
+    // documentIdget,
 }) => {
 
-    console.log(documentType,"documentType")
+    const [filesets, setFilesets] = useState([]);
+
+    useEffect(() => {
+        if (employeeDoc && employeeDoc.length > 0) {
+            const documents = employeeDoc.map(doc => ({
+                documentId: doc.id,
+                documentType: doc.document_type_id,
+                selecteddocumentType: doc.document_type_id,
+                documentName: doc.document_name,
+                selectedFile: `${doc.document_img}`,
+            }));
+
+            setFilesets(documents);
+        }
+    }, [])
+
+    console.log(filesets, "filesets")
+
+    const documentIdget = filesets.map(fileSet => fileSet.documentId);
+    const selectedDocumentTypes = filesets.map(fileSet => fileSet.selecteddocumentType);
+    const documentNames = filesets.map(fileSet => fileSet.documentName);
+    const selectedFiles = filesets.map(fileSet => fileSet.selectedFile);
+
+    console.log(documentIdget, "documentIdget")
+    console.log(selectedFiles, "selectedFiles")
 
     // data from redux store 
 
@@ -230,6 +261,7 @@ const Documents = ({
         }
     };
 
+
     // Handle Submit
 
     const HandleSubmit = async () => {
@@ -244,19 +276,22 @@ const Documents = ({
 
         formData.append('employee_id', employee.hrms_emp_id);
 
-        if (selectedImage.length > 0) {
-            selectedImage.map((selectedImg, index) => {
-                const imageUriParts = selectedImg.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`emp_profile`, {
-                    uri: selectedImg,
-                    name: imageName,
-                    type: 'image/jpeg',
+        if (selectedImage) {
+            if (selectedImage.length > 0) {
+                selectedImage.map((selectedImg, index) => {
+                    const imageUriParts = selectedImg.split('/');
+                    const imageName = imageUriParts[imageUriParts.length - 1];
+                    formData.append(`emp_profile`, {
+                        uri: selectedImg,
+                        name: imageName,
+                        type: 'image/jpeg',
+                    });
                 });
-            });
-        }
-        else {
-            formData.append('emp_profile', employee.profile_img);
+            } else {
+                formData.append('old_profileimg', employee.profile_img);
+            }
+        } else {
+            formData.append('old_profileimg', employee.profile_img);
         }
 
         formData.append('first_name', employee.first_name);
@@ -296,7 +331,7 @@ const Documents = ({
         formData.append('probation_period', employee.probation_period);
 
         if (!employee.confirmation_date) {
-            formData.append('confiramation_date', "-");
+            formData.append('confiramation_date', "");
         } else {
             formData.append('confiramation_date', employee.confirmation_date);
         }
@@ -414,7 +449,7 @@ const Documents = ({
         if (showFields) {
             formData.append('new_position', desg);
         } else {
-            formData.append('new_position', "-");
+            formData.append('new_position', employee.department_name);
         }
 
 
@@ -452,59 +487,98 @@ const Documents = ({
         formData.append('ifsc_code', employee.ifsc_code);
         formData.append('account_type', employee.ac_type);
 
-        if (documentType.length > 0) {
-            documentType.map((file, index) => {
-                formData.append('emp_document_type[]', file);
-            });
-        } else {
-            formData.append('emp_document_type[]', documentType);
-        }
+        // if (selectedDocumentTypes) {
+        //     if (selectedDocumentTypes.length > 0) {
+        //         selectedDocumentTypes.map((file, index) => {
+        //             formData.append('emp_document_type[]', file);
+        //         });
+        //     } else {
+        //         formData.append('emp_document_type[]', selectedDocumentTypes);
+        //     }
+        // } else {
+        //     formData.append('emp_document_type[]', selectedDocumentTypes);
+        // }
 
-        if (documentName.length > 0) {
-            documentName.map((file, index) => {
-                formData.append('emp_document_name[]', file);
-            });
-        } else {
-            formData.append('emp_document_name[]', documentName);
-        }
+        // if (documentNames) {
+        //     if (documentNames.length > 0) {
+        //         documentNames.map((file, index) => {
+        //             formData.append('emp_document_name[]', file);
+        //         });
+        //     } else {
+        //         formData.append('emp_document_name[]', documentNames);
+        //     }
+        // } else {
+        //     formData.append('emp_document_name[]', documentNames);
+        // }
 
-        if (documentFile.length > 0) {
-            documentFile.map((file, index) => {
-                let uri, name;
-                if (typeof file === 'string') {
-                    const imageUriParts = file.split('/');
-                    name = imageUriParts[imageUriParts.length - 1];
-                    uri = file;
-                } else {
-                    name = file.name;
-                    uri = file.uri;
-                }
-                formData.append(`emp_document_image[]`, {
-                    uri: uri,
-                    name: name,
-                    type: 'image/jpeg',
-                });
-            });
-        } else {
-            formData.append('emp_document_image[]', documentFile);
-        }
+        // if (selectedFiles.length > 0) {
+        //     selectedFiles.map((file, index) => {
+        //         let uri, name;
+        //         if (typeof file === 'string') {
+        //             const imageUriParts = file.split('/');
+        //             name = imageUriParts[imageUriParts.length - 1];
+        //             uri = file;
+        //         } else {
+        //             name = file.name;
+        //             uri = file.uri;
+        //         }
+        //         formData.append(`emp_document_image[]`, {
+        //             uri: uri,
+        //             name: name,
+        //             type: 'image/jpeg',
+        //         });
+        //     });
+        // } else {
+        //     formData.append('emp_document_image[]', selectedFiles);
+        // }
+
+        // if (documentIds) {
+        //     if (documentIds.length > 0) {
+        //         documentIds.map((file, index) => {
+        //             formData.append('emp_document_id[]', file);
+        //         });
+        //     } else {
+        //         formData.append('emp_document_id[]', documentIds);
+        //     }
+        // } else {
+        //     formData.append('emp_document_id[]', documentIds);
+        // }
+
+        documentIdget.forEach((documentId, index) => {
+            formData.append('emp_document_id[]', documentId);
+        });
+
+        // //   -------------------------------------------------------------------------------------
+        selectedDocumentTypes.forEach((type, index) => {
+            let typeValue = type;
+            if (typeof type === "string") {
+                typeValue = type.trim();
+            } else if (type == null) {
+                typeValue = "-";
+            } else {
+                typeValue = String(type).trim();  // Convert non-null, non-string types to string
+            }
+            formData.append('emp_document_type[]', typeValue === "" ? "-" : typeValue);
+        });
+        // //   -----------------------------------------------------------------------------------------
+
+        documentNames.forEach((name, index) => {
+            formData.append('emp_document_name[]', name.trim() === "" ? "-" : name);
+        });
+
+        // //   --------------------------------------------------------------------------------  
+
+        selectedFiles.forEach((file, index) => {
+            if (file) {
+                formData.append('emp_document_image[]', file);
+            }
+            else {
+                formData.append('emp_document_image[]', '-');
+            }
+        });
 
         formData.append('updated_by', data.userrole);
 
-        if (selectedImage.length > 0) {
-            selectedImage.map((selectedImg, index) => {
-                const imageUriParts = selectedImg.split('/');
-                const imageName = imageUriParts[imageUriParts.length - 1];
-                formData.append(`old_profileimg`, {
-                    uri: selectedImg,
-                    name: imageName,
-                    type: 'image/jpeg',
-                });
-            });
-        }
-        else {
-            formData.append('old_profileimg', employee.profile_img);
-        }
 
         try {
 
@@ -701,8 +775,6 @@ const Documents = ({
 
         closeEditModal();
     };
-
-
 
     return (
 

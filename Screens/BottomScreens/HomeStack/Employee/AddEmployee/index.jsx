@@ -7,7 +7,7 @@ import EmployeeRole from '../AddEmployee/EmployeeRole/index';
 import BankDetails from '../AddEmployee/BankDetails/index';
 import Documents from '../AddEmployee/Documents/index';
 
-const AddEmployee = () => {
+const AddEmployee = ({ route, navigation }) => {
 
     const [activeComponent, setActiveComponent] = useState('BasicDetails');
 
@@ -55,6 +55,10 @@ const AddEmployee = () => {
     const [documents, setDocuments] = useState([]);
     const [validation, setValidation] = useState(false);
 
+
+    const [dob, setDob] = useState();
+    const [doj, setDoj] = useState();
+
     return (
         <ScrollView>
 
@@ -69,7 +73,7 @@ const AddEmployee = () => {
                                 activeComponent === 'BasicDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BasicDetails')}
+                            onPress={() => renderComponent('BasicDetails')}
                         >
                             <Text
                                 style={
@@ -86,7 +90,7 @@ const AddEmployee = () => {
                                 activeComponent === 'EmployeeDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeDetails')}
+                            onPress={() => renderComponent('EmployeeDetails')}
                         >
                             <Text
                                 style={
@@ -103,7 +107,7 @@ const AddEmployee = () => {
                                 activeComponent === 'EmployeeRole' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('EmployeeRole')}
+                            onPress={() => renderComponent('EmployeeRole')}
                         >
                             <Text
                                 style={
@@ -120,7 +124,7 @@ const AddEmployee = () => {
                                 activeComponent === 'BankDetails' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('BankDetails')}
+                            onPress={() => renderComponent('BankDetails')}
                         >
                             <Text
                                 style={
@@ -137,7 +141,7 @@ const AddEmployee = () => {
                                 activeComponent === 'Documents' ?
                                     styles.HeaderButtonActive : styles.HeaderButton
                             }
-                        // onPress={() => renderComponent('Documents')}
+                            onPress={() => renderComponent('Documents')}
                         >
                             <Text
                                 style={
@@ -159,6 +163,7 @@ const AddEmployee = () => {
                             setSelectedImage={setSelectedImage}
                             selectedImageErr={selectedImageErr}
                             validation={validation}
+                            setDob={setDob}
                         />
                     }
                     {
@@ -167,6 +172,7 @@ const AddEmployee = () => {
                             onEmpRole={handleNextEmpRole}
                             onprevBasicDetails={handlePrevBasicDetails}
                             validation={validation}
+                            setDoj={setDoj}
                         />
                     }
                     {
@@ -189,6 +195,7 @@ const AddEmployee = () => {
                         activeComponent === 'Documents' &&
                         <Documents
                             onprevBankDetails={handlePrevBankDetails}
+                            navigation={navigation}
                             selectedImage={selectedImage}
                             setSelectedImage={setSelectedImage}
                             documents={documents}
@@ -201,6 +208,8 @@ const AddEmployee = () => {
                             setDocumentFile={setDocumentFile}
                             setSelectedImageErr={setSelectedImageErr}
                             setValidation={setValidation}
+                            dob={dob}
+                            doj={doj}
                         />
                     }
 

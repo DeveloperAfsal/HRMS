@@ -130,18 +130,11 @@ const MonthlyList = ({ navigation }) => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours'];
+        const tableHead = ['S.No', 'Employee Name', ...allKeys];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.checkin_date,
-            rowData.checkin_time,
-            rowData.checkout_time,
-            rowData.emp_present,
-            rowData.emp_late,
-            rowData.emp_permission,
-            rowData.emp_onduty,
-            rowData.checkout_total_hours,
+            rowData.Name,
+            ...allKeys.map(day => rowData[day] || '')
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -153,7 +146,7 @@ const MonthlyList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Monthly_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -175,18 +168,11 @@ const MonthlyList = ({ navigation }) => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Employee Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours'];
+        const tableHead = ['S.No', 'Employee Name', ...allKeys];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.checkin_date,
-            rowData.checkin_time,
-            rowData.checkout_time,
-            rowData.emp_present,
-            rowData.emp_late,
-            rowData.emp_permission,
-            rowData.emp_onduty,
-            rowData.checkout_total_hours,
+            rowData.Name,
+            ...allKeys.map(day => rowData[day] || '')
         ]);
 
         const htmlContent = `
@@ -226,7 +212,7 @@ const MonthlyList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Monthly_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -275,7 +261,7 @@ const MonthlyList = ({ navigation }) => {
         }
     };
 
-    
+
 
     // 
 
@@ -476,8 +462,9 @@ const MonthlyList = ({ navigation }) => {
                                                                         null,
                                                     borderRadius: 25,
                                                     width: 100,
+                                                    height: 50,
                                                     borderWidth: 5,
-                                                    borderColor: '#fff'
+                                                    borderColor: '#fff',
                                                 }}>
                                                     <Text style={[styles.cell, {
                                                         color: item[day] === "HL" ? "#fff" :
@@ -488,6 +475,7 @@ const MonthlyList = ({ navigation }) => {
                                                                             item[day] === "P" ? "#404040" :
                                                                                 item[day] === "H" ? "#028A00" :
                                                                                     null,
+                                                        textAlign: 'center'
                                                     }]}>
                                                         {item[day]}
                                                     </Text>
@@ -495,7 +483,8 @@ const MonthlyList = ({ navigation }) => {
                                             ))}
                                         </TouchableOpacity>
                                     ))
-                                )}
+                                )
+                                }
 
                             </View>
                         )

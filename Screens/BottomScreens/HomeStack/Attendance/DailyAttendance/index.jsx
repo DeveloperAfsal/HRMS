@@ -115,7 +115,7 @@ const AttendanceRequest = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Dailyattendance_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -188,7 +188,7 @@ const AttendanceRequest = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Dailyattendance_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -203,139 +203,139 @@ const AttendanceRequest = () => {
     };
 
     return (
+        <ScrollView>
+            <View style={styles.Container}>
 
-        <View style={styles.Container}>
-
-            <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
-                    onPress={exportToExcel}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to Excel
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.Button}
-                    onPress={exportToPDF}
-                >
-                    <Text style={styles.ButtonText}>
-                        Export to PDF
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.InputContainer}>
-                <TextInput
-                    style={styles.Input}
-                    value={filterText}
-                    onChangeText={text => {
-                        setFilterText(text);
-                        setCurrentPage(1);
-                    }}
-                />
-                <View style={styles.IconBg}>
-                    <SearchIcon color={'#474747'} width={24} height={24} />
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity style={[styles.Button, { marginRight: '5%' }]}
+                        onPress={exportToExcel}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to Excel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button}
+                        onPress={exportToPDF}
+                    >
+                        <Text style={styles.ButtonText}>
+                            Export to PDF
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            <View style={styles.inputs} >
-                <Text onPress={showDatepicker}>
-                    {startDate.toDateString()} &nbsp;
-                </Text>
-                {showDatePicker && (
-                    <DateTimePicker
-                        value={startDate}
-                        mode="date"
-                        display="default"
-                        onChange={handleDateChange}
+                <View style={styles.InputContainer}>
+                    <TextInput
+                        style={styles.Input}
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
                     />
-                )}
-            </View>
+                    <View style={styles.IconBg}>
+                        <SearchIcon color={'#474747'} width={24} height={24} />
+                    </View>
+                </View>
 
-            <ScrollView horizontal={true}>
+                <View style={styles.inputs} >
+                    <Text onPress={showDatepicker}>
+                        {startDate.toDateString()} &nbsp;
+                    </Text>
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={startDate}
+                            mode="date"
+                            display="default"
+                            onChange={handleDateChange}
+                        />
+                    )}
+                </View>
 
-                <View style={styles.Tablecontainer}>
-                    {loadData ? (
-                        <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
-                    ) : (
-                        <View>
+                <ScrollView horizontal={true}>
 
-                            <View style={[styles.row, styles.listHeader]}>
-                                <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
-                                <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Employee Name</Text>
-                                <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Date</Text>
-                                <Text style={[styles.header, styles.cell, styles.StartDate]}>In Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.EndDate]}>Out Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>P/A/L/HL</Text>
-                                <Text style={[styles.header, styles.cell, styles.WeekOff]}>LA</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>PR</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>OT</Text>
-                                <Text style={[styles.header, styles.cell, styles.Status]}>Total Hours</Text>
+                    <View style={styles.Tablecontainer}>
+                        {loadData ? (
+                            <ActivityIndicator size="small" color="#20DDFE" style={styles.Activeindicator} />
+                        ) : (
+                            <View>
+
+                                <View style={[styles.row, styles.listHeader]}>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Employee Name</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>In Time</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Out Time</Text>
+                                    <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>P/A/L/HL</Text>
+                                    <Text style={[styles.header, styles.cell, styles.WeekOff]}>LA</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>PR</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>OT</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Total Hours</Text>
+                                </View>
+
+                                {paginatedData.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
+                                ) : (
+                                    paginatedData.map((item, index) => (
+                                        <View key={index} style={[styles.row, styles.listBody]}>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.first_name}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.checkin_date}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.checkin_time}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.checkout_time}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.emp_present}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.emp_late}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.emp_permission}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.emp_onduty}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.checkout_total_hours}</Text>
+                                        </View>
+                                    ))
+                                )}
+
                             </View>
+                        )
+                        }
+                    </View>
 
-                            {paginatedData.length === 0 ? (
-                                <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
-                            ) : (
-                                paginatedData.map((item, index) => (
-                                    <View key={index} style={[styles.row, styles.listBody]}>
-                                        <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                        <Text style={[styles.cell, styles.DepartmentName]}>{item.first_name}</Text>
-                                        <Text style={[styles.cell, styles.EmployeeName]}>{item.checkin_date}</Text>
-                                        <Text style={[styles.cell, styles.StartDate]}>{item.checkin_time}</Text>
-                                        <Text style={[styles.cell, styles.EndDate]}>{item.checkout_time}</Text>
-                                        <Text style={[styles.cell, styles.ShiftSlot]}>{item.emp_present}</Text>
-                                        <Text style={[styles.cell, styles.WeekOff]}>{item.emp_late}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.emp_permission}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.emp_onduty}</Text>
-                                        <Text style={[styles.cell, styles.Status]}>{item.checkout_total_hours}</Text>
-                                    </View>
-                                ))
-                            )}
+                </ScrollView>
 
-                        </View>
-                    )
-                    }
-                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={styles.pagination}>
 
-            </ScrollView>
-
-            <View style={{ alignItems: 'center' }}>
-                <View style={styles.pagination}>
-
-                    <TouchableOpacity style={styles.prev}
-                        onPress={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        <ArrowLeftIcon width={14} height={14} color={'#737373'} />
-                        <Text style={styles.prevText}>
-                            Prev
-                        </Text>
-                    </TouchableOpacity>
-
-                    {pages.map(page => (
-                        <Text
-                            key={page}
-                            style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
-                            onPress={() => onPageChange(page)}
+                        <TouchableOpacity style={styles.prev}
+                            onPress={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
                         >
-                            {page}
-                        </Text>
-                    ))}
+                            <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                            <Text style={styles.prevText}>
+                                Prev
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Next}
-                        onPress={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Text style={styles.NextText}>
-                            Next
-                        </Text>
-                        <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
-                    </TouchableOpacity>
+                        {pages.map(page => (
+                            <Text
+                                key={page}
+                                style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                onPress={() => onPageChange(page)}
+                            >
+                                {page}
+                            </Text>
+                        ))}
 
+                        <TouchableOpacity style={styles.Next}
+                            onPress={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Text style={styles.NextText}>
+                                Next
+                            </Text>
+                            <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
+
             </View>
-
-        </View>
-
+        </ScrollView>
     )
 }
 

@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
+const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) => {
 
     const dispatch = useDispatch();
 
@@ -90,15 +90,49 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
 
     // 
 
+    // const [showDatePicker, setShowDatePicker] = useState(false);
+    // const [selectedDateDoj, setSelectedDateDoj] = useState(new Date());
+
+    // const handleDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setSelectedDateDoj(date);
+    //     }
+    //     const formattedDoj = `${selectedDateDoj.getFullYear()}-${selectedDateDoj.getMonth() + 1}-${selectedDateDoj.getDate()}`;
+    //     handleFieldsChange('dateOfJoining', formattedDoj);
+    //     setShowDatePicker(Platform.OS === 'ios');
+    // };
+
+    // const showDatepicker = () => {
+    //     setShowDatePicker(true);
+    // };
+
+    // const formattedDoj = Employee.dateOfJoining ? new Date(Employee.dateOfJoining).toDateString() : selectedDateDoj.toDateString();
+
+    // const formattedDoj = Employee.dateOfJoining
+    //     ? new Date(Employee.dateOfJoining).toISOString().slice(0, 10)
+    //     : selectedDateDoj.toISOString().slice(0, 10);
+
+    // useEffect(() => {
+    //     setDoj(formattedDoj);
+    // }, [formattedDoj])
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedDateDoj, setSelectedDateDoj] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
-            setSelectedDateDoj(date);
+            setStartDate(date);
+            const formattedStartDate = formatDate(date);
+            handleFieldsChange('dateOfJoining', formattedStartDate);
         }
-        const formattedDoj = `${selectedDateDoj.getFullYear()}-${selectedDateDoj.getMonth() + 1}-${selectedDateDoj.getDate()}`;
-        handleFieldsChange('dateOfJoining', formattedDoj);
         setShowDatePicker(Platform.OS === 'ios');
     };
 
@@ -106,47 +140,110 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
         setShowDatePicker(true);
     };
 
-    const formattedDoj = Employee.dateOfJoining ? new Date(Employee.dateOfJoining).toDateString() : selectedDateDoj.toDateString();
+    const formattedDoj = Employee.dateOfJoining
+        ? formatDate(new Date(Employee.dateOfJoining))
+        : formatDate(startDate);
+
+    useEffect(() => {
+        setDoj(formattedDoj);
+    }, [formattedDoj])
+
 
     // 
 
-    const [showDatePickerConfirm, setShowDatePickerConfirm] = useState(false);
-    const [selectedConfirmDate, setSelectedConfirmDate] = useState(new Date());
+    // const [showDatePickerConfirm, setShowDatePickerConfirm] = useState(false);
+    // const [selectedConfirmDate, setSelectedConfirmDate] = useState(new Date());
 
-    const handleConfirmDateChange = (event, date) => {
+    // const handleConfirmDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setSelectedConfirmDate(date);
+    //     }
+    //     const formattedConfirmDate = `${selectedConfirmDate.getFullYear()}-${selectedConfirmDate.getMonth() + 1}-${selectedConfirmDate.getDate()}`;
+    //     handleFieldsChange('confirmationDate', formattedConfirmDate);
+    //     setShowDatePickerConfirm(Platform.OS === 'ios');
+    // };
+
+    // const showConfirmDatepicker = () => {
+    //     setShowDatePickerConfirm(true);
+    // };
+
+    // const formattedConfirm = Employee.confirmationDate 
+    // ? formatDate(new Date(Employee.confirmationDate)) 
+    // : formatDate(selectedConfirmDate);
+    // console.log(formattedConfirm, "formattedConfirm")
+
+    const [showDatePicker1, setShowDatePicker1] = useState(false);
+    const [startDate1, setStartDate1] = useState(null);
+
+    const handleDateChange1 = (event, date) => {
         if (date !== undefined) {
-            setSelectedConfirmDate(date);
+            setStartDate1(date);
+            const formattedStartDate1 = formatDate(date);
+            handleFieldsChange('confirmationDate', formattedStartDate1);
         }
-        const formattedConfirmDate = `${selectedConfirmDate.getFullYear()}-${selectedConfirmDate.getMonth() + 1}-${selectedConfirmDate.getDate()}`;
-        handleFieldsChange('confirmationDate', formattedConfirmDate);
-        setShowDatePickerConfirm(Platform.OS === 'ios');
+        setShowDatePicker1(Platform.OS === 'ios');
     };
 
-    const showConfirmDatepicker = () => {
-        setShowDatePickerConfirm(true);
+    const showDatepicker1 = () => {
+        setShowDatePicker1(true);
     };
 
-    const formattedConfirm = Employee.confirmationDate ? new Date(Employee.confirmationDate).toDateString() : selectedConfirmDate.toDateString();
+    // const formattedConfirm = Employee.confirmationDate
+    //     ? formatDate(new Date(Employee.confirmationDate))
+    //     : formatDate(startDate);
+
+    // useEffect(() => {
+    //     setDoj(formattedDoj);
+    // }, [formattedDoj])
 
     // 
 
-    const [showDatePickerLWD, setShowDatePickerLWD] = useState(false);
-    const [selectedLWDDate, setSelectedLWDDate] = useState(new Date());
+    const [showDatePicker2, setShowDatePicker2] = useState(false);
+    const [startDate2, setStartDate2] = useState(null);
 
-    const handleLWDDateChange = (event, date) => {
+    const handleDateChange2 = (event, date) => {
         if (date !== undefined) {
-            setSelectedLWDDate(date);
+            setStartDate2(date);
+            const formattedStartDate2 = formatDate(date);
+            handleFieldsChange('lastWorkingDay', formattedStartDate2);
         }
-        const formattedLWDDate = `${selectedLWDDate.getFullYear()}-${selectedLWDDate.getMonth() + 1}-${selectedLWDDate.getDate()}`;
-        handleFieldsChange('lastWorkingDay', formattedLWDDate);
-        setShowDatePickerLWD(Platform.OS === 'ios');
+        setShowDatePicker2(Platform.OS === 'ios');
     };
 
-    const showLWDDatepicker = () => {
-        setShowDatePickerLWD(true);
+    const showDatepicker2 = () => {
+        setShowDatePicker2(true);
     };
 
-    const formattedLWD = Employee.lastWorkingDay ? new Date(Employee.lastWorkingDay).toDateString() : selectedLWDDate.toDateString();
+    const formattedLWD = Employee.selectedLWDDate
+        ? formatDate(new Date(Employee.selectedLWDDate))
+        : formatDate(startDate);
+
+    // const [showDatePickerLWD, setShowDatePickerLWD] = useState(false);
+    // const [selectedLWDDate, setSelectedLWDDate] = useState(new Date());
+
+    // const handleLWDDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setSelectedLWDDate(date);
+    //     }
+    //     const formattedLWDDate = `${selectedLWDDate.getFullYear()}-${selectedLWDDate.getMonth() + 1}-${selectedLWDDate.getDate()}`;
+    //     handleFieldsChange('lastWorkingDay', formattedLWDDate);
+    //     setShowDatePickerLWD(Platform.OS === 'ios');
+    // };
+
+    // const showLWDDatepicker = () => {
+    //     setShowDatePickerLWD(true);
+    // };
+
+    // const formattedLWD = Employee.lastWorkingDay ? new Date(Employee.lastWorkingDay).toDateString() : selectedLWDDate.toDateString();
+
+    // const formattedLWD = Employee.lastWorkingDay
+    //     ? new Date(Employee.lastWorkingDay).toISOString().slice(0, 10)
+    //     : selectedLWDDate.toISOString().slice(0, 10);
+
+    // useEffect(() => {
+    //     setDoj(formattedLWD);
+    // }, [formattedLWD])
+
 
     return (
 
@@ -189,7 +286,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 Date Of Joining
             </Text>
 
-            <View style={styles.inputs}>
+            {/* <View style={styles.inputs}>
                 <Text onPress={showDatepicker}>
                     {formattedDoj}
                 </Text>
@@ -201,10 +298,23 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                         onChange={handleDateChange}
                     />
                 )}
+            </View> */}
+            <View style={styles.inputs} >
+                <Text onPress={showDatepicker}>
+                    {startDate ? formatDate(startDate) : Employee.dateOfJoining ? Employee.dateOfJoining : "Select Date Of Joining"} &nbsp;
+                </Text>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={startDate || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
+                    />
+                )}
             </View>
 
             <Text style={styles.errorText}>
-                { }
+                {validation ? (!Employee.dateOfJoining ? "Date Of Joining Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -215,6 +325,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.probationPeriod}
                 onChangeText={(text) => handleFieldsChange('probationPeriod', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -225,7 +336,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 Confirmation Date
             </Text>
 
-            <View style={styles.inputs}>
+            {/* <View style={styles.inputs}>
                 <Text onPress={showConfirmDatepicker}>
                     {formattedConfirm}
                 </Text>
@@ -235,6 +346,20 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                         mode="date"
                         display="default"
                         onChange={handleConfirmDateChange}
+                    />
+                )}
+            </View> */}
+
+            <View style={styles.inputs} >
+                <Text onPress={showDatepicker1}>
+                    {startDate1 ? formatDate(startDate1) : Employee.confirmationDate ? Employee.confirmationDate : "Select Confirmation date"} &nbsp;
+                </Text>
+                {showDatePicker1 && (
+                    <DateTimePicker
+                        value={startDate1 || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange1}
                     />
                 )}
             </View>
@@ -251,6 +376,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.employeeAgreementPeriod}
                 onChangeText={(text) => handleFieldsChange('employeeAgreementPeriod', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -265,6 +391,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.noticePeriod}
                 onChangeText={(text) => handleFieldsChange('noticePeriod', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -279,6 +406,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.ctc}
                 onChangeText={(text) => handleFieldsChange('ctc', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -293,6 +421,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.grossSalary}
                 onChangeText={(text) => handleFieldsChange('grossSalary', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -307,6 +436,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 style={styles.input}
                 value={Employee.netSalary}
                 onChangeText={(text) => handleFieldsChange('netSalary', text)}
+                keyboardType="number-pad"
             />
 
             <Text style={styles.errorText}>
@@ -317,7 +447,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                 Last Working Day
             </Text>
 
-            <View style={styles.inputs}>
+            {/* <View style={styles.inputs}>
                 <Text onPress={showLWDDatepicker}>
                     {formattedLWD}
                 </Text>
@@ -327,6 +457,20 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation }) => {
                         mode="date"
                         display="default"
                         onChange={handleLWDDateChange}
+                    />
+                )}
+            </View> */}
+
+            <View style={styles.inputs} >
+                <Text onPress={showDatepicker2}>
+                    {startDate2 ? formatDate(startDate2) : Employee.lastWorkingDay ? Employee.lastWorkingDay : "Select Last Working Date"} &nbsp;
+                </Text>
+                {showDatePicker2 && (
+                    <DateTimePicker
+                        value={startDate2 || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange2}
                     />
                 )}
             </View>

@@ -63,8 +63,10 @@ const AppNav = ({ navigation }) => {
     useEffect(() => {
         if (data != null) {
             handleShowAlert();
+        } else {
+            // Alert.alert("Oops", "Your Session Has Expired");
         }
-    }, []);
+    }, [data]);
 
 
 

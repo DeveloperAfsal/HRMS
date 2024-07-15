@@ -29,6 +29,18 @@ const JobOpenings = ({ navigation }) => {
     const [nofVacanciesError, setNofVacanciesError] = useState('');
     const [datalist, setDatalist] = useState([]);
 
+    // 
+
+    const OnRefresh = () => {
+        setDesignation('');
+        setNofVacancies('');
+        setDescription('');
+
+        if (richText.current) {
+            richText.current.setContentHTML('');
+        }
+    }
+
     // Add
 
     const HandleSubmit = async () => {
@@ -291,7 +303,7 @@ const JobOpenings = ({ navigation }) => {
                                     </TouchableOpacity>
 
                                     <TouchableOpacity style={styles.cancelbutton}
-                                        onPress={() => navigation.navigate('Dashboard')}
+                                        onPress={() => OnRefresh()}
                                     >
                                         <Text style={styles.cancelbuttontext}>
                                             Cancel

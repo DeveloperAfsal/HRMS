@@ -99,15 +99,26 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
 
     // 
 
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDateDoj, setSelectedDateDoj] = useState(new Date());
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
             setSelectedDateDoj(date);
+            const formattedDoj = formatDate(date);
+            updateEmployeeField('doj', formattedDoj);
         }
-        const formattedDoj = `${selectedDateDoj.getFullYear()}-${selectedDateDoj.getMonth() + 1}-${selectedDateDoj.getDate()}`;
-        updateEmployeeField('doj', formattedDoj);
+        // const formattedDoj = `${selectedDateDoj.getFullYear()}-${selectedDateDoj.getMonth() + 1}-${selectedDateDoj.getDate()}`;
+        // updateEmployeeField('doj', formattedDoj);
         // handleFieldsChange('dateOfJoining', formattedDoj);
         setShowDatePicker(Platform.OS === 'ios');
     };
@@ -116,7 +127,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
         setShowDatePicker(true);
     };
 
-    const formattedDoj = Employee.dateOfJoining ? new Date(Employee.dateOfJoining).toDateString() : selectedDateDoj.toDateString();
+    const formattedDoj = Employee.dateOfJoining
+        ? formatDate(new Date(Employee.dateOfJoining))
+        : formatDate(selectedDateDoj);
 
     // 
 
@@ -126,7 +139,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
     const handleConfirmDateChange = (event, date) => {
         if (date !== undefined) {
             setSelectedConfirmDate(date);
-            const formattedConfirmDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            const formattedConfirmDate = formatDate(date);
             updateEmployeeField('confirmation_date', formattedConfirmDate);
         }
         setShowDatePickerConfirm(Platform.OS === 'ios');
@@ -136,8 +149,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
         setShowDatePickerConfirm(true);
     };
 
-    const formattedConfirm = Employee.confirmationDate ? new Date(Employee.confirmationDate).toDateString() : selectedConfirmDate.toDateString();
-
+    const formattedConfirm = Employee.confirmationDate
+        ? formatDate(new Date(Employee.confirmationDate))
+        : formatDate(selectedConfirmDate);
     // 
 
     const [showDatePickerLWD, setShowDatePickerLWD] = useState(false);
@@ -146,9 +160,11 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
     const handleLWDDateChange = (event, date) => {
         if (date !== undefined) {
             setSelectedLWDDate(date);
+            const formattedLWDDate = formatDate(date);
+            updateEmployeeField('last_working_date', formattedLWDDate);
         }
-        const formattedLWDDate = `${selectedLWDDate.getFullYear()}-${selectedLWDDate.getMonth() + 1}-${selectedLWDDate.getDate()}`;
-        updateEmployeeField('last_working_date', formattedLWDDate);
+        // const formattedLWDDate = `${selectedLWDDate.getFullYear()}-${selectedLWDDate.getMonth() + 1}-${selectedLWDDate.getDate()}`;
+        // updateEmployeeField('last_working_date', formattedLWDDate);
         setShowDatePickerLWD(Platform.OS === 'ios');
     };
 
@@ -156,7 +172,9 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
         setShowDatePickerLWD(true);
     };
 
-    const formattedLWD = Employee.lastWorkingDay ? new Date(Employee.lastWorkingDay).toDateString() : selectedLWDDate.toDateString();
+    const formattedLWD = Employee.lastWorkingDay
+        ? formatDate(new Date(Employee.lastWorkingDay))
+        : formatDate(selectedLWDDate);
 
     return (
 
@@ -201,7 +219,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
 
             <View style={styles.inputs}>
                 <Text onPress={showDatepicker}>
-                    {employee.doj}
+                    {formattedDoj}
                 </Text>
                 {showDatePicker && (
                     <DateTimePicker
@@ -237,7 +255,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, setEmployee, employee 
 
             <View style={styles.inputs}>
                 <Text onPress={showConfirmDatepicker}>
-                    {employee.confirmation_date === null ? "yyyy-mm-dd" : employee.confirmation_date}
+                    {employee.confirmation_date === null ? "yyyy-mm-dd" : formattedConfirm}
                 </Text>
                 {showDatePickerConfirm && (
                     <DateTimePicker
