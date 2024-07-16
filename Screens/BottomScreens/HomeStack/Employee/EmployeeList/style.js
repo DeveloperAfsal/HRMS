@@ -142,6 +142,15 @@ const styles = StyleSheet.create({
         color: '#00275C',
         lineHeight: 26.6
     },
+
+    name1: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#00275C',
+        // lineHeight: 26.6
+        marginTop: '50%'
+    },
+
     depname: {
         fontSize: 16,
         fontWeight: '400',

@@ -41,7 +41,7 @@ const EmployeeList = ({ navigation }) => {
             });
             const employeeData = response.data.data;
 
-            employeeData.sort((a, b) => {
+            const dat = employeeData ? employeeData.sort((a, b) => {
                 const firstNameA = a.first_name.toUpperCase();
                 const firstNameB = b.first_name.toUpperCase();
 
@@ -52,9 +52,9 @@ const EmployeeList = ({ navigation }) => {
                     return 1;
                 }
                 return 0;
-            });
+            }) : [];
 
-            setEmployeeData(employeeData);
+            setEmployeeData(dat);
             setLoading(false);
         } catch (error) {
             console.log(error.message);
@@ -134,48 +134,52 @@ const EmployeeList = ({ navigation }) => {
                 ) : (
                     <>
                         {
-                            filteredData.map((employee, index) =>
+                            filteredData.length == 0 ?
+                                <Text style={styles.name1}>
+                                    No employee found
+                                </Text> :
+                                filteredData.map((employee, index) =>
 
-                            (
-                                <TouchableOpacity key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}
-                                    onPress={() => navigation.navigate('View Profile', { id: employee.id })}
-                                >
-                                    <View key={employee.id} >
-                                        <View style={styles.cardtop}>
-                                            <View>
-                                                {employee.profile_img ? (
-                                                    <Image
-                                                        source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }}
-                                                        style={styles.imageStyle}
+                                (
+                                    <TouchableOpacity key={index} style={[styles.card, index === filteredData.length - 1 && styles.cardBottom]}
+                                        onPress={() => navigation.navigate('View Profile', { id: employee.id })}
+                                    >
+                                        <View key={employee.id} >
+                                            <View style={styles.cardtop}>
+                                                <View>
+                                                    {employee.profile_img ? (
+                                                        <Image
+                                                            source={{ uri: `https://ocean21.in/api/storage/app/${employee.profile_img}` }}
+                                                            style={styles.imageStyle}
 
-                                                    />
-                                                ) : (
-                                                    <View style={styles.iconStyle}>
-                                                        <ProfileIcon width={22} height={22} color={'#0A60F1'} />
+                                                        />
+                                                    ) : (
+                                                        <View style={styles.iconStyle}>
+                                                            <ProfileIcon width={22} height={22} color={'#0A60F1'} />
+                                                        </View>
+                                                    )}
+
+
+                                                    <View style={styles.NameContainer}>
+                                                        <Text style={styles.name}>{employee.first_name} {employee.last_name}</Text>
+                                                        <Text style={styles.depname}>{employee.department_name}</Text>
                                                     </View>
-                                                )}
+                                                </View>
+                                            </View>
 
-
-                                                <View style={styles.NameContainer}>
-                                                    <Text style={styles.name}>{employee.first_name} {employee.last_name}</Text>
-                                                    <Text style={styles.depname}>{employee.department_name}</Text>
+                                            <View style={styles.phoneEmail}>
+                                                <View style={styles.gap} >
+                                                    <PhoneIcon width={18} height={18} color={"#3A3A3A"} />
+                                                    <MailIcon width={18} height={18} color={"#3A3A3A"} />
+                                                </View>
+                                                <View style={styles.gap} >
+                                                    <Text style={styles.fontsize}>   {employee.mobile_no}</Text>
+                                                    <Text style={styles.fontsize}>   {employee.official_email}</Text>
                                                 </View>
                                             </View>
                                         </View>
-
-                                        <View style={styles.phoneEmail}>
-                                            <View style={styles.gap} >
-                                                <PhoneIcon width={18} height={18} color={"#3A3A3A"} />
-                                                <MailIcon width={18} height={18} color={"#3A3A3A"} />
-                                            </View>
-                                            <View style={styles.gap} >
-                                                <Text style={styles.fontsize}>   {employee.mobile_no}</Text>
-                                                <Text style={styles.fontsize}>   {employee.official_email}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            ))
+                                    </TouchableOpacity>
+                                ))
                         }
 
                     </>
