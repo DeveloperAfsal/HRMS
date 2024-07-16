@@ -407,7 +407,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.noticePeriod ? "noticePeriod Required" : null) : null}
+                {validation ? (!Employee.noticePeriod ? "Notice Period Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -422,7 +422,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.ctc ? "ctc Required" : null) : null}
+                {validation ? (!Employee.ctc ? "CTC Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -437,7 +437,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.grossSalary ? "grossSalary Required" : null) : null}
+                {validation ? (!Employee.grossSalary ? "Gross Salary Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -452,7 +452,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.netSalary ? "netSalary Required" : null) : null}
+                {validation ? (!Employee.netSalary ? "Net Salary Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -519,7 +519,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.providentFund ? "providentFund Required" : null) : null}
+                {validation ? (!Employee.providentFund ? "Provident Fund Required" : null) : null}
             </Text>
 
             {
@@ -536,7 +536,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.uanNumber ? "uanNumber Required" : null) : null}
+                            {validation ? (!Employee.uanNumber ? "UAN Number Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -550,7 +550,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.employeePfContribution ? "employeePfContribution Required" : null) : null}
+                            {validation ? (!Employee.employeePfContribution ? "Employee Pf Contribution Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -564,7 +564,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.employerPfContribution ? "employerPfContribution Required" : null) : null}
+                            {validation ? (!Employee.employerPfContribution ? "Employer Pf Contribution Required" : null) : null}
                         </Text>
                     </>
                     : null
@@ -598,7 +598,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.esi ? "esi Required" : null) : null}
+                {validation ? (!Employee.esi ? "ESI Required" : null) : null}
             </Text>
 
             {
@@ -615,7 +615,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.esiNumber ? "esiNumber Required" : null) : null}
+                            {validation ? (!Employee.esiNumber ? "ESI Number Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -629,7 +629,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.employeeEsiContribution ? "employeeEsiContribution Required" : null) : null}
+                            {validation ? (!Employee.employeeEsiContribution ? "Employee ESI Contribution Required" : null) : null}
                         </Text>
 
                         <Text style={styles.subHeading}>
@@ -643,7 +643,7 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
                         />
 
                         <Text style={styles.errorText}>
-                            {validation ? (!Employee.employerEsiContribution ? "employerEsiContribution Required" : null) : null}
+                            {validation ? (!Employee.employerEsiContribution ? "Employer ESI Contribution Required" : null) : null}
                         </Text>
                     </>
                     : null

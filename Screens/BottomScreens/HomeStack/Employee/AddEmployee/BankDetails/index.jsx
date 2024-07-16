@@ -52,7 +52,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.bankAccountNumber ? "bankAccountNumber Required" : null) : null}
+                {validation ? (!Employee.bankAccountNumber ? "Bank Account Number Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -66,7 +66,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.bankName ? "bankName Required" : null) : null}
+                {validation ? (!Employee.bankName ? "Bank Name Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -80,7 +80,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.bankBranch ? "bankBranch Required" : null) : null}
+                {validation ? (!Employee.bankBranch ? "Bank Branch Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -94,7 +94,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.ifscCode ? "ifscCode Required" : null) : null}
+                {validation ? (!Employee.ifscCode ? "IFSC Code Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -103,7 +103,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
 
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
-                <Text style={styles.StatusTouchableText}>{Employee.accountType || "Selected Account Type"}</Text>
+                <Text style={styles.StatusTouchableText}>{Employee.accountType || "Select Account Type"}</Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
             </TouchableOpacity>
@@ -129,7 +129,7 @@ const BankDetails = ({ onDetails, onprevEmpRole, validation }) => {
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.accountType ? "accountType Required" : null) : null}
+                {validation ? (!Employee.accountType ? "Account Type Required" : null) : null}
             </Text>
 
             <View style={[styles.fullWidth, styles.Row, styles.Left]}>

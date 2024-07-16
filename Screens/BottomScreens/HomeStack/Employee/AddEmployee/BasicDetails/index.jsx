@@ -321,7 +321,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.lastName ? "lastName Required" : null) : null}
+                {validation ? (!Employee.lastName ? "Last Name Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -387,7 +387,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.status ? "status Required" : null) : null}
+                {validation ? (!Employee.status ? "Status Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -402,7 +402,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.phoneNumber ? "phoneNumber Required" : null) : null}
+                {validation ? (!Employee.phoneNumber ? "Phone Number Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -417,7 +417,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.whatsappNumber ? "whatsappNumber Required" : null) : null}
+                {validation ? (!Employee.whatsappNumber ? "WhatsApp Number Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -431,7 +431,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.email ? "email Required" : null) : null}
+                {validation ? (!Employee.email ? "Email Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -484,7 +484,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.currentAddress ? "currentAddress Required" : null) : null}
+                {validation ? (!Employee.currentAddress ? "Current Address Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -508,7 +508,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             </View>
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.permanentAddress ? "permanentAddress Required" : null) : null}
+                {validation ? (!Employee.permanentAddress ? "Permanent Address Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -522,7 +522,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.parentName ? "parentName Required" : null) : null}
+                {validation ? (!Employee.parentName ? "Parent Name Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -561,7 +561,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.maritalStatus ? "maritalStatus Required" : null) : null}
+                {validation ? (!Employee.maritalStatus ? "Marital Status Required" : null) : null}
             </Text>
 
             {
@@ -578,7 +578,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
                         />
 
                         <Text style={styles.errorText}>
-                            {!Employee.spouseName ? "spouseName Required" : null}
+                            {!Employee.spouseName ? "Spouse Name Required" : null}
                         </Text>
                     </> : null
 
@@ -596,7 +596,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.aadharNumber ? "aadharNumber Required" : null) : null}
+                {validation ? (!Employee.aadharNumber ? "Aadhar Number Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -610,7 +610,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.panNumber ? "panNumber Required" : null) : null}
+                {validation ? (!Employee.panNumber ? "Pan Number Required" : null) : null}
             </Text>
 
             <View style={styles.fullWidth}>

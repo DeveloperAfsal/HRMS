@@ -114,9 +114,29 @@ const Documents = ({
             setSelectedDocumentId([]);
             setDocName('');
             setDocFile('');
-
+            setDocNameErr('');
+            setSelectedDocumentErr('');
+            setDocFileErr('');
         } else {
-            Alert.alert('Data not addded', "Add All the Fields")
+
+            if (!docName) {
+                setDocNameErr('Document Name Required');
+            } else {
+                setDocNameErr('');
+            }
+
+            if (selectedDocument.length == "0") {
+                setSelectedDocumentErr('Document Type Required');
+            } else {
+                setSelectedDocumentErr('');
+            }
+
+            if (!docFile) {
+                setDocFileErr('Attachment Required');
+            } else {
+                setDocFileErr('');
+            }
+
         }
     };
 
@@ -168,13 +188,13 @@ const Documents = ({
             Alert.alert('Invalid Email ID', "Please enter a valid email address");
             setLoad(false);
             return;
-        } 
+        }
 
-        if (!emailRegex.test(Employee.email)) {
-            Alert.alert('Invalid Email ID', "Please enter a valid email address");
+        if (!emailRegex.test(Employee.officialEmail)) {
+            Alert.alert('Invalid Official Email ID', "Please enter a valid email address");
             setLoad(false);
             return;
-        } 
+        }
 
         formData.append('employee_id', Employee.employeeId);
 
@@ -460,6 +480,13 @@ const Documents = ({
 
     const HandleCancel = () => {
         dispatch(removeEmployeeFields());
+        setSelectedDocument([]);
+        setSelectedDocumentId([]);
+        setDocName('');
+        setDocFile('');
+        setDocNameErr('');
+        setSelectedDocumentErr('');
+        setDocFileErr('');
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -512,7 +539,7 @@ const Documents = ({
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                 <Text style={styles.StatusTouchableText}>
-                    {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Selected Document Type"}
+                    {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Select Document Type"}
                 </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 

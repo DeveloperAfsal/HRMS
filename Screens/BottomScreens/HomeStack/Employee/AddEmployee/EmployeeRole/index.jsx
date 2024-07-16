@@ -163,7 +163,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (Employee.userRole.length == "0" ? "userRole Required" : null) : null}
+                {validation ? (Employee.userRole.length == "0" ? "User Role Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -177,7 +177,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.designation ? "designation Required" : null) : null}
+                {validation ? (!Employee.designation ? "Designation Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -208,7 +208,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             }
 
             <Text style={styles.errorText}>
-                {validation ? (Employee.supervisor.length == "0" ? "supervisor Required" : null) : null}
+                {validation ? (Employee.supervisor.length == "0" ? "Supervisor Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -222,7 +222,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.officialEmail ? "officialEmail Required" : null) : null}
+                {validation ? (!Employee.officialEmail ? "Official Email Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -236,7 +236,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.password ? "password Required" : null) : null}
+                {validation ? (!Employee.password ? "Password Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -269,11 +269,10 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
                     </TouchableOpacity>
 
                 </View>
-
             )}
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.checkinCheckout ? "checkinCheckout Required" : null) : null}
+                {validation ? (!Employee.checkinCheckout ? "Check-In Check-Out Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>

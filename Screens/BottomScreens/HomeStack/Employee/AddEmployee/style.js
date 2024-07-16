@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     },
 
     HeaderButton: {
-        width: 162,
+        width: "45%",
         height: 52,
         borderRadius: 7,
         borderWidth: 1,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     },
 
     HeaderButtonActive: {
-        width: 162,
+        width: '45%',
         height: 52,
         borderRadius: 7,
         borderWidth: 1,
@@ -304,14 +304,14 @@ const styles = StyleSheet.create({
         paddingLeft: "5%",
     },
 
-    inputs:{
+    inputs: {
         borderWidth: 1,
         borderColor: '#515151',
         borderRadius: 7,
         width: '90%',
         paddingLeft: "5%",
-        height:50,
-        justifyContent:'center'
+        height: 50,
+        justifyContent: 'center'
     },
 
     fullWidth: {
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     },
 
     NextButton: {
-        width: 100,
+        width: "25%",
         height: 40,
         borderRadius: 5,
         backgroundColor: '#0A62F1',
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     },
 
     PrevButton: {
-        width: 100,
+        width: "30%",
         height: 40,
         borderRadius: 5,
         borderColor: '#0A62F1',
