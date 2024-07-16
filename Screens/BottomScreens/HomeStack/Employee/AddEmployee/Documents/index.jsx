@@ -175,23 +175,61 @@ const Documents = ({
 
         setLoad(true);
         setValidation(true);
-
-        // setSelectedImageErr('Image Field Required')
-
         const formData = new FormData();
 
         //append data
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (Employee.employeeId && selectedImage && Employee.firstName &&
+            Employee.lastName && Employee.gender && Employee.status && Employee.phoneNumber &&
+            Employee.whatsappNumber && Employee.email && dob && Employee.currentAddress &&
+            Employee.permanentAddress && Employee.parentName && Employee.maritalStatus &&
+            Employee.aadharNumber && Employee.panNumber && Employee.selectedemployeeCategory &&
+            doj && Employee.noticePeriod && Employee.ctc && Employee.grossSalary && Employee.netSalary &&
+            Employee.providentFund && Employee.esi && Employee.selectedRoleId && Employee.designation &&
+            Employee.selectedsupervisorId && Employee.officialEmail && Employee.password &&
+            Employee.checkinCheckoutId && Employee.bankAccountNumber && Employee.bankName && Employee.bankBranch &&
+            Employee.ifscCode && Employee.accountType
+        ) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
-        if (!emailRegex.test(Employee.email)) {
-            Alert.alert('Invalid Email ID', "Please enter a valid email address");
-            setLoad(false);
-            return;
-        }
+            if (!emailRegex.test(Employee.email)) {
+                Alert.alert('Invalid Email ID', "Please enter a valid email address");
+                setLoad(false);
+                return;
+            }
 
-        if (!emailRegex.test(Employee.officialEmail)) {
-            Alert.alert('Invalid Official Email ID', "Please enter a valid email address");
+            if (!emailRegex.test(Employee.officialEmail)) {
+                Alert.alert('Invalid Official Email ID', "Please enter a valid email address");
+                setLoad(false);
+                return;
+            }
+
+            if (Employee.aadharNumber.length !== 12) {
+                Alert.alert('Invalid "Aadhar Number', "Please enter a valid Aadhar Number");
+                setLoad(false);
+                return;
+            }
+
+            if (!panRegex.test(Employee.panNumber)) {
+                Alert.alert('Invalid Pan Number', "Please enter a valid Pan Number");
+                setLoad(false);
+                return;
+            }
+
+            if (Employee.phoneNumber.length !== 10) {
+                Alert.alert('Invalid "Phone Number', "Please enter a valid Phone Number");
+                setLoad(false);
+                return;
+            }
+
+            if (Employee.whatsappNumber.length !== 10) {
+                Alert.alert('Invalid "Whatsapp Number', "Please enter a valid Whatsapp Number");
+                setLoad(false);
+                return;
+            }
+        } else {
+            Alert.alert('Error', 'Enter all required fields')
             setLoad(false);
             return;
         }

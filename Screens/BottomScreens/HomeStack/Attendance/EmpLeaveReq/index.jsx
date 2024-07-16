@@ -358,14 +358,14 @@ const EmpLeaveReq = ({ navigation }) => {
             }
         }
 
-        if (!docFile) {
-            setDocFileErr('Choose File');
-            Alert.alert('Missing', "Check The Document Field");
-            setLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('Choose File');
+        //     Alert.alert('Missing', "Check The Document Field");
+        //     setLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
         if (!Reason) {
             setReasonErr('Enter Reason');
@@ -446,13 +446,13 @@ const EmpLeaveReq = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            if (selectedCategory === "Permission") {
-                navigation.navigate('Permission Request');
-            } else if (selectedCategory === "Leave") {
-                navigation.navigate('Leave Request');
-            } else if (selectedCategory === "Half Day") {
-                navigation.navigate('HalfDay Request');
-            }
+            // if (selectedCategory === "Permission") {
+            //     navigation.navigate('Permission Request');
+            // } else if (selectedCategory === "Leave") {
+            //     navigation.navigate('Leave Request');
+            // } else if (selectedCategory === "Half Day") {
+            //     navigation.navigate('HalfDay Request');
+            // }
             Handlerefresh();
         }, 2500);
     };
@@ -571,6 +571,7 @@ const EmpLeaveReq = ({ navigation }) => {
                                         mode="date"
                                         display="default"
                                         onChange={handleDateChange}
+                                        minimumDate={new Date()}
                                     />
                                 )}
                             </View>
@@ -642,6 +643,7 @@ const EmpLeaveReq = ({ navigation }) => {
                                         mode="date"
                                         display="default"
                                         onChange={handleDateChange1}
+                                        minimumDate={new Date()}
                                     />
                                 )}
                             </View>
@@ -665,6 +667,7 @@ const EmpLeaveReq = ({ navigation }) => {
                                         mode="date"
                                         display="default"
                                         onChange={handleDateChange2}
+                                        minimumDate={new Date()}
                                     />
                                 )}
                             </View>
@@ -703,6 +706,8 @@ const EmpLeaveReq = ({ navigation }) => {
                         value={Reason}
                         onChangeText={(text) => setReason(text)}
                         style={styles.Reason}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>

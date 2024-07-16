@@ -46,7 +46,7 @@ const ForgotPassword = ({ navigation }) => {
             if (response.data.status === "success") {
                 setLoad(false);
                 // handleShowAlert();
-                navigation.navigate('Otp')
+                navigation.navigate('Otp', { Id: email });
             } else {
                 setLoad(false);
                 // Alert.alert("Login failed");
@@ -75,7 +75,7 @@ const ForgotPassword = ({ navigation }) => {
     };
 
     const [isAlertVisible, setAlertVisible] = useState(false);
-    
+
     const handleShowAlert = (res) => {
         setAlertVisible(true);
         setTimeout(() => {

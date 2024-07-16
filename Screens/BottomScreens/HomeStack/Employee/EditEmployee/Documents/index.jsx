@@ -272,6 +272,33 @@ const Documents = ({
 
         const formData = new FormData();
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+        if (!emailRegex.test(employee.email)) {
+            Alert.alert('Invalid Email ID', "Please enter a valid email address");
+            setLoad(false);
+            return;
+        }
+
+        if (!emailRegex.test(employee.official_email)) {
+            Alert.alert('Invalid Official Email ID', "Please enter a valid email address");
+            setLoad(false);
+            return;
+        }
+
+        if (employee.aadhar_number.length !== 12) {
+            Alert.alert('Invalid "Aadhar Number', "Please enter a valid Aadhar Number");
+            setLoad(false);
+            return;
+        }
+
+        if (!panRegex.test(employee.pan_number)) {
+            Alert.alert('Invalid Pan Number', "Please enter a valid Pan Number");
+            setLoad(false);
+            return;
+        }
+
         //append data
 
         formData.append('id', employee.id);

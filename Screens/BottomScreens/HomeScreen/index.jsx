@@ -851,13 +851,14 @@ const HomeScreen = ({ navigation }) => {
                                 <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
 
                                 <View style={styles.border}></View>
+                                
                                 <View style={styles.textview}>
                                     <Text style={styles.text}>What's your mood today? </Text>
                                 </View>
 
                                 {mood.status === "success" ? (
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: '5%', gap: 10 }}>
-                                        <Text style={{ fontWeight: '400', fontSize: 14, color: "#000" }}>Hey! Your Mood Today</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: '5%', gap: 5 }}>
+                                        <Text style={{ fontWeight: '400', fontSize: 14, color: "#000" }}>Hey ! Your Mood Today</Text>
                                         {editIcon && {
                                             'face_shy': <SmileIcon />,
                                             'happy': <LaughIcon />,

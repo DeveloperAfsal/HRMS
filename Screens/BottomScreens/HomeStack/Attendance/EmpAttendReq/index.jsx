@@ -405,7 +405,7 @@ const EmpAttendReq = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Attendance Request');
+            // navigation.navigate('Attendance Request');
             Handlerefresh();
         }, 2500);
     };
@@ -553,6 +553,7 @@ const EmpAttendReq = ({ navigation }) => {
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
+                                // maximumDate={new Date()}
                             />
                         )}
                     </View>

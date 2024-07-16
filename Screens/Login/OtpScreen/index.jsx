@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import { useSelector } from "react-redux";
@@ -8,7 +8,11 @@ import LottieAlertSucess from "../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../Assets/Alerts/Catch";
 
-const Otp = ({ navigation }) => {
+const Otp = ({ navigation, route }) => {
+
+    // 
+
+    const SpecEmail = route.params.Id;
 
     // data from redux store
 
@@ -19,6 +23,54 @@ const Otp = ({ navigation }) => {
     const [otp, setOtp] = useState('');
     const [load, setLoad] = useState(false);
     const [otpError, setOtpError] = useState('');
+    const [seconds, setSeconds] = useState(60);
+    const [showButton, setShowButton] = useState(false);
+
+    useEffect(() => {
+        if (seconds > 0) {
+            const timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+            return () => clearTimeout(timer);
+        } else {
+            setShowButton(true);
+        }
+    }, [seconds]);
+
+    const handleResendOtp = async () => {
+
+        setLoad(true)
+
+        try {
+
+            const apiUrl = 'https://ocean21.in/api/public/api/forgot_password';
+
+            const response = await axios.post(apiUrl, {
+                email: SpecEmail,
+            });
+
+            if (response.data.status === "success") {
+                // setLoad(false);
+                Alert.alert('Successfull', 'OTP Sent Successfully')
+                // handleShowAlert();
+                // navigation.navigate('Otp')
+            } else {
+                // setLoad(false);
+                // Alert.alert("Login failed");
+                handleShowAlert1();
+                console.error('Login failed:', response.data.error);
+            }
+
+        }
+
+        catch (error) {
+            setLoad(false);
+            // Alert.alert("Error during Mail", "Check The Login Credentials");
+            handleShowAlert2();
+            console.error('Error during login:', error);
+        }
+
+        setSeconds(60);
+        setShowButton(false);
+    };
 
     // 
 
@@ -66,7 +118,7 @@ const Otp = ({ navigation }) => {
             if (response.data.status === "success") {
                 setLoad(false);
                 // handleShowAlert();
-            navigation.navigate('Reset Password');
+                navigation.navigate('Reset Password');
 
             } else {
                 setLoad(false);
@@ -153,6 +205,13 @@ const Otp = ({ navigation }) => {
                             </Text>
                     }
                 </TouchableOpacity>
+
+                {showButton ?
+                    <TouchableOpacity onPress={handleResendOtp}>
+                        <Text style={{ fontWeight: '400', fontSize: 13, color: '#fff', paddingTop: '5%' }}>Resend OTP</Text>
+                    </TouchableOpacity> :
+                    <Text style={{ fontWeight: '400', fontSize: 13, color: '#fff', paddingTop: '5%' }}>Resend OTP in {seconds} s</Text>
+                }
 
             </View>
 

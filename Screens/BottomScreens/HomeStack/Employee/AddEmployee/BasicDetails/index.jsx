@@ -14,6 +14,8 @@ import CheckBox from '@react-native-community/checkbox';
 
 const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedImageErr, validation, setDob }) => {
 
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
     const dispatch = useDispatch();
 
     // Employee from redux store 
@@ -103,6 +105,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
                     const compressedUri = await compressImage(image);
                     console.log(compressedUri, "compressedUri")
                     setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
+                    selectedImageErr(null)
                 }
             }
         }
@@ -293,7 +296,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             </View>
 
             <Text style={styles.errorText}>
-                {validation ? selectedImageErr : null}
+                {validation ? (selectedImage.length == 0 ? "Image Field Required" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -402,7 +405,13 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.phoneNumber ? "Phone Number Required" : null) : null}
+                {validation ? (
+                    !Employee.phoneNumber ?
+                        "Phone Number Required" :
+                        Employee.phoneNumber.length !== 10 ?
+                            "Phone Number must be exactly 10 digits" :
+                            null
+                ) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -417,7 +426,13 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.whatsappNumber ? "WhatsApp Number Required" : null) : null}
+                {validation ? (
+                    !Employee.whatsappNumber ?
+                        "WhatsApp Number Required" :
+                        Employee.whatsappNumber.length !== 10 ?
+                            "WhatsApp Number must be exactly 10 digits" :
+                            null
+                ) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -596,7 +611,13 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.aadharNumber ? "Aadhar Number Required" : null) : null}
+                {validation ? (
+                    !Employee.aadharNumber ?
+                        "Aadhar Number Required" :
+                        Employee.aadharNumber.length !== 12 ?
+                            "Aadhar Number must be exactly 12 digits" :
+                            null
+                ) : null}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -610,7 +631,13 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.panNumber ? "Pan Number Required" : null) : null}
+                {validation ? (
+                    !Employee.panNumber ?
+                        "PAN Number Required" :
+                        !panRegex.test(Employee.panNumber) ?
+                            "PAN Number must be in the format: first 5 letters, next 4 numbers, last 1 letter" :
+                            null
+                ) : null}
             </Text>
 
             <View style={styles.fullWidth}>

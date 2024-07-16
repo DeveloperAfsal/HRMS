@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 
     textview: {
         alignItems: 'flex-start',
-        width: "65%",
+        // width: "65%",
     },
 
     text: {
@@ -174,10 +174,10 @@ const styles = StyleSheet.create({
 
     Emo: {
         flexDirection: 'row',
-        paddingTop: "5%",
+        // paddingTop: "5%",
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: "65%",
+        // width: "65%",
     },
 
     buttonContainer: {
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     },
 
     emojiButton: {
-        padding: 10,
+        padding: 5,
         borderRadius: 20,
         margin: 5,
     },
