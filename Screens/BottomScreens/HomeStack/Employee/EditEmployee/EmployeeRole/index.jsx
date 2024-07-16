@@ -295,6 +295,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, employee, setEmployee, 
                 style={styles.input}
                 value={employee.password}
                 onChangeText={(text) => updateEmployeeField('password', text)}
+                secureTextEntry={true}
             />
 
             <Text style={styles.errorText}>

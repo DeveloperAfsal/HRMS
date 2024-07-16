@@ -58,15 +58,15 @@ const Documents = ({
         }
     }, [])
 
-    console.log(filesets, "filesets")
+    // console.log(filesets, "filesets")
 
     const documentIdget = filesets.map(fileSet => fileSet.documentId);
     const selectedDocumentTypes = filesets.map(fileSet => fileSet.selecteddocumentType);
     const documentNames = filesets.map(fileSet => fileSet.documentName);
     const selectedFiles = filesets.map(fileSet => fileSet.selectedFile);
 
-    console.log(documentIdget, "documentIdget")
-    console.log(selectedFiles, "selectedFiles")
+    // console.log(documentIdget, "documentIdget")
+    // console.log(selectedFiles, "selectedFiles")
 
     // data from redux store 
 
@@ -84,6 +84,8 @@ const Documents = ({
     const [selectedDocument1, setSelectedDocument1] = useState([]);
     const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
     const [load, setLoad] = useState(false);
+
+    console.log(documentList,"documentList")
 
     // Api call for Dropdown dropdown
 
@@ -650,7 +652,7 @@ const Documents = ({
         }, 3000);
     };
 
-    const availableDocumentList = documentList.filter(doc => !employeeDoc.find(d => d.type === doc.document_name));
+    const availableDocumentList = documentList.filter(doc => !employeeDoc.find(d => d.document_type_name === doc.document_name));
 
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editedtitle, setEditedtitle] = useState('');
@@ -791,7 +793,7 @@ const Documents = ({
             <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                 <Text style={styles.StatusTouchableText}>
-                    {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Selected Document Type"}
+                    {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Select Document Type"}
                 </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
