@@ -69,6 +69,8 @@ const AddEmployeeShift = ({ navigation }) => {
     const [selectedDepartmentIds, setSelectedDepartmentIds] = useState([]);
     const selectedDepartmentIdsAsNumbers = selectedDepartmentIds.join(',');
 
+
+
     const handleToggleDepartment = async (departmentName, departmentId) => {
         if (selectedDepartments.includes(departmentName)) {
             setSelectedDepartments(selectedDepartments.filter(selectedDepartment => selectedDepartment !== departmentName));
@@ -76,7 +78,7 @@ const AddEmployeeShift = ({ navigation }) => {
 
             // Clear selected employees when department is deselected
             setSelectedEmployees([]);
-
+            setSelectedEmployeesIds([]);
         } else {
             setSelectedDepartments([...selectedDepartments, departmentName]);
             setSelectedDepartmentIds([...selectedDepartmentIds, departmentId]);
@@ -94,7 +96,6 @@ const AddEmployeeShift = ({ navigation }) => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedDaysIds, setSelectedDaysIds] = useState([]);
     const selectedDaysIdsAsNumbers = selectedDaysIds.join(',');
-
 
     const handleToggleDay = (day, index) => {
         if (selectedDays.includes(day)) {
@@ -138,8 +139,8 @@ const AddEmployeeShift = ({ navigation }) => {
 
     // Date Formatter 
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
+    const formattedStartDate = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+    const formattedEndDate = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
 
     // status
 
@@ -165,7 +166,12 @@ const AddEmployeeShift = ({ navigation }) => {
             });
             setLoadData(false)
             const responseData = response.data.data;
-            setDatalist(responseData);
+            
+            if (!responseData) {
+                setDatalist([]);
+            } else {
+                setDatalist(responseData);
+            }
         } catch (error) {
             setLoadData(false)
             console.error('Error fetching data:', error);
@@ -330,10 +336,14 @@ const AddEmployeeShift = ({ navigation }) => {
         setStartDate(new Date());
         setEndDate(new Date());
         setSelectedDepartments([]);
+        setSelectedDepartmentIds([]);
         setSelectedEmployees([]);
+        setSelectedEmployeesIds([]);
         setSelectedShift(null);
+        setSelectedShiftId(null);
         setSelectedDays([]);
-        setSelectedStatus("Select Status");
+        setSelectedDaysIds([]);
+        setSelectedStatus(null);
         setStatusError('');
         setWeekoffError('');
         setSlotError('');
@@ -411,7 +421,7 @@ const AddEmployeeShift = ({ navigation }) => {
                 setWeekoffError('');
             }
 
-            if (!selectedStatus || selectedStatus === "Select Status") {
+            if (!selectedStatus) {
                 setStatusError('Status Require');
                 Alert.alert('Missing', "Check The Status Field");
                 SetLoad(false)
@@ -439,19 +449,17 @@ const AddEmployeeShift = ({ navigation }) => {
             });
 
             if (response.data.status === "success") {
-                handleShowAlert(response.data);
-                fetchData();
                 SetLoad(false);
-                Handlerefresh();
+                handleShowAlert(response.data);
+                setTimeout(() => {
+                    fetchData();
+                    Handlerefresh();
+                }, 2500);
             } else {
-                // Alert.alert("Failed To Add");
                 handleShowAlert1(response.data);
                 SetLoad(false);
-                console.error('Failed To Add:', response.data.error);
             }
-
         } catch (error) {
-            // Alert.alert("Error during submit", "Check The Input Credentials");
             handleShowAlert2();
             console.error('Error during submit:', error);
             SetLoad(false);
@@ -503,6 +511,10 @@ const AddEmployeeShift = ({ navigation }) => {
             setAlertVisible2(false);
         }, 3000);
     };
+
+    useEffect(() => {
+        console.log(selectedStatus, "selectedStatus")
+    }, [selectedStatus])
 
     return (
 
@@ -794,7 +806,7 @@ const AddEmployeeShift = ({ navigation }) => {
                             }
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelbutton}>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={()=>Handlerefresh()}>
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
                             </Text>
@@ -832,7 +844,7 @@ const AddEmployeeShift = ({ navigation }) => {
                                     <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
                                 </View>
 
-                                {datalist.length === 0 ? (
+                                {datalist.length == 0 ? (
                                     <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                 ) : (
                                     datalist.map((item, index) => (

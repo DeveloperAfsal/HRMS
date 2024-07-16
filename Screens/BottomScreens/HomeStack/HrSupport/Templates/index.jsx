@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, PermissionsAndroid } from "react-native";
 import styles from "./style";
 import DocumentPicker from 'react-native-document-picker';
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import DownloadIcon from "../../../../../Assets/Icons/Download.svg";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import axios from "axios";
 import RNFS from "react-native-fs";
+import RNFetchBlob from 'rn-fetch-blob';
 import { Linking } from 'react-native';
 import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
@@ -264,10 +265,13 @@ const Template = ({ navigation }) => {
     const [editedstatusError, setEditedstatusError] = useState('');
     const [EditLoad, setEditLoad] = useState(false);
     const [showModalDropdown, setShowModalDropdown] = useState(false);
+
     const [EdocFile, setEdocFile] = useState([]);
     console.log(EdocFile, "EdocFile")
+
     const [EditedocFile, seteditedocFile] = useState([]);
     console.log(EditedocFile, "EditedocFile")
+
     const [selectedId, setSelectedId] = useState();
 
     const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
@@ -405,28 +409,36 @@ const Template = ({ navigation }) => {
             });
     }, []);
 
-    const DownloadFile = (URLlink) => {
-        const url = `https://ocean21.in/api/storage/app/`;
-        const filePath = RNFS.DocumentDirectoryPath + URLlink;
+    // const DownloadFile = async (URLlink) => {
+    //     const baseUrl = `https://ocean21.in/api/storage/app/`;
+    //     const url = baseUrl + URLlink;
+    //     const filePath = RNFS.DocumentDirectoryPath + '/' + URLlink.split('/').pop();
 
-        RNFS.downloadFile({
-            fromUrl: url,
-            toFile: filePath,
-            background: true, // Enable downloading in the background (iOS only)
-            discretionary: true, // Allow the OS to control the timing and speed (iOS only)
-            progress: (res) => {
-                // Handle download progress updates if needed
-                const progress = (res.bytesWritten / res.contentLength) * 100;
-                console.log(`Progress: ${progress.toFixed(2)}%`);
-            },
-        })
-            .promise.then((response) => {
-                console.log('File downloaded!', response);
-            })
-            .catch((err) => {
-                console.log('Download error:', err);
-            });
-    };
+    //     console.log(`Downloading from: ${url}`);
+    //     console.log(`Saving to: ${filePath}`);
+
+    //     try {
+    //         const response = await RNFS.downloadFile({
+    //             fromUrl: url,
+    //             toFile: filePath,
+    //             background: true, // Enable downloading in the background (iOS only)
+    //             discretionary: true, // Allow the OS to control the timing and speed (iOS only)
+    //             headers: {
+    //                 'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual token if needed
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             progress: (res) => {
+    //                 // Handle download progress updates if needed
+    //                 const progress = (res.bytesWritten / res.contentLength) * 100;
+    //                 console.log(`Progress: ${progress.toFixed(2)}%`);
+    //             },
+    //         }).promise;
+
+    //         console.log('File downloaded!', response);
+    //     } catch (err) {
+    //         console.log('Download error:', err);
+    //     }
+    // };
 
     const handlePreview = (UrlLink) => {
         const baseUrl = 'https://ocean21.in/api/storage/app/';
@@ -475,6 +487,66 @@ const Template = ({ navigation }) => {
         setSelectedStatus(null);
         setDocFile('');
     }
+
+    const actualDownload = async (URLlink) => {
+        const { dirs } = RNFetchBlob.fs;
+        const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+        const fileName = URLlink.split('/').pop();
+        const configfb = {
+            fileCache: true,
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mediaScannable: true,
+                title: fileName,
+                path: `${dirToSave}/${fileName}`,
+            },
+            path: `${dirToSave}/${fileName}`,
+        };
+
+        const configOptions = Platform.select({
+            ios: configfb,
+            android: configfb,
+        });
+
+        try {
+            const response = await RNFetchBlob.config(configOptions)
+                .fetch('GET', `https://ocean21.in/api/storage/app/${URLlink}`, {
+                    'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual token if needed
+                    'Content-Type': 'application/json',
+                });
+
+            if (Platform.OS === 'ios') {
+                RNFetchBlob.fs.writeFile(configfb.path, response.data, 'base64');
+                RNFetchBlob.ios.previewDocument(configfb.path);
+            } else if (Platform.OS === 'android') {
+                console.log('File downloaded successfully:', response.path());
+                // Alert.alert('Successfull', 'File downloaded successfully');
+                handleShowAlert('File downloaded successfully')
+            }
+        } catch (e) {
+            console.log('Download error:', e);
+        }
+    };
+
+    const getPermission = async (URLlink) => {
+        if (Platform.OS === 'ios') {
+            actualDownload(URLlink);
+        } else {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    actualDownload(URLlink);
+                } else {
+                    console.log("Please grant permission to download the file.");
+                }
+            } catch (err) {
+                console.log("Permission request error:", err);
+            }
+        }
+    };
 
     return (
 
@@ -626,7 +698,7 @@ const Template = ({ navigation }) => {
                                                     </TouchableOpacity> : null}
 
                                                     <TouchableOpacity
-                                                        onPress={() => DownloadFile(item.template_file)}
+                                                        onPress={() => getPermission(item.template_file)}
                                                         style={styles.listcontenteditbutton}>
                                                         <DownloadIcon width={14} height={14} color={"#000"} />
                                                     </TouchableOpacity>
@@ -773,8 +845,8 @@ const Template = ({ navigation }) => {
                                         }
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
 
                                 </View>

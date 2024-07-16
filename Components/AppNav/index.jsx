@@ -97,7 +97,7 @@ const AppNav = ({ navigation }) => {
             <LottieAlertSucess
                 visible={isAlertVisible}
                 animationSource={require('../../Assets/Alerts/tick.json')}
-                title="SuccessFully Logged In"
+                title="Successfully Logged In"
             />
 
         </>
