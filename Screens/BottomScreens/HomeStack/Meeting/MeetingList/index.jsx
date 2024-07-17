@@ -355,7 +355,7 @@ const MeetingList = ({ navigation }) => {
             console.log(error);
             setDelData1(false);
         }
-
+        setModalVisible1(false)
     }
 
     const HandleCancel = async (item) => {
@@ -394,7 +394,7 @@ const MeetingList = ({ navigation }) => {
             console.log(error);
             setDelData2(false);
         }
-
+        setModalVisible2(false)
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -505,8 +505,8 @@ const MeetingList = ({ navigation }) => {
                                     <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Date</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>Start Time</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>End Time</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Agenda</Text>
-                                    <Text style={[styles.header, styles.cell, styles.Status]}>Remarks</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status1, { textAlign: 'left' }]}>Agenda</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status1, { textAlign: 'left' }]}>Remarks</Text>
                                     {
                                         data.userrole == 1 || data.userrole == 2 ?
                                             <>
@@ -534,8 +534,8 @@ const MeetingList = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.ShiftSlot]}>{item.m_date}</Text>
                                             <Text style={[styles.cell, styles.WeekOff]}>{item.m_start_time}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.m_end_time}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.m_agenda}</Text>
-                                            <Text style={[styles.cell, styles.Status]}>{item.m_remarks}</Text>
+                                            <Text style={[styles.cell, styles.Status1, { textAlign: 'left' }]}>{item.m_agenda}</Text>
+                                            <Text style={[styles.cell, styles.Status1, { textAlign: 'left' }]}>{item.m_remarks}</Text>
                                             {
                                                 data.userrole == 1 || data.userrole == 2 ?
                                                     <>
@@ -546,7 +546,6 @@ const MeetingList = ({ navigation }) => {
                                                         <Text style={[styles.cell, styles.Status]}>{item.empreason}</Text>
                                                     </>
                                             }
-
 
                                             {(data.userrole == 1 || data.userrole == 2) ? (
                                                 <View style={styles.listcontentButtonview}>
@@ -653,8 +652,8 @@ const MeetingList = ({ navigation }) => {
                                     {ReasonError1}
                                 </Text>
                                 <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete1}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete1}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalDeleteButton} onPress={HandleConfirm}>
 
@@ -662,7 +661,7 @@ const MeetingList = ({ navigation }) => {
                                         {
                                             DelData1 ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalDeleteButtonText}>Update</Text>
+                                                <Text style={styles.modalDeleteButtonText}>Submit</Text>
                                         }
 
 
@@ -691,8 +690,8 @@ const MeetingList = ({ navigation }) => {
                                     {ReasonError2}
                                 </Text>
                                 <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete2}>
-                                        <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete2}>
+                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.modalDeleteButton} onPress={HandleCancel}>
 
@@ -700,7 +699,7 @@ const MeetingList = ({ navigation }) => {
                                         {
                                             DelData2 ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalDeleteButtonText}>Update</Text>
+                                                <Text style={styles.modalDeleteButtonText}>Submit</Text>
                                         }
 
 

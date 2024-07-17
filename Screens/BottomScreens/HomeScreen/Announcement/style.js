@@ -361,6 +361,19 @@ const styles = StyleSheet.create({
         paddingLeft: "5%"
     },
 
+    modalInput1: {
+        paddingLeft: 20,
+        borderRadius: 7,
+        borderWidth: 0.5,
+        borderColor: "#515151",
+        height: 152,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: "5%",
+        paddingLeft: "5%"
+    },
+
     modalReasonInput: {
         paddingLeft: 20,
         borderRadius: 7,

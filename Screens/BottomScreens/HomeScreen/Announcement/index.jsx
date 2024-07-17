@@ -594,7 +594,9 @@ const Announcement = () => {
                             <TextInput
                                 value={AnnounceMentdes}
                                 onChangeText={(txt) => setAnnounceMentdes(txt)}
-                                style={styles.modalInput}
+                                style={styles.modalInput1}
+                                multiline={true}
+                                textAlignVertical="top"
                             />
 
                             <Text style={styles.errorText}>

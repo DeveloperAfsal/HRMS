@@ -12,6 +12,8 @@ const OrgIndvidual = ({ route, navigation }) => {
     const [totalcount, setTotalCount] = useState('');
     const [details, setDetails] = useState([]);
 
+    console.log(details,"details")
+
     const CountApi = async () => {
         try {
             const apiUrl = `https://ocean21.in/api/public/api/orgchart_employee_data/${SpecId.id}`;

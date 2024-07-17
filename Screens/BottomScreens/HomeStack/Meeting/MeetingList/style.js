@@ -177,6 +177,10 @@ const styles = StyleSheet.create({
         width: 100
     },
 
+    Status1: {
+        width: 200
+    },
+
     Action: {
         width: 100
     },
