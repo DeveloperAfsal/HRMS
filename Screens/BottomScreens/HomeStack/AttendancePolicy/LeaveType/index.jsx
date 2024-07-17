@@ -60,25 +60,34 @@ const LeaveType = () => {
 
     // Api Call For Add Shift 
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!shiftSlot) {
+            setShiftError('Leave Type is required');
+            isValid = false;
+        } else {
+            setShiftError('');
+        }
+
+        if (!selectedStatus || selectedStatus === "Select Status") {
+            setStatusError('Status is required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true)
 
         try {
-            if (!shiftSlot) {
-                setShiftError('Leave Type is required');
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setShiftError('');
-            }
-
-            if (!selectedStatus || selectedStatus === "Select Status") {
-                setStatusError('Status is required');
-                setLoad(false);
-                return;
-            } else {
-                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/leavetypeinsert';

@@ -394,74 +394,72 @@ const AttendancePolicy = ({ navigation }) => {
 
     // Api call for Handle Submit
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!selectedShift) {
+            setSelectedShiftError('Shift is Required');
+            isValid = false;
+        } else {
+            setSelectedShiftError('');
+        }
+
+        if (!late1) {
+            setlate1Error('Late1 Field is Required');
+            isValid = false;
+        } else {
+            setlate1Error('');
+        }
+
+        if (!late2) {
+            setlate2Error('Late2 Field is Required');
+            isValid = false;
+        } else {
+            setlate2Error('');
+        }
+
+        if (!late3) {
+            setlate3Error('Late3 Field is Required');
+            isValid = false;
+        } else {
+            setlate3Error('');
+        }
+
+        if (!lateDeduction1) {
+            setLateDeduction1Error('LateDeduction1 Field is Required');
+            isValid = false;
+        } else {
+            setLateDeduction1Error('');
+        }
+
+        if (!lateDeduction2) {
+            setLateDeduction2Error('LateDeduction2 Field is Required');
+            isValid = false;
+        } else {
+            setLateDeduction2Error('');
+        }
+
+        if (!lateDeduction3) {
+            setLateDeduction3Error('LateDeduction3 Field is Required');
+            isValid = false;
+        } else {
+            setLateDeduction3Error('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         SetLoad(true);
 
         try {
 
-            if (!selectedShift || selectedShift === "Select Shift") {
-                setSelectedShiftError('Shift is Required');
-                Alert.alert('Missing', "Check The Shift Field");
+            if (!validateFields()) {
                 SetLoad(false);
                 return;
-            } else {
-                setSelectedShiftError('');
             }
 
-            if (!late1) {
-                setlate1Error('Late1 Field is Required');
-                Alert.alert('Missing', "Check The Late1 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setlate1Error('')
-            }
-
-            if (!late2) {
-                setlate2Error('Late2 Field is Required');
-                Alert.alert('Missing', "Check The Late2 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setlate2Error('');
-            }
-
-            if (!late3) {
-                setlate3Error('Late3 Field is Required');
-                Alert.alert('Missing', "Check The Late3 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setlate3Error('');
-            }
-
-            if (!lateDeduction1) {
-                setLateDeduction1Error('LateDeduction1 Field is Required');
-                Alert.alert('Missing', "Check The LateDeduction1 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setLateDeduction1Error('')
-            }
-
-            if (!lateDeduction2) {
-                setLateDeduction2Error('LateDeduction2 Field is Required');
-                Alert.alert('Missing', "Check The LateDeduction2 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setLateDeduction2Error('');
-            }
-
-            if (!lateDeduction3) {
-                setLateDeduction3Error('LateDeduction3 Field is Required');
-                Alert.alert('Missing', "Check The LateDeduction3 Field");
-                SetLoad(false);
-                return;
-            } else {
-                setLateDeduction3Error('');
-            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/attendancepolicyinsert';
 
@@ -522,7 +520,7 @@ const AttendancePolicy = ({ navigation }) => {
     }
 
     const Handlerefresh = () => {
-        setSelectedShift('Select Shift')
+        setSelectedShift(null)
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
         setSlotTotalTime('00:00:00');

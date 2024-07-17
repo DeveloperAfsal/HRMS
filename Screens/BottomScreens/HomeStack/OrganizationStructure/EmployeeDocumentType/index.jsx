@@ -62,25 +62,35 @@ const DocumentType = () => {
 
     // Api Call For Add Shift 
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!shiftSlot) {
+            setShiftError('Document Name Required');
+            isValid = false;
+        } else {
+            setShiftError('');
+        }
+    
+        if (!selectedStatus) {
+            setStatusError('Status is required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+    
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true)
 
         try {
-            if (!shiftSlot) {
-                setShiftError('Document Name required');
-                setLoad(false)
-                return;
-            } else {
-                setShiftError('');
-            }
 
-            if (!selectedStatus || selectedStatus === "Select Status") {
-                setStatusError('Status is required');
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/empdoctypeinsert';
@@ -98,7 +108,7 @@ const DocumentType = () => {
             if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
-                setSelectedStatus('Select Status');
+                setSelectedStatus(null);
                 handleShowAlert(response.data);
                 fetchData();
             } else {
@@ -122,7 +132,7 @@ const DocumentType = () => {
         setShiftSlot('');
         setStatusError('');
         setShiftError('');
-        setSelectedStatus("Select Status");
+        setSelectedStatus(null);
     }
 
     // Api call for list Shifts

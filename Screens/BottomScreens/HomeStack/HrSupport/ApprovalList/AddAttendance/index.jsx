@@ -279,89 +279,84 @@ const AddAttendance = ({ navigation }) => {
         setShowDropdown(false);
     };
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            isValid = false;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            isValid = false;
+        } else {
+            setSelectedMemberErr('');
+        }
+
+        if (!selectedType) {
+            setSelectedTypeErr('Select Type');
+            isValid = false;
+        } else {
+            setSelectedTypeErr('');
+        }
+
+        if (!selectedLocation) {
+            setSelectedLocationErr('Select Location');
+            isValid = false;
+        } else {
+            setSelectedLocationErr('');
+        }
+
+        if (!selectedShift) {
+            setSelectedShiftErr('Select Shift');
+            isValid = false;
+        } else {
+            setSelectedShiftErr('');
+        }
+
+        if (!startDate) {
+            setStartDateErr('Select Date');
+            isValid = false;
+        } else {
+            setStartDateErr('');
+        }
+
+        if (slotfromTime === '00:00:00') {
+            setSlotfromTimeErr('Select From Time');
+            isValid = false;
+        } else {
+            setSlotfromTimeErr('');
+        }
+
+        if (slotToTime === '00:00:00') {
+            setSlotToTimeErr('Select To Time');
+            isValid = false;
+        } else {
+            setSlotToTimeErr('');
+        }
+
+        if (!Reason) {
+            setReasonErr('Enter Reason');
+            isValid = false;
+        } else {
+            setReasonErr('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
+
         setLoad(true);
+
         try {
 
-            if (!selectedDepartments) {
-                setSelectedDepartmentsErr('Select Department Name');
-                Alert.alert('Missing', "Check The Department Field");
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setSelectedDepartmentsErr('');
-            }
-
-            if (!selectedMember) {
-                setSelectedMemberErr('Select Member Name');
-                Alert.alert('Missing', "Check The Member Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedMemberErr('');
-            }
-
-            if (!selectedType) {
-                setSelectedTypeErr('Select Type');
-                Alert.alert('Missing', "Check The Type Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedTypeErr('');
-            }
-
-            if (!selectedLocation) {
-                setSelectedLocationErr('Select Loactaion');
-                Alert.alert('Missing', "Check The Loactaion Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedLocationErr('');
-            }
-
-            if (!selectedShift) {
-                setSelectedShiftErr('Select Shift');
-                Alert.alert('Missing', "Check The Shift Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedShiftErr('');
-            }
-
-            if (!startDate) {
-                setStartDateErr('Select Date');
-                Alert.alert('Missing', "Check The Date Field");
-                setLoad(false);
-                return;
-            } else {
-                setStartDateErr('');
-            }
-
-            if (slotfromTime == '00:00:00') {
-                setSlotfromTimeErr('Select From Time');
-                Alert.alert('Missing', "Check The From Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotfromTimeErr('');
-            }
-
-            if (slotToTime == '00:00:00') {
-                setSlotToTimeErr('Select To Time');
-                Alert.alert('Missing', "Check The To Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotToTimeErr('');
-            }
-
-            if (!Reason) {
-                setReasonErr('Enter Reason');
-                Alert.alert('Missing', "Check The Reason Field");
-                setLoad(false);
-                return;
-            } else {
-                setReasonErr('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_attendancemenualentry';

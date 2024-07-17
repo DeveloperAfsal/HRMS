@@ -81,7 +81,7 @@ const SupervisorList = ({ navigation }) => {
     const [supervisorNameDropdown, setSupervisorNameDropdown] = useState([]);
     const [selectedName, setSelectedName] = useState(null);
     const [selectedNameId, setSelectedNameId] = useState(null);
-    console.log(selectedNameId, "selectedNameId")
+    console.log(supervisorNameDropdown, "supervisorNameDropdown")
     const [showSupervisorNameDropdown, setShowSupervisorNameDropdown] = useState(false);
     const [memError, setMemError] = useState('');
 
@@ -125,37 +125,42 @@ const SupervisorList = ({ navigation }) => {
         setShowSupervisorNameDropdown(false);
     };
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!selectedDepartment) {
+            setDepError('Department Required');
+            isValid = false;
+        } else {
+            setDepError('');
+        }
+
+        if (!selectedName) {
+            setMemError('Supervisor Required');
+            isValid = false;
+        } else {
+            setMemError('');
+        }
+
+        if (!selectedStatus) {
+            setStatusError('Status Required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true);
 
         try {
 
-            if (!selectedDepartment) {
-                setDepError('Department Required ');
-                Alert.alert('Missing', "Check The Department Field");
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setDepError('');
-            }
-
-            if (!selectedName) {
-                setMemError('Supervisor Required ');
-                Alert.alert('Missing', "Check The Supervisor Field");
-                setLoad(false);
-                return;
-            } else {
-                setMemError('');
-            }
-
-            if (!selectedStatus || selectedStatus === "Selected Status") {
-                setStatusError('Status Required ');
-                Alert.alert('Missing', "Check The Status Field");
-                setLoad(false);
-                return;
-            } else {
-                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/addsupervisor';
@@ -196,9 +201,9 @@ const SupervisorList = ({ navigation }) => {
     // 
 
     const Handlerefresh = () => {
-        setSelectedDepartment('Select Department Name');
-        setSelectedName('Select Name');
-        setSelectedStatus("Selected Status");
+        setSelectedDepartment(null);
+        setSelectedName(null);
+        setSelectedStatus(null);
         setSelectedNameId(null);
         setSelectedDepartmentId(null);
     }

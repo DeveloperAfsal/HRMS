@@ -350,115 +350,95 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
 
     };
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            isValid = false;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+    
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            isValid = false;
+        } else {
+            setSelectedMemberErr('');
+        }
+    
+        if (!selectedType) {
+            setSelectedTypeErr('Select Type');
+            isValid = false;
+        } else {
+            setSelectedTypeErr('');
+        }
+    
+        if (!selectedCategory) {
+            setSelectedCategoryErr('Select Category');
+            isValid = false;
+        } else {
+            setSelectedCategoryErr('');
+        }
+    
+        if (selectedCategory === "Leave" || selectedCategory === "Absent") {
+            if (!date) {
+                setdateErr('Select From Date');
+                isValid = false;
+            } else {
+                setdateErr('');
+            }
+    
+            if (!endDate) {
+                setEndDateErr('Select To Date');
+                isValid = false;
+            } else {
+                setEndDateErr('');
+            }
+        }
+    
+        if (selectedCategory === "Permission" || selectedCategory === "Half Day") {
+            if (!startDate) {
+                setStartDateErr('Select Date');
+                isValid = false;
+            } else {
+                setStartDateErr('');
+            }
+    
+            if (!slotfromTime) {
+                setSlotfromTimeErr('Select From Time');
+                isValid = false;
+            } else {
+                setSlotfromTimeErr('');
+            }
+    
+            if (!slotToTime) {
+                setSlotToTimeErr('Select To Time');
+                isValid = false;
+            } else {
+                setSlotToTimeErr('');
+            }
+        }
+    
+        if (!Reason) {
+            setReasonErr('Enter Reason');
+            isValid = false;
+        } else {
+            setReasonErr('');
+        }
+    
+        return isValid;
+    };
     const HandleSubmit = async () => {
 
         setLoad(true);
 
         const formData = new FormData();
 
-        if (!selectedDepartments) {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
+        if (!validateFields()) {
             setLoad(false);
             return;
-        } else {
-            setSelectedDepartmentsErr('');
         }
-
-        if (!selectedMember) {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedMemberErr('');
-        }
-
-        if (!selectedType) {
-            setSelectedTypeErr('Select Type');
-            Alert.alert('Missing', "Check The Type Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedTypeErr('');
-        }
-
-        if (!selectedCategory) {
-            setSelectedCategoryErr('Select Category');
-            Alert.alert('Missing', "Check The Category Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedCategoryErr('');
-        }
-
-        if (selectedCategory === "Leave" || selectedCategory === "Absent") {
-            if (!date) {
-                setdateErr('Select From Date');
-                Alert.alert('Missing', "Check From Date Field");
-                setLoad(false);
-                return;
-            } else {
-                setdateErr('');
-            }
-
-            if (!endDate) {
-                setEndDateErr('Select To Date');
-                Alert.alert('Missing', "Check To Date Field");
-                setLoad(false);
-                return;
-            } else {
-                setEndDateErr('');
-            }
-        }
-
-        if (selectedCategory === "Permission" || selectedCategory === "Half Day") {
-            if (!startDate) {
-                setStartDateErr('Select Date');
-                Alert.alert('Missing', "Check The Date Field");
-                setLoad(false);
-                return;
-            } else {
-                setStartDateErr('');
-            }
-
-            if (!slotfromTime) {
-                setSlotfromTimeErr('Select From Time');
-                Alert.alert('Missing', "Check The From Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotfromTimeErr('');
-            }
-
-            if (!slotToTime) {
-                setSlotToTimeErr('Select To Time');
-                Alert.alert('Missing', "Check The To Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotToTimeErr('');
-            }
-        }
-
-        if (!Reason) {
-            setReasonErr('Enter Reason');
-            Alert.alert('Missing', "Check The Reason Field");
-            setLoad(false);
-            return;
-        } else {
-            setReasonErr('');
-        }
-
-        // if (!docFile) {
-        //     setDocFileErr('Choose file');
-        //     Alert.alert('Missing', "Check File Field");
-        //     setLoad(false);
-        //     return;
-        // } else {
-        //     setDocFileErr('');
-        // }
-
 
         try {
 
@@ -570,6 +550,8 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
             setAlertVisible2(false);
         }, 3000);
     };
+
+    const filteredCategoryDropdown = CategoryDropdown.filter(item => item.leave_category_name !== "Absent");
 
     return (
 
@@ -700,7 +682,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                 {showCategoryDropdown && (
                     <View style={styles.dropdown}>
                         <ScrollView>
-                            {CategoryDropdown.map((item, index) => (
+                            {filteredCategoryDropdown.map((item, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     style={styles.dropdownOption}

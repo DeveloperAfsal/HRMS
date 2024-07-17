@@ -247,7 +247,7 @@ const LeavePolicy = ({ navigation }) => {
     const Handlerefresh = () => {
         setStartDate(new Date());
         setEndDate(new Date());
-        setSelectedleaveType('Select Leave Type');
+        setSelectedleaveType(null);
         setSelectedDepartments([]);
         setSelectedDepartmentIds([]);
         setSelectedEmployees([]);
@@ -260,55 +260,56 @@ const LeavePolicy = ({ navigation }) => {
         setMonthlycountError('');
     }
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!selectedleaveType) {
+            setLeaveTypeError('Select Leave Type');
+            isValid = false;
+        } else {
+            setLeaveTypeError('');
+        }
+
+        if (!selectedDepartments.length) {
+            setRoleError('Select Role');
+            isValid = false;
+        } else {
+            setRoleError('');
+        }
+
+        if (!selectedEmployees.length) {
+            setEmployeeError('Select Employee');
+            isValid = false;
+        } else {
+            setEmployeeError('');
+        }
+
+        if (!Leavecount) {
+            setLeavecountError('Enter Leave Count');
+            isValid = false;
+        } else {
+            setLeavecountError('');
+        }
+
+        if (!Monthlycount) {
+            setMonthlycountError('Enter Monthly Leave Count');
+            isValid = false;
+        } else {
+            setMonthlycountError('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true);
 
         try {
 
-            if (!selectedleaveType) {
-                setLeaveTypeError('Select Leave Type');
-                Alert.alert('Missing', "Check The Leave Type Field");
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setLeaveTypeError('')
-            }
-
-            if (!selectedDepartments.length) {
-                setRoleError('Select Role');
-                Alert.alert('Missing', "Check The Role Field");
-                setLoad(false);
-                return;
-            } else {
-                setRoleError('');
-            }
-
-            if (!selectedEmployees.length) {
-                setEmployeeError('Select Employee');
-                Alert.alert('Missing', "Check The Select Employee Field");
-                setLoad(false);
-                return;
-            } else {
-                setEmployeeError('');
-            }
-
-            if (!Leavecount) {
-                setLeavecountError('Enter Leave Count');
-                Alert.alert('Missing', "Check The Total Leave Count Field");
-                setLoad(false);
-                return;
-            } else {
-                setLeavecountError('');
-            }
-
-            if (!Monthlycount) {
-                setMonthlycountError('Enter Monthly Leave Count');
-                Alert.alert('Missing', "Check The Monthly Leave Count Field");
-                setLoad(false);
-                return;
-            } else {
-                setMonthlycountError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/addleave_policy';
@@ -330,7 +331,7 @@ const LeavePolicy = ({ navigation }) => {
 
             console.log(response.data, "response")
 
-            console.log( 
+            console.log(
                 "start_date:", formattedStartDate,
                 "end_date:", formattedEndDate,
                 "role_type:", selectedDepartmentIdsAsNumbers,

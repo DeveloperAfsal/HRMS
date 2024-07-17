@@ -379,57 +379,57 @@ const AddEmployeeShift = ({ navigation }) => {
 
     // Api call for Handle Submit
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!selectedDepartments.length) {
+            setSelectedShiftError('Select Department Name');
+            isValid = false;
+        } else {
+            setSelectedShiftError('');
+        }
+    
+        if (!selectedEmployees.length) {
+            setEmployeeError('Select Employee Name');
+            isValid = false;
+        } else {
+            setEmployeeError('');
+        }
+    
+        if (!selectedShift) {
+            setSlotError('Select Shift Slot');
+            isValid = false;
+        } else {
+            setSlotError('');
+        }
+    
+        if (!selectedDays.length) {
+            setWeekoffError('Week off Required');
+            isValid = false;
+        } else {
+            setWeekoffError('');
+        }
+    
+        if (!selectedStatus) {
+            setStatusError('Status Required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+    
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         SetLoad(true);
 
         try {
 
-            if (!selectedDepartments.length) {
-                setSelectedShiftError('Select Department Name');
-                Alert.alert('Missing', "Check The Department Name Field");
+            if (!validateFields()) {
                 SetLoad(false);
                 return;
-            } else {
-                setSelectedShiftError('');
             }
-
-            if (!selectedEmployees.length) {
-                setEmployeeError('Select Employee Name');
-                Alert.alert('Missing', "Check The Employee Name Field");
-                SetLoad(false);
-                return;
-            } else {
-                setEmployeeError('');
-            }
-
-            if (!selectedShift) {
-                setSlotError('Select Shift Slot');
-                Alert.alert('Missing', "Check The Shift Slot Field");
-                SetLoad(false);
-                return;
-            } else {
-                setSlotError('');
-            }
-
-            if (!selectedDays.length) {
-                setWeekoffError('Week off Required');
-                Alert.alert('Missing', "Check The Week off Field");
-                SetLoad(false)
-                return;
-            } else {
-                setWeekoffError('');
-            }
-
-            if (!selectedStatus) {
-                setStatusError('Status Require');
-                Alert.alert('Missing', "Check The Status Field");
-                SetLoad(false)
-                return;
-            } else {
-                setStatusError('')
-            }
-
 
             const apiUrl = 'https://ocean21.in/api/public/api/employeeshiftinsert';
 

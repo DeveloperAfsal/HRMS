@@ -270,89 +270,44 @@ const AddOvertime = ({ navigation }) => {
         setShowDropdown(false);
     };
 
+    const validateFields = () => {
+        const validations = [
+            { field: selectedDepartments, errorSetter: setSelectedDepartmentsErr, errorMessage: 'Select Department Name' },
+            { field: selectedMember, errorSetter: setSelectedMemberErr, errorMessage: 'Select Member Name' },
+            { field: selectedType, errorSetter: setSelectedTypeErr, errorMessage: 'Select Type' },
+            { field: selectedLocation, errorSetter: setSelectedLocationErr, errorMessage: 'Select Location' },
+            { field: selectedShift, errorSetter: setSelectedShiftErr, errorMessage: 'Select Shift' },
+            { field: startDate, errorSetter: setStartDateErr, errorMessage: 'Select Date' },
+            { field: slotfromTime !== '00:00:00', errorSetter: setSlotfromTimeErr, errorMessage: 'Select From Time' },
+            { field: slotToTime !== '00:00:00', errorSetter: setSlotToTimeErr, errorMessage: 'Select To Time' },
+            { field: Reason, errorSetter: setReasonErr, errorMessage: 'Enter Reason' }
+        ];
+
+        let isValid = true;
+
+        validations.forEach(({ field, errorSetter, errorMessage }) => {
+            if (!field) {
+                errorSetter(errorMessage);
+                isValid = false;
+            } else {
+                errorSetter('');
+            }
+        });
+
+        if (!isValid) {
+            setLoad(false);
+        }
+
+        return isValid;
+    };
+
     const handleSubmit = async () => {
         setLoad(true);
         try {
 
-            if (!selectedDepartments) {
-                setSelectedDepartmentsErr('Select Department Name');
-                Alert.alert('Missing', "Check The Department Field");
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setSelectedDepartmentsErr('');
-            }
-
-            if (!selectedMember) {
-                setSelectedMemberErr('Select Member Name');
-                Alert.alert('Missing', "Check The Member Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedMemberErr('');
-            }
-
-            if (!selectedType) {
-                setSelectedTypeErr('Select Type');
-                Alert.alert('Missing', "Check The Type Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedTypeErr('');
-            }
-
-            if (!selectedLocation) {
-                setSelectedLocationErr('Select Loactaion');
-                Alert.alert('Missing', "Check The Loactaion Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedLocationErr('');
-            }
-
-            if (!selectedShift) {
-                setSelectedShiftErr('Select Shift');
-                Alert.alert('Missing', "Check The Shift Field");
-                setLoad(false);
-                return;
-            } else {
-                setSelectedShiftErr('');
-            }
-
-            if (!startDate) {
-                setStartDateErr('Select Date');
-                Alert.alert('Missing', "Check The Date Field");
-                setLoad(false);
-                return;
-            } else {
-                setStartDateErr('');
-            }
-
-            if (slotfromTime == '00:00:00') {
-                setSlotfromTimeErr('Select From Time');
-                Alert.alert('Missing', "Check The From Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotfromTimeErr('');
-            }
-
-            if (slotToTime == '00:00:00') {
-                setSlotToTimeErr('Select To Time');
-                Alert.alert('Missing', "Check The To Time Field");
-                setLoad(false);
-                return;
-            } else {
-                setSlotToTimeErr('');
-            }
-
-            if (!Reason) {
-                setReasonErr('Enter Reason');
-                Alert.alert('Missing', "Check The Reason Field");
-                setLoad(false);
-                return;
-            } else {
-                setReasonErr('');
             }
 
             const apiUrl = `https://ocean21.in/api/public/api/add_otmenualentry`;

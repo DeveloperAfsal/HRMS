@@ -61,25 +61,34 @@ const LevelCategory = () => {
 
     // Api Call For Add Shift 
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!shiftSlot) {
+            setShiftError('Level Name Required');
+            isValid = false;
+        } else {
+            setShiftError('');
+        }
+
+        if (!selectedStatus) {
+            setStatusError('Status is required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true)
 
         try {
-            if (!shiftSlot) {
-                setShiftError('Level Name Required');
-                setLoad(false)
-                return;
-            } else {
-                setShiftError('');
-            }
-
-            if (!selectedStatus || selectedStatus === "Select Status") {
-                setStatusError('Status is required');
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/emplevelcategoryinsert';
@@ -97,7 +106,7 @@ const LevelCategory = () => {
             if (response.data.status === "success") {
                 setLoad(false);
                 setShiftSlot('');
-                setSelectedStatus('Selected Status');
+                setSelectedStatus(null);
                 fetchData();
                 handleShowAlert(response.data);
             } else {
@@ -121,7 +130,7 @@ const LevelCategory = () => {
         setShiftSlot('');
         setStatusError('');
         setShiftError('');
-        setSelectedStatus("Select Status");
+        setSelectedStatus(null);
     }
 
     // Api call for list Shifts
