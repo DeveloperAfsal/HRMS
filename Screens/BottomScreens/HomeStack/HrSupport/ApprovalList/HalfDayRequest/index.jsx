@@ -304,6 +304,7 @@ const HalfDayRequest = () => {
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                <Text style={[styles.header, styles.cell, styles.Status]}>HR Status</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                             </View>
 
@@ -321,6 +322,7 @@ const HalfDayRequest = () => {
                                         <Text style={[styles.cell, styles.WeekOff]}>{item.permission_timefrom}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.permission_timeto}</Text>
                                         <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
+                                        <Text style={[styles.cell, styles.Status]}>{item.tl_status === null ? "Pending" : item.tl_status}</Text>
                                         {
                                             item.emp_status === "Pending" ?
                                                 <View style={styles.listcontentButtonview}>

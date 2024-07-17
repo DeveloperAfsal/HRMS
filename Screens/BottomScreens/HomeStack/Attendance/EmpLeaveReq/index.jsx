@@ -76,6 +76,8 @@ const EmpLeaveReq = ({ navigation }) => {
     const [selectedCategoryId, setSelectedCategoryId] = useState('');
     const [selectedCategoryErr, setSelectedCategoryErr] = useState('');
 
+    const filteredCategoryDropdown = CategoryDropdown.filter(item => item.leave_category_name !== "Absent");
+
     useEffect(() => {
         const apiUrl = 'https://ocean21.in/api/public/api/leave_category_list';
 
@@ -117,7 +119,6 @@ const EmpLeaveReq = ({ navigation }) => {
     const formattedStartDate = startDate ?
         `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
         "";
-    console.log(formattedStartDate, "formattedStartDate");
 
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
@@ -136,7 +137,6 @@ const EmpLeaveReq = ({ navigation }) => {
     const formattedEndDate = endDate ?
         `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}` :
         "";
-    console.log(formattedEndDate, "formatteddate")
 
     const handleDateChange1 = (event, date) => {
         if (date !== undefined) {
@@ -155,7 +155,6 @@ const EmpLeaveReq = ({ navigation }) => {
     const formattedReturnDate = returnDate ?
         `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}` :
         "";
-    console.log(formattedReturnDate, "formatteddate")
 
     const handleDateChange2 = (event, date) => {
         if (date !== undefined) {
@@ -550,7 +549,7 @@ const EmpLeaveReq = ({ navigation }) => {
                     {showCategoryDropdown && (
                         <View style={styles.dropdown}>
                             <ScrollView>
-                                {CategoryDropdown.map((item, index) => (
+                                {filteredCategoryDropdown.map((item, index) => (
                                     <TouchableOpacity
                                         key={index}
                                         style={styles.dropdownOption}

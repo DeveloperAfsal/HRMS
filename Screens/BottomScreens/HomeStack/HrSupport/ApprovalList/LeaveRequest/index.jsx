@@ -297,6 +297,7 @@ const LeaveRequest = () => {
                                     <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>From Date</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Date</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>HR Status</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                                 </View>
 
@@ -313,6 +314,7 @@ const LeaveRequest = () => {
                                             <Text style={[styles.cell, styles.ShiftSlot]}>{item.from_date}</Text>
                                             <Text style={[styles.cell, styles.WeekOff]}>{item.to_date}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.tl_status === null ? "Pending" : item.tl_status}</Text>
                                             {
                                                 item.emp_status === "Pending" ?
                                                     <View style={styles.listcontentButtonview}>
