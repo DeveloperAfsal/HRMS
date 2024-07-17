@@ -64,26 +64,35 @@ const IssueType = () => {
 
     // Api Call For Add Shift 
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!shiftSlot) {
+            setShiftError('Issue type is required');
+            isValid = false;
+        } else {
+            setShiftError('');
+        }
+
+        if (!selectedStatus) {
+            setStatusError('Status is required');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true)
 
         try {
 
-            if (!shiftSlot) {
-                setShiftError('Issue type is required');
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setShiftError('');
-            }
-
-            if (!selectedStatus) {
-                setStatusError('Status is required');
-                setLoad(false);
-                return;
-            } else {
-                setStatusError('');
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_issue_type';
@@ -124,6 +133,8 @@ const IssueType = () => {
     const HandleCancel = () => {
         setShiftSlot('');
         setShiftError('');
+        setSelectedStatus(null);
+        setStatusError(null);
     }
 
     // Api call for list Shifts

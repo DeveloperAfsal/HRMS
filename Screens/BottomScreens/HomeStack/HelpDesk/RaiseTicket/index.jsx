@@ -249,91 +249,77 @@ const RaiseTicket = ({ navigation }) => {
 
     // 
 
-    const AddTick = async () => {
-
-        SetLoad(true);
-
-        const formData = new FormData();
+    const validateFields = () => {
+        let isValid = true;
 
         if (!selectedDepartments) {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Name Field");
-            SetLoad(false);
-            return;
+            setSelectedDepartmentsErr('Select Department Name')
+            isValid = false;
         } else {
             setSelectedDepartmentsErr('');
         }
 
         if (!selectedMember) {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Name Field");
-            SetLoad(false);
-            return;
+            setSelectedMemberErr('Select Member Name')
+            isValid = false;
         } else {
             setSelectedMemberErr('');
         }
 
         if (!tickTitle) {
-            setTickTitleErr('Enter Title');
-            Alert.alert('Missing', "Check The Title Field");
-            SetLoad(false);
-            return;
+            setTickTitleErr('Enter Title')
+            isValid = false;
         } else {
             setTickTitleErr('');
         }
 
         if (!selectedIssType) {
             setSelectedIssTypeErr('Select Issue Type');
-            Alert.alert('Missing', "Check The Issue Type Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedIssTypeErr('');
         }
 
         if (!description) {
             setDescriptionErr('Enter Description');
-            Alert.alert('Missing', "Check The Description Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setDescriptionErr('');
         }
 
-        // if (!docFile) {
-        //     setDocFileErr('choose File');
-        //     Alert.alert('Missing', "Check The Attachment Field");
-        //     SetLoad(false);
-        //     return;
-        // } else {
-        //     setDocFileErr('');
-        // }
-
         if (!selectedDepartments1) {
             setSelectedDepartmentsErr1('Select Department Name');
-            Alert.alert('Missing', "Check The Assign Department Name Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedDepartmentsErr1('');
         }
 
         if (!selectedMember1) {
             setSelectedMemberErr1('Select Member Name');
-            Alert.alert('Missing', "Check The Assign Employee Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedMemberErr1('');
         }
 
         if (!selectedStatus) {
             setSelectedStatusErr('Select Status');
-            Alert.alert('Missing', "Check The Status Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedStatusErr('');
+        }
+
+        return isValid;
+    };
+
+    const AddTick = async () => {
+
+        SetLoad(true);
+
+        const formData = new FormData();
+
+        if (!validateFields()) {
+            SetLoad(false);
+            return;
         }
 
         try {
