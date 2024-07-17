@@ -12,8 +12,6 @@ const OrgIndvidual = ({ route, navigation }) => {
     const [totalcount, setTotalCount] = useState('');
     const [details, setDetails] = useState([]);
 
-    console.log(details,"details")
-
     const CountApi = async () => {
         try {
             const apiUrl = `https://ocean21.in/api/public/api/orgchart_employee_data/${SpecId.id}`;
@@ -41,60 +39,70 @@ const OrgIndvidual = ({ route, navigation }) => {
 
             <View style={styles.Container}>
 
-                <View style={[styles.Card, { marginBottom: "10%" }]}>
+                <View style={{ paddingLeft: '20%' }}>
 
-                    <View style={styles.ImgCard}>
+                    <View style={[styles.Card, { marginBottom: "10%" }]}>
 
-                        {totalcount.profile_img ? (
-                            <Image source={{ uri: `https://ocean21.in/api/storage/app/${totalcount.profile_img}` }} style={styles.Img} />
-                        ) : (
-                            <EmployeeIcon width={22} height={22} color={'#000'} />
-                        )}
+                        <View style={styles.ImgCard}>
+
+                            {totalcount.profile_img ? (
+                                <Image source={{ uri: `https://ocean21.in/api/storage/app/${totalcount.profile_img}` }} style={styles.Img} />
+                            ) : (
+                                <EmployeeIcon width={22} height={22} color={'#000'} />
+                            )}
+
+                        </View>
+
+                        <View>
+
+                            <Text style={styles.Name}>{totalcount.first_name} {totalcount.last_name}</Text>
+                            <Text style={styles.Role}>Current Designation: {totalcount.department_name}</Text>
+
+                        </View>
 
                     </View>
 
-                    <View>
+                    <View style={{ paddingLeft: '20%' }}>
 
-                        <Text style={styles.Name}>{totalcount.first_name} {totalcount.last_name}</Text>
-                        <Text style={styles.Role}>Current Designation: {totalcount.department_name}</Text>
+                        {details.map((detail, index) => (
 
+                            <View key={detail.id} style={{ flexDirection: 'row' }}>
+
+                                <View>
+
+                                    <View style={{ width: 8, height: 8, borderRadius: 8, backgroundColor: '#0A62F1' }} />
+
+                                    {index !== details.length - 1 && (
+                                        <View style={{ marginLeft: 3.5, height: 250, justifyContent: 'center' }}>
+                                            <Dash style={{ width: 1, height: 250, flexDirection: 'column' }} dashColor={'#0A62F1'} dashThickness={1.5} dashGap={3} />
+                                        </View>
+                                    )}
+
+                                </View>
+
+                                <View style={{ marginLeft: "7.5%" }}>
+
+                                    <Text style={styles.dept}>{detail.department_name}</Text>
+
+                                    {detail.department_salaries.map((salary) => (
+
+                                        <View key={salary.id} style={{ marginVertical: '2%' }}>
+
+                                            <Text style={styles.date}>{salary.ctc_start_month} - {salary.ctc_end_month ? salary.ctc_end_month : 'Present'}</Text>
+                                            <Text style={styles.ctc}>CTC: {salary.annual_ctc} LPA</Text>
+
+                                        </View>
+
+                                    ))}
+
+                                </View>
+
+                            </View>
+
+                        ))}
                     </View>
 
                 </View>
-
-                {details.map((detail, index) => (
-
-                    <View key={detail.id} style={{ flexDirection: 'row' }}>
-
-                        <View>
-                            <View style={{ width: 8, height: 8, borderRadius: 8, backgroundColor: '#0A62F1' }} />
-                            {index !== details.length - 1 && (
-                                <View style={{ marginLeft: 3.5, height: 250, justifyContent: 'center' }}>
-                                    <Dash style={{ width: 1, height: 250, flexDirection: 'column' }} dashColor={'#0A62F1'} dashThickness={1.5} dashGap={3} />
-                                </View>
-                            )}
-                        </View>
-
-                        <View style={{ marginLeft: "7.5%" }}>
-
-                            <Text style={styles.dept}>{detail.department_name}</Text>
-
-                            {detail.department_salaries.map((salary) => (
-
-                                <View key={salary.id} style={{ marginVertical: '2%' }}>
-
-                                    <Text style={styles.date}>{salary.ctc_start_month} - {salary.ctc_end_month ? salary.ctc_end_month : 'Present'}</Text>
-                                    <Text style={styles.ctc}>CTC: {salary.annual_ctc} LPA</Text>
-
-                                </View>
-
-                            ))}
-
-                        </View>
-
-                    </View>
-
-                ))}
 
             </View>
 

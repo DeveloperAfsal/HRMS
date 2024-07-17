@@ -4,14 +4,15 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 
     Container: {
-        alignItems: 'center',
+        // alignItems: 'center',
         marginVertical: '20%'
     },
 
     dept: {
         color: '#0A62F1',
         fontWeight: '600',
-        fontSize: 18
+        fontSize: 18,
+        marginTop: -5,
     },
 
     date: {
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#00275C',
         paddingVertical: 10,
+        width: "75%",
     },
 
     ImgCard: {
