@@ -280,8 +280,10 @@ const EmpOvertimeReq = ({ navigation }) => {
     // 
 
     const Handlerefresh = () => {
-        setSelectedleaveType(null);
+        setSelectedrequestId(null);
+        setSelectedrequest('');
         setSelectedLocation(null);
+        setSelectedLocationId('');
         setSelectedShift(null);
         setStartDate(new Date());
         setSlotFromTime('00:00:00');
@@ -394,7 +396,7 @@ const EmpOvertimeReq = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('OverTime Request');
+            // navigation.navigate('OverTime Request');
             Handlerefresh();
         }, 2500);
     };
@@ -603,6 +605,8 @@ const EmpOvertimeReq = ({ navigation }) => {
                         value={Reason}
                         onChangeText={(text) => setReason(text)}
                         style={styles.Reason}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>

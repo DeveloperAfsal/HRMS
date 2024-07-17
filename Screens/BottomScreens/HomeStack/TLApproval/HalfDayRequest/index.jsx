@@ -302,6 +302,7 @@ const TLHalfDayRequest = () => {
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>From Time</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>HR Status</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                                 </View>
 
@@ -319,8 +320,9 @@ const TLHalfDayRequest = () => {
                                             <Text style={[styles.cell, styles.WeekOff]}>{item.permission_timefrom}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.permission_timeto}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.leave_reason}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.emp_status}</Text>
                                             {
-                                                item.emp_status === "Pending" ?
+                                                item.tl_status === null ?
                                                     <View style={styles.listcontentButtonview}>
                                                         <TouchableOpacity style={styles.listcontenteditbutton}
                                                             onPress={() => HandleConfirm(item)}
@@ -333,7 +335,7 @@ const TLHalfDayRequest = () => {
                                                             <CloseIcon width={14} height={14} />
                                                         </TouchableOpacity>
                                                     </View> :
-                                                    <Text style={[styles.cell, styles.Status]}>{item.emp_status}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.tl_status}</Text>
                                             }
                                         </View>
                                     ))

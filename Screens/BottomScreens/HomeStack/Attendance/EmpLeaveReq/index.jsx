@@ -191,6 +191,7 @@ const EmpLeaveReq = ({ navigation }) => {
     const [slotToTime, setSlotToTime] = useState('00:00:00');
     const [slotToTimeErr, setSlotToTimeErr] = useState('');
     const [showSlotToTimePicker, setShowSlotToTimePicker] = useState(false);
+    const [shiftErr, setShiftErr] = useState('');
 
     const handleSlotToTimeChange = (event, time) => {
         if (time !== undefined) {
@@ -230,11 +231,16 @@ const EmpLeaveReq = ({ navigation }) => {
             if (ResData.status === "success") {
                 setShiftId(ResData.shift_id);
                 setShiftName(ResData.shift_name);
+                setShiftErr('');
+            } else if (ResData.status === "error") {
+                Alert.alert("Error", ResData.message);
+                setShiftErr(ResData.message)
+                setShiftName('');
             } else {
                 console.log("Error")
             }
 
-            console.log(response.data, "response vantaan paa")
+            console.log(response.data, "response")
 
         } catch (error) {
             console.log(error, "error")
@@ -281,6 +287,8 @@ const EmpLeaveReq = ({ navigation }) => {
         setSlotFromTime('00:00:00');
         setSlotToTime('00:00:00');
         setReason('');
+        setShiftName('');
+        setShiftId('');
     }
 
     // Api call for Handle Submit
@@ -290,6 +298,11 @@ const EmpLeaveReq = ({ navigation }) => {
         setLoad(true);
 
         const formData = new FormData();
+
+        if (shiftErr) {
+            setLoad(false);
+            return;
+        }
 
         if (!selectedleaveType) {
             setSelectedleaveTypeErr('Select Type');
@@ -622,6 +635,8 @@ const EmpLeaveReq = ({ navigation }) => {
 
                             <Text style={styles.errorText}>
                                 {slotToTimeErr}
+                                {shiftErr}
+                                {shiftName}
                             </Text>
                         </> : null
                     }

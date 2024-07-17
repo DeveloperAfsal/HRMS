@@ -348,6 +348,7 @@ const TLOtRequest = () => {
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>To Time</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>Total Hours</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Reason</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>HR Status</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Status</Text>
                                 </View>
 
@@ -367,8 +368,9 @@ const TLOtRequest = () => {
                                             <Text style={[styles.cell, styles.Status]}>{item.request_totime}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.total_hrs}</Text>
                                             <Text style={[styles.cell, styles.Status]}>{item.request_reason}</Text>
+                                            <Text style={[styles.cell, styles.Status]}>{item.request_status}</Text>
                                             {
-                                                item.request_status === "Pending" ?
+                                                item.tl_reqeust_status === null ?
                                                     <View style={styles.listcontentButtonview}>
                                                         <TouchableOpacity style={styles.listcontenteditbutton}
                                                             onPress={() => HandleConfirm(item)}
@@ -381,7 +383,7 @@ const TLOtRequest = () => {
                                                             <CloseIcon width={14} height={14} />
                                                         </TouchableOpacity>
                                                     </View> :
-                                                    <Text style={[styles.cell, styles.Status]}>{item.request_status}</Text>
+                                                    <Text style={[styles.cell, styles.Status]}>{item.tl_reqeust_status}</Text>
                                             }
                                         </View>
                                     ))

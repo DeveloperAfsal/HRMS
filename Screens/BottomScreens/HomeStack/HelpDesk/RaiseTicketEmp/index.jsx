@@ -275,14 +275,14 @@ const RaiseTicketEmp = ({ navigation }) => {
             setDescriptionErr('');
         }
 
-        if (!docFile) {
-            setDocFileErr('choose File');
-            Alert.alert('Missing', "Check The Attachment Field");
-            SetLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('choose File');
+        //     Alert.alert('Missing', "Check The Attachment Field");
+        //     SetLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
         try {
 
@@ -340,7 +340,11 @@ const RaiseTicketEmp = ({ navigation }) => {
     }
 
     const onRefresh = () => {
-
+        setTickTitle('');
+        setSelectedIssType('');
+        setSelectedIssTypeId('');
+        setDescription('');
+        setDocFile('');
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -352,6 +356,7 @@ const RaiseTicketEmp = ({ navigation }) => {
         setTimeout(() => {
             setAlertVisible(false);
             navigation.navigate('Tickets List');
+            onRefresh();
         }, 2500);
     };
 
@@ -453,6 +458,8 @@ const RaiseTicketEmp = ({ navigation }) => {
                         value={description}
                         onChangeText={(txt) => setDescription(txt)}
                         style={styles.ShiftSlotTextInput1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -495,7 +502,7 @@ const RaiseTicketEmp = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Dashboard')}
+                            onPress={() => onRefresh()}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
