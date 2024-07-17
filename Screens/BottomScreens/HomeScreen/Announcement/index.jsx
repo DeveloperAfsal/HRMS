@@ -526,8 +526,8 @@ const Announcement = () => {
                                 {ReasonError}
                             </Text>
                             <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={cancelDelete}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
 
