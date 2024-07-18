@@ -111,6 +111,9 @@ import LeaveCount from "../HomeScreen/LeaveCount";
 import ManualEntryCount from "../HomeScreen/ManualEntryCount";
 import OdCount from "../HomeScreen/ODCount";
 import OrgIndvidual from "./OrganizationStructure/OrgIndvidual";
+import PostJob from "./Recruitement/PostJob";
+import JobList from "./Recruitement/JobList";
+import ViewJobList from "./Recruitement/ViewJob";
 
 const Stack = createNativeStackNavigator();
 
@@ -310,6 +313,12 @@ const HomeStack = () => {
       <Stack.Screen name="Activity Log" component={ActivityLog} />
       <Stack.Screen name="Employee Activity Log" component={EMPActiveLog} />
       <Stack.Screen name="View Details" component={ViewDeatails} />
+
+      {/*  */}
+
+      <Stack.Screen name="Post Job" component={PostJob} />
+      <Stack.Screen name="Job List" component={JobList} />
+      <Stack.Screen name="View Job List" component={ViewJobList} />
 
     </Stack.Navigator>
   );

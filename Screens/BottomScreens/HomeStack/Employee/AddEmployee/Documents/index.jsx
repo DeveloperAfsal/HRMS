@@ -31,7 +31,7 @@ const Documents = ({
     doj
 }) => {
 
-    console.log(documents, "documents")
+    console.log(documentFile,"documentFile")
 
     const dispatch = useDispatch();
 

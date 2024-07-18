@@ -77,6 +77,7 @@ const CustomDrawerContent = ({ navigation }) => {
         OrganisationStructure: false,
         HRSupport: false,
         HelpDesk: false,
+        Recruitment: false,
     });
 
     const toggleDropdown = (dropdown) => {
@@ -1066,6 +1067,53 @@ const CustomDrawerContent = ({ navigation }) => {
                             )}
                         </>
                     )}
+
+                    {/*  */}
+
+                    <>
+                        <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Recruitment')}>
+                            <View style={styles.Tab}>
+                                <VistitorManageIcon width={20} height={20} color={'#000'} />
+                                <Text style={styles.dropdownText}>Recruitment</Text>
+                            </View>
+                            {
+                                dropdowns.Recruitment ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                                    <DropdownIcon width={15} height={15} color={'#000'} />
+                            }
+                        </TouchableOpacity>
+
+                        {dropdowns.Recruitment && (
+                            <>
+
+                                < DrawerItem
+                                    label="Post Job"
+                                    onPress={() => navigation.navigate('Post Job')}
+                                />
+
+
+                                < DrawerItem
+                                    label="Job List"
+                                onPress={() => navigation.navigate('Job List')}
+                                />
+
+                                < DrawerItem
+                                    label="Add Resume"
+                                // onPress={() => navigation.navigate('Job List')}
+                                />
+
+                                < DrawerItem
+                                    label="Candidate Status"
+                                // onPress={() => navigation.navigate('Job List')}
+                                />
+
+                                < DrawerItem
+                                    label="Resume Screening"
+                                // onPress={() => navigation.navigate('Job List')}
+                                />
+
+                            </>
+                        )}
+                    </>
 
                     {/* Logout */}
 

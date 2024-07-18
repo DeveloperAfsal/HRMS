@@ -12,6 +12,7 @@ import DocumentPicker from 'react-native-document-picker';
 import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
+import RNFS from 'react-native-fs';
 
 
 const Documents = ({
@@ -42,6 +43,29 @@ const Documents = ({
     // documentIdget,
 }) => {
 
+    // const documentImgPath = "assets/Employee/EMP014/Rejected.png";
+
+    // // Extract the file name and type from the path
+    // const fileNames = documentImgPath.split('/').pop();
+    // const fileType = `image/${fileNames.split('.').pop()}`;
+
+    // // Assume you have the file size and URI. In a real scenario, you might need to obtain these through an API or file handling method.
+    // const fileSize = 0; // Replace with the actual file size
+    // const fileUri = documentImgPath// Replace with the actual URI
+
+    // const documentImgObject = {
+    //     fileCopyUri: null,
+    //     name: fileNames,
+    //     size: fileSize,
+    //     type: fileType,
+    //     uri: fileUri
+    // };
+
+    // console.log(documentImgObject);
+
+
+    // console.log(employeeDoc, "employeeDoc")
+
     const [filesets, setFilesets] = useState([]);
 
     useEffect(() => {
@@ -58,12 +82,16 @@ const Documents = ({
         }
     }, [])
 
+    // employeeDoc.forEach(doc => {
+    //     console.log(doc.document_img, "doc.document_img")
+    // });
+
     // console.log(filesets, "filesets")
 
-    const documentIdget = filesets.map(fileSet => fileSet.documentId);
-    const selectedDocumentTypes = filesets.map(fileSet => fileSet.selecteddocumentType);
-    const documentNames = filesets.map(fileSet => fileSet.documentName);
-    const selectedFiles = filesets.map(fileSet => fileSet.selectedFile);
+    // const documentIdget = filesets.map(fileSet => fileSet.documentId);
+    // const selectedDocumentTypes = filesets.map(fileSet => fileSet.selecteddocumentType);
+    // const documentNames = filesets.map(fileSet => fileSet.documentName);
+    // const selectedFiles = filesets.map(fileSet => fileSet.selectedFile);
 
     // console.log(documentIdget, "documentIdget")
     // console.log(selectedFiles, "selectedFiles")
@@ -85,7 +113,6 @@ const Documents = ({
     const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
     const [load, setLoad] = useState(false);
 
-    console.log(documentList,"documentList")
 
     // Api call for Dropdown dropdown
 
@@ -131,12 +158,13 @@ const Documents = ({
 
     const addDocument = () => {
         if (selectedDocumentId && docName && docFile && selectedDocument) {
+            console.log(docFile[0], "docFile[0]")
             const newDocument = {
                 document_name: docName,
                 document_type_id: selectedDocumentId,
                 document_type_name: selectedDocument,
                 emp_id: data.emp_id, // Assuming data.emp_id holds the employee ID
-                document_img: docFile[0].uri // Assuming docFile is an array of File objects and you want to store the URI
+                document_img: docFile[0] // Assuming docFile is an array of File objects and you want to store the URI
             };
 
             // Update employeeDoc state
@@ -516,95 +544,38 @@ const Documents = ({
         formData.append('ifsc_code', employee.ifsc_code);
         formData.append('account_type', employee.ac_type);
 
-        // if (selectedDocumentTypes) {
-        //     if (selectedDocumentTypes.length > 0) {
-        //         selectedDocumentTypes.map((file, index) => {
-        //             formData.append('emp_document_type[]', file);
-        //         });
-        //     } else {
-        //         formData.append('emp_document_type[]', selectedDocumentTypes);
-        //     }
-        // } else {
-        //     formData.append('emp_document_type[]', selectedDocumentTypes);
-        // }
-
-        // if (documentNames) {
-        //     if (documentNames.length > 0) {
-        //         documentNames.map((file, index) => {
-        //             formData.append('emp_document_name[]', file);
-        //         });
-        //     } else {
-        //         formData.append('emp_document_name[]', documentNames);
-        //     }
-        // } else {
-        //     formData.append('emp_document_name[]', documentNames);
-        // }
-
-        // if (selectedFiles.length > 0) {
-        //     selectedFiles.map((file, index) => {
-        //         let uri, name;
-        //         if (typeof file === 'string') {
-        //             const imageUriParts = file.split('/');
-        //             name = imageUriParts[imageUriParts.length - 1];
-        //             uri = file;
-        //         } else {
-        //             name = file.name;
-        //             uri = file.uri;
-        //         }
-        //         formData.append(`emp_document_image[]`, {
-        //             uri: uri,
-        //             name: name,
-        //             type: 'image/jpeg',
-        //         });
-        //     });
-        // } else {
-        //     formData.append('emp_document_image[]', selectedFiles);
-        // }
-
-        // if (documentIds) {
-        //     if (documentIds.length > 0) {
-        //         documentIds.map((file, index) => {
-        //             formData.append('emp_document_id[]', file);
-        //         });
-        //     } else {
-        //         formData.append('emp_document_id[]', documentIds);
-        //     }
-        // } else {
-        //     formData.append('emp_document_id[]', documentIds);
-        // }
-
-        documentIdget.forEach((documentId, index) => {
-            formData.append('emp_document_id[]', documentId);
+        employeeDoc.forEach(doc => {
+            formData.append('emp_document_id[]', doc.id);
         });
 
-        // //   -------------------------------------------------------------------------------------
-        selectedDocumentTypes.forEach((type, index) => {
-            let typeValue = type;
-            if (typeof type === "string") {
-                typeValue = type.trim();
-            } else if (type == null) {
-                typeValue = "-";
+        employeeDoc.forEach(doc => {
+            formData.append('emp_document_type[]', doc.document_type_id);
+        });
+
+        employeeDoc.forEach(doc => {
+            formData.append('emp_document_name[]', doc.document_name);
+        });
+
+        // employeeDoc.forEach(doc => {
+        //     formData.append('emp_document_image[]', doc.document_img);
+        // });
+
+        employeeDoc.forEach(doc => {
+            if (doc.document_img) {
+                const fileUri = doc.document_img;
+                const fileName = fileUri.split('/').pop();
+                const fileType = doc.document_img.type || 'image/png';
+
+                formData.append('emp_document_image[]', {
+                    uri: fileUri,
+                    name: fileName,
+                    type: fileType
+                });
             } else {
-                typeValue = String(type).trim();  // Convert non-null, non-string types to string
-            }
-            formData.append('emp_document_type[]', typeValue === "" ? "-" : typeValue);
-        });
-        // //   -----------------------------------------------------------------------------------------
-
-        documentNames.forEach((name, index) => {
-            formData.append('emp_document_name[]', name.trim() === "" ? "-" : name);
-        });
-
-        // //   --------------------------------------------------------------------------------  
-
-        selectedFiles.forEach((file, index) => {
-            if (file) {
-                formData.append('emp_document_image[]', file);
-            }
-            else {
-                formData.append('emp_document_image[]', '-');
+                formData.append('emp_document_image[]', doc.document_img, doc.document_name);
             }
         });
+
 
         formData.append('updated_by', data.userrole);
 
@@ -749,7 +720,7 @@ const Documents = ({
 
             formData.append('id', selectedId);
             formData.append('emp_id', empid);
-            formData.append('emp_document_type', selectedDocument1);
+            formData.append('emp_document_type', selectedDocumentId1);
             formData.append('emp_document_name', editedtitle);
 
             formData.append('updated_by', data.userempid);

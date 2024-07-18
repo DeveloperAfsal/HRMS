@@ -37,7 +37,7 @@ const Otp = ({ navigation, route }) => {
 
     const handleResendOtp = async () => {
 
-        setLoad(true)
+        // setLoad(true)
 
         try {
 
@@ -62,7 +62,7 @@ const Otp = ({ navigation, route }) => {
         }
 
         catch (error) {
-            setLoad(false);
+            // setLoad(false);
             // Alert.alert("Error during Mail", "Check The Login Credentials");
             handleShowAlert2();
             console.error('Error during login:', error);
