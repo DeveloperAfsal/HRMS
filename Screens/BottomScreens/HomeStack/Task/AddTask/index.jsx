@@ -268,92 +268,79 @@ const AddTask = ({ navigation }) => {
 
     // Api call for Handle Submit
 
-    const HandleSubmit = async () => {
-
-        setLoad(true);
-
-        const formData = new FormData();
+    const validateTaskFields = () => {
+        let isValid = true;
 
         if (!tname) {
             setTnameErr('Enter Task Name');
-            Alert.alert('Missing', "Check The Task Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setTnameErr('');
         }
 
         if (!selectedProject) {
             setSelectedProjectErr('Select Project Name');
-            Alert.alert('Missing', "Check The Project Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedProjectErr('');
         }
 
         if (!pworktype) {
             setPworktypeErr('Enter Project Work Type');
-            Alert.alert('Missing', "Check The Project Work Type Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setPworktypeErr('');
         }
 
-        if (selectedDepartments.length == "0") {
+        if (selectedDepartments.length === 0) {
             setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedDepartmentsErr('');
         }
 
-        if (selectedEmployees.length == "0") {
+        if (selectedEmployees.length === 0) {
             setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedMemberErr('');
         }
 
         if (!editedStatus) {
             setEditedStatusErr('Select Task Status');
-            Alert.alert('Missing', "Check The Task Status Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setEditedStatusErr('');
         }
 
         if (!editedStatus1) {
             setEditedStatus1Err('Select Priority');
-            Alert.alert('Missing', "Check The Priority Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setEditedStatus1Err('');
         }
 
         if (!des) {
             setDesErr('Enter Description');
-            Alert.alert('Missing', "Check The Description Field");
-            setLoad(false);
-            return;
+            isValid = false;
         } else {
             setDesErr('');
         }
 
-        // if (!docFile) {
-        //     setDocFileErr('Choose File');
-        //     Alert.alert('Missing', "Check The Attachment Field");
-        //     setLoad(false);
-        //     return;
-        // } else {
-        //     setDocFileErr('');
-        // }
+        return isValid;
+    };
+
+
+    const HandleSubmit = async () => {
+
+        setLoad(true);
+
+        const formData = new FormData();
+
+        if (!validateTaskFields()) {
+            setLoad(false);
+            return;
+        }
 
         try {
 

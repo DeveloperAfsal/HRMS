@@ -293,74 +293,64 @@ const AddEvent = ({ navigation }) => {
 
     // 
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!title) {
+            setTitleErr('Enter Title');
+            isValid = false;
+        } else {
+            setTitleErr('');
+        }
+    
+        if (selectedDepartments.length === 0) {
+            setSelectedDepartmentsErr('Select Department Name');
+            isValid = false;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+    
+        if (selectedEmployees.length === 0) {
+            setSelectedMemberErr('Select Member Name');
+            isValid = false;
+        } else {
+            setSelectedMemberErr('');
+        }
+    
+        if (slotfromTime === "00:00:00") {
+            setSlotFromTimeErr('Select From Time');
+            isValid = false;
+        } else {
+            setSlotFromTimeErr('');
+        }
+    
+        if (slotToTime === "00:00:00") {
+            setSlotToTimeErr('Select To Time');
+            isValid = false;
+        } else {
+            setSlotToTimeErr('');
+        }
+    
+        if (!agenda) {
+            setAgendaErr('Enter Agenda');
+            isValid = false;
+        } else {
+            setAgendaErr('');
+        }
+    
+        return isValid;
+    };
+
     const eventAdd = async () => {
 
         setLoad(true);
 
         const formData = new FormData();
 
-        if (!title) {
-            setTitleErr('Enter Title');
-            Alert.alert('Missing', "Check The title Field");
+        if (!validateFields()) {
             setLoad(false);
             return;
-        } else {
-            setTitleErr('');
         }
-
-        if (selectedDepartments.length == "0") {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedDepartmentsErr('');
-        }
-
-        if (selectedEmployees.length == "0") {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            setLoad(false);
-            return;
-        } else {
-            setSelectedMemberErr('');
-        }
-
-        if (slotfromTime == "00:00:00") {
-            setSlotFromTimeErr('Select From Time');
-            Alert.alert('Missing', "Check The From Time Field");
-            setLoad(false);
-            return;
-        } else {
-            setSlotFromTimeErr('');
-        }
-
-        if (slotToTime == "00:00:00") {
-            setSlotToTimeErr('Select To Time');
-            Alert.alert('Missing', "Check The To Time Field");
-            setLoad(false);
-            return;
-        } else {
-            setSlotToTimeErr('');
-        }
-
-        if (!agenda) {
-            setAgendaErr('Enter Agenda');
-            Alert.alert('Missing', "Check The Agenda Field");
-            setLoad(false);
-            return;
-        } else {
-            setAgendaErr('');
-        }
-
-        // if (selectedImage.length == "0") {
-        //     setSelectedImageErr('Choose Image');
-        //     Alert.alert('Missing', "Check The Attachment Field");
-        //     setLoad(false);
-        //     return;
-        // } else {
-        //     setSelectedImageErr('');
-        // }
 
         try {
 

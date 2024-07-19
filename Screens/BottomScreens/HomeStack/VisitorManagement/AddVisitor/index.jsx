@@ -253,115 +253,126 @@ const AddVisitor = ({ navigation }) => {
         return regex.test(email);
     };
 
+    const validateFormFields = () => {
+        let isValid = true;
+    
+        // Define the fields and their corresponding error setters and messages
+        const fieldsToValidate = [
+            {
+                value: name,
+                errorSetter: setNameErr,
+                errorMessage: 'Enter Name',
+                alertMessage: 'Check The Name Field'
+            },
+            {
+                value: selectedImage.length,
+                errorSetter: setSelectedImageErr,
+                errorMessage: 'Select Image',
+                alertMessage: 'Check The Image Field',
+                checkType: 'length'
+            },
+            {
+                value: mobileNumber,
+                errorSetter: setmobileNumberErr,
+                errorMessage: 'Enter Mobile Number',
+                alertMessage: 'Check The Mobile Number Field'
+            },
+            {
+                value: selectedDocument.length,
+                errorSetter: setSelectedDocumentErr,
+                errorMessage: 'Select ID',
+                alertMessage: 'Check The ID Proof Field',
+                checkType: 'length'
+            },
+            {
+                value: idNumber,
+                errorSetter: setIdNumberErr,
+                errorMessage: 'Enter Id Proof Number',
+                alertMessage: 'Check The Id Proof Number Field'
+            },
+            {
+                value: mail,
+                errorSetter: setMailErr,
+                errorMessage: 'Enter Mail',
+                alertMessage: 'Check The Mail Field',
+                additionalCheck: isValidEmail,
+                additionalErrorMessage: 'Enter a valid mail id'
+            },
+            {
+                value: selectedDepartments,
+                errorSetter: setSelectedDepartmentsErr,
+                errorMessage: 'Select Department Name',
+                alertMessage: 'Check The Department Field'
+            },
+            {
+                value: selectedMember,
+                errorSetter: setSelectedMemberErr,
+                errorMessage: 'Select Member Name',
+                alertMessage: 'Check The Member Field'
+            },
+            {
+                value: location,
+                errorSetter: setLocationErr,
+                errorMessage: 'Enter Location',
+                alertMessage: 'Check Location Field'
+            },
+            {
+                value: slotfromTime,
+                errorSetter: setSlotFromTimeErr,
+                errorMessage: 'Select From Time',
+                alertMessage: 'Check The From Time Field',
+                checkType: 'equals',
+                checkValue: '00:00:00'
+            }
+        ];
+    
+        // Iterate over the fields and perform validation
+        fieldsToValidate.forEach(field => {
+            if (field.checkType === 'length') {
+                if (field.value === "0") {
+                    field.errorSetter(field.errorMessage);
+                    isValid = false;
+                } else {
+                    field.errorSetter('');
+                }
+            } else if (field.checkType === 'equals') {
+                if (field.value === field.checkValue) {
+                    field.errorSetter(field.errorMessage);
+                    isValid = false;
+                } else {
+                    field.errorSetter('');
+                }
+            } else if (field.additionalCheck) {
+                if (!field.value || !field.additionalCheck(field.value)) {
+                    field.errorSetter(field.additionalErrorMessage || field.errorMessage);
+                    isValid = false;
+                } else {
+                    field.errorSetter('');
+                }
+            } else {
+                if (!field.value) {
+                    field.errorSetter(field.errorMessage);
+                    isValid = false;
+                } else {
+                    field.errorSetter('');
+                }
+            }
+        });
+    
+        return isValid;
+    };
+
+
     const visitorAdd = async () => {
 
         SetLoad(true);
 
         const formData = new FormData();
 
-        if (!name) {
-            setNameErr('Enter Name');
-            Alert.alert('Missing', "Check The Name Field");
+        if (!validateFormFields()) {
             SetLoad(false);
             return;
-        } else {
-            setNameErr('');
         }
-
-        if (selectedImage.length == "0") {
-            setSelectedImageErr('Select Image');
-            Alert.alert('Missing', "Check The Image Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedImageErr('');
-        }
-
-        if (!mobileNumber) {
-            setmobileNumberErr('Enter Mobile Number');
-            Alert.alert('Missing', "Check The Mobile Number Field");
-            SetLoad(false);
-            return;
-        } else {
-            setmobileNumberErr('');
-        }
-
-        if (selectedDocument.length == "0") {
-            setSelectedDocumentErr('Select ID');
-            Alert.alert('Missing', "Check The ID Proof Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedDocumentErr('');
-        }
-
-        if (!idNumber) {
-            setIdNumberErr('Enter Id Proof Number');
-            Alert.alert('Missing', "Check The Id Proof Number Field");
-            SetLoad(false);
-            return;
-        } else {
-            setIdNumberErr('');
-        }
-
-        if (!mail) {
-            setMailErr('Enter Mail');
-            Alert.alert('Missing', "Check The Mail Field");
-            SetLoad(false);
-            return;
-        } else if (!isValidEmail(mail)) {
-            setMailErr('Enter a valid mail id');
-            Alert.alert('Invalid Email', 'Enter a valid mail id');
-            SetLoad(false);
-            return false;
-        } else {
-            setMailErr('');
-        }
-
-        if (!selectedDepartments) {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedDepartmentsErr('');
-        }
-
-        if (!selectedMember) {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedMemberErr('');
-        }
-
-        if (!location) {
-            setLocationErr('Enter Location');
-            Alert.alert('Missing', "Check Location Field");
-            SetLoad(false);
-            return;
-        } else {
-            setLocationErr('');
-        }
-
-        if (slotfromTime == "00:00:00") {
-            setSlotFromTimeErr('Select From Time');
-            Alert.alert('Missing', "Check The From Time Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSlotFromTimeErr('');
-        }
-
-        // if (slotToTime == "00:00:00") {
-        //     setSlotToTimeErr('Select To Time');
-        //     Alert.alert('Missing', "Check The To Time Field");
-        //     SetLoad(false);
-        //     return;
-        // } else {
-        //     setSlotToTimeErr('');
-        // }
 
         try {
 

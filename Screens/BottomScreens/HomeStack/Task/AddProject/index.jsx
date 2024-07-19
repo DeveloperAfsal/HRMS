@@ -215,153 +215,132 @@ const AddProject = ({ navigation }) => {
 
     // Api call for Handle Submit
 
-    const HandleSubmit = async () => {
-
-        SetLoad(true);
+    const validateProjectFields = () => {
+        let isValid = true;
 
         if (!pname) {
             setPnameErr('Select Project Name');
-            Alert.alert('Missing', "Check The Project Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setPnameErr('');
         }
 
         if (!ptype) {
             setPtypeErr('Select Project Type');
-            Alert.alert('Missing', "Check The Project Type");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setPtypeErr('');
         }
 
         if (!pcategory) {
             setPcategoryErr('Select Project Category');
-            Alert.alert('Missing', "Check The Project Category");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setPcategoryErr('');
         }
 
         if (!pworktype) {
             setPworktypeErr('Select Project Work Type');
-            Alert.alert('Missing', "Check The Project Work Type");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setPworktypeErr('');
         }
 
-        if (selectedDepartments.length == "0") {
+        if (selectedDepartments.length === 0) {
             setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedDepartmentsErr('');
         }
 
-        if (selectedEmployees.length == "0") {
+        if (selectedEmployees.length === 0) {
             setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedMemberErr('');
         }
 
         if (!duration) {
             setDurationErr('Select Duration');
-            Alert.alert('Missing', "Check The Duration");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setDurationErr('');
         }
 
         if (!editedStatus) {
             setEditedStatusErr('Select Status');
-            Alert.alert('Missing', "Check The Status");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setEditedStatusErr('');
         }
 
         if (!des) {
             setDesErr('Select Description');
-            Alert.alert('Missing', "Check The Description");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setDesErr('');
         }
 
         if (!cname) {
             setCnameErr('Select Client Name');
-            Alert.alert('Missing', "Check The Client Name");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCnameErr('');
         }
 
         if (!ccompany) {
             setCcompanyErr('Select Client Company');
-            Alert.alert('Missing', "Check The Client Company");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCcompanyErr('');
         }
 
         if (!ccontact) {
             setCcontactErr('Select Contact No');
-            Alert.alert('Missing', "Check The Contact No");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCcontactErr('');
         }
 
         if (!cemail) {
             setCemailErr('Select Client Email');
-            Alert.alert('Missing', "Check The Client Email");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCemailErr('');
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(cemail)) {
+        if (cemail && !emailRegex.test(cemail)) {
             setCemailErr('Invalid email format');
-            Alert.alert('Invalid Email', "Please enter a valid email address");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCemailErr('');
         }
 
         if (!ccity) {
             setCcityErr('Select Client City');
-            Alert.alert('Missing', "Check The Client City");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCcityErr('');
         }
 
         if (!cstate) {
             setCstateErr('Select Client State');
-            Alert.alert('Missing', "Check The Client State");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCstateErr('');
+        }
+
+        return isValid;
+    };
+
+    const HandleSubmit = async () => {
+
+        SetLoad(true);
+
+        if (!validateProjectFields()) {
+            SetLoad(false);
+            return;
         }
 
         try {

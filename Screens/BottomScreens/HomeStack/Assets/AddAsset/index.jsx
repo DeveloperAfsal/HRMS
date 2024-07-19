@@ -235,99 +235,83 @@ const AddAsset = ({ navigation }) => {
 
     // 
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!selectedDepartments) {
+            setSelectedDepartmentsErr('Select Department Name');
+            isValid = false;
+        } else {
+            setSelectedDepartmentsErr('');
+        }
+    
+        if (!selectedMember) {
+            setSelectedMemberErr('Select Member Name');
+            isValid = false;
+        } else {
+            setSelectedMemberErr('');
+        }
+    
+        if (selectedAssetTypes.length === 0) {
+            setSelectedAssetTypesErr('Select Asset Type');
+            isValid = false;
+        } else {
+            setSelectedAssetTypesErr('');
+        }
+    
+        if (!assetDetails) {
+            setAssetsDetailsErr('Enter Asset Details');
+            isValid = false;
+        } else {
+            setAssetsDetailsErr('');
+        }
+    
+        if (!assetValue) {
+            setAssetsValueErr('Enter Asset Value');
+            isValid = false;
+        } else {
+            setAssetsValueErr('');
+        }
+    
+        if (!selectedStatus) {
+            setSelectedStatusErr('Select Status');
+            isValid = false;
+        } else {
+            setSelectedStatusErr('');
+        }
+    
+        if (!remarks) {
+            setRemarksErr('Enter Remarks');
+            isValid = false;
+        } else {
+            setRemarksErr('');
+        }
+    
+        if (!startDate) {
+            setStartDateErr('Select Issue Date');
+            isValid = false;
+        } else {
+            setStartDateErr('');
+        }
+    
+        if (!endDate) {
+            setEndDateErr('Select Valid Till Date');
+            isValid = false;
+        } else {
+            setEndDateErr('');
+        }
+    
+        return isValid;
+    };
+
     const AddAss = async () => {
 
         SetLoad(true);
 
-        if (!selectedDepartments) {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
+        if (!validateFields()) {
             SetLoad(false);
             return;
-        } else {
-            setSelectedDepartmentsErr('');
         }
-
-        if (!selectedMember) {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedMemberErr('');
-        }
-
-        if (selectedAssetTypes.length == "0") {
-            setSelectedAssetTypesErr('Select Asset Type');
-            Alert.alert('Missing', "Check The Asset Type Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedAssetTypesErr('');
-        }
-
-        if (!assetDetails) {
-            setAssetsDetailsErr('Enter Asset Details');
-            Alert.alert('Missing', "Check The Asset Details Field");
-            SetLoad(false);
-            return;
-        } else {
-            setAssetsDetailsErr('');
-        }
-
-        if (!assetValue) {
-            setAssetsValueErr('Enter Asset Value');
-            Alert.alert('Missing', "Check The Asset Value Field");
-            SetLoad(false);
-            return;
-        } else {
-            setAssetsValueErr('');
-        }
-
-        if (!selectedStatus) {
-            setSelectedStatusErr('Select Status');
-            Alert.alert('Missing', "Check The Status Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedStatusErr('');
-        }
-
-        if (!remarks) {
-            setRemarksErr('Enter Remarks');
-            Alert.alert('Missing', "Check The Remarks Field");
-            SetLoad(false);
-            return;
-        } else {
-            setRemarksErr('');
-        }
-
-        if (!startDate) {
-            setStartDateErr('Select Issue Date');
-            Alert.alert('Missing', "Check Issue Date Field");
-            SetLoad(false);
-            return;
-        } else {
-            setStartDateErr('');
-        }
-
-        if (!endDate) {
-            setEndDateErr('Select Valid Till Date');
-            Alert.alert('Missing', "Check Valid Till Field");
-            SetLoad(false);
-            return;
-        } else {
-            setEndDateErr('');
-        }
-
-        // if (!returnDate) {
-        //     setreturnDateErr('Select Return On Date');
-        //     Alert.alert('Missing', "Check Return On Date Field");
-        //     SetLoad(false);
-        //     return;
-        // } else {
-        //     setreturnDateErr('');
-        // }
 
         try {
 

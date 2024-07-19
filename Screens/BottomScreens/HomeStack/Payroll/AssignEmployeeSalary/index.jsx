@@ -174,194 +174,146 @@ const AssignEmpSalary = ({ navigation }) => {
         setShowDropdownstatus(false);
     };
 
-    const AddAss = async () => {
-
-        // console.log(
-        //     " dep_id:", selectedDepartmentsId,
-        //     "e_id:", selectedMemberId,
-        //    " start_date:", formattedStartDate,
-        //     "end_date: ",formattedEndDate,
-        //    " annual_ctc:", ctc,
-        //    " gross_pay:", grossPay,
-        //     "net_pay:", netPay,
-        //     "basic_da:", basic,
-        //     "hra:", hra,
-        //     "conveyance_allowance:", cAllowance,
-        //     "transport_allowance:", tAllowance,
-        //     "medical_allowance:", mAllowance,
-        //     "other_allowance:", oAllowance,
-        //     "variable:", variable,
-        //     "pf:", pf,
-        //     "epf:", epf,
-        //     "esi:", esi,
-        //     "advance:", sAdvance,
-        //     "other_deduction:", oDeduction,
-        //     "status:", selectedStatus,
-        //     "created_by:", data.userempid
-        // )
-
-        SetLoad(true);
-
+    const validateFields = () => {
+        let isValid = true;
+    
+        // Validation checks
         if (!selectedDepartments) {
             setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedDepartmentsErr('');
         }
-
+    
         if (!selectedMember) {
             setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSelectedMemberErr('');
         }
-
+    
         if (!ctc) {
             setCtcErr('Enter CTC');
-            Alert.alert('Missing', "Check The CTC Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCtcErr('');
         }
-
+    
         if (!grossPay) {
             setGrossPayErr('Enter Gross Pay');
-            Alert.alert('Missing', "Check The Gross Pay Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setGrossPayErr('');
         }
-
+    
         if (!netPay) {
             setNetPayErr('Enter Net Pay');
-            Alert.alert('Missing', "Check The Net Pay Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setNetPayErr('');
         }
-
+    
         if (!basic) {
             setBasicErr('Enter Basic');
-            Alert.alert('Missing', "Check The Basic Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setBasicErr('');
         }
-
+    
         if (!hra) {
             setHraErr('Enter HRA');
-            Alert.alert('Missing', "Check The HRA Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setHraErr('');
         }
-
+    
         if (!cAllowance) {
             setCAllowanceErr('Enter Convenience Allowance');
-            Alert.alert('Missing', "Check The Convenience Allowance Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setCAllowanceErr('');
         }
-
+    
         if (!tAllowance) {
             setTAllowanceErr('Enter Transport Allowance');
-            Alert.alert('Missing', "Check The Transport Allowance Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setTAllowanceErr('');
         }
-
+    
         if (!mAllowance) {
             setMAllowanceErr('Enter Medical Allowance');
-            Alert.alert('Missing', "Check The Medical Allowance Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setMAllowanceErr('');
         }
-
+    
         if (!oAllowance) {
             setOAllowanceErr('Enter Other Allowance');
-            Alert.alert('Missing', "Check The Other Allowance Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setOAllowanceErr('');
         }
-
+    
         if (!variable) {
-            setVariableErr('Enter variable');
-            Alert.alert('Missing', "Check The variable Field");
-            SetLoad(false);
-            return;
+            setVariableErr('Enter Variable');
+            isValid = false;
         } else {
             setVariableErr('');
         }
-
+    
         if (!pf) {
             setPfErr('Enter PF');
-            Alert.alert('Missing', "Check The PF Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setPfErr('');
         }
-
+    
         if (!epf) {
             setEpfErr('Enter EPF');
-            Alert.alert('Missing', "Check The EPF Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setEpfErr('');
         }
-
+    
         if (!esi) {
             setEsiErr('Enter ESI');
-            Alert.alert('Missing', "Check The ESI Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setEsiErr('');
         }
-
+    
         if (!sAdvance) {
             setSAdvanceErr('Enter Salary Advance');
-            Alert.alert('Missing', "Check The Salary Advance Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setSAdvanceErr('');
         }
-
+    
         if (!oDeduction) {
             setODeductionErr('Enter Other Deduction');
-            Alert.alert('Missing', "Check The Other Deduction Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setODeductionErr('');
         }
-
+    
         if (!selectedStatus) {
             setStatusError('Select Status');
-            Alert.alert('Missing', "Check The Status Field");
-            SetLoad(false);
-            return;
+            isValid = false;
         } else {
             setStatusError('');
+        }
+    
+        return isValid;
+    };
+
+    const AddAss = async () => {
+
+        SetLoad(true);
+
+        if (!validateFields()) {
+            SetLoad(false);
+            return;
         }
 
         try {

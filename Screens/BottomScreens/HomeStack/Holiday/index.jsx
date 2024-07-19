@@ -251,34 +251,50 @@ const AttendanceRequest = () => {
         setIsModalVisible(!isModalVisible);
     };
 
+    const validateHolidayFields = () => {
+        let isValid = true;
+
+        // Define the fields and their corresponding error setters and messages
+        const fieldsToValidate = [
+            {
+                value: Addholidayname,
+                errorSetter: setAddHolidaynameErr,
+                errorMessage: 'Enter Holiday Name',
+            },
+            {
+                value: AddselectedDay,
+                errorSetter: setAddSelectedDayErr,
+                errorMessage: 'Select Day',
+            },
+            {
+                value: selectedStatus1,
+                errorSetter: setSelectedStatus1Err,
+                errorMessage: 'Select Holiday Type',
+            }
+        ];
+
+        // Iterate over the fields and perform validation
+        fieldsToValidate.forEach(field => {
+            if (!field.value) {
+                field.errorSetter(field.errorMessage);
+                isValid = false;
+            } else {
+                field.errorSetter('');
+            }
+        });
+
+        return isValid;
+    };
+
     const handleEditSubmit = async () => {
 
         setEditLoad(true);
 
         const formData = new FormData();
 
-        if (!Addholidayname) {
-            setAddHolidaynameErr('Enter Holiday Name');
+        if (!validateHolidayFields()) {
             setEditLoad(false);
             return;
-        } else {
-            setAddHolidaynameErr('');
-        }
-
-        if (!AddselectedDay) {
-            setAddSelectedDayErr('Select Day');
-            setEditLoad(false);
-            return;
-        } else {
-            setAddSelectedDayErr('');
-        }
-
-        if (!selectedStatus1) {
-            setSelectedStatus1Err('Select Holiday Type');
-            setEditLoad(false);
-            return;
-        } else {
-            setSelectedStatus1Err('');
         }
 
         formData.append('h_name', Addholidayname);

@@ -262,35 +262,34 @@ const GeneratePayslip = ({ navigation }) => {
 
     // 
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        const fieldsToValidate = [
+            { value: selectedDepartments, errorSetter: setSelectedDepartmentsErr, errorMessage: 'Select Department Name',},
+            { value: selectedMember, errorSetter: setSelectedMemberErr, errorMessage: 'Select Member Name',},
+            { value: startDate, errorSetter: setStartDateErr, errorMessage: 'Select Date',}
+        ];
+    
+        fieldsToValidate.forEach(field => {
+            if (!field.value) {
+                field.errorSetter(field.errorMessage);
+                isValid = false;
+            } else {
+                field.errorSetter('');
+            }
+        });
+    
+        return isValid;
+    };
+
     const AddAss = async () => {
 
         SetLoad(true);
 
-        if (!selectedDepartments) {
-            setSelectedDepartmentsErr('Select Department Name');
-            Alert.alert('Missing', "Check The Department Field");
+        if (!validateFields()) {
             SetLoad(false);
             return;
-        } else {
-            setSelectedDepartmentsErr('');
-        }
-
-        if (!selectedMember) {
-            setSelectedMemberErr('Select Member Name');
-            Alert.alert('Missing', "Check The Member Field");
-            SetLoad(false);
-            return;
-        } else {
-            setSelectedMemberErr('');
-        }
-
-        if (!startDate) {
-            setStartDateErr('Select Date');
-            Alert.alert('Missing', "Check The Date Field");
-            SetLoad(false);
-            return;
-        } else {
-            setStartDateErr('');
         }
 
         try {
