@@ -265,11 +265,7 @@ const EditEmployee = ({ route, navigation }) => {
                             showFields={showFields}
                             formattedStartDate={formattedStartDate}
                             desg={desg}
-                            // filesets={filesets}
-                            // documentIdget={documentIds}
-                            // selectedDocumentTypes={selectedDocumentTypes}
-                            // documentNames={documentNames}
-                            // selectedFiles={selectedFiles}
+                            id={id}
                         />
                     }
 

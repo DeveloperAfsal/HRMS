@@ -623,6 +623,8 @@ const EmpAttendReq = ({ navigation }) => {
                         value={Reason}
                         onChangeText={(text) => setReason(text)}
                         style={styles.Reason}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>

@@ -962,8 +962,8 @@ const AssignedTask = () => {
                                     }
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
 
                             </View>

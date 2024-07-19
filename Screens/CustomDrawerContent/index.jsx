@@ -671,7 +671,7 @@ const CustomDrawerContent = ({ navigation }) => {
                                     {checkedNames.TLApproval.includes('OT_Approval') && (
                                         <DrawerItem
                                             label="OT Approval"
-                                            onPress={() => navigation.navigate('TL Ot Request')}
+                                            onPress={() => navigation.navigate('TL OT Request')}
                                         />
                                     )}
                                 </>

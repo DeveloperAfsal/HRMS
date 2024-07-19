@@ -707,7 +707,7 @@ const TaskList = ({ navigation }) => {
                             <View>
 
                                 <View style={[styles.row, styles.listHeader]}>
-                                    <Text style={[styles.header, styles.cell1, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Task ID</Text>
                                     <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Task Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Name</Text>
@@ -716,12 +716,12 @@ const TaskList = ({ navigation }) => {
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.WeekOff]}>Department</Text> : null}
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Assigned To</Text> : null}
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Created By</Text>
-                                    <Text style={[styles.header, styles.cell1, styles.Status]}>Start Date</Text>
-                                    <Text style={[styles.header, styles.cell1, styles.Status]}>End Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Start Date</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>End Date</Text>
                                     <Text style={[styles.header, styles.cell, styles.Status]}>Attachment</Text>
                                     {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Task Status</Text> : null}
-                                    <Text style={[styles.header, styles.cell1, styles.Status]}>Priority</Text>
-                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell1, styles.Status]}>Action</Text> : null}
+                                    <Text style={[styles.header, styles.cell, styles.Status]}>Priority</Text>
+                                    {(data.userrole == 1 || data.userrole == 2) ? <Text style={[styles.header, styles.cell, styles.Status]}>Action</Text> : null}
                                     {(data.userrole == 1 || data.userrole == 2) ? null : <Text style={[styles.header, styles.cell, styles.StatusT]}>Task Status</Text>}
                                 </View>
 
@@ -730,7 +730,7 @@ const TaskList = ({ navigation }) => {
                                 ) : (
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
-                                            <Text style={[styles.cell1, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.ticket_id}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.task_name}</Text>
                                             <Text style={[styles.cell, styles.StartDate]}>{item.project_name}</Text>
@@ -777,7 +777,7 @@ const TaskList = ({ navigation }) => {
                                             </View> : null}
                                             {(data.userrole == 1 || data.userrole == 2) ? null :
                                                 <TouchableOpacity style={[styles.Status2, styles.Taskdrop]} onPress={() => openEditModal1(item)}>
-                                                    <Text style={[styles.cell1]}>{item.task_status}</Text>
+                                                    <Text style={[styles.cell]}>{item.task_status}</Text>
                                                     <DropdownIcon width={14} height={14} color={"#0879F6"} />
                                                 </TouchableOpacity>}
                                         </View>
@@ -1064,8 +1064,8 @@ const TaskList = ({ navigation }) => {
                                     }
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
 
                             </View>

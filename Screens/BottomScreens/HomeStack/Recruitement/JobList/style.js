@@ -2,6 +2,50 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    ActiveInactiveContainer: {
+        paddingHorizontal: "5%",
+        paddingVertical: '3%',
+    },
+
+    StatusTouchable: {
+        width: 144,
+        height: 48,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#1AD0FF',
+        borderRadius: 6,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: '5%',
+        marginTop: '3%'
+    },
+
+    StatusTouchableText: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        color: '#3A3A3A',
+    },
+
+    dropdown: {
+        width: 144,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: "#1AD0FF",
+        backgroundColor: '#fff',
+    },
+
+    dropdownOption: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#1AD0FF",
+    },
+
+    dropdownOptionText: {
+        fontSize: 16,
+    },
+
     modalCancelButton1: {
         // backgroundColor: '#ccc',
         borderColor:'#0A62F1',
@@ -379,22 +423,6 @@ const styles = StyleSheet.create({
     modalLabelText: {
         paddingTop: '5%',
         paddingBottom: '5%'
-    },
-
-    dropdown: {
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderColor: "#ccc",
-    },
-
-    dropdownOption: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
-    },
-
-    dropdownOptionText: {
-        fontSize: 16,
     },
 
     listcontentButtonview: {

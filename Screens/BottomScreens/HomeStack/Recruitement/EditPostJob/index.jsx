@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
@@ -8,19 +8,60 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 //     GetState,
 //     GetCity,
 // } from "react-country-state-city";
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { htmlToText } from 'html-to-text';
 import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
-import axios from "axios";
-import { useSelector } from "react-redux";
 
-const PostJob = ({ navigation }) => {
+const EditPostJob = ({ route, navigation }) => {
 
     // data from redux store 
 
     const { data } = useSelector((state) => state.login);
 
-    const [load, setLoad] = useState(false);
+    // 
+
+    const SpecId = route.params.Id;
+    const SpecCityNames = route.params.Id.city_names
+    const cityfrom = SpecCityNames.join(', ')
+
+    const [loadData, setLoadData] = useState(false);
+    const [load, SetLoad] = useState(false);
+    const [datalist, setDatalist] = useState([]);
+
+    const fetchData = async () => {
+        setLoadData(true)
+        try {
+            const apiUrl = `https://ocean21.in/api/public/api/post_job_editlist/${SpecId.id}`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+            setLoadData(false)
+            const responseData = response.data.data;
+            setDatalist(responseData);
+        } catch (error) {
+            setLoadData(false)
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [SpecId])
+    );
+
+    const stripHtmlTags = (html) => {
+        return htmlToText(html, {
+            wordwrap: false,
+            tags: { '': { options: { ignoreHref: true } } }
+        });
+    };
 
     const [desgination, setDesignation] = useState('');
     const [desginationErr, setDesignationErr] = useState('');
@@ -131,6 +172,10 @@ const PostJob = ({ navigation }) => {
         setSelectedCountry(selectedCountry.name);
         setSelectedCountryId(selectedCountry.id);
         setDropdownVisible(false);
+        setSelectedState([]);
+        setSelectedStateId([]);
+        setSelectedCity([]);
+        setSelectedCityId([]);
     };
 
     const CountApi = async () => {
@@ -159,6 +204,7 @@ const PostJob = ({ navigation }) => {
     const [state, setState] = useState([]);
     const [selectededState, setSelectedState] = useState([]);
     const [selectedStateId, setSelectedStateId] = useState([]);
+    console.log(selectedStateId, "selectedStateId")
     const [dropdownVisible1, setDropdownVisible1] = useState(false);
 
     const toggleDropdown1 = () => {
@@ -197,6 +243,7 @@ const PostJob = ({ navigation }) => {
     const [city, setCity] = useState([]);
     const [selectededCity, setSelectedCity] = useState([]);
     const [selectedCityId, setSelectedCityId] = useState([]);
+    console.log(selectedCityId, "selectedCityId")
     const [dropdownVisible2, setDropdownVisible2] = useState(false);
 
     const toggleDropdown2 = () => {
@@ -211,8 +258,8 @@ const PostJob = ({ navigation }) => {
                 return [...prevSelectedCities, selectedCity];
             }
         });
-
-        setSelectedCityId((prevSelectedCityIds) => {
+    
+        setSelectedCityId((prevSelectedCityIds = []) => {
             if (prevSelectedCityIds.includes(selectedCity.id)) {
                 return prevSelectedCityIds.filter(id => id !== selectedCity.id);
             } else {
@@ -220,6 +267,8 @@ const PostJob = ({ navigation }) => {
             }
         });
     };
+    
+
 
     const CityApi = async () => {
 
@@ -242,7 +291,7 @@ const PostJob = ({ navigation }) => {
 
     useEffect(() => {
         CityApi();
-    }, [selectededState])
+    }, [selectedStateId])
 
     const [error, setError] = useState('');
 
@@ -422,20 +471,49 @@ const PostJob = ({ navigation }) => {
         return isValid;
     };
 
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setDesignation(datalist.designation);
+            setNofVaccancies(datalist.no_of_vacancies);
+            setSelectedCountry(datalist.country_name);
+            setSelectedCountryId(datalist.job_countries);
+            setSelectedState(datalist.state_name);
+            // setSelectedCity(datalist.city_names);
+            setSelectedCityId(datalist.job_cities)
+            setSelectedStateId(datalist.job_states);
+            setSelectedStatus1(datalist.job_type);
+            setSelectedStatus3(datalist.emp_type);
+            setSelectedStatus2(datalist.shift);
+            setSalarymin(datalist.salary_min);
+            setSalarymax(datalist.salary_max);
+            setExpmin(datalist.experience_min);
+            setExpmax(datalist.experience_max);
+            setKeySkills(datalist.key_skills);
+            setSelectedStatus(datalist.job_status);
+            setRolesRes(datalist.roles_responsiblities);
+            setPreferrerdCan(datalist.preferred_candidate);
+            setOtherBenefits(datalist.other_benefits);
+            setStartDate(new Date(datalist.valid_till));
+        }, 1000);
+
+        return () => clearTimeout(timeoutId);
+    }, [datalist]);
+
     const HandleSubmit = async () => {
 
-        setLoad(true);
+        SetLoad(true);
+
+        if (!validateFields()) {
+            SetLoad(false);
+            return;
+        }
 
         try {
 
-            if (!validateFields()) {
-                setLoad(false);
-                return;
-            }
+            const apiUrl = 'https://ocean21.in/api/public/api/update_post_job';
 
-            const apiUrl = 'https://ocean21.in/api/public/api/add_job_post';
-
-            const response = await axios.post(apiUrl, {
+            const response = await axios.put(apiUrl, {
+                id: SpecId.id,
                 designation: desgination,
                 no_of_vacancies: nofVaccancies,
                 job_countries: selectedCountryId,
@@ -454,7 +532,7 @@ const PostJob = ({ navigation }) => {
                 other_benefits: otherBenefits,
                 job_status: selectedStatus,
                 valid_till: formattedStartDate,
-                created_by: data.userempid
+                updated_by: data.userempid
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -465,16 +543,16 @@ const PostJob = ({ navigation }) => {
 
             if (responseData.status === "success") {
                 handleShowAlert(responseData.message);
-                setLoad(false);
+                SetLoad(false);
             } else {
                 handleShowAlert1(responseData.message);
-                setLoad(false);
+                SetLoad(false);
             }
 
         } catch (error) {
             handleShowAlert2();
             console.error('Error fetching data:', error);
-            setLoad(false);
+            SetLoad(false);
         }
     }
 
@@ -486,8 +564,7 @@ const PostJob = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Job List');
-            onRefresh();
+            navigation.navigate('Job List')
         }, 2500);
     };
 
@@ -510,48 +587,6 @@ const PostJob = ({ navigation }) => {
             setAlertVisible2(false);
         }, 3000);
     };
-
-    const onRefresh = () => {
-        setDesignation('');
-        setDesignationErr('');
-        setNofVaccancies('');
-        setNofVaccanciesErr('');
-        setSelectedCountryErr('');
-        setSelectedStateErr('');
-        setSelectedCitiesErr('');
-        setSelectedCountry([]);
-        setSelectedCity([]);
-        setSelectedState([]);
-        setSelectedCountryId([]);
-        setSelectedCityId([]);
-        setSelectedStateId([]);
-        setSelectedStatus1(null);
-        setSelectedStatusErr1('');
-        setSelectedStatus2(null);
-        setSelectedStatusErr2('');
-        setSelectedStatus3(null);
-        setSelectedStatusErr3('');
-        setSelectedStatus(null);
-        setSelectedStatusErr('');
-        setSalarymin('');
-        setSalaryminErr('');
-        setSalarymaxErr('');
-        setSalarymax('');
-        setExpmin('');
-        setExpminErr('');
-        setExpmax('');
-        setExpmaxErr('');
-        setKeySkills('');
-        setKeySkillsErr('');
-        setPreferrerdCan('');
-        setPreferrerdCanErr('');
-        setRolesRes('');
-        setRolesResErr('');
-        setOtherBenefits('');
-        setOtherBenefitsErr('');
-        setStartDateErr('');
-        setStartDate(null);
-    }
 
     return (
         <ScrollView>
@@ -651,10 +686,9 @@ const PostJob = ({ navigation }) => {
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown2}>
                         <Text style={styles.StatusTouchableText}>
-                            {/* {selectededCity.length > 0 ? selectededCity : 'Select a City'} */}
                             {selectededCity.length > 0
                                 ? selectededCity.map(city => city.name).join(', ')
-                                : 'Select a City'}
+                                : cityfrom}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -679,7 +713,7 @@ const PostJob = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus1} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus1 || "Select Job Type"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus1}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -714,7 +748,7 @@ const PostJob = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus3} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus3 || "Select Employment Type"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus3}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -753,7 +787,7 @@ const PostJob = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus2} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus2 || "Select Schedule / Shift"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus2}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -917,7 +951,7 @@ const PostJob = ({ navigation }) => {
 
                     <TouchableOpacity onPress={toggleDropdownstatus} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Job Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -948,8 +982,7 @@ const PostJob = ({ navigation }) => {
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {/* {startDate.toDateString()} &nbsp; */}
-                            {startDate ? startDate.toDateString() : "Select date"} &nbsp;
+                            {startDate ? startDate.toDateString() : "Date"} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -980,7 +1013,7 @@ const PostJob = ({ navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => onRefresh()}
+                            onPress={() => navigation.navigate('Job List')}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel
@@ -1014,4 +1047,4 @@ const PostJob = ({ navigation }) => {
     )
 }
 
-export default PostJob;
+export default EditPostJob;

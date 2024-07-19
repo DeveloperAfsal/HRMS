@@ -43,35 +43,44 @@ const JobOpenings = ({ navigation }) => {
 
     // Add
 
+    const validateFields = () => {
+        let isValid = true;
+
+        if (!designation) {
+            setDesignationErr('Enter designation');
+            isValid = false;
+        } else {
+            setDesignationErr('');
+        }
+
+        if (!nofVacancies) {
+            setNofVacanciesError('Enter Vacancies');
+            isValid = false;
+        } else {
+            setNofVacanciesError('');
+        }
+
+        if (!description) {
+            setDescriptionErr('Enter Description');
+            isValid = false;
+        } else {
+            setDescriptionErr('');
+        }
+
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setload(true);
 
         try {
 
-            if (!designation) {
-                setDesignationErr('Enter designation');
+            if (!validateFields()) {
                 setload(false);
                 return;
-            } else {
-                setDesignationErr('');
             }
 
-            if (!nofVacancies) {
-                setNofVacanciesError('Enter Vacancies');
-                setload(false);
-                return;
-            } else {
-                setNofVacanciesError('');
-            }
-
-            if (!description) {
-                setDescriptionErr('Enter Description');
-                setload(false);
-                return;
-            } else {
-                setDescriptionErr('');
-            }
 
             const apiUrl = 'https://ocean21.in/api/public/api/add_jobopening';
 
@@ -248,15 +257,17 @@ const JobOpenings = ({ navigation }) => {
                                     Description
                                 </Text>
 
-                                {/* <TextInput
+                                <TextInput
                                     value={description}
                                     onChangeText={(txt) => setDescription(txt)}
-                                    style={styles.ShiftSlotTextInput}
-                                /> */}
+                                    style={styles.ShiftSlotTextInput1}
+                                    multiline={true}
+                                    textAlignVertical="top"
+                                />
 
                                 {/* react-native-pell-rich-editor */}
 
-                                <SafeAreaView style={styles.container1}>
+                                {/* <SafeAreaView style={styles.container1}>
 
                                     <RichEditor
                                         ref={richText}
@@ -283,7 +294,7 @@ const JobOpenings = ({ navigation }) => {
                                             [actions.heading1]: ({ tintColor }) => <Text style={[styles.toolbarButton1, { color: tintColor }]}>H1</Text>,
                                         }}
                                     />
-                                </SafeAreaView>
+                                </SafeAreaView> */}
 
                                 <Text style={styles.errorText}>
                                     {descriptionErr}

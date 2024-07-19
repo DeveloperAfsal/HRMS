@@ -210,7 +210,8 @@ const PermissionRequest = () => {
             if (response.data.status === "success") {
                 fetchData();
             } else {
-                console.log("error")
+                console.log("error");
+                Alert.alert("Error")
             }
 
         } catch (error) {

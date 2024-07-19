@@ -82,6 +82,16 @@ const styles = StyleSheet.create({
         paddingLeft: 15
     },
 
+    ShiftSlotTextInput1: {
+        width: "90%",
+        height: 142,
+        backgroundColor: '#F3FCFF',
+        borderWidth: 1,
+        borderColor: '#515151',
+        borderRadius: 7,
+        paddingLeft: 15
+    },
+
     errorText: {
         color: "red",
         paddingTop: 10,

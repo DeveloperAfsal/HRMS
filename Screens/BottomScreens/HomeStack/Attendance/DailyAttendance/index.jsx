@@ -21,6 +21,13 @@ const AttendanceRequest = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
             setStartDate(date);
@@ -32,7 +39,7 @@ const AttendanceRequest = () => {
         setShowDatePicker(true);
     };
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
+    const formattedStartDate = formatDate(startDate);
 
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
@@ -239,7 +246,7 @@ const AttendanceRequest = () => {
 
                 <View style={styles.inputs} >
                     <Text onPress={showDatepicker}>
-                        {startDate.toDateString()} &nbsp;
+                        {formattedStartDate} &nbsp;
                     </Text>
                     {showDatePicker && (
                         <DateTimePicker

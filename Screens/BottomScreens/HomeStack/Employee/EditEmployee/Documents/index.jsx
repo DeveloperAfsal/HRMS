@@ -30,71 +30,15 @@ const Documents = ({
     setDocumentFile,
     setDocuments,
     documents,
-    employeeDoc,
-    setEmployeeDoc,
-    setEmployee,
+    // employeeDoc,
+    // setEmployeeDoc,
+    // setEmployee,
     employee,
     formattedStartDate,
     desg,
     showFields,
-    // selectedFiles,
-    // documentNames,
-    // selectedDocumentTypes,
-    // documentIdget,
+    id,
 }) => {
-
-    // const documentImgPath = "assets/Employee/EMP014/Rejected.png";
-
-    // // Extract the file name and type from the path
-    // const fileNames = documentImgPath.split('/').pop();
-    // const fileType = `image/${fileNames.split('.').pop()}`;
-
-    // // Assume you have the file size and URI. In a real scenario, you might need to obtain these through an API or file handling method.
-    // const fileSize = 0; // Replace with the actual file size
-    // const fileUri = documentImgPath// Replace with the actual URI
-
-    // const documentImgObject = {
-    //     fileCopyUri: null,
-    //     name: fileNames,
-    //     size: fileSize,
-    //     type: fileType,
-    //     uri: fileUri
-    // };
-
-    // console.log(documentImgObject);
-
-
-    // console.log(employeeDoc, "employeeDoc")
-
-    const [filesets, setFilesets] = useState([]);
-
-    useEffect(() => {
-        if (employeeDoc && employeeDoc.length > 0) {
-            const documents = employeeDoc.map(doc => ({
-                documentId: doc.id,
-                documentType: doc.document_type_id,
-                selecteddocumentType: doc.document_type_id,
-                documentName: doc.document_name,
-                selectedFile: `${doc.document_img}`,
-            }));
-
-            setFilesets(documents);
-        }
-    }, [])
-
-    // employeeDoc.forEach(doc => {
-    //     console.log(doc.document_img, "doc.document_img")
-    // });
-
-    // console.log(filesets, "filesets")
-
-    // const documentIdget = filesets.map(fileSet => fileSet.documentId);
-    // const selectedDocumentTypes = filesets.map(fileSet => fileSet.selecteddocumentType);
-    // const documentNames = filesets.map(fileSet => fileSet.documentName);
-    // const selectedFiles = filesets.map(fileSet => fileSet.selectedFile);
-
-    // console.log(documentIdget, "documentIdget")
-    // console.log(selectedFiles, "selectedFiles")
 
     // data from redux store 
 
@@ -106,12 +50,46 @@ const Documents = ({
     const [showDropdown1, setShowDropdown1] = useState(false);
     const [documentList, setDocumentList] = useState([]);
     const [docFile, setDocFile] = useState();
+    const [docFileErr, setDocFileErr] = useState();
     const [docName, setDocName] = useState();
-    const [selectedDocument, setSelectedDocument] = useState([]);
-    const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+    const [docNameErr, setDocNameErr] = useState();
+    const [selectedDocument, setSelectedDocument] = useState('');
+    const [selectedDocumentErr, setSelectedDocumentErr] = useState('');
+    const [selectedDocumentId, setSelectedDocumentId] = useState('');
     const [selectedDocument1, setSelectedDocument1] = useState([]);
     const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
     const [load, setLoad] = useState(false);
+
+    // 
+
+    const [loading, setLoading] = useState(false);
+    const [employeeDoc, setEmployeeDoc] = useState([]);
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(
+                `https://ocean21.in/api/public/api/employee_detailslitshow/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                }
+            );
+            const resData = response.data.data.employee_details;
+            const resDoc = response.data.data.employee_documents;
+            setEmployeeDoc(resDoc);
+            setLoading(false);
+
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [id])
 
 
     // Api call for Dropdown dropdown
@@ -156,32 +134,116 @@ const Documents = ({
 
     // 
 
-    const addDocument = () => {
-        if (selectedDocumentId && docName && docFile && selectedDocument) {
-            console.log(docFile[0], "docFile[0]")
-            const newDocument = {
-                document_name: docName,
-                document_type_id: selectedDocumentId,
-                document_type_name: selectedDocument,
-                emp_id: data.emp_id, // Assuming data.emp_id holds the employee ID
-                document_img: docFile[0] // Assuming docFile is an array of File objects and you want to store the URI
-            };
+    const [loadData, setLoadData] = useState(false)
 
-            // Update employeeDoc state
-            setEmployeeDoc(prevEmployeeDoc => [...prevEmployeeDoc, newDocument]);
+    const docRefresh = () => {
+        setSelectedDocumentId('');
+        setSelectedDocument('');
+        setDocName('');
+        setDocFile('');
+    }
 
-            // Update other related states
-            setDocumentType(prevDocumentTypes => [...prevDocumentTypes, selectedDocumentId]);
-            setDocumentName(prevDocumentNames => [...prevDocumentNames, docName]);
-            setDocumentFile(prevDocumentFiles => [...prevDocumentFiles, docFile[0]]);
+    const validateFields = () => {
+        let isValid = true;
 
-            setSelectedDocument([]);
-            setDocName('');
-            setDocFile('');
-
+        if (!selectedDocument) {
+            setSelectedDocumentErr('Document Type required');
+            isValid = false;
         } else {
-            Alert.alert('Please fill all fields');
+            setSelectedDocumentErr('');
         }
+
+        if (!docName) {
+            setDocNameErr('Document Name Required');
+            isValid = false;
+        } else {
+            setDocNameErr('');
+        }
+
+        if (!docFile) {
+            setDocFileErr('Document File Required');
+            isValid = false;
+        } else {
+            setDocFileErr('');
+        }
+
+        return isValid;
+    };
+
+    const addDocument = async () => {
+
+        setLoadData(true)
+
+        if (!validateFields()) {
+            setLoadData(false);
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append('emp_id', id);
+        formData.append('emp_document_type[]', selectedDocumentId);
+        formData.append('emp_document_name[]', selectedDocument);
+
+        if (docFile.length > 0) {
+            docFile.map((file, index) => {
+                let uri, name;
+                if (typeof file === 'string') {
+                    const imageUriParts = file.split('/');
+                    name = imageUriParts[imageUriParts.length - 1];
+                    uri = file;
+                } else {
+                    name = file.name;
+                    uri = file.uri;
+                }
+                formData.append(`emp_document_image[]`, {
+                    uri: uri,
+                    name: name,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            formData.append('emp_document_image[]', docFile);
+        }
+
+        formData.append('updated_by', data.userrole);
+
+        try {
+
+            const response = await fetch('https://ocean21.in/api/public/api/add_document_list', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
+
+            const responsedata = await response.json();
+
+            console.log(responsedata, "responsedata")
+
+            if (responsedata.status === "success") {
+
+                handleShowAlert(responsedata);
+                fetchData();
+                docRefresh();
+                setLoadData(false);
+
+            } else {
+
+                handleShowAlert1(responsedata);
+                setLoadData(false);
+            }
+
+
+        } catch (error) {
+            handleShowAlert2();
+            setLoadData(false)
+            console.error('Error fetching data:', error);
+        }
+
     };
 
     // Api call for Delete
@@ -280,18 +342,6 @@ const Documents = ({
 
     };
 
-    // Delete document from list
-
-    const deleteDocument = (document_type_id) => {
-        const index = employeeDoc.findIndex(doc => doc.document_type_id === document_type_id);
-        if (index !== -1) {
-            const updatedDocs = [...employeeDoc];
-            updatedDocs.splice(index, 1);
-            setEmployeeDoc(updatedDocs);
-        }
-    };
-
-
     // Handle Submit
 
     const HandleSubmit = async () => {
@@ -329,7 +379,7 @@ const Documents = ({
 
         //append data
 
-        formData.append('id', employee.id);
+        formData.append('id', id);
 
         formData.append('employee_id', employee.hrms_emp_id);
 
@@ -544,45 +594,12 @@ const Documents = ({
         formData.append('ifsc_code', employee.ifsc_code);
         formData.append('account_type', employee.ac_type);
 
-        employeeDoc.forEach(doc => {
-            formData.append('emp_document_id[]', doc.id);
-        });
-
-        employeeDoc.forEach(doc => {
-            formData.append('emp_document_type[]', doc.document_type_id);
-        });
-
-        employeeDoc.forEach(doc => {
-            formData.append('emp_document_name[]', doc.document_name);
-        });
-
-        // employeeDoc.forEach(doc => {
-        //     formData.append('emp_document_image[]', doc.document_img);
-        // });
-
-        employeeDoc.forEach(doc => {
-            if (doc.document_img) {
-                const fileUri = doc.document_img;
-                const fileName = fileUri.split('/').pop();
-                const fileType = doc.document_img.type || 'image/png';
-
-                formData.append('emp_document_image[]', {
-                    uri: fileUri,
-                    name: fileName,
-                    type: fileType
-                });
-            } else {
-                formData.append('emp_document_image[]', doc.document_img, doc.document_name);
-            }
-        });
-
-
         formData.append('updated_by', data.userrole);
 
 
         try {
 
-            const response = await fetch('https://ocean21.in/api/public/api/update_employee_details', {
+            const response = await fetch('https://ocean21.in/api/public/api/update_employeemobile_details', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -597,17 +614,21 @@ const Documents = ({
             console.log(responsedata, "appended")
 
             if (responsedata.status === "success") {
-                Alert.alert('Submitted', responsedata.message);
-                // handleShowAlert(responsedata.data);
+                // Alert.alert('Submitted', responsedata.message);
                 setLoad(false);
+                handleShowAlert(responsedata);
+                setTimeout(() => {
+                    navigation.navigate('Employee List')
+
+                }, 2000);
             } else {
-                // handleShowAlert1(responsedata.data);
-                Alert.alert('Failed to add Employee', responsedata.message);
+                handleShowAlert1(responsedata);
+                // Alert.alert('Failed to add Employee', responsedata.message);
             }
 
         } catch (error) {
-            Alert.alert('Failed to add Employee', error);
-            // handleShowAlert2();
+            // Alert.alert('Failed to add Employee', error);
+            handleShowAlert2();
             setLoad(false);
         }
 
@@ -660,9 +681,14 @@ const Documents = ({
     const [EdocFile, setEdocFile] = useState([]);
     const [EditedocFile, seteditedocFile] = useState([]);
     const [selectedId, setSelectedId] = useState();
+    const [fileName, setFileName] = useState('');
 
-    const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
-    const fileName = filePath.split('/').pop();
+    useEffect(() => {
+        if (typeof EditedocFile === 'string') {
+            const filePath = EditedocFile;
+            setFileName(filePath.split('/').pop());
+        }
+    }, [EditedocFile]);
 
     // Api call For EditButton
 
@@ -687,7 +713,7 @@ const Documents = ({
     const openEditModal = (slot) => {
         setEmpid(slot.emp_id);
         setEditedtitle(slot.document_name);
-        seteditedocFile(slot?.document_img);
+        seteditedocFile(slot.document_img);
         setSelectedDocument1(slot.document_type_name);
         setEditModalVisible(true);
         setSelectedId(slot.id);
@@ -755,13 +781,9 @@ const Documents = ({
 
             if (responsedata.status === "success") {
                 setEditLoad(false);
-                // const updatedDataList = [...employeeDoc];
-                // setEmployeeDoc(updatedDataList);
                 handleShowAlert(responsedata);
                 setEdocFile(null);
-                setTimeout(() => {
-                    navigation.navigate('Employee List')
-                }, 2500);
+                fetchData();
             } else {
                 setEditLoad(false);
                 handleShowAlert1(responsedata);
@@ -810,7 +832,7 @@ const Documents = ({
             )}
 
             <Text style={styles.errorText}>
-                { }
+                {selectedDocumentErr}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -819,14 +841,12 @@ const Documents = ({
 
             <TextInput
                 style={styles.input}
-                // value={Employee.documentName}
-                // onChangeText={(text) => handleFieldsChange('documentName', text)}
                 value={docName}
                 onChangeText={(text) => setDocName(text)}
             />
 
             <Text style={styles.errorText}>
-                { }
+                {docNameErr}
             </Text>
 
             <Text style={styles.subHeading}>
@@ -846,17 +866,18 @@ const Documents = ({
             </View>
 
             <Text style={styles.errorText}>
-                { }
+                {docFileErr}
             </Text>
 
             <View style={styles.fullWidth}>
                 <TouchableOpacity style={styles.NextButton}
                     onPress={addDocument}
                 >
-                    <Text style={styles.NextButtonText}>
-                        ADD
-                    </Text>
-                    <ArrowRightIcon width={14} height={14} color={'#fff'} />
+                    {
+                        loadData ?
+                            <ActivityIndicator size={'small'} color={'#fff'} /> :
+                            <Text style={styles.NextButtonText}> ADD +</Text>
+                    }
                 </TouchableOpacity>
             </View>
 
@@ -883,23 +904,16 @@ const Documents = ({
                                     <Text style={styles.listcontentsno}>{index + 1}</Text>
                                     <Text style={styles.listcontentRoleName}>{doc.document_name}</Text>
                                     <View style={styles.listcontentButtonview}>
-                                        {
-                                            doc.emp_id === undefined ?
-                                                (
-                                                    <TouchableOpacity onPress={() => deleteDocument(doc.document_type_id)} style={styles.listcontentdelbutton}>
-                                                        <DeleteIcon width={14} height={14} color={"#000"} />
-                                                    </TouchableOpacity>
-                                                ) : (
-                                                    <>
-                                                        <TouchableOpacity onPress={() => openEditModal(doc)} style={styles.listcontenteditbutton}>
-                                                            <EditIcon width={14} height={14} color={"#000"} />
-                                                        </TouchableOpacity>
-                                                        <TouchableOpacity onPress={() => HandleDelete(doc)} style={styles.listcontentdelbutton}>
-                                                            <DeleteIcon width={14} height={14} color={"#000"} />
-                                                        </TouchableOpacity>
-                                                    </>
-                                                )
-                                        }
+
+                                        <>
+                                            <TouchableOpacity onPress={() => openEditModal(doc)} style={styles.listcontenteditbutton}>
+                                                <EditIcon width={14} height={14} color={"#000"} />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => HandleDelete(doc)} style={styles.listcontentdelbutton}>
+                                                <DeleteIcon width={14} height={14} color={"#000"} />
+                                            </TouchableOpacity>
+                                        </>
+
                                     </View>
                                 </View>
                             ))
@@ -1070,8 +1084,8 @@ const Documents = ({
                                 }
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                            <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                             </TouchableOpacity>
 
                         </View>

@@ -171,6 +171,33 @@ const Template = ({ navigation }) => {
 
     // 
 
+    const validateFields = () => {
+        let isValid = true;
+    
+        if (!title) {
+            setTitleError('Select Title');
+            isValid = false;
+        } else {
+            setTitleError('');
+        }
+    
+        if (!selectedStatus) {
+            setStatusErr('Select Status');
+            isValid = false;
+        } else {
+            setStatusErr('');
+        }
+    
+        if (!docFile) {
+            setDocFileErr('Select Document File');
+            isValid = false;
+        } else {
+            setDocFileErr('');
+        }
+    
+        return isValid;
+    };
+
     const HandleSubmit = async () => {
 
         setLoad(true);
@@ -179,28 +206,9 @@ const Template = ({ navigation }) => {
 
         try {
 
-            if (!title) {
-                setTitleError('Select Title');
+            if (!validateFields()) {
                 setLoad(false);
                 return;
-            } else {
-                setTitleError('');
-            }
-
-            if (!selectedStatus) {
-                setStatusErr('Select Status');
-                setLoad(false);
-                return;
-            } else {
-                setStatusErr('');
-            }
-
-            if (!docFile) {
-                setDocFileErr('Select Doc File');
-                setLoad(false);
-                return;
-            } else {
-                setDocFileErr('');
             }
 
             formData.append('title', title);

@@ -23,6 +23,13 @@ const MonthlyList = ({ navigation }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const handleDateChange = (event, date) => {
         if (date !== undefined) {
             setStartDate(date);
@@ -33,6 +40,8 @@ const MonthlyList = ({ navigation }) => {
     const showDatepicker = () => {
         setShowDatePicker(true);
     };
+
+    const formattedStartDate = formatDate(startDate);
 
     // const [showDatePicker1, setShowDatePicker1] = useState(false);
     // const [endDate, setEndDate] = useState(new Date());
@@ -62,7 +71,7 @@ const MonthlyList = ({ navigation }) => {
     //     setShowDatePicker2(true);
     // };
 
-    const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}`;
+    // const formattedStartDate = `${startDate.getFullYear()}-${startDate.getMonth() + 1}`;
     // const formattedEndDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`;
     // const formattedReturnDate = `${returnDate.getFullYear()}-${returnDate.getMonth() + 1}-${returnDate.getDate()}`;
 
@@ -415,7 +424,7 @@ const MonthlyList = ({ navigation }) => {
 
                 <View style={styles.inputs} >
                     <Text onPress={showDatepicker}>
-                        {startDate.toDateString()} &nbsp;
+                        {formattedStartDate} &nbsp;
                     </Text>
                     {showDatePicker && (
                         <DateTimePicker

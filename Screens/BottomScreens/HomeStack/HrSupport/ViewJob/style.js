@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         borderRadius:7,
         borderWidth:0.5,
         borderColor:"#515151",
-        // height: 42,
+        height: 142,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

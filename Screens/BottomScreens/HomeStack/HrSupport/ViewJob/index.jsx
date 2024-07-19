@@ -333,6 +333,7 @@ const ViewJob = ({ navigation, route }) => {
                                 onChangeText={(text) => setEditedDes(text)}
                                 style={styles.modalInput1}
                                 multiline={true}
+                                textAlignVertical="top"
                             />
 
                             <Text style={styles.errorText}>
@@ -349,8 +350,8 @@ const ViewJob = ({ navigation, route }) => {
                                     }
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.modalCancelButton} onPress={closeEditModal}>
-                                    <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                                <TouchableOpacity style={styles.modalCancelButton1} onPress={closeEditModal}>
+                                    <Text style={styles.modalCancelButtonText1}>Cancel</Text>
                                 </TouchableOpacity>
 
                             </View>

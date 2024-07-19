@@ -342,7 +342,7 @@ const ProjectList = ({ navigation }) => {
                             <View>
 
                                 <View style={[styles.row, styles.listHeader]}>
-                                    <Text style={[styles.header, styles.cell1, styles.sno]}>S.No</Text>
+                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Project Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Project Type</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Category</Text>
@@ -361,7 +361,7 @@ const ProjectList = ({ navigation }) => {
                                 ) : (
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
-                                            <Text style={[styles.cell1, styles.sno]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.p_name}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName, { textAlign: 'left' }]}>{item.p_type}</Text>
                                             <Text style={[styles.cell, styles.StartDate]}>{item.p_category}</Text>

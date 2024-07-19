@@ -412,14 +412,14 @@ const EditTask = ({ route, navigation }) => {
             setDesErr('');
         }
 
-        if (!docFile) {
-            setDocFileErr('Choose File');
-            Alert.alert('Missing', "Check The Attachment Field");
-            setLoad(false);
-            return;
-        } else {
-            setDocFileErr('');
-        }
+        // if (!docFile) {
+        //     setDocFileErr('Choose File');
+        //     Alert.alert('Missing', "Check The Attachment Field");
+        //     setLoad(false);
+        //     return;
+        // } else {
+        //     setDocFileErr('');
+        // }
 
         try {
 

@@ -5,6 +5,7 @@ import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
 import EditIcon from "../../../../../Assets/Icons/Edit.svg";
 import ViewIcon from "../../../../../Assets/Icons/eyeopen.svg";
+import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
 import TickIcon from '../../../../../Assets/Icons/Tick.svg';
 import CloseIcon from '../../../../../Assets/Icons/Close.svg';
@@ -56,12 +57,25 @@ const JobList = ({ navigation }) => {
         setCurrentPage(page);
     };
 
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedStatus, setSelectedStatus] = useState('All');
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const selectStatus = (status) => {
+        setSelectedStatus(status);
+        setShowDropdown(false);
+    };
+
     // 
 
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/post_job_list/All';
+            const apiUrl = `https://ocean21.in/api/public/api/post_job_list/${selectedStatus}`;
+            console.log(apiUrl, "apiUrl")
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -69,7 +83,12 @@ const JobList = ({ navigation }) => {
             });
             setLoadData(false)
             const responseData = response.data.data;
-            setDatalist(responseData);
+
+            if (!responseData) {
+                setDatalist([]);
+            } else {
+                setDatalist(responseData);
+            }
         } catch (error) {
             setLoadData(false)
             console.error('Error fetching data:', error);
@@ -79,7 +98,7 @@ const JobList = ({ navigation }) => {
     useFocusEffect(
         useCallback(() => {
             fetchData();
-        }, [])
+        }, [selectedStatus])
     );
 
     // Export-Excel 
@@ -190,78 +209,6 @@ const JobList = ({ navigation }) => {
         }
     };
 
-    // Api call for Delete
-
-    const [modalVisible, setModalVisible] = useState(false);
-    const [ReasonError, setReasonError] = useState('')
-    const [Reason, setReason] = useState('');
-    const [DelData, setDelData] = useState(false);
-    const [slotToDelete, setSlotToDelete] = useState(null);
-
-    const HandleDelete = (slotId) => {
-        setSlotToDelete(slotId);
-        setModalVisible(true);
-    }
-
-    const cancelDelete = () => {
-        setSlotToDelete(null);
-        setModalVisible(false);
-        setReasonError('');
-        setReason('');
-        setDelData(false);
-    }
-
-    const confirmDelete = async () => {
-
-        setDelData(true)
-
-        if (slotToDelete) {
-
-            try {
-
-                if (!Reason) {
-                    setReasonError('Reason Required');
-                    setDelData(false);
-                    return;
-                } else {
-                    setReasonError('');
-                    setReason('');
-                }
-
-                const apiUrl = `https://ocean21.in/api/public/api/delete_meeting`;
-
-                const response = await axios.post(apiUrl, {
-                    id: slotToDelete,
-                    updated_by: data.userempid,
-                    reason: Reason,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${data.token}`
-                    }
-                });
-
-                if (response.data.status === "success") {
-                    const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
-                    setDatalist(updatedDataList);
-                    setDelData(false);
-                    // Alert.alert("Deleted", "Deleted Successfully");
-                    handleShowAlert(response.data.message);
-                } else {
-                    // Alert.alert("Failed", "Failed to delete shift slot");
-                    handleShowAlert1(response.data.message);
-                    setDelData(false)
-                }
-            } catch (error) {
-                // Alert.alert("Error", "Error while deleting shift slot");
-                handleShowAlert2();
-                console.error('Error deleting shift slot:', error);
-                setDelData(false)
-            }
-            setSlotToDelete(null);
-            setModalVisible(false);
-        }
-    }
-
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -292,6 +239,8 @@ const JobList = ({ navigation }) => {
             setAlertVisible2(false);
         }, 3000);
     };
+
+
 
     return (
         <ScrollView>
@@ -328,6 +277,41 @@ const JobList = ({ navigation }) => {
                     </View>
                 </View>
 
+                <View style={styles.ActiveInactiveContainer}>
+
+                    <Text style={{ fontWeight: '600', fontSize: 16, lineHeight: 21.28 }}>Job Status :</Text>
+
+                    <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
+
+                        <Text style={styles.StatusTouchableText}>{selectedStatus}</Text>
+                        <DropdownIcon width={14} height={14} color={"#1AD0FF"} />
+
+                    </TouchableOpacity>
+
+                    {/* Dropdown to show the options */}
+
+                    {showDropdown && (
+
+                        <View style={styles.dropdown}>
+
+                            <TouchableOpacity onPress={() => selectStatus("All")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>All</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selectStatus("Active")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>Active</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => selectStatus("In-Active")} style={styles.dropdownOption}>
+                                <Text style={styles.dropdownOptionText}>In-Active</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    )}
+
+                </View>
+
                 <ScrollView horizontal={true}>
 
                     <View style={styles.Tablecontainer}>
@@ -355,12 +339,13 @@ const JobList = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.designation}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.no_of_vacancies}</Text>
-                                            <Text style={[styles.cell, styles.StartDate]}>{item.job_status}</Text>
-                                            <Text style={[styles.cell, styles.EndDate]}>{item.created_at}</Text>
-                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.job_cities}</Text>
-                                            <Text style={[styles.cell, styles.WeekOff]}>{item.emp_type}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.emp_type}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.city_names.join(', ')}</Text>
+                                            <Text style={[styles.cell, styles.ShiftSlot]}>{item.job_status}</Text>
+                                            <Text style={[styles.cell, styles.WeekOff]}>{item.created_at}</Text>
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => navigation.navigate('Edit Post Job', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
@@ -378,44 +363,6 @@ const JobList = ({ navigation }) => {
                         )
                         }
                     </View>
-
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => setModalVisible(false)}
-                    >
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
-                                <Text style={styles.modalText}>Reason:</Text>
-                                <TextInput
-                                    value={Reason}
-                                    onChangeText={(text) => setReason(text)}
-                                    style={styles.Reason}
-                                />
-                                <Text style={styles.errorTextDelete}>
-                                    {ReasonError}
-                                </Text>
-                                <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
-                                        <Text style={styles.modalCancelButtonText1}>Cancel</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
-
-
-                                        {
-                                            DelData ?
-                                                <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalDeleteButtonText}>Delete</Text>
-                                        }
-
-
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
 
                 </ScrollView>
 

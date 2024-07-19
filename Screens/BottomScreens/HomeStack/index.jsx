@@ -114,6 +114,7 @@ import OrgIndvidual from "./OrganizationStructure/OrgIndvidual";
 import PostJob from "./Recruitement/PostJob";
 import JobList from "./Recruitement/JobList";
 import ViewJobList from "./Recruitement/ViewJob";
+import EditPostJob from "./Recruitement/EditPostJob";
 
 const Stack = createNativeStackNavigator();
 
@@ -243,7 +244,7 @@ const HomeStack = () => {
       <Stack.Screen name="TL Permission Request" component={TLPermissionRequest} />
       <Stack.Screen name="TL HalfDay Request" component={TLHalfDayRequest} />
 
-      <Stack.Screen name="TL Ot Request" component={TLOtRequest} />
+      <Stack.Screen name="TL OT Request" component={TLOtRequest} />
 
       {/*  */}
 
@@ -317,6 +318,7 @@ const HomeStack = () => {
       {/*  */}
 
       <Stack.Screen name="Post Job" component={PostJob} />
+      <Stack.Screen name="Edit Post Job" component={EditPostJob} />
       <Stack.Screen name="Job List" component={JobList} />
       <Stack.Screen name="View Job List" component={ViewJobList} />
 

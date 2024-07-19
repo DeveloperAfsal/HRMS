@@ -246,7 +246,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             <TouchableOpacity onPress={toggleDropdownPucnh} style={styles.StatusTouchable}>
 
                 <Text style={styles.StatusTouchableText}>
-                    {Employee.checkinCheckout && Employee.checkinCheckout.length > 0 ? Employee.checkinCheckout : "Selected Field"}
+                    {Employee.checkinCheckout && Employee.checkinCheckout.length > 0 ? Employee.checkinCheckout : "Select Field"}
                 </Text>
                 <DropdownIcon width={14} height={14} color={"#000"} />
 
