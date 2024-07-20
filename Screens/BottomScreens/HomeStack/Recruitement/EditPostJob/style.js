@@ -2,6 +2,14 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    selectedays: {
+        backgroundColor: '#20DDFE',
+        padding: 7,
+        borderRadius: 7,
+        color: '#fff',
+        fontWeight: '400',
+    },
+
     ShiftSlotContainerTitle: {
         paddingBottom: "5%",
         width: "90%",

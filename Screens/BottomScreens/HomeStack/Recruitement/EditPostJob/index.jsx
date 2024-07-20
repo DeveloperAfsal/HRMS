@@ -204,7 +204,6 @@ const EditPostJob = ({ route, navigation }) => {
     const [state, setState] = useState([]);
     const [selectededState, setSelectedState] = useState([]);
     const [selectedStateId, setSelectedStateId] = useState([]);
-    console.log(selectedStateId, "selectedStateId")
     const [dropdownVisible1, setDropdownVisible1] = useState(false);
 
     const toggleDropdown1 = () => {
@@ -215,6 +214,8 @@ const EditPostJob = ({ route, navigation }) => {
         setSelectedState(selectededState.name);
         setSelectedStateId(selectededState.id);
         setDropdownVisible1(false);
+        setSelectedCity([]);
+        setSelectedCityId([]);
     };
 
     const StateApi = async () => {
@@ -238,37 +239,40 @@ const EditPostJob = ({ route, navigation }) => {
 
     useEffect(() => {
         StateApi();
-    }, [selectedCountryId])
+    }, [selectedCountry, selectedCountryId])
 
     const [city, setCity] = useState([]);
     const [selectededCity, setSelectedCity] = useState([]);
     const [selectedCityId, setSelectedCityId] = useState([]);
-    console.log(selectedCityId, "selectedCityId")
     const [dropdownVisible2, setDropdownVisible2] = useState(false);
 
     const toggleDropdown2 = () => {
         setDropdownVisible2(!dropdownVisible2);
     };
 
+    // const selectCity = (selectedCity) => {
+    //     setSelectedCity(selectedCity.name);
+    //     setSelectedCityId(selectedCity.id);
+    //     setDropdownVisible2(false);
+    // };
+
     const selectCity = (selectedCity) => {
         setSelectedCity((prevSelectedCities) => {
-            if (prevSelectedCities.some(city => city.id === selectedCity.id)) {
-                return prevSelectedCities.filter(city => city.id !== selectedCity.id);
-            } else {
-                return [...prevSelectedCities, selectedCity];
-            }
+            const updatedCities = prevSelectedCities.includes(selectedCity.name)
+                ? prevSelectedCities.filter((city) => city !== selectedCity.name)
+                : [...prevSelectedCities, selectedCity.name];
+            return updatedCities;
         });
     
-        setSelectedCityId((prevSelectedCityIds = []) => {
-            if (prevSelectedCityIds.includes(selectedCity.id)) {
-                return prevSelectedCityIds.filter(id => id !== selectedCity.id);
-            } else {
-                return [...prevSelectedCityIds, selectedCity.id];
-            }
+        setSelectedCityId((prevSelectedCityIds) => {
+            const updatedCityIds = prevSelectedCityIds.includes(selectedCity.id)
+                ? prevSelectedCityIds.filter((id) => id !== selectedCity.id)
+                : [...prevSelectedCityIds, selectedCity.id];
+            return updatedCityIds;
         });
+    
+        setDropdownVisible2(false);
     };
-    
-
 
     const CityApi = async () => {
 
@@ -284,14 +288,14 @@ const EditPostJob = ({ route, navigation }) => {
             setCity(responseData);
 
         } catch (error) {
-            console.error('Error fetching Count data:', error);
+            console.error('Error fetching City data:', error);
         }
 
     }
 
     useEffect(() => {
         CityApi();
-    }, [selectedStateId])
+    }, [selectedStateId, selectededState])
 
     const [error, setError] = useState('');
 
@@ -478,8 +482,8 @@ const EditPostJob = ({ route, navigation }) => {
             setSelectedCountry(datalist.country_name);
             setSelectedCountryId(datalist.job_countries);
             setSelectedState(datalist.state_name);
-            // setSelectedCity(datalist.city_names);
-            setSelectedCityId(datalist.job_cities)
+            setSelectedCity(datalist.city_names || []);
+            setSelectedCityId(datalist.job_cities || [])
             setSelectedStateId(datalist.job_states);
             setSelectedStatus1(datalist.job_type);
             setSelectedStatus3(datalist.emp_type);
@@ -686,9 +690,7 @@ const EditPostJob = ({ route, navigation }) => {
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown2}>
                         <Text style={styles.StatusTouchableText}>
-                            {selectededCity.length > 0
-                                ? selectededCity.map(city => city.name).join(', ')
-                                : cityfrom}
+                            {selectededCity.length > 0 ? selectededCity.join(', ') : 'Select Cities'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
