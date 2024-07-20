@@ -246,6 +246,8 @@ const EditPostJob = ({ route, navigation }) => {
     const [selectedCityId, setSelectedCityId] = useState([]);
     const [dropdownVisible2, setDropdownVisible2] = useState(false);
 
+    console.log(selectedCityId,"selectedCityId")
+
     const toggleDropdown2 = () => {
         setDropdownVisible2(!dropdownVisible2);
     };
@@ -263,14 +265,14 @@ const EditPostJob = ({ route, navigation }) => {
                 : [...prevSelectedCities, selectedCity.name];
             return updatedCities;
         });
-    
+
         setSelectedCityId((prevSelectedCityIds) => {
             const updatedCityIds = prevSelectedCityIds.includes(selectedCity.id)
                 ? prevSelectedCityIds.filter((id) => id !== selectedCity.id)
                 : [...prevSelectedCityIds, selectedCity.id];
             return updatedCityIds;
         });
-    
+
         setDropdownVisible2(false);
     };
 
@@ -568,7 +570,7 @@ const EditPostJob = ({ route, navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Job List')
+            navigation.navigate('List Job')
         }, 2500);
     };
 
@@ -982,9 +984,9 @@ const EditPostJob = ({ route, navigation }) => {
                         Valid Till
                     </Text>
 
-                    <View style={styles.inputs} >
+                    <View style={styles.inputs}>
                         <Text onPress={showDatepicker}>
-                            {startDate ? startDate.toDateString() : "Date"} &nbsp;
+                            {formattedStartDate || "Date"} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -995,6 +997,7 @@ const EditPostJob = ({ route, navigation }) => {
                             />
                         )}
                     </View>
+
 
                     <Text style={styles.errorText}>
                         {startDateErr}
@@ -1015,7 +1018,7 @@ const EditPostJob = ({ route, navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.cancelbutton}
-                            onPress={() => navigation.navigate('Job List')}
+                            onPress={() => navigation.navigate('List Job')}
                         >
                             <Text style={styles.cancelbuttontext}>
                                 Cancel

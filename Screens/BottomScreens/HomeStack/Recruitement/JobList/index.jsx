@@ -109,10 +109,10 @@ const JobList = ({ navigation }) => {
             index + 1,
             rowData.designation,
             rowData.no_of_vacancies,
+            rowData.emp_type,
+            rowData.city_names.join(', '),
             rowData.job_status,
             rowData.created_at,
-            rowData.job_cities,
-            rowData.emp_type,
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -151,10 +151,10 @@ const JobList = ({ navigation }) => {
             index + 1,
             rowData.designation,
             rowData.no_of_vacancies,
+            rowData.emp_type,
+            rowData.city_names.join(', '),
             rowData.job_status,
             rowData.created_at,
-            rowData.job_cities,
-            rowData.emp_type,
         ]);
 
 
@@ -350,7 +350,7 @@ const JobList = ({ navigation }) => {
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={styles.listcontentviewbutton}
-                                                    onPress={() => navigation.navigate('View Job List', { Id: item })}
+                                                    onPress={() => navigation.navigate('View List Job', { Id: item })}
                                                 >
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

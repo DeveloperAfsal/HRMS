@@ -214,7 +214,9 @@ const AddEmployee = ({ route, navigation }) => {
                     }
 
                 </View>
+                
             </View>
+
         </ScrollView>
     )
 }

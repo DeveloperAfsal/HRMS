@@ -103,12 +103,29 @@ const PostJob = ({ navigation }) => {
         `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
         "";
 
-    const handleDateChange = (event, date) => {
-        if (date !== undefined) {
-            setStartDate(date);
-        }
-        setShowDatePicker(Platform.OS === 'ios');
+    // const handleDateChange = (event, date) => {
+    //     if (date !== undefined) {
+    //         setStartDate(date);
+    //     }
+    //     setShowDatePicker(Platform.OS === 'ios');
+    // };
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
+
+    const handleDateChange = (event, date) => {
+        if (event.type === "set" && date) {
+            setStartDate(date);
+            const formattedStartDate = formatDate(date);
+        }
+        setShowDatePicker(false);
+    };
+
 
     const showDatepicker = () => {
         setShowDatePicker(true);
@@ -486,7 +503,7 @@ const PostJob = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Job List');
+            navigation.navigate('List Job');
             onRefresh();
         }, 2500);
     };
@@ -946,10 +963,22 @@ const PostJob = ({ navigation }) => {
                         Valid Till
                     </Text>
 
+                    {/* <View style={styles.inputs}>
+                        <Text onPress={showDatepicker}>
+                            {formattedStartDate || "Select date"} &nbsp;
+                        </Text>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={startDate || new Date()}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
+                            />
+                        )}
+                    </View> */}
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {/* {startDate.toDateString()} &nbsp; */}
-                            {startDate ? startDate.toDateString() : "Select date"} &nbsp;
+                            {startDate ? formatDate(startDate) : "Select Date"} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
