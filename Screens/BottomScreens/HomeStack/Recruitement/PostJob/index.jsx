@@ -103,13 +103,6 @@ const PostJob = ({ navigation }) => {
         `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
         "";
 
-    // const handleDateChange = (event, date) => {
-    //     if (date !== undefined) {
-    //         setStartDate(date);
-    //     }
-    //     setShowDatePicker(Platform.OS === 'ios');
-    // };
-
     const formatDate = (date) => {
         if (!date) return '';
         const year = date.getFullYear();
@@ -963,19 +956,6 @@ const PostJob = ({ navigation }) => {
                         Valid Till
                     </Text>
 
-                    {/* <View style={styles.inputs}>
-                        <Text onPress={showDatepicker}>
-                            {formattedStartDate || "Select date"} &nbsp;
-                        </Text>
-                        {showDatePicker && (
-                            <DateTimePicker
-                                value={startDate || new Date()}
-                                mode="date"
-                                display="default"
-                                onChange={handleDateChange}
-                            />
-                        )}
-                    </View> */}
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
                             {startDate ? formatDate(startDate) : "Select Date"} &nbsp;

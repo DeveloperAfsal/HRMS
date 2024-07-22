@@ -125,6 +125,21 @@ const CanViewDetails = ({ route, navigation }) => {
                         />
                     }
 
+                    <TouchableOpacity
+                        style={
+                           
+                                styles.HeaderButtonActive 
+                        }
+                    >
+                        <Text
+                            style={
+                                    styles.HeaderButtonTextActive 
+                            }
+                        >
+                            Edit
+                        </Text>
+                    </TouchableOpacity>
+
                 </View>
 
             </View>

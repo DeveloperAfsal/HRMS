@@ -1093,21 +1093,26 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                 < DrawerItem
                                     label="List Job"
-                                onPress={() => navigation.navigate('List Job')}
+                                    onPress={() => navigation.navigate('List Job')}
                                 />
 
                                 < DrawerItem
                                     label="Add Resume"
-                                // onPress={() => navigation.navigate('Job List')}
+                                    onPress={() => navigation.navigate('Add Resume')}
                                 />
 
                                 < DrawerItem
                                     label="Candidate Status"
-                                onPress={() => navigation.navigate('Candidate Resume')}
+                                    onPress={() => navigation.navigate('Candidate Resume')}
                                 />
 
                                 < DrawerItem
-                                    label="Resume Screening"
+                                    label="Inbox Resume"
+                                // onPress={() => navigation.navigate('Job List')}
+                                />
+
+                                < DrawerItem
+                                    label="Search Resume"
                                 // onPress={() => navigation.navigate('Job List')}
                                 />
 

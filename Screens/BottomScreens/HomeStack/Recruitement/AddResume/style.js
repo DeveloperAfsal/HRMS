@@ -2,18 +2,6 @@ import { StyleSheet } from "react-native";
 
 
 const styles = StyleSheet.create({
-
-    ShiftSlotContainerTitle: {
-        paddingBottom: "5%",
-        width: "90%",
-    },
-    
-    ShiftSlotContainerTitleText: {
-        color: '#00275C',
-        fontWeight: '800',
-        lineHeight: 23.94,
-        fontSize: 20,
-    },
     
     modalCancelButton1: {
         // backgroundColor: '#ccc',
@@ -216,19 +204,21 @@ const styles = StyleSheet.create({
     Page: {
         width: '100%',
         alignItems: 'center',
-        paddingVertical: '5%'
+        paddingTop: '5%'
     },
 
     container: {
-        width: '90%',
-        alignItems: 'center'
+        width: '100%',
+        // alignItems: 'center'
     },
 
     HeaderButtonView: {
-        width: '85%',
+        // width: '85%',
+        paddingHorizontal:'10%',
+        paddingBottom:'10%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         gap: 20
     },
 
