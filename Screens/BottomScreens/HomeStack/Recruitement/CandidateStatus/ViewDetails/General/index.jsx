@@ -55,7 +55,7 @@ const General = ({ datalist, loadData }) => {
                                     </View>
                                     <View style={styles.bodyline}>
                                         <Text style={[styles.halfWidth, styles.value]}>Preferred Location :</Text>
-                                        <Text style={[styles.halfWidth, styles.value1]}>{datas.preferred_location}</Text>
+                                        <Text style={[styles.halfWidth, styles.value1]}>{datas.preferred_locations.join(', ')}</Text>
                                     </View>
                                     <View style={styles.bodyline}>
                                         <Text style={[styles.halfWidth, styles.value]}>Languages Known :</Text>
@@ -94,9 +94,9 @@ const General = ({ datalist, loadData }) => {
                                         <Text style={[styles.halfWidth, styles.value1]}>{datas.pg_university}</Text>
                                     </View>
 
-                                </View> : null
+                                </View> :
+                                <ActivityIndicator size={"small"} color={'#0A62F1'} />
                         }
-
                     </View>
                 </View>
             </View>

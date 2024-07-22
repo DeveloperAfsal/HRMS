@@ -23,11 +23,11 @@ const Career = ({ datalist, loadData }) => {
                             </View>
                             <View style={styles.bodyline}>
                                 <Text style={[styles.halfWidth, styles.value]}>Functional Area :</Text>
-                                <Text style={[styles.halfWidth, styles.value1]}>{datas.functionality_area}</Text>
+                                <Text style={[styles.halfWidth, styles.value1]}>{datas.functional_area}</Text>
                             </View>
                             <View style={styles.bodyline}>
                                 <Text style={[styles.halfWidth, styles.value]}>Area of Specialization :</Text>
-                                <Text style={[styles.halfWidth, styles.value1]}>{datas.area_specialization}</Text>
+                                <Text style={[styles.halfWidth, styles.value1]}>{datas.area_specialization_name}</Text>
                             </View>
                             <View style={styles.bodyline}>
                                 <Text style={[styles.halfWidth, styles.value]}>Industry :</Text>
