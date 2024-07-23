@@ -14,6 +14,7 @@ const CanViewDetails = ({ route, navigation }) => {
 
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
+
     const [activeComponent, setActiveComponent] = useState('General');
 
     const tabs = [
@@ -64,6 +65,23 @@ const CanViewDetails = ({ route, navigation }) => {
 
         <ScrollView>
 
+            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', padding: '5%' }}>
+                <TouchableOpacity
+                    style={
+                        styles.HeaderButtonActive1
+                    }
+                    onPress={() => navigation.navigate('Edit Resume', { id: SpecId })}
+                >
+                    <Text
+                        style={
+                            styles.HeaderButtonTextActive1
+                        }
+                    >
+                        Edit
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
             <View style={styles.Page}>
 
                 <View style={styles.container}>
@@ -108,6 +126,7 @@ const CanViewDetails = ({ route, navigation }) => {
                             </Text>
                         </TouchableOpacity>
 
+
                     </View>
 
                     {
@@ -124,21 +143,6 @@ const CanViewDetails = ({ route, navigation }) => {
                             loadData={loadData}
                         />
                     }
-
-                    <TouchableOpacity
-                        style={
-                           
-                                styles.HeaderButtonActive 
-                        }
-                    >
-                        <Text
-                            style={
-                                    styles.HeaderButtonTextActive 
-                            }
-                        >
-                            Edit
-                        </Text>
-                    </TouchableOpacity>
 
                 </View>
 

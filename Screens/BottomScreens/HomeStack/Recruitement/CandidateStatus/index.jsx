@@ -64,7 +64,6 @@ const CanStatus = ({ route, navigation }) => {
             });
 
             const employeeData = response.data.data;
-            console.log(employeeData, "employeeData");
 
             setEmployeeData(employeeData);
             setLoading(false);

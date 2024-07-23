@@ -7,8 +7,6 @@ const General = ({ datalist, loadData }) => {
 
     const datas = datalist[0];
 
-    console.log(datas, "datas")
-
     return (
         <ScrollView>
             <View style={[styles.employeeContainer]}>

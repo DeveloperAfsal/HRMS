@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
     Page: {
         width: '100%',
         alignItems: 'center',
-        paddingVertical: '5%'
     },
 
     container: {
@@ -261,6 +260,24 @@ const styles = StyleSheet.create({
     },
 
     HeaderButtonTextActive: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '700',
+        lineHeight: 18.62
+    },
+
+    HeaderButtonActive1: {
+        width: '20%',
+        height: 35,
+        borderRadius: 7,
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0A60F1',
+        borderColor: '#0A60F1',
+    },
+
+    HeaderButtonTextActive1: {
         color: '#fff',
         fontSize: 14,
         fontWeight: '700',
