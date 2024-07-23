@@ -7,15 +7,14 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
 
-const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1 }) => {
-
-    const [load, SetLoad] = useState(false);
+const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1, validation }) => {
 
     // Employee from redux store 
 
     const dispatch = useDispatch();
 
     const { Resume } = useSelector((state) => state.resume);
+    const { data } = useSelector((state) => state.login);
 
     const handleFieldsChange = (fieldName, value) => {
         dispatch({
@@ -63,6 +62,156 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
         handleFieldsChange('candidateStatus', Cstatus);
     };
 
+    // Industry
+
+    const [industry, setIndustry] = useState([]);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+
+    const toggleDropdownInd = () => {
+        setDropdownVisible(!dropdownVisible);
+    };
+
+    const selectIndustry = (selectedCountry) => {
+        handleFieldsChange('industry', selectedCountry.name);
+        handleFieldsChange('industryid', selectedCountry.id);
+        setDropdownVisible(false);
+    };
+
+    const CountApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/industry_list';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setIndustry(responseData);
+
+        } catch (error) {
+            console.error('Error fetching Industry data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        CountApi();
+    }, [])
+
+    // Functional Area
+
+    const [fArea, setFArea] = useState([]);
+    const [dropdownVisible1, setDropdownVisible1] = useState(false);
+
+    const toggleDropdownFArea = () => {
+        setDropdownVisible1(!dropdownVisible1);
+    };
+
+    const selectFArea = (selectFArea) => {
+        handleFieldsChange('functionalArea', selectFArea.category);
+        handleFieldsChange('functionalAreaid', selectFArea.id);
+        handleFieldsChange('areaOfSpecification', "");
+        handleFieldsChange('areaOfSpecificationid', "");
+        setDropdownVisible1(false);
+    };
+
+    const FuncArea = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/functional_list';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setFArea(responseData);
+
+        } catch (error) {
+            console.error('Error fetching FArea data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        FuncArea();
+    }, [])
+
+    // 
+
+    const [fAreaSpec, setFAreaSpec] = useState([]);
+    const [state, setState] = useState([]);
+    const [dropdownVisible2, setDropdownVisible2] = useState(false);
+
+    const toggleDropdownSpec = () => {
+        setDropdownVisible2(!dropdownVisible2);
+    };
+
+    const selectSpec = (selectSpec) => {
+        handleFieldsChange('areaOfSpecification', selectSpec.category);
+        handleFieldsChange('areaOfSpecificationid', selectSpec.id);
+        setDropdownVisible2(false);
+    };
+
+    const StateApi = async () => {
+
+        try {
+            const apiUrl = `https://ocean21.in/api/public/api/area_specialization_list/${Resume.functionalAreaid}`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setFAreaSpec(responseData);
+
+        } catch (error) {
+            console.error('Error fetching State data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        StateApi();
+    }, [Resume.functionalAreaid])
+
+    // 
+
+    // 
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
+    const formattedStartDate = startDate ?
+        `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
+        "";
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleDateChange = (event, date) => {
+        if (event.type === "set" && date) {
+            setStartDate(date);
+            const formattedStartDate = formatDate(date);
+            handleFieldsChange('doj', formattedStartDate);
+        }
+        setShowDatePicker(false);
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+
     return (
 
         <ScrollView>
@@ -86,7 +235,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.currentEmployer ? "Current Employer Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -100,49 +249,82 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.currentDesignation ? "Current Designation Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Functional Area
                     </Text>
 
-                    <TextInput
-                        // value={Resume.functionalArea}
-                        // onChangeText={(text) => handleFieldsChange('functionalArea', text)}
-                        style={styles.inputs}
-                    />
+                    <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownFArea}>
+                        <Text style={styles.StatusTouchableText}>
+                            {Resume.functionalArea ? Resume.functionalArea : 'Select a Functional Area'}
+                        </Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+                    </TouchableOpacity>
+
+                    {dropdownVisible1 && (
+                        <View style={styles.dropdown}>
+                            {fArea.map((item) => (
+                                <TouchableOpacity key={item.id} onPress={() => selectFArea(item)} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>{item.category}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.functionalArea ? "Functional Area Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Area of Specialization
                     </Text>
 
-                    <TextInput
-                        // value={Resume.areaOfSpecification}
-                        // onChangeText={(text) => handleFieldsChange('areaOfSpecification', text)}
-                        style={styles.inputs}
-                    />
+                    <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownSpec}>
+                        <Text style={styles.StatusTouchableText}>
+                            {Resume.areaOfSpecification ? Resume.areaOfSpecification : 'Select Area Of Specification'}
+                        </Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+                    </TouchableOpacity>
+
+                    {dropdownVisible2 && (
+                        <View style={styles.dropdown}>
+                            {fAreaSpec.map((item) => (
+                                <TouchableOpacity key={item.id} onPress={() => selectSpec(item)} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>{item.category}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.areaOfSpecification ? "Area Of Specification Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Industry
                     </Text>
 
-                    <TextInput
-                        // value={Resume.industry}
-                        // onChangeText={(text) => handleFieldsChange('industry', text)}
-                        style={styles.inputs}
-                    />
+                    <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownInd}>
+                        <Text style={styles.StatusTouchableText}>
+                            {Resume.industry ? Resume.industry : 'Select a Industry'}
+                        </Text>
+                        <DropdownIcon width={14} height={14} color={"#000"} />
+                    </TouchableOpacity>
+
+                    {dropdownVisible && (
+                        <View style={styles.dropdown}>
+                            {industry.map((item) => (
+                                <TouchableOpacity key={item.id} onPress={() => selectIndustry(item)} style={styles.dropdownOption}>
+                                    <Text style={styles.dropdownOptionText}>{item.name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.industry ? "Industry Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -181,7 +363,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.employmentType ? "Employment Type Required" : null) : null}
                     </Text>
 
 
@@ -193,10 +375,11 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                         value={Resume.totalExperience}
                         onChangeText={(text) => handleFieldsChange('totalExperience', text)}
                         style={styles.inputs}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.totalExperience ? "Total Experience Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -207,10 +390,11 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                         value={Resume.currentCTC}
                         onChangeText={(text) => handleFieldsChange('currentCTC', text)}
                         style={styles.inputs}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.currentCTC ? "Current CTC Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -221,10 +405,11 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                         value={Resume.expectedCTC}
                         onChangeText={(text) => handleFieldsChange('expectedCTC', text)}
                         style={styles.inputs}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.expectedCTC ? "Expected CTC Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -271,7 +456,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.noticePeriod ? "Notice Period Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -314,21 +499,29 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.candidateStatus ? "Candidate Status Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Date Of Joining
                     </Text>
 
-                    <TextInput
-                        value={Resume.doj}
-                        onChangeText={(text) => handleFieldsChange('doj', text)}
-                        style={styles.inputs}
-                    />
+                    <View style={styles.inputs} >
+                        <Text onPress={showDatepicker}>
+                            {startDate ? formatDate(startDate) : "Select Date"} &nbsp;
+                        </Text>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={startDate || new Date()}
+                                mode="date"
+                                display="default"
+                                onChange={handleDateChange}
+                            />
+                        )}
+                    </View>
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.doj ? "Date Of Joining Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -342,7 +535,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.keySkills ? "key Skills Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -376,7 +569,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     </View>
 
                     <Text style={styles.errorText}>
-                        {docFileErr1}
+                    {validation ? (!docFile1 ? "Resume Reqquired" : null) : null}
                     </Text>
 
                 </View>

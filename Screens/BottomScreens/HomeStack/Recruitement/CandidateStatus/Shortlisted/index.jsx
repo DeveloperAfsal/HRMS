@@ -34,31 +34,31 @@ const Shortlisted = ({ employeeData, loading, filteredData, navigation }) => {
                             <Text style={styles.name1}>No Data found</Text>
                         ) : (
                             paginatedData.map((employee, index) => (
-                                <View key={index} style={[styles.card, styles.cardBottom]}>
+                                <View key={index} style={[styles.card]}>
                                     <View>
-                                        <View style={styles.phoneEmail}>
-                                            <View style={styles.gap}>
-                                                <Text style={styles.fontsize1}>Name :</Text>
-                                                <Text style={styles.fontsize1}>Designation :</Text>
-                                                <Text style={styles.fontsize1}>Total Experience :</Text>
-                                                <Text style={styles.fontsize1}>Current CTC :</Text>
-                                                <Text style={styles.fontsize1}>Candidate Status :</Text>
+
+                                        <View style={styles.divider}>
+                                            <View style={{ gap: 5 }}>
+                                                <Text style={{ fontWeight: '600', fontSize: 20, color: '#3A3A3A' }}>{employee.candidate_name}</Text>
+                                                <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.current_designation}</Text>
                                             </View>
-                                            <View style={styles.gap}>
-                                                <Text style={styles.fontsize}>{employee.candidate_name}</Text>
-                                                <Text style={styles.fontsize}>{employee.current_designation}</Text>
-                                                <Text style={styles.fontsize}>{employee.total_exp}</Text>
-                                                <Text style={styles.fontsize}>{employee.current_ctc}</Text>
-                                                <View style={styles.ViewDetails1}>
-                                                    <Text style={styles.DetailsText1}>{employee.status}</Text>
-                                                </View>
+                                            <View style={styles.ViewDetails1}>
+                                                <Text style={styles.DetailsText1}>{employee.status}</Text>
                                             </View>
                                         </View>
-                                        <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-                                            <TouchableOpacity style={styles.ViewDetails} onPress={() => navigation.navigate('Candidate View Details', { Id: employee.id })}                                            >
+
+                                        <View style={styles.divider}>
+                                            <Text style={{ fontWeight: '600', fontSize: 18, color: '#00275C' }}>CTC : <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.current_ctc}</Text></Text>
+                                            <Text style={{ fontWeight: '600', fontSize: 18, color: '#00275C' }}>EXP : <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.total_exp}</Text></Text>
+                                        </View>
+
+                                        <View>
+                                            <TouchableOpacity style={styles.ViewDetails} onPress={() => navigation.navigate('Candidate View Details', { Id: employee.id })}
+                                            >
                                                 <Text style={styles.DetailsText}>View Details</Text>
                                             </TouchableOpacity>
                                         </View>
+
                                     </View>
                                 </View>
                             ))

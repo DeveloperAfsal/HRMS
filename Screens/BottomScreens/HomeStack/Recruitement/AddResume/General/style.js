@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 
     StatusTouchable: {
         width: "90%",
-        height: 42,
+        height: 52,
         backgroundColor: '#F3FCFF',
         borderWidth: 1,
         borderColor: '#515151',
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#515151',
         width: '90%',
-        height: 42,
+        height: 52,
         borderRadius: 7,
         paddingHorizontal: '5%',
         marginBottom: '3%',

@@ -232,8 +232,8 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        width: '90%',
-        alignItems: 'center',
+        // width: '90%',
+        // alignItems: 'center',s
         marginVertical:'5%'
     },
 

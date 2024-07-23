@@ -7,7 +7,20 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
 
-const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }) => {
+const AddGeneral = ({
+    navigation,
+    docFile,
+    docFileErr,
+    handleDocumentSelection,
+    validation,
+    prefcity,
+    selectededPrefCity,
+    selectedPrefCityId,
+    setSelectedPrefCityId,
+    setSelectedPrefCity,
+    setDropdownVisible3,
+    dropdownVisible3,
+    setPrefCity }) => {
 
     // Employee from redux store 
 
@@ -158,8 +171,6 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     const [selectedCitiesErr, setSelectedCitiesErr] = useState(null);
 
     const [country, setCountry] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState([]);
-    const [selectedCountryId, setSelectedCountryId] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
     const toggleDropdown3 = () => {
@@ -167,10 +178,12 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     };
 
     const selectCountry = (selectedCountry) => {
-        setSelectedCountry(selectedCountry.name);
-        setSelectedCountryId(selectedCountry.id);
         handleFieldsChange('country', selectedCountry.name);
         handleFieldsChange('countryid', selectedCountry.id);
+        handleFieldsChange('state', "");
+        handleFieldsChange('stateid', "");
+        handleFieldsChange('city', "");
+        handleFieldsChange('cityId', "");
         setDropdownVisible(false);
     };
 
@@ -198,8 +211,6 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     }, [])
 
     const [state, setState] = useState([]);
-    const [selectededState, setSelectedState] = useState([]);
-    const [selectedStateId, setSelectedStateId] = useState([]);
     const [dropdownVisible1, setDropdownVisible1] = useState(false);
 
     const toggleDropdown4 = () => {
@@ -207,17 +218,17 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     };
 
     const selectState = (selectededState) => {
-        setSelectedState(selectededState.name);
-        setSelectedStateId(selectededState.id);
         handleFieldsChange('state', selectededState.name);
         handleFieldsChange('stateid', selectededState.id);
+        handleFieldsChange('city', "");
+        handleFieldsChange('cityId', "");
         setDropdownVisible1(false);
     };
 
     const StateApi = async () => {
 
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/state_list/${selectedCountryId}`;
+            const apiUrl = `https://ocean21.in/api/public/api/state_list/${Resume.countryid}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -235,11 +246,9 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
 
     useEffect(() => {
         StateApi();
-    }, [selectedCountryId])
+    }, [Resume.countryid])
 
     const [city, setCity] = useState([]);
-    const [selectededCity, setSelectedCity] = useState([]);
-    const [selectedCityId, setSelectedCityId] = useState([]);
     const [dropdownVisible2, setDropdownVisible2] = useState(false);
 
     const toggleDropdown5 = () => {
@@ -247,8 +256,6 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     };
 
     const selectCity = (selectedCity) => {
-        setSelectedCity(selectedCity.name);
-        setSelectedCityId(selectedCity.id);
         handleFieldsChange('city', selectedCity.name);
         handleFieldsChange('cityId', selectedCity.id);
         setDropdownVisible2(false);
@@ -257,7 +264,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
     const CityApi = async () => {
 
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/city_list/${selectedStateId}`;
+            const apiUrl = `https://ocean21.in/api/public/api/city_list/${Resume.stateid}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -275,12 +282,9 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
 
     useEffect(() => {
         CityApi();
-    }, [selectededState])
+    }, [Resume.stateid])
 
-    const [prefcity, setPrefCity] = useState([]);
-    const [selectededPrefCity, setSelectedPrefCity] = useState([]);
-    const [selectedPrefCityId, setSelectedPrefCityId] = useState([]);
-    const [dropdownVisible3, setDropdownVisible3] = useState(false);
+    // 
 
     const toggleDropdown6 = () => {
         setDropdownVisible3(!dropdownVisible3);
@@ -291,7 +295,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
             if (prevSelectedCities.some(city => city.id === selectedPrefCity.id)) {
                 return prevSelectedCities.filter(city => city.id !== selectedPrefCity.id);
             } else {
-                return [...prevSelectedCities, selectedPrefCity];
+                return [...prevSelectedCities, selectedPrefCity.name];
             }
         });
 
@@ -382,7 +386,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.source ? "Source Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -396,7 +400,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.candidateName ? "Candidate Name Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -410,7 +414,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.positionApplying ? "position Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -445,7 +449,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.gender ? "Gender Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -459,7 +463,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.email ? "Email Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -473,7 +477,13 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (
+                            !Resume.mobileNo ?
+                                "Phone Number Required" :
+                                Resume.mobileNo.length !== 10 ?
+                                    "Phone Number must be exactly 10 digits" :
+                                    null
+                        ) : null}
                     </Text>
 
 
@@ -488,7 +498,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -510,7 +520,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     </View>
 
                     <Text style={styles.errorText}>
-                        {startDateErr}
+                        {validation ? (!Resume.dob ? "Date Of Birth Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -535,7 +545,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedCountryErr}
+                        {validation ? (!Resume.country ? "Country Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -560,7 +570,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedStateErr}
+                        {validation ? (!Resume.state ? "State Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -585,22 +595,17 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedCitiesErr}
+                        {validation ? (!Resume.city ? "City Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Preferred Location
                     </Text>
 
-                    {/* <TextInput
-                        value={Resume.preferedLocation}
-                        onChangeText={(text) => handleFieldsChange('preferedLocation', text)}
-                        style={styles.inputs}
-                    /> */}
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown6}>
                         <Text style={styles.StatusTouchableText}>
                             {selectededPrefCity.length > 0
-                                ? selectededPrefCity.map(city => city.name).join(', ')
+                                ? selectededPrefCity.join(', ')
                                 : 'Select Prefered City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
@@ -617,11 +622,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.errorText}>
-                        { }
+                        {/* {validation ? (Resume.preferedLocation.length == 0 ? "Prefered Location Required" : null) : null} */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -635,7 +636,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.languageKnown ? "language Required" : null) : null}
                     </Text>
 
                 </View>
@@ -675,7 +676,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedDegreeErr}
+                        {validation ? (!Resume.uDegree ? "UG Degree Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -689,7 +690,7 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.uSpecialization ? "Specialization Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -700,10 +701,11 @@ const AddGeneral = ({ navigation, docFile, docFileErr, handleDocumentSelection }
                         value={Resume.uYearOfPassing}
                         onChangeText={(text) => handleFieldsChange('uYearOfPassing', text)}
                         style={styles.inputs}
+                        keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {validation ? (!Resume.uYearOfPassing ? "Year Of Passing Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
