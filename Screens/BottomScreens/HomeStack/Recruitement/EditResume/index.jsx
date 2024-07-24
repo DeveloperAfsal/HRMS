@@ -19,7 +19,7 @@ const EditResume = ({ route, navigation }) => {
 
     const [loading, setLoading] = useState(false);
     const [resume, setResume] = useState(null);
-    console.log(resume,"resume");
+    console.log(resume, "resume");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -105,7 +105,7 @@ const EditResume = ({ route, navigation }) => {
     const [selectededPrefCity, setSelectedPrefCity] = useState([]);
     const [selectedPrefCityId, setSelectedPrefCityId] = useState([]);
     const [dropdownVisible3, setDropdownVisible3] = useState(false);
-    console.log(selectedPrefCityId,"selectedPrefCityId")
+    console.log(selectedPrefCityId, "selectedPrefCityId")
 
     useEffect(() => {
         if (resume) {
@@ -113,7 +113,7 @@ const EditResume = ({ route, navigation }) => {
             setSelectedPrefCityId(resume[0].preferred_location || []);
         }
     }, [resume]);
-    
+
 
     // Handle Submit
 
@@ -146,11 +146,19 @@ const EditResume = ({ route, navigation }) => {
                 return;
             }
 
-            // if (resume[0].mobile_no !== 10 || !/^\d{10}$/.test(resume[0].mobile_no)) {
-            //     Alert.alert('Invalid "Phone Number', "Please enter a valid Phone Number");
-            //     setLoad(false);
-            //     return;
-            // }
+            const validatePhoneNumber = (number) => {
+                // Regular expression to check if the number is exactly 10 digits
+                const phoneNumberPattern = /^[0-9]{10}$/;
+                return phoneNumberPattern.test(number);
+            };
+
+            if (resume[0].mobile_no) {
+                if (!validatePhoneNumber(resume[0].mobile_no)) {
+                    Alert.alert('Invalid Phone Number', 'Please enter a valid Phone Number');
+                    setLoad(false);
+                    return;
+                }
+            }
 
         } else {
             Alert.alert('Invalid Fields', 'Enter all required fields')
@@ -420,7 +428,7 @@ const EditResume = ({ route, navigation }) => {
 
                         {activeComponent === 'Career' ? <TouchableOpacity style={
                             styles.HeaderButton
-                        } onPress={()=>navigation.navigate('Candidate Resume')}>
+                        } onPress={() => navigation.navigate('Candidate Resume')}>
                             <Text
                                 style={
                                     styles.HeaderButtonText
