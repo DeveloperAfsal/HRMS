@@ -6,14 +6,34 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
 
-const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1, validation }) => {
+
+const EditCareer = ({
+    navigation,
+    handleDocumentSelection1,
+    docFile1,
+    docFileErr1,
+    validation,
+    setResume,
+    resume,
+    EdocFile1,
+    setEdocFile1
+}) => {
+
+    const val = (resume && resume.length > 0) ? resume[0] : {};
+
+    const updateResumeField = (fieldName, value) => {
+        const updatedResume = [...resume];
+        updatedResume[0] = { ...updatedResume[0], [fieldName]: value };
+        setResume(updatedResume);
+    };
 
     // Employee from redux store 
 
     const dispatch = useDispatch();
 
-    const { Resume } = useSelector((state) => state.resume);
+    // const { Resume } = useSelector((state) => state.resume);
     const { data } = useSelector((state) => state.login);
 
     const handleFieldsChange = (fieldName, value) => {
@@ -33,7 +53,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
     const selectEmptype = (Emptype) => {
         setShowEmptype(false);
-        handleFieldsChange('employmentType', Emptype);
+        updateResumeField('employment_type', Emptype);
     };
 
     // Select Notice Period
@@ -46,7 +66,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
     const selectNperiod = (Nperiod) => {
         setShowNperiod(false);
-        handleFieldsChange('noticePeriod', Nperiod);
+        updateResumeField('notice_period', Nperiod);
     };
 
     // Select Candidate Status
@@ -59,7 +79,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
     const selectCstatus = (Cstatus) => {
         setShowCstatus(false);
-        handleFieldsChange('candidateStatus', Cstatus);
+        updateResumeField('status', Cstatus);
     };
 
     // Industry
@@ -72,8 +92,13 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
     };
 
     const selectIndustry = (selectedCountry) => {
-        handleFieldsChange('industry', selectedCountry.name);
-        handleFieldsChange('industryid', selectedCountry.id);
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            industry_name: selectedCountry.name,
+            industry: selectedCountry.id
+        };
+        setResume(updatedResume);
         setDropdownVisible(false);
     };
 
@@ -110,10 +135,15 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
     };
 
     const selectFArea = (selectFArea) => {
-        handleFieldsChange('functionalArea', selectFArea.category);
-        handleFieldsChange('functionalAreaid', selectFArea.id);
-        handleFieldsChange('areaOfSpecification', "");
-        handleFieldsChange('areaOfSpecificationid', "");
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            functional_area: selectFArea.category,
+            functionality_area: selectFArea.id,
+            area_specialization: "",
+            area_specialization_name: ""
+        };
+        setResume(updatedResume);
         setDropdownVisible1(false);
     };
 
@@ -151,15 +181,20 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
     };
 
     const selectSpec = (selectSpec) => {
-        handleFieldsChange('areaOfSpecification', selectSpec.category);
-        handleFieldsChange('areaOfSpecificationid', selectSpec.id);
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            area_specialization: selectSpec.id,
+            area_specialization_name: selectSpec.category
+        };
+        setResume(updatedResume);
         setDropdownVisible2(false);
     };
 
     const StateApi = async () => {
 
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/area_specialization_list/${Resume.functionalAreaid}`;
+            const apiUrl = `https://ocean21.in/api/public/api/area_specialization_list/${val.functionality_area}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -177,9 +212,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
     useEffect(() => {
         StateApi();
-    }, [Resume.functionalAreaid])
-
-    // 
+    }, [val.functionality_area])
 
     // 
 
@@ -202,7 +235,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
         if (event.type === "set" && date) {
             setStartDate(date);
             const formattedStartDate = formatDate(date);
-            handleFieldsChange('doj', formattedStartDate);
+            updateResumeField('date_of_join', formattedStartDate);
         }
         setShowDatePicker(false);
     };
@@ -211,6 +244,32 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
         setShowDatePicker(true);
     };
 
+    // 
+
+    useEffect(() => {
+        seteditedocFile1(val.attached_resume)
+    }, [val])
+
+    const [EditedocFile1, seteditedocFile1] = useState([]);
+
+    const filePath1 = typeof EditedocFile1 === 'string' ? EditedocFile1 : '';
+    const fileName1 = filePath1.split('/').pop();
+
+    const handleEditDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setEdocFile1(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
 
     return (
 
@@ -229,13 +288,13 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.currentEmployer}
-                        onChangeText={(text) => handleFieldsChange('currentEmployer', text)}
+                        value={val.current_employer || ""}
+                        onChangeText={(text) => updateResumeField('current_employer', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.currentEmployer ? "Current Employer Required" : null) : null}
+                        {validation ? (!resume[0].current_employer ? "Current Employer Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -243,13 +302,13 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.currentDesignation}
-                        onChangeText={(text) => handleFieldsChange('currentDesignation', text)}
+                        value={val.current_designation || ''}
+                        onChangeText={(text) => updateResumeField('current_designation', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.currentDesignation ? "Current Designation Required" : null) : null}
+                        {validation ? (!resume[0].current_designation ? "Current Designation Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -258,7 +317,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownFArea}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.functionalArea ? Resume.functionalArea : 'Select a Functional Area'}
+                            {val.functional_area ? val.functional_area : 'Select a City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -274,7 +333,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.functionalArea ? "Functional Area Required" : null) : null}
+                        {validation ? (!resume[0].functional_area ? "Functional Area Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -283,7 +342,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownSpec}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.areaOfSpecification ? Resume.areaOfSpecification : 'Select Area Of Specification'}
+                            {val.area_specialization_name ? val.area_specialization_name : 'Select Area Of Specification'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -299,7 +358,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.areaOfSpecification ? "Area Of Specification Required" : null) : null}
+                        {validation ? (!resume[0].area_specialization_name ? "Area Of Specification Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -308,7 +367,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdownInd}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.industry ? Resume.industry : 'Select a Industry'}
+                            {val.industry_name ? val.industry_name : 'Select a Industry'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -324,7 +383,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.industry ? "Industry Required" : null) : null}
+                        {validation ? (!resume[0].industry_name ? "Industry Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -333,7 +392,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity onPress={toggleDropdownEmptype} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.employmentType || "Select Employment Type"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.employment_type || "Select Employment Type"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -363,7 +422,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.employmentType ? "Employment Type Required" : null) : null}
+                        {validation ? (!resume[0].employment_type ? "Employment Type Required" : null) : null}
                     </Text>
 
 
@@ -372,14 +431,14 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.totalExperience}
-                        onChangeText={(text) => handleFieldsChange('totalExperience', text)}
+                        value={val.total_exp}
+                        onChangeText={(text) => updateResumeField('total_exp', text)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.totalExperience ? "Total Experience Required" : null) : null}
+                        {validation ? (!resume[0].total_exp ? "Total Experience Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -387,14 +446,14 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.currentCTC}
-                        onChangeText={(text) => handleFieldsChange('currentCTC', text)}
+                        value={val.current_ctc}
+                        onChangeText={(text) => updateResumeField('current_ctc', text)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.currentCTC ? "Current CTC Required" : null) : null}
+                        {validation ? (!resume[0].current_ctc ? "Current CTC Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -402,14 +461,14 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.expectedCTC}
-                        onChangeText={(text) => handleFieldsChange('expectedCTC', text)}
+                        value={val.expected_ctc}
+                        onChangeText={(text) => updateResumeField('expected_ctc', text)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.expectedCTC ? "Expected CTC Required" : null) : null}
+                        {validation ? (!resume[0].current_ctc ? "Expected CTC Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -418,7 +477,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity onPress={toggleDropdownNperiod} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.noticePeriod || "Select Notice Period"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.notice_period || "Select Notice Period"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -456,7 +515,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.noticePeriod ? "Notice Period Required" : null) : null}
+                        {validation ? (!resume[0].notice_period ? "Notice Period Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -465,7 +524,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <TouchableOpacity onPress={toggleDropdownCstatus} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.candidateStatus || "Select Candidate Status"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.status || "Select Candidate Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -499,7 +558,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.candidateStatus ? "Candidate Status Required" : null) : null}
+                        {validation ? (!resume[0].status ? "Candidate Status Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -508,7 +567,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {startDate ? formatDate(startDate) : "Select Date"} &nbsp;
+                            {startDate ? formatDate(startDate) : val.date_of_join} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -521,7 +580,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </View>
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.doj ? "Date Of Joining Required" : null) : null}
+                        {validation ? (!resume[0].date_of_join ? "Date Of Joining Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -529,13 +588,13 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.keySkills}
-                        onChangeText={(text) => handleFieldsChange('keySkills', text)}
+                        value={val.key_skills}
+                        onChangeText={(text) => updateResumeField('key_skills', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.keySkills ? "key Skills Required" : null) : null}
+                        {validation ? (!resume[0].key_skills ? "key Skills Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -543,25 +602,26 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </Text>
 
                     <TextInput
-                        value={Resume.socialMediaLink}
-                        onChangeText={(text) => handleFieldsChange('socialMediaLink', text)}
+                        value={val.social_link}
+                        onChangeText={(text) => updateResumeField('social_link', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Attached Resume
                     </Text>
 
-                    <Text style={docFile1 ? styles.DocFileName : styles.DocFileNameHolder}>
-                        {docFile1 ? docFile1[0].name : 'Select The Document'}
+                    <Text style={EdocFile1 ? styles.DocFileName : styles.DocFileNameHolder}>
+                        {/* {docFile1 ? docFile1[0].name : 'Select The Document'} */}
+                        {EdocFile1.length > 0 && EdocFile1[0]?.name ? EdocFile1[0].name : fileName1}
                     </Text>
 
                     <View style={styles.fullWidth}>
-                        <TouchableOpacity style={styles.UploadButton} onPress={handleDocumentSelection1}>
+                        <TouchableOpacity style={styles.UploadButton} onPress={handleEditDocumentSelection}>
                             <Text style={styles.UploadButtonText}>
                                 Select Document
                             </Text>
@@ -569,7 +629,7 @@ const EditCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr
                     </View>
 
                     <Text style={styles.errorText}>
-                    {validation ? (!docFile1 ? "Resume Reqquired" : null) : null}
+                        {validation ? (!EdocFile1 ? "Resume Reqquired" : null) : null}
                     </Text>
 
                 </View>

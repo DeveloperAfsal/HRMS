@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
 
 const EditGeneral = ({
     navigation,
@@ -22,7 +23,9 @@ const EditGeneral = ({
     dropdownVisible3,
     setPrefCity,
     setResume,
-    resume
+    resume,
+    EdocFile,
+    setEdocFile
 }) => {
 
     const val = (resume && resume.length > 0) ? resume[0] : {};
@@ -31,7 +34,6 @@ const EditGeneral = ({
 
     const dispatch = useDispatch();
 
-    const { Resume } = useSelector((state) => state.resume);
     const { data } = useSelector((state) => state.login);
 
     const updateResumeFields = (updatedFields) => ({
@@ -56,7 +58,7 @@ const EditGeneral = ({
 
     const selectGender = (Gender) => {
         setShowGender(false);
-        handleFieldsChange('gender', Gender);
+        updateResumeField('gender', Gender);
     };
 
     // Select Source
@@ -93,7 +95,7 @@ const EditGeneral = ({
         if (event.type === "set" && date) {
             setStartDate(date);
             const formattedStartDate = formatDate(date);
-            handleFieldsChange('dob', formattedStartDate);
+            updateResumeField('dob', formattedStartDate);
         }
         setShowDatePicker(false);
     };
@@ -132,8 +134,8 @@ const EditGeneral = ({
     };
 
     const selectDegree = (shift) => {
-        handleFieldsChange('uDegree', shift.degree_lists);
-        handleFieldsChange('uDegreeid', shift.id);
+        updateResumeField('ug_degree', shift.degree_lists);
+        updateResumeField('under_graduate', shift.id);
         setShowDropdown(false);
     };
 
@@ -167,8 +169,8 @@ const EditGeneral = ({
     };
 
     const selectPgDegree = (shift) => {
-        handleFieldsChange('pDegree', shift.degree_lists);
-        handleFieldsChange('pDegreeid', shift.id);
+        updateResumeField('pg_degree', shift.degree_lists);
+        updateResumeField('post_graduate', shift.id);
         setShowDropdown1(false);
     };
 
@@ -186,12 +188,17 @@ const EditGeneral = ({
     };
 
     const selectCountry = (selectedCountry) => {
-        handleFieldsChange('country', selectedCountry.name);
-        handleFieldsChange('countryid', selectedCountry.id);
-        handleFieldsChange('state', "");
-        handleFieldsChange('stateid', "");
-        handleFieldsChange('city', "");
-        handleFieldsChange('cityId', "");
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            country_name: selectedCountry.name,
+            current_country: selectedCountry.id,
+            state_name: "",
+            current_state: "",
+            current_cityname: "",
+            current_city: ""
+        };
+        setResume(updatedResume);
         setDropdownVisible(false);
     };
 
@@ -226,17 +233,22 @@ const EditGeneral = ({
     };
 
     const selectState = (selectededState) => {
-        handleFieldsChange('state', selectededState.name);
-        handleFieldsChange('stateid', selectededState.id);
-        handleFieldsChange('city', "");
-        handleFieldsChange('cityId', "");
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            state_name: selectededState.name,
+            current_state: selectededState.id,
+            current_cityname: "",
+            current_city: ""
+        };
+        setResume(updatedResume);
         setDropdownVisible1(false);
     };
 
     const StateApi = async () => {
 
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/state_list/${Resume.countryid}`;
+            const apiUrl = `https://ocean21.in/api/public/api/state_list/${val.current_country}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -254,7 +266,7 @@ const EditGeneral = ({
 
     useEffect(() => {
         StateApi();
-    }, [Resume.countryid])
+    }, [val.current_country])
 
     const [city, setCity] = useState([]);
     const [dropdownVisible2, setDropdownVisible2] = useState(false);
@@ -264,15 +276,20 @@ const EditGeneral = ({
     };
 
     const selectCity = (selectedCity) => {
-        handleFieldsChange('city', selectedCity.name);
-        handleFieldsChange('cityId', selectedCity.id);
+        const updatedResume = [...resume];
+        updatedResume[0] = {
+            ...updatedResume[0],
+            current_cityname: selectedCity.name,
+            current_city: selectedCity.id,
+        };
+        setResume(updatedResume);
         setDropdownVisible2(false);
     };
 
     const CityApi = async () => {
 
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/city_list/${Resume.stateid}`;
+            const apiUrl = `https://ocean21.in/api/public/api/city_list/${val.current_state}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -290,7 +307,7 @@ const EditGeneral = ({
 
     useEffect(() => {
         CityApi();
-    }, [Resume.stateid])
+    }, [val.current_state])
 
     // 
 
@@ -298,26 +315,32 @@ const EditGeneral = ({
         setDropdownVisible3(!dropdownVisible3);
     };
 
-    const selectPrefCity = (selectedPrefCity) => {
+    const selectPrefCity = (selectedCity) => {
         setSelectedPrefCity((prevSelectedCities) => {
-            if (prevSelectedCities.some(city => city.id === selectedPrefCity.id)) {
-                return prevSelectedCities.filter(city => city.id !== selectedPrefCity.id);
+            // Check if the city is already selected
+            if (prevSelectedCities.includes(selectedCity.name)) {
+                // Remove the city if it's already selected
+                return prevSelectedCities.filter(city => city !== selectedCity.name);
             } else {
-                return [...prevSelectedCities, selectedPrefCity.name];
+                // Add the city if it's not already selected
+                return [...prevSelectedCities, selectedCity.name];
             }
         });
 
         setSelectedPrefCityId((prevSelectedCityIds) => {
-            if (prevSelectedCityIds.includes(selectedPrefCity.id)) {
-                return prevSelectedCityIds.filter(id => id !== selectedPrefCity.id);
+            // Check if the city ID is already selected
+            if (prevSelectedCityIds.includes(selectedCity.id)) {
+                // Remove the ID if it's already selected
+                return prevSelectedCityIds.filter(id => id !== selectedCity.id);
             } else {
-                return [...prevSelectedCityIds, selectedPrefCity.id];
+                // Add the ID if it's not already selected
+                return [...prevSelectedCityIds, selectedCity.id];
             }
         });
 
         setDropdownVisible3(false);
-
     };
+
 
     const PrefCityApi = async () => {
 
@@ -341,6 +364,34 @@ const EditGeneral = ({
     useEffect(() => {
         PrefCityApi();
     }, [])
+
+    // 
+
+    useEffect(() => {
+        seteditedocFile(val.certification_attach)
+    }, [val])
+
+
+    const [EditedocFile, seteditedocFile] = useState([]);
+
+    const filePath = typeof EditedocFile === 'string' ? EditedocFile : '';
+    const fileName = filePath.split('/').pop();
+
+    const handleEditDocumentSelection = async () => {
+
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setEdocFile(res);
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('Document picker is cancelled');
+            } else {
+                console.error('Error while picking the document:', err);
+            }
+        }
+    };
 
     return (
 
@@ -394,7 +445,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.source ? "Source Required" : null) : null}
+                        {validation ? (!resume[0].source ? "Source Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -408,7 +459,7 @@ const EditGeneral = ({
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.candidateName ? "Candidate Name Required" : null) : null}
+                        {validation ? (!resume[0].candidate_name ? "Candidate Name Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -416,13 +467,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.positionApplying}
-                        onChangeText={(text) => handleFieldsChange('positionApplying', text)}
+                        value={val.position_applying || ''}
+                        onChangeText={(text) => updateResumeField('position_applying', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.positionApplying ? "position Required" : null) : null}
+                        {validation ? (!resume[0].position_applying ? "position Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -431,7 +482,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity onPress={toggleDropdownGender} style={styles.StatusTouchable}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.gender || "Select Gender"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.gender || "Select Gender"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -457,7 +508,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.gender ? "Gender Required" : null) : null}
+                        {validation ? (!resume[0].gender ? "Gender Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -465,13 +516,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.email}
-                        onChangeText={(text) => handleFieldsChange('email', text)}
+                        value={val.email}
+                        onChangeText={(text) => updateResumeField('email', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.email ? "Email Required" : null) : null}
+                        {validation ? (!resume[0].email ? "Email Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -479,16 +530,16 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.mobileNo}
-                        onChangeText={(text) => handleFieldsChange('mobileNo', text)}
+                        value={val.mobile_no}
+                        onChangeText={(text) => updateResumeField('mobile_no', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
                         {validation ? (
-                            !Resume.mobileNo ?
+                            !resume[0].mobile_no ?
                                 "Phone Number Required" :
-                                Resume.mobileNo.length !== 10 ?
+                                resume[0].mobile_no.length !== 10 ?
                                     "Phone Number must be exactly 10 digits" :
                                     null
                         ) : null}
@@ -500,13 +551,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.alternativeMobileNo}
-                        onChangeText={(text) => handleFieldsChange('alternativeMobileNo', text)}
+                        value={val.alter_mobile_no}
+                        onChangeText={(text) => updateResumeField('alter_mobile_no', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -515,7 +566,7 @@ const EditGeneral = ({
 
                     <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
-                            {startDate ? formatDate(startDate) : "Select Date"} &nbsp;
+                            {startDate ? formatDate(startDate) : val.dob} &nbsp;
                         </Text>
                         {showDatePicker && (
                             <DateTimePicker
@@ -528,7 +579,7 @@ const EditGeneral = ({
                     </View>
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.dob ? "Date Of Birth Required" : null) : null}
+                        {validation ? (!resume[0].dob ? "Date Of Birth Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -537,7 +588,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown3}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.country ? Resume.country : 'Select a country'}
+                            {val.country_name ? val.country_name : 'Select a country'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -553,7 +604,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.country ? "Country Required" : null) : null}
+                        {validation ? (!resume[0].country_name ? "Country Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -562,7 +613,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown4}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.state ? Resume.state : 'Select a State'}
+                            {val.state_name ? val.state_name : 'Select a State'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -578,7 +629,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.state ? "State Required" : null) : null}
+                        {validation ? (!resume[0].state_name ? "State Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -587,7 +638,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown5}>
                         <Text style={styles.StatusTouchableText}>
-                            {Resume.city ? Resume.city : 'Select a City'}
+                            {val.current_cityname ? val.current_cityname : 'Select a City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -603,7 +654,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.city ? "City Required" : null) : null}
+                        {validation ? (!resume[0].current_cityname ? "City Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -614,7 +665,7 @@ const EditGeneral = ({
                         <Text style={styles.StatusTouchableText}>
                             {selectededPrefCity.length > 0
                                 ? selectededPrefCity.join(', ')
-                                : 'Select Prefered City'}
+                                : 'Select Preferred City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -630,7 +681,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {/* {validation ? (Resume.preferedLocation.length == 0 ? "Prefered Location Required" : null) : null} */}
+                        {/* {validation ? (resume.preferred_locations.length == 0 ? "Prefered Location Required" : null) : null} */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -638,13 +689,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.languageKnown}
-                        onChangeText={(text) => handleFieldsChange('languageKnown', text)}
+                        value={val.languages}
+                        onChangeText={(text) => updateResumeField('languages', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.languageKnown ? "language Required" : null) : null}
+                        {validation ? (!resume[0].languages ? "language Required" : null) : null}
                     </Text>
 
                 </View>
@@ -666,7 +717,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.uDegree || "Select Degree"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.ug_degree || "Select Degree"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -684,7 +735,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.uDegree ? "UG Degree Required" : null) : null}
+                        {validation ? (!resume[0].ug_degree ? "UG Degree Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -692,13 +743,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.uSpecialization}
-                        onChangeText={(text) => handleFieldsChange('uSpecialization', text)}
+                        value={val.ug_specialization || ""}
+                        onChangeText={(text) => updateResumeField('ug_specialization', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.uSpecialization ? "Specialization Required" : null) : null}
+                        {validation ? (!resume[0].ug_specialization ? "Specialization Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -706,14 +757,14 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.uYearOfPassing}
-                        onChangeText={(text) => handleFieldsChange('uYearOfPassing', text)}
+                        value={val.ug_year_of_passing || ""}
+                        onChangeText={(text) => updateResumeField('ug_year_of_passing', text)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.uYearOfPassing ? "Year Of Passing Required" : null) : null}
+                        {validation ? (!resume[0].ug_year_of_passing ? "Year Of Passing Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -721,13 +772,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.uSchoolUniversity}
-                        onChangeText={(text) => handleFieldsChange('uSchoolUniversity', text)}
+                        value={val.ug_university || ''}
+                        onChangeText={(text) => updateResumeField('ug_university', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                 </View>
@@ -748,7 +799,7 @@ const EditGeneral = ({
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown1}>
 
-                        <Text style={styles.StatusTouchableText}>{Resume.pDegree || "Select PgDegree"}</Text>
+                        <Text style={styles.StatusTouchableText}>{val.pg_degree || "Select PgDegree"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 
                     </TouchableOpacity>
@@ -766,7 +817,7 @@ const EditGeneral = ({
                     )}
 
                     <Text style={styles.errorText}>
-                        {selectedPgDegreeErr}
+                        {/* {selectedPgDegreeErr} */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -774,13 +825,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.pSpecialization}
-                        onChangeText={(text) => handleFieldsChange('pSpecialization', text)}
+                        value={val.pg_specialization || ""}
+                        onChangeText={(text) => updateResumeField('pg_specialization', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -788,13 +839,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.pYearOfPassing}
-                        onChangeText={(text) => handleFieldsChange('pYearOfPassing', text)}
+                        value={val.pg_year_of_passing || ""}
+                        onChangeText={(text) => updateResumeField('pg_year_of_passing', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -802,13 +853,13 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.pSchoolUniversity}
-                        onChangeText={(text) => handleFieldsChange('pSchoolUniversity', text)}
+                        value={val.pg_university || ''}
+                        onChangeText={(text) => updateResumeField('pg_university', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -816,25 +867,26 @@ const EditGeneral = ({
                     </Text>
 
                     <TextInput
-                        value={Resume.pCertification}
-                        onChangeText={(text) => handleFieldsChange('pCertification', text)}
+                        value={val.certification || ''}
+                        onChangeText={(text) => updateResumeField('certification', text)}
                         style={styles.inputs}
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {/* { } */}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Attachment
                     </Text>
 
-                    <Text style={docFile ? styles.DocFileName : styles.DocFileNameHolder}>
-                        {docFile ? docFile[0].name : 'Select The Document'}
+                    <Text style={EdocFile ? styles.DocFileName : styles.DocFileNameHolder}>
+                        {/* {docFile ? docFile[0].name : 'Select The Document'} */}
+                        {EdocFile.length > 0 && EdocFile[0]?.name ? EdocFile[0].name : fileName}
                     </Text>
 
                     <View style={styles.fullWidth}>
-                        <TouchableOpacity style={styles.UploadButton} onPress={handleDocumentSelection}>
+                        <TouchableOpacity style={styles.UploadButton} onPress={handleEditDocumentSelection}>
                             <Text style={styles.UploadButtonText}>
                                 Select Document
                             </Text>
@@ -842,7 +894,7 @@ const EditGeneral = ({
                     </View>
 
                     <Text style={styles.errorText}>
-                        {docFileErr}
+                        {/* {docFileErr} */}
                     </Text>
 
                 </View>

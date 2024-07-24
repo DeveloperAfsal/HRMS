@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, Text, View, TouchableOpacity, TextInput } from "react-native";
 import SearchIcon from '../../../../../Assets/Icons/Search.svg';
 import axios from "axios";
@@ -9,6 +9,7 @@ import NotSuitable from "./NotSuitable";
 import Offered from "./Offered";
 import Reject from "./Reject";
 import Shortlisted from "./Shortlisted";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CanStatus = ({ route, navigation }) => {
 
@@ -73,9 +74,15 @@ const CanStatus = ({ route, navigation }) => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [activeComponent]);
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [activeComponent])
+    );
+
+    // useEffect(() => {
+    //     fetchData();
+    // }, [activeComponent]);
 
     return (
         <ScrollView>

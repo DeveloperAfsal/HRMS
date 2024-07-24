@@ -19,6 +19,7 @@ const EditResume = ({ route, navigation }) => {
 
     const [loading, setLoading] = useState(false);
     const [resume, setResume] = useState(null);
+    console.log(resume,"resume");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,6 +57,9 @@ const EditResume = ({ route, navigation }) => {
 
     const [docFile1, setDocFile1] = useState('');
     const [docFileErr1, setDocFileErr1] = useState();
+
+    const [EdocFile, setEdocFile] = useState([]);
+    const [EdocFile1, setEdocFile1] = useState([]);
 
     // Function to handle document selection
 
@@ -101,6 +105,15 @@ const EditResume = ({ route, navigation }) => {
     const [selectededPrefCity, setSelectedPrefCity] = useState([]);
     const [selectedPrefCityId, setSelectedPrefCityId] = useState([]);
     const [dropdownVisible3, setDropdownVisible3] = useState(false);
+    console.log(selectedPrefCityId,"selectedPrefCityId")
+
+    useEffect(() => {
+        if (resume) {
+            setSelectedPrefCity(resume[0].preferred_locations || []);
+            setSelectedPrefCityId(resume[0].preferred_location || []);
+        }
+    }, [resume]);
+    
 
     // Handle Submit
 
@@ -114,137 +127,141 @@ const EditResume = ({ route, navigation }) => {
 
         //append data
 
-        // if (
-        //     Resume.source && Resume.candidateName && Resume.positionApplying &&
-        //     Resume.gender && Resume.email && Resume.mobileNo && Resume.dob &&
-        //     Resume.country && Resume.state && Resume.city && selectededPrefCity &&
-        //     Resume.languageKnown && Resume.uDegree && Resume.uSpecialization && Resume.uYearOfPassing &&
-        //     Resume.currentEmployer && Resume.currentDesignation && Resume.functionalArea && Resume.areaOfSpecification &&
-        //     Resume.industry && Resume.employmentType && Resume.totalExperience && Resume.currentCTC &&
-        //     Resume.expectedCTC && Resume.noticePeriod && Resume.candidateStatus && Resume.doj &&
-        //     Resume.keySkills && docFile1
-        // ) {
-        //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (
+            resume[0].source && resume[0].candidate_name && resume[0].position_applying &&
+            resume[0].gender && resume[0].email && resume[0].mobile_no && resume[0].dob &&
+            resume[0].country_name && resume[0].state_name && resume[0].current_cityname && selectededPrefCity &&
+            resume[0].languages && resume[0].ug_degree && resume[0].ug_specialization && resume[0].ug_year_of_passing &&
+            resume[0].current_employer && resume[0].current_designation && resume[0].functional_area && resume[0].area_specialization_name &&
+            resume[0].industry_name && resume[0].employment_type && resume[0].total_exp && resume[0].current_ctc &&
+            resume[0].expected_ctc && resume[0].notice_period && resume[0].status && resume[0].date_of_join &&
+            resume[0].key_skills && EdocFile1
+        ) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const mobileNoPattern = /^\d{10}$/;
 
-        //     if (!emailRegex.test(Resume.email)) {
-        //         Alert.alert('Invalid Email ID', "Please enter a valid email address");
-        //         setLoad(false);
-        //         return;
-        //     }
+            if (!emailRegex.test(resume[0].email)) {
+                Alert.alert('Invalid Email ID', "Please enter a valid email address");
+                setLoad(false);
+                return;
+            }
 
-        //     if (Resume.mobileNo.length !== 10) {
-        //         Alert.alert('Invalid "Phone Number', "Please enter a valid Phone Number");
-        //         setLoad(false);
-        //         return;
-        //     }
+            // if (resume[0].mobile_no !== 10 || !/^\d{10}$/.test(resume[0].mobile_no)) {
+            //     Alert.alert('Invalid "Phone Number', "Please enter a valid Phone Number");
+            //     setLoad(false);
+            //     return;
+            // }
 
-        // } else {
-        //     Alert.alert('Invalid Fields', 'Enter all required fields')
-        //     setLoad(false);
-        //     return;
-        // }
+        } else {
+            Alert.alert('Invalid Fields', 'Enter all required fields')
+            setLoad(false);
+            return;
+        }
 
-        // formData.append('source', Resume.source);
-        // formData.append('candidate_name', Resume.candidateName);
-        // formData.append('position_applying', Resume.positionApplying);
-        // formData.append('gender', Resume.gender);
-        // formData.append('email', Resume.email);
-        // formData.append('mobile_no', Resume.mobileNo);
-        // formData.append('alter_mobile_no', Resume.alternativeMobileNo ? Resume.alternativeMobileNo : "-");
-        // formData.append('dob', Resume.dob);
-        // formData.append('current_country', Resume.countryid);
-        // formData.append('current_state', Resume.stateid);
-        // formData.append('current_city', Resume.cityId);
-        // formData.append('preferred_location', selectedPrefCityId.join(', '));
-        // formData.append('languages', Resume.languageKnown);
+        formData.append('id', id);
+        formData.append('source', resume[0].source);
+        formData.append('candidate_name', resume[0].candidate_name);
+        formData.append('position_applying', resume[0].position_applying);
+        formData.append('gender', resume[0].gender);
+        formData.append('email', resume[0].email);
+        formData.append('mobile_no', resume[0].mobile_no);
+        formData.append('alter_mobile_no', resume[0].alter_mobile_no ? resume[0].alter_mobile_no : "-");
+        formData.append('dob', resume[0].dob);
+        formData.append('current_country', resume[0].current_country);
+        formData.append('current_state', resume[0].current_state);
+        formData.append('current_city', resume[0].current_city);
+        formData.append('preferred_location', selectedPrefCityId);
+        formData.append('languages', resume[0].languages);
 
-        // formData.append('under_graduate', Resume.uDegreeid);
-        // formData.append('ug_specialization', Resume.uSpecialization);
-        // formData.append('ug_year_of_passing', Resume.uYearOfPassing);
+        formData.append('under_graduate', resume[0].under_graduate);
+        formData.append('ug_specialization', resume[0].ug_specialization);
+        formData.append('ug_year_of_passing', resume[0].ug_year_of_passing);
 
-        // if (!Resume.uSchoolUniversity) {
-        //     formData.append('ug_university', "-");
-        // } else {
-        //     formData.append('ug_university', Resume.uSchoolUniversity);
-        // }
+        if (!resume[0].ug_university) {
+            formData.append('ug_university', "-");
+        } else {
+            formData.append('ug_university', resume[0].ug_university);
+        }
 
-        // if (!Resume.pDegree) {
-        //     formData.append('post_graduate', "-");
-        // } else {
-        //     formData.append('post_graduate', Resume.pDegree);
-        // }
+        if (!resume[0].post_graduate) {
+            formData.append('post_graduate', "-");
+        } else {
+            formData.append('post_graduate', resume[0].post_graduate);
+        }
 
-        // if (!Resume.pSpecialization) {
-        //     formData.append('pg_specialization', "-");
-        // } else {
-        //     formData.append('pg_specialization', Resume.pSpecialization);
-        // }
+        if (!resume[0].pg_specialization) {
+            formData.append('pg_specialization', "-");
+        } else {
+            formData.append('pg_specialization', resume[0].pg_specialization);
+        }
 
-        // formData.append('pg_year_of_passing', Resume.pYearOfPassing ? Resume.pYearOfPassing : "-");
-        // formData.append('pg_university', Resume.pSchoolUniversity ? Resume.pSchoolUniversity : "-");
-        // formData.append('certification', Resume.pCertification ? Resume.pCertification : "-");
+        formData.append('pg_year_of_passing', resume[0].pg_year_of_passing ? resume[0].pg_year_of_passing : "-");
+        formData.append('pg_university', resume[0].pg_university ? resume[0].pg_university : "-");
+        formData.append('certification', resume[0].certification ? resume[0].certification : "-");
 
-        // if (docFile.length > 0) {
-        //     docFile.map((file, index) => {
-        //         let uri, name;
-        //         if (typeof file === 'string') {
-        //             const imageUriParts = file.split('/');
-        //             name = imageUriParts[imageUriParts.length - 1];
-        //             uri = file;
-        //         } else {
-        //             name = file.name;
-        //             uri = file.uri;
-        //         }
-        //         formData.append(`certification_attach`, {
-        //             uri: uri,
-        //             name: name,
-        //             type: 'image/jpeg',
-        //         });
-        //     });
-        // } else {
-        //     formData.append('certification_attach', '-');
-        // }
+        if (EdocFile.length > 0) {
+            EdocFile.map((file, index) => {
+                let uri, name;
+                if (typeof file === 'string') {
+                    const imageUriParts = file.split('/');
+                    name = imageUriParts[imageUriParts.length - 1];
+                    uri = file;
+                } else {
+                    name = file.name;
+                    uri = file.uri;
+                }
+                formData.append(`certification_attach`, {
+                    uri: uri,
+                    name: name,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            formData.append('certification_attach', '-');
+        }
 
-        // formData.append('social_link', Resume.socialMediaLink);
-        // formData.append('current_employer', Resume.currentEmployer);
-        // formData.append('functionality_area', Resume.functionalAreaid);
-        // formData.append('area_specialization', Resume.areaOfSpecificationid);
-        // formData.append('industry', Resume.industryid);
-        // formData.append('current_designation', Resume.currentDesignation);
-        // formData.append('employment_type', Resume.employmentType);
-        // formData.append('total_exp', Resume.totalExperience);
-        // formData.append('current_ctc', Resume.currentCTC);
-        // formData.append('expected_ctc', Resume.expectedCTC);
-        // formData.append('key_skills', Resume.keySkills);
-        // formData.append('notice_period', Resume.noticePeriod);
-        // formData.append('date_of_join', Resume.doj);
-        // formData.append('status', Resume.candidateStatus);
-        // formData.append('created_by', data.userrole);
+        formData.append('social_link', resume[0].social_link);
+        formData.append('current_employer', resume[0].current_employer);
+        formData.append('functionality_area', resume[0].functionality_area);
+        formData.append('area_specialization', resume[0].area_specialization);
+        formData.append('industry', resume[0].industry);
+        formData.append('current_designation', resume[0].current_designation);
+        formData.append('employment_type', resume[0].employment_type);
+        formData.append('total_exp', resume[0].total_exp);
+        formData.append('current_ctc', resume[0].current_ctc);
+        formData.append('expected_ctc', resume[0].expected_ctc);
+        formData.append('key_skills', resume[0].key_skills);
+        formData.append('notice_period', resume[0].notice_period);
+        formData.append('date_of_join', resume[0].date_of_join);
+        formData.append('status', resume[0].status);
+        formData.append('updated_by', data.userrole);
+        formData.append('oldpath_resume_upload', resume[0].attached_resume);
+        formData.append('oldpath_certification', resume[0].certification_attach);
 
-        // if (docFile1.length > 0) {
-        //     docFile1.map((file, index) => {
-        //         let uri, name;
-        //         if (typeof file === 'string') {
-        //             const imageUriParts = file.split('/');
-        //             name = imageUriParts[imageUriParts.length - 1];
-        //             uri = file;
-        //         } else {
-        //             name = file.name;
-        //             uri = file.uri;
-        //         }
-        //         formData.append(`attached_resume`, {
-        //             uri: uri,
-        //             name: name,
-        //             type: 'image/jpeg',
-        //         });
-        //     });
-        // } else {
-        //     formData.append('attached_resume', docFile1);
-        // }
+        if (EdocFile1.length > 0) {
+            EdocFile1.map((file, index) => {
+                let uri, name;
+                if (typeof file === 'string') {
+                    const imageUriParts = file.split('/');
+                    name = imageUriParts[imageUriParts.length - 1];
+                    uri = file;
+                } else {
+                    name = file.name;
+                    uri = file.uri;
+                }
+                formData.append(`attached_resume`, {
+                    uri: uri,
+                    name: name,
+                    type: 'image/jpeg',
+                });
+            });
+        } else {
+            formData.append('attached_resume', EdocFile1);
+        }
 
         try {
 
-            const response = await fetch('https://ocean21.in/api/public/api/addhr_resume_upload', {
+            const response = await fetch('https://ocean21.in/api/public/api/update_hr_resume', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -332,6 +349,8 @@ const EditResume = ({ route, navigation }) => {
                             setDropdownVisible3={setDropdownVisible3}
                             setResume={setResume}
                             resume={resume}
+                            EdocFile={EdocFile}
+                            setEdocFile={setEdocFile}
                         />
                     }
 
@@ -344,6 +363,8 @@ const EditResume = ({ route, navigation }) => {
                             validation={validation}
                             setResume={setResume}
                             resume={resume}
+                            EdocFile1={EdocFile1}
+                            setEdocFile1={setEdocFile1}
                         />
                     }
 
@@ -399,7 +420,7 @@ const EditResume = ({ route, navigation }) => {
 
                         {activeComponent === 'Career' ? <TouchableOpacity style={
                             styles.HeaderButton
-                        }>
+                        } onPress={()=>navigation.navigate('Candidate Resume')}>
                             <Text
                                 style={
                                     styles.HeaderButtonText
