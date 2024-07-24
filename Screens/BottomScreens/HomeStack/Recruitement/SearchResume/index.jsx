@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
+import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
+import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
 
-const SearchResume = () => {
+const SearchResume = ({ navigation }) => {
 
     // 
 
     const { data } = useSelector((state) => state.login);
+
+    // 
+
+    const [employeeData, setEmployeeData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [filterText, setFilterText] = useState('');
+
+    const filteredData = employeeData ? employeeData.filter(row => {
+        const values = Object.values(row).map(value => String(value));
+        return values.some(value =>
+            value.toLowerCase().includes(filterText.toLowerCase()));
+    }) : [];
 
     // 
 
@@ -323,12 +337,54 @@ const SearchResume = () => {
     const [load, setLoad] = useState(false);
 
     const onRefresh = () => {
-
+        setEmployeeData([])
     }
 
-    const HandleSubmit = () => {
-
+    const HandleSearch = async () => {
+        setLoad(true)
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/search_resume_list';
+            const response = await axios.post(apiUrl, {
+                designation: desgination || "",
+                preferred_location: selectedPrefCityId || "",
+                current_city: selectedCityId || "",
+                functional_area: selectedFAreaId || "",
+                area_specialization: selectedSpecId || "",
+                industry: selectedIndustryApiId || "",
+                exp_min: expmin || "",
+                exp_max: expmax || "",
+                salary_min: salarymin || "",
+                salary_max: salarymax || ""
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+            setLoad(false)
+            const responseData = response.data.data;
+            setEmployeeData(responseData);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
+
+    // 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    const paginatedData = filteredData.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const totalItems = filteredData.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pages = [...Array(totalPages).keys()].map(num => num + 1);
+
+    const onPageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
 
@@ -552,7 +608,7 @@ const SearchResume = () => {
 
                     <View style={styles.buttonview}>
                         <TouchableOpacity style={styles.submitbutton}
-                            onPress={HandleSubmit}
+                            onPress={HandleSearch}
                         >
                             {
                                 load ?
@@ -578,10 +634,90 @@ const SearchResume = () => {
 
             <View style={styles.ShiftSlotContainer}>
 
-                <View style={styles.ShiftSlotContainerTitle}>
+                <View style={styles.ShiftSlotContainerTitle1}>
                     <Text style={styles.ShiftSlotContainerTitleText}>Search Result</Text>
                 </View>
 
+            </View>
+
+            <View style={styles.container}>
+                {loading ? (
+                    <ActivityIndicator size="large" color={"#0A60F1"} style={styles.activityIndicator} />
+                ) : (
+                    <>
+                        {paginatedData.length === 0 ? (
+                            <Text style={styles.name}>Resume List Data Not Found!.</Text>
+                        ) : (
+                            paginatedData.map((employee, index) => (
+                                <View key={index} style={[styles.card]}>
+                                    <View>
+
+                                        <View style={styles.divider}>
+                                            <View style={{ gap: 5 }}>
+                                                <Text style={{ fontWeight: '600', fontSize: 20, color: '#3A3A3A' }}>{employee.candidate_name}</Text>
+                                                <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.current_designation}</Text>
+                                            </View>
+                                            <View style={styles.ViewDetails1}>
+                                                <Text style={styles.DetailsText1}>{employee.status}</Text>
+                                            </View>
+                                        </View>
+
+                                        <View style={styles.divider}>
+                                            <Text style={{ fontWeight: '600', fontSize: 18, color: '#00275C' }}>CTC : <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.current_ctc}</Text></Text>
+                                            <Text style={{ fontWeight: '600', fontSize: 18, color: '#00275C' }}>EXP : <Text style={{ fontWeight: '400', fontSize: 18 }}>{employee.total_exp}</Text></Text>
+                                        </View>
+
+                                        <View>
+                                            <TouchableOpacity style={styles.ViewDetails} onPress={() => navigation.navigate('Candidate View Details', { Id: employee.id })}
+                                            >
+                                                <Text style={styles.DetailsText}>View Details</Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            ))
+                        )}
+
+                        {paginatedData.length === 0 ? null : <View style={{ alignItems: 'center' }}>
+                            <View style={styles.pagination}>
+
+                                <TouchableOpacity style={styles.prev}
+                                    onPress={() => onPageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                >
+                                    <ArrowLeftIcon width={14} height={14} color={'#737373'} />
+                                    <Text style={styles.prevText}>
+                                        Prev
+                                    </Text>
+                                </TouchableOpacity>
+
+                                {pages.map(page => (
+                                    <Text
+                                        key={page}
+                                        style={[styles.pageNo, currentPage === page ? styles.PageActive : null]}
+                                        onPress={() => onPageChange(page)}
+                                    >
+                                        {page}
+                                    </Text>
+                                ))}
+
+                                <TouchableOpacity style={styles.Next}
+                                    onPress={() => onPageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    <Text style={styles.NextText}>
+                                        Next
+                                    </Text>
+                                    <ArrowRightIcon width={14} height={14} color={'#0A62F1'} />
+                                </TouchableOpacity>
+
+                            </View>
+                        </View>
+                        }
+
+                    </>
+                )}
             </View>
 
         </ScrollView>

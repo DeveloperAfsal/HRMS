@@ -6,7 +6,11 @@ const styles = StyleSheet.create({
         paddingBottom: "5%",
         width: "90%",
     },
-    
+
+    ShiftSlotContainerTitle1: {
+        width: "90%",
+    },
+
     ShiftSlotContainerTitleText: {
         color: '#00275C',
         fontWeight: '700',
@@ -14,85 +18,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
-    errorText: {
-        color: "red",
-        paddingVertical: '3%',
-        width: "90%"
-    },
-
-    Input: {
-        borderWidth: 1,
-        borderColor: '#515151',
-        width: '90%',
-        borderRadius: 7,
-        paddingHorizontal: '5%',
-        paddingVertical: '3%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-
-    selectedDaysContainer: {
-        flexDirection: 'row',
-        gap: 5,
-        flexWrap: 'wrap',
-    },
-
-    selectedays: {
-        backgroundColor: '#20DDFE',
-        padding: 7,
-        borderRadius: 7,
-        color: '#fff',
-        fontWeight: '400',
-    },
-
-    inputs: {
-        borderWidth: 1,
-        borderColor: '#515151',
-        width: '90%',
-        height: 50,
-        borderRadius: 7,
-        paddingHorizontal: '5%',
-        marginBottom:'3%',
-        justifyContent: 'center',
-    },
-
-    container: {
-        width: '90%',
-        alignItems: 'center'
-    },
-
-    imageContainer: {
-        marginRight: 5,
-        marginTop: 5,
-        position: 'relative',
-    },
-
-    image: {
-        width: 200,
-        height: 200,
-        marginBottom: 5,
-    },
-
-    deleteButton: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        borderRadius: 20,
-        padding: 5,
-        zIndex: 1,
-        backgroundColor: "#fff"
-    },
-
     ShiftSlotContainer: {
         alignItems: 'center',
-        marginTop:'10%'
+        marginTop: '10%'
     },
-    
+
     Inputcontainer: {
         backgroundColor: "#F4FDFF",
         padding: '5%',
-        paddingBottom:'10%',
+        paddingBottom: '10%',
         borderRadius: 11,
         borderWidth: 1,
         borderColor: '#A4CED8',
@@ -104,7 +38,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 16,
         lineHeight: 21.28,
-        paddingVertical:'5%',
+        paddingVertical: '5%',
         width: "90%"
     },
 
@@ -116,27 +50,7 @@ const styles = StyleSheet.create({
         borderColor: '#515151',
         borderRadius: 7,
         paddingLeft: 15,
-        justifyContent:'center',
-    },
-
-    ShiftSlotTextInput1: {
-        width: "90%",
-        height: 150,
-        backgroundColor: '#F3FCFF',
-        borderWidth: 1,
-        borderColor: '#515151',
-        borderRadius: 7,
-        paddingLeft: 15,
-        paddingTop: 10,
-    },
-
-    StatusText: {
-        fontWeight: "600",
-        fontSize: 16,
-        lineHeight: 21.28,
-        paddingBottom: "3%",
-        paddingTop: "3%",
-        width: "90%"
+        justifyContent: 'center',
     },
 
     StatusTouchable: {
@@ -149,7 +63,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal:'5%',
+        paddingHorizontal: '5%',
     },
 
     StatusTouchableText: {
@@ -205,12 +119,6 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
     },
 
-    modaldropdown:{
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderColor: "#ccc",
-    },
-
     dropdownOption: {
         padding: 10,
         borderBottomWidth: 1,
@@ -221,24 +129,112 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
-    fullWidth: {
-        width: '100%',
-        paddingHorizontal: '5%'
+    name: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#00275C',
+        lineHeight: 26.6,
+        marginVertical: '10%'
     },
 
-    UploadButton: {
-        backgroundColor: '#D4E7EB',
-        height: 42,
+    container: {
+        alignItems: 'center'
+    },
+
+    card: {
+        width: '90%',
+        backgroundColor: 'red',
+        borderRadius: 10,
+        marginTop: "10%",
+        padding: "10%",
+        borderWidth: 1,
+        borderColor: '#DDE4EF',
+        backgroundColor: "#FFF",
+    },
+
+    divider: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: '5%'
+    },
+
+    ViewDetails1: {
+        width: 117,
+        height: 35,
+        backgroundColor: '#C6F3FF',
+        borderRadius: 4,
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5
+        justifyContent: 'center'
     },
 
-    UploadButtonText: {
-        color: '#3D3D3D',
+    DetailsText1: {
+        color: '#00275C',
         fontWeight: '600',
-        fontSize: 13,
-        lineHeight: 17.92
+        fontSize: 16
+    },
+
+    ViewDetails: {
+        width: '100%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#0A62F1',
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    DetailsText: {
+        color: '#0A62F1',
+        fontWeight: '600',
+        fontSize: 16
+    },
+
+    pagination: {
+        marginVertical: '10%',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: '50%',
+    },
+
+    prev: {
+        flexDirection: 'row',
+        gap: 10
+    },
+
+    Next: {
+        flexDirection: 'row',
+        gap: 10
+    },
+
+    NextText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#0A60F1',
+        paddingLeft: 10
+    },
+
+    prevText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#737373',
+        paddingRight: 10
+    },
+
+    pageNo: {
+        fontWeight: '700',
+        fontSize: 14,
+        lineHeight: 18.62,
+        paddingHorizontal: '4%'
+    },
+
+    PageActive: {
+        width: 26,
+        height: 26,
+        borderRadius: 26,
+        backgroundColor: '#0A62F1',
+        color: '#fff',
+        paddingTop: 5
     },
 })
 
