@@ -1113,7 +1113,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                 < DrawerItem
                                     label="Search Resume"
-                                // onPress={() => navigation.navigate('Job List')}
+                                    onPress={() => navigation.navigate('Search Resume')}
                                 />
 
                             </>
