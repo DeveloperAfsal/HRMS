@@ -120,6 +120,7 @@ import CanViewDetails from "./Recruitement/CandidateStatus/ViewDetails";
 import AddResume from "./Recruitement/AddResume";
 import EditResume from "./Recruitement/EditResume";
 import SearchResume from "./Recruitement/SearchResume";
+import InboxResume from "./Recruitement/InboxResume";
 
 const Stack = createNativeStackNavigator();
 
@@ -331,6 +332,7 @@ const HomeStack = () => {
       <Stack.Screen name="Add Resume" component={AddResume} />
       <Stack.Screen name="Edit Resume" component={EditResume} />
       <Stack.Screen name="Search Resume" component={SearchResume} />
+      <Stack.Screen name="Inbox Resume" component={InboxResume} />
 
     </Stack.Navigator>
   );

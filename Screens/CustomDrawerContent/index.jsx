@@ -1108,7 +1108,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                 < DrawerItem
                                     label="Inbox Resume"
-                                // onPress={() => navigation.navigate('Job List')}
+                                    onPress={() => navigation.navigate('Inbox Resume')}
                                 />
 
                                 < DrawerItem
