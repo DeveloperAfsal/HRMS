@@ -3,6 +3,11 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    // dropdownButton:{
+    //     padding:100,
+    //     backgroundColor:'red'
+    // },
+
     filterInput: {
         borderWidth: 1,
         borderColor: "#1AD0FF",
@@ -151,18 +156,22 @@ const styles = StyleSheet.create({
     },
 
     DepartmentName: {
-        width: 200
-    },
-
-    EmployeeName: {
-        width: 200
-    },
-
-    StartDate: {
         width: 120
     },
 
+    EmployeeName: {
+        width: 120
+    },
+
+    StartDate: {
+        width: 170
+    },
+
     EndDate: {
+        width: 170
+    },
+
+    Resume: {
         width: 120
     },
 
@@ -222,6 +231,138 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#737373',
         paddingRight: 10
+    },
+
+    listcontentviewbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#8056FF",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E7E0FC'
+    },
+
+    listcontentButtonview: {
+        width: 120,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 10
+    },
+
+    listcontentdelbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#FF7676",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFE0E0'
+    },
+
+    listcontentmailbutton: {
+        width: 26,
+        height: 26,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: "#0A62F1",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#DBE9FF',
+    },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+    },
+
+    modalTextHeading: {
+        fontSize: 16,
+        fontWeight: '800',
+        textAlign: 'center',
+        color: "#000",
+        paddingBottom: '10%',
+    },
+
+    modalTextHeading1: {
+        fontSize: 16,
+        fontWeight: '800',
+        textAlign: 'center',
+        color: "#000",
+        paddingVertical: '3%',
+    },
+
+    modalText: {
+        marginBottom: 5,
+        fontSize: 18,
+        fontWeight: '600',
+    },
+
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+
+    Reason: {
+        marginBottom: "5%",
+        borderRadius: 5,
+        borderColor: '#515151',
+        borderWidth: 1,
+        paddingLeft: 20,
+    },
+
+    errorTextDelete: {
+        color: "red",
+        paddingBottom: 10,
+        width: "90%"
+    },
+
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+
+    modalCancelButton1: {
+        borderColor: '#0A62F1',
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        height: 34,
+        borderRadius: 5,
+    },
+
+    modalCancelButtonText1: {
+        fontSize: 15,
+        fontWeight: '400',
+        color: '#0A62F1',
+    },
+
+    modalDeleteButton: {
+        backgroundColor: '#0A62F1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        width: 90,
+        height: 34,
+    },
+    
+    modalDeleteButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
     },
 })
 

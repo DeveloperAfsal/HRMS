@@ -1,26 +1,42 @@
-import React, { useState } from "react";
-import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Linking, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import SearchIcon from '../../../../../Assets/Icons/Search.svg';
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
 import MailOpenIcon from "../../../../../Assets/Icons/mailOpen.svg";
 import MailCloseIcon from "../../../../../Assets/Icons/mailClosed.svg";
 import ArrowRightIcon from "../../../../../Assets/Icons/ArrowRight.svg";
 import ArrowLeftIcon from "../../../../../Assets/Icons/leftarrow.svg";
+import ViewIcon from "../../../../../Assets/Icons/eyeopen.svg";
 import styles from "./style";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import CheckBox from '@react-native-community/checkbox';
+import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../Assets/Alerts/Catch";
+
 
 const InboxResume = () => {
+
+    // data from redux store 
+
+    const { data } = useSelector((state) => state.login);
 
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [readCount, setReadCount] = useState();
+    const [unReadCount, setUnReadCount] = useState();
 
     const itemsPerPage = 5;
 
-    const filteredData = datalist.filter(row => {
+    const [filterText, setFilterText] = useState('');
+
+    const filteredData = datalist ? datalist.filter(row => {
         const values = Object.values(row).map(value => String(value));
         return values.some(value =>
             value.toLowerCase().includes(filterText.toLowerCase()));
-    });
+    }) : [];
 
     const paginatedData = filteredData.slice(
         (currentPage - 1) * itemsPerPage,
@@ -71,6 +87,230 @@ const InboxResume = () => {
         setCurrentPage(page);
     };
 
+    // 
+
+    const fetchData = async () => {
+        setLoadData(true)
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/career_inboxdetails';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+            setLoadData(false)
+            const responseData = response.data;
+            setDatalist(responseData.data.career_list);
+            setReadCount(responseData.data.read_count);
+            setUnReadCount(responseData.data.unread_count);
+        } catch (error) {
+            setLoadData(false)
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    // 
+
+    const handlePreview = (UrlLink) => {
+        const baseUrl = 'https://ocean21.in/api/storage/app/';
+        const filePath = UrlLink;
+        const url = `${baseUrl}${filePath}`;
+        if (filePath && filePath !== "-") {
+            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+        } else {
+            Alert.alert('No File Located')
+        }
+    }
+
+    // 
+
+    const [DelData, setDelData] = useState(false);
+    const [Reason, setReason] = useState('');
+    const [slotToDelete, setSlotToDelete] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [ReasonError, setReasonError] = useState('');
+
+    const confirmDelete = async () => {
+
+        setDelData(true)
+
+        try {
+
+            if (!Reason) {
+                setReasonError('Reason Required');
+                setDelData(false);
+                return;
+            } else {
+                setReasonError('');
+                setReason('');
+            }
+
+            const apiUrl = `https://ocean21.in/api/public/api/single_delete`;
+
+            const response = await axios.post(apiUrl, {
+                id: slotToDelete,
+                updated_by: data.userempid,
+                reason: Reason,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const ResData = response.data
+
+            if (ResData.status === "success") {
+                const updatedDataList = datalist.filter(slot => slot.id !== slotToDelete);
+                setDatalist(updatedDataList);
+                setModalVisible(false);
+                setDelData(false);
+                setReasonError('');
+                setReason('');
+                handleShowAlert(ResData.message);
+            } else {
+                handleShowAlert1(ResData.message);
+                setModalVisible(false);
+                setDelData(false);
+                setReasonError('');
+                setReason('');
+            }
+
+        } catch (error) {
+            handleShowAlert2();
+            setDelData(false);
+        }
+    }
+
+    const HandleDelete = (Id) => {
+        setSlotToDelete(Id);
+        setModalVisible(true);
+    }
+
+    const cancelDelete = () => {
+        setSlotToDelete(null);
+        setModalVisible(false);
+        setReasonError('');
+        setReason('');
+    }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
+
+    // 
+
+    const ReadMail = async (id) => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/read_countupdate`;
+
+            const response = await axios.post(apiUrl, {
+                id: id,
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            if (response.data.status === "success") {
+                handleShowAlert(response.data.message);
+                fetchData();
+            } else {
+                handleShowAlert1(response.data.message);
+            }
+        } catch (error) {
+            handleShowAlert2();
+        }
+    }
+
+    const UnReadMail = async (id) => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/un_read_countupdate`;
+
+            const response = await axios.post(apiUrl, {
+                id: id,
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            if (response.data.status === "success") {
+                handleShowAlert(response.data.message);
+                fetchData();
+            } else {
+                handleShowAlert1(response.data.message);
+            }
+        } catch (error) {
+            handleShowAlert2();
+        }
+    }
+
+    // 
+
+    const [isChecked, setIsChecked] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('None');
+
+    const options = ['All', 'Read', 'Unread', 'None'];
+
+    // Determine if there are items with "Read" and "Unread" statuses
+    const hasReadItems = paginatedData.some(item => item.read_status == 1);
+    const hasUnreadItems = paginatedData.some(item => item.read_status == 0);
+
+    const isCheckedForItem = (item) => {
+        if (selectedOption === 'All') return true;
+        if (selectedOption === 'Read') return item.read_status == 1;
+        if (selectedOption === 'Unread') return item.read_status == 0;
+        return false;
+    };
+
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+        setDropdownVisible(false);
+        if (option === 'None') {
+            setIsChecked(false);
+        } else {
+            setIsChecked(true);
+        }
+    };
+
     return (
 
         <ScrollView>
@@ -82,6 +322,11 @@ const InboxResume = () => {
                     <TextInput
                         style={styles.search}
                         placeholder="Search"
+                        value={filterText}
+                        onChangeText={text => {
+                            setFilterText(text);
+                            setCurrentPage(1);
+                        }}
                     />
 
                     <View style={styles.searchIcon}>
@@ -95,7 +340,7 @@ const InboxResume = () => {
 
                         <Text style={styles.ButtonText}>
                             Read  <View style={styles.ButtonCount}>
-                                <Text style={styles.ButtonCountText}>148</Text>
+                                <Text style={styles.ButtonCountText}>{readCount}</Text>
                             </View>
                         </Text>
 
@@ -105,7 +350,7 @@ const InboxResume = () => {
 
                         <Text style={styles.ButtonText}>
                             Unread <View style={styles.ButtonCount}>
-                                <Text style={styles.ButtonCountText}>14</Text>
+                                <Text style={styles.ButtonCountText}>{unReadCount}</Text>
                             </View>
                         </Text>
 
@@ -113,7 +358,7 @@ const InboxResume = () => {
 
                 </View>
 
-                <View style={styles.ButtonView1}>
+                {selectedOption === "All" || selectedOption === 'Read' && hasReadItems || selectedOption === 'Unread' && hasUnreadItems ? <View style={styles.ButtonView1}>
 
                     <TouchableOpacity style={styles.Button1}>
                         <MailCloseIcon width={18} height={18} />
@@ -136,7 +381,7 @@ const InboxResume = () => {
                         </Text>
                     </TouchableOpacity>
 
-                </View>
+                </View> : null}
 
                 <ScrollView horizontal={true}>
 
@@ -147,13 +392,28 @@ const InboxResume = () => {
                             <View>
 
                                 <View style={[styles.row, styles.listHeader]}>
-                                    <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
+                                    <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
+                                        <CheckBox
+                                            value={isChecked}
+                                            onChange={() => setDropdownVisible(true)}
+                                            onValueChange={(newValue) => {
+                                                if (selectedOption === 'All' || selectedOption === 'Unread') {
+                                                    setIsChecked(newValue);
+                                                } else {
+                                                    setIsChecked(false);
+                                                }
+                                            }}
+                                            tintColors={{ true: '#20DDFE' }}
+                                            style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], marginRight: 10 }}
+                                        />
+                                        <Text>{selectedOption}</Text>
+                                    </View>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Designation</Text>
                                     <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Mobile No</Text>
                                     <Text style={[styles.header, styles.cell, styles.EndDate]}>Email</Text>
-                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Key Skills</Text>
-                                    <Text style={[styles.header, styles.cell, styles.EndDate]}>Resume</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Key Skills</Text>
+                                    <Text style={[styles.header, styles.cell, styles.Resume]}>Resume</Text>
                                     <Text style={[styles.header, styles.cell, styles.Action]}>Action</Text>
                                 </View>
 
@@ -162,11 +422,50 @@ const InboxResume = () => {
                                 ) : (
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
-                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.created_name}</Text>
-                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.message}</Text>
-                                            <Text style={[styles.cell, styles.StartDate]}>{item.created_at}</Text>
-                                            <Text style={[styles.cell, styles.EndDate]}>{item.updated_at}</Text>
+                                            <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
+                                                <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
+                                                    <CheckBox
+                                                        value={isCheckedForItem(item)}
+                                                        tintColors={{ true: '#20DDFE' }}
+                                                        style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], marginRight: 10 }}
+                                                    />
+                                                </View>
+                                            </View>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.designation}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.candidate_name}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.mobile_no}</Text>
+                                            <Text style={[styles.cell, styles.EndDate]}>{item.email}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.key_skills}</Text>
+
+                                            <View style={styles.listcontentButtonview}>
+                                                <TouchableOpacity
+                                                    onPress={() => handlePreview(item.attachment)}
+                                                    style={styles.listcontentviewbutton}>
+                                                    <ViewIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            <View style={styles.listcontentButtonview}>
+                                                {
+                                                    item.read_status == 0 ?
+                                                        <TouchableOpacity
+                                                            onPress={() => ReadMail(item.id)}
+                                                            style={styles.listcontentmailbutton}>
+                                                            <MailCloseIcon width={18} height={18} />
+                                                        </TouchableOpacity> :
+                                                        <TouchableOpacity
+                                                            onPress={() => UnReadMail(item.id)}
+                                                            style={styles.listcontentmailbutton}>
+                                                            <MailOpenIcon width={18} height={18} />
+                                                        </TouchableOpacity>
+                                                }
+                                                <TouchableOpacity
+                                                    onPress={() => HandleDelete(item.id)}
+                                                    style={styles.listcontentdelbutton}>
+                                                    <DeleteIcon width={14} height={14} color={"#000"} />
+                                                </TouchableOpacity>
+                                            </View>
+
                                         </View>
                                     ))
                                 )}
@@ -201,6 +500,87 @@ const InboxResume = () => {
                 </View>
 
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete This !</Text>
+                        <Text style={styles.modalText}>Reason:</Text>
+                        <TextInput
+                            value={Reason}
+                            onChangeText={(text) => setReason(text)}
+                            style={styles.Reason}
+                        />
+                        <Text style={styles.errorTextDelete}>
+                            {ReasonError}
+                        </Text>
+
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete}>
+                                <Text style={styles.modalCancelButtonText1}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete}>
+
+
+                                {
+                                    DelData ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                }
+
+
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                transparent={true}
+                visible={dropdownVisible}
+                animationType="slide"
+                onRequestClose={() => setDropdownVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <FlatList
+                            data={options}
+                            keyExtractor={(item) => item}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    style={styles.modalTextHeading1}
+                                    onPress={() => handleOptionSelect(item)}
+                                >
+                                    <Text style={styles.modalText}>{item}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </View>
+                </View>
+            </Modal>
 
         </ScrollView>
 
