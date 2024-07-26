@@ -78,13 +78,54 @@ const CustomDrawerContent = ({ navigation }) => {
         HRSupport: false,
         HelpDesk: false,
         Recruitment: false,
+        SalesManagement: false,
+        SalesManagementLead: false,
+        PreSalesDropdown: false,
+        SalesDropdown: false,
     });
+
+    const [openDropdown, setOpenDropdown] = useState(null);
 
     const toggleDropdown = (dropdown) => {
         setDropdowns((prevDropdowns) => ({
-            ...Object.fromEntries(Object.entries(prevDropdowns).map(([key, value]) => [key, key === dropdown ? !value : false])),
+            ...Object.fromEntries(
+                Object.entries(prevDropdowns).map(([key, value]) => [
+                    key,
+                    key === dropdown ? !value : false,
+                ])
+            ),
         }));
     };
+
+    const toggleDropdown1 = (dropdown) => {
+
+        setOpenDropdown((prevDropdown) =>
+            prevDropdown === dropdown ? null : dropdown
+        );
+
+        setDropdowns((prevDropdowns) => {
+            // Create a copy of the previous state
+            const newDropdowns = { ...prevDropdowns };
+
+            // Handle top-level dropdowns
+            if (['SalesManagement', 'PreSalesDropdown', 'SalesDropdown'].includes(dropdown)) {
+                newDropdowns[dropdown] = !prevDropdowns[dropdown];
+                // Close other top-level dropdowns
+                Object.keys(newDropdowns).forEach((key) => {
+                    if (key !== dropdown && !key.includes('SalesManagement') && !key.includes('PreSalesDropdown') && !key.includes('SalesDropdown')) {
+                        newDropdowns[key] = false;
+                    }
+                });
+            }
+            // Handle nested dropdowns
+            else if (['SalesManagementLead'].includes(dropdown)) {
+                newDropdowns[dropdown] = !prevDropdowns[dropdown];
+            }
+
+            return newDropdowns;
+        });
+    };
+
 
     // Data from Redux Store
 
@@ -1119,6 +1160,115 @@ const CustomDrawerContent = ({ navigation }) => {
                             </>
                         )}
                     </>
+
+                    {/*  */}
+
+                    <>
+                        <TouchableOpacity
+                            style={styles.dropdown}
+                            onPress={() => toggleDropdown('SalesManagement')}
+                        >
+                            <View style={styles.Tab}>
+                                <VistitorManageIcon width={20} height={20} color={'#000'} />
+                                <Text style={styles.dropdownText}>Sales Management</Text>
+                            </View>
+                            {dropdowns.SalesManagement ? (
+                                <DropupIcon width={15} height={15} color={'#000'} />
+                            ) : (
+                                <DropdownIcon width={15} height={15} color={'#000'} />
+                            )}
+                        </TouchableOpacity>
+
+                        {dropdowns.SalesManagement && (
+                            <>
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('SalesManagementLead')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Lead</Text>
+                                    </View>
+                                    {openDropdown === 'SalesManagementLead' ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {openDropdown === 'SalesManagementLead' && (
+                                    <>
+                                        <DrawerItem
+                                            label="Enquiry List"
+                                            onPress={() => navigation.navigate('Enquiry List')}
+                                        />
+                                        <DrawerItem
+                                            label="Add Lead"
+                                            onPress={() => navigation.navigate('Add Lead')}
+                                        />
+                                        <DrawerItem
+                                            label="Lead List"
+                                            onPress={() => navigation.navigate('Lead List')}
+                                        />
+                                    </>
+                                )}
+
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('PreSalesDropdown')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Pre Sales</Text>
+                                    </View>
+                                    {openDropdown === 'PreSalesDropdown' ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {openDropdown === 'PreSalesDropdown' && (
+                                    <>
+                                        <DrawerItem
+                                            label="Enquiry List"
+                                            onPress={() => navigation.navigate('Pre Enquiry List')}
+                                        />
+                                        <DrawerItem
+                                            label="Add Lead"
+                                            onPress={() => navigation.navigate('Pre Add Lead')}
+                                        />
+                                        <DrawerItem
+                                            label="Lead List"
+                                            onPress={() => navigation.navigate('Pre Lead List')}
+                                        />
+                                    </>
+                                )}
+
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('SalesDropdown')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Sales</Text>
+                                    </View>
+                                    {openDropdown === 'SalesDropdown' ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {openDropdown === 'SalesDropdown' && (
+                                    <>
+                                        <DrawerItem
+                                            label="Lead List"
+                                            onPress={() => navigation.navigate('Sales Lead List')}
+                                        />
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </>
+
 
                     {/* Logout */}
 

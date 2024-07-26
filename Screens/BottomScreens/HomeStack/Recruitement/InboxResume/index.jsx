@@ -197,6 +197,113 @@ const InboxResume = () => {
         setReason('');
     }
 
+    // 
+
+    const [selectedIds, setSelectedIds] = useState([]);
+    // 
+
+    const hasReadItems = paginatedData.some(item => item.read_status == 1);
+    const hasUnreadItems = paginatedData.some(item => item.read_status == 0);
+    const [selectedOption, setSelectedOption] = useState('None');
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const options = ['All', 'Read', 'Unread', 'None'];
+    console.log(selectedIds, "selectedIds");
+
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option)
+        switch (option) {
+            case 'All':
+                setSelectedIds(datalist.map(item => item.id));
+                break;
+            case 'Read':
+                setSelectedIds(datalist.filter(item => item.read_status == 1).map(item => item.id));
+                break;
+            case 'Unread':
+                setSelectedIds(datalist.filter(item => item.read_status == 0).map(item => item.id));
+                break;
+            case 'None':
+                setSelectedIds([]);
+                break;
+            default:
+                break;
+        }
+        setDropdownVisible(false);
+    };
+
+    const handleCheckboxChange = (id) => {
+        setSelectedIds((prevSelectedIds) =>
+            prevSelectedIds.includes(id)
+                ? prevSelectedIds.filter((selectedId) => selectedId !== id)
+                : [...prevSelectedIds, id]
+        );
+    };
+
+    const [DelData1, setDelData1] = useState(false);
+    const [Reason1, setReason1] = useState('');
+    const [modalVisible1, setModalVisible1] = useState(false);
+    const [ReasonError1, setReasonError1] = useState('');
+
+    const confirmDelete1 = async () => {
+
+        setDelData1(true)
+
+        try {
+
+            if (!Reason1) {
+                setReasonError1('Reason Required');
+                setDelData1(false);
+                return;
+            } else {
+                setReasonError1('');
+                setReason1('');
+            }
+
+            const apiUrl = `https://ocean21.in/api/public/api/bulk_delete`;
+
+            const response = await axios.post(apiUrl, {
+                id: selectedIds.join(', '),
+                updated_by: data.userempid,
+                reason: Reason1,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const ResData = response.data
+
+            if (ResData.status === "success") {
+                fetchData();
+                handleShowAlert(ResData.message);
+                setModalVisible1(false);
+                setDelData1(false);
+                setReasonError1('');
+                setReason1('');
+                setSelectedIds([]);
+            } else {
+                handleShowAlert1(ResData.message);
+                setModalVisible1(false);
+                setDelData1(false);
+                setReasonError1('');
+                setReason1('');
+            }
+
+        } catch (error) {
+            handleShowAlert2();
+            setDelData1(false);
+        }
+    }
+
+    const HandleDelete1 = () => {
+        setModalVisible1(true);
+    }
+
+    const cancelDelete1 = () => {
+        setModalVisible1(false);
+        setReasonError1('');
+        setReason1('');
+    }
+
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
 
@@ -256,6 +363,33 @@ const InboxResume = () => {
         }
     }
 
+    const BulkReadMail = async (id) => {
+
+        try {
+
+            const apiUrl = `https://ocean21.in/api/public/api/bulk_read_countupdate`;
+
+            const response = await axios.post(apiUrl, {
+                id: selectedIds.join(', '),
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            if (response.data.status === "success") {
+                handleShowAlert(response.data.message);
+                setSelectedIds([]);
+                fetchData();
+            } else {
+                handleShowAlert1(response.data.message);
+            }
+        } catch (error) {
+            handleShowAlert2();
+        }
+    }
+
     const UnReadMail = async (id) => {
 
         try {
@@ -282,34 +416,32 @@ const InboxResume = () => {
         }
     }
 
-    // 
+    const BulkUnReadMail = async (id) => {
 
-    const [isChecked, setIsChecked] = useState(false);
-    const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('None');
+        try {
 
-    const options = ['All', 'Read', 'Unread', 'None'];
+            const apiUrl = `https://ocean21.in/api/public/api/bulk_unread_countupdate`;
 
-    // Determine if there are items with "Read" and "Unread" statuses
-    const hasReadItems = paginatedData.some(item => item.read_status == 1);
-    const hasUnreadItems = paginatedData.some(item => item.read_status == 0);
+            const response = await axios.post(apiUrl, {
+                id: selectedIds.join(', '),
+                updated_by: data.userempid,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
 
-    const isCheckedForItem = (item) => {
-        if (selectedOption === 'All') return true;
-        if (selectedOption === 'Read') return item.read_status == 1;
-        if (selectedOption === 'Unread') return item.read_status == 0;
-        return false;
-    };
-
-    const handleOptionSelect = (option) => {
-        setSelectedOption(option);
-        setDropdownVisible(false);
-        if (option === 'None') {
-            setIsChecked(false);
-        } else {
-            setIsChecked(true);
+            if (response.data.status === "success") {
+                handleShowAlert(response.data.message);
+                setSelectedIds([])
+                fetchData();
+            } else {
+                handleShowAlert1(response.data.message);
+            }
+        } catch (error) {
+            handleShowAlert2();
         }
-    };
+    }
 
     return (
 
@@ -360,21 +492,21 @@ const InboxResume = () => {
 
                 {selectedOption === "All" || selectedOption === 'Read' && hasReadItems || selectedOption === 'Unread' && hasUnreadItems ? <View style={styles.ButtonView1}>
 
-                    <TouchableOpacity style={styles.Button1}>
+                    {selectedOption === 'Read' && hasReadItems || selectedOption === "All" ? <TouchableOpacity style={styles.Button1} onPress={() => BulkUnReadMail()}>
                         <MailCloseIcon width={18} height={18} />
                         <Text style={styles.ButtonText1}>
                             Mark as unread
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
-                    <TouchableOpacity style={styles.Button1}>
+                    {selectedOption === 'Unread' && hasUnreadItems || selectedOption === "All" ? <TouchableOpacity style={styles.Button1} onPress={() => BulkReadMail()}>
                         <MailOpenIcon width={18} height={18} />
                         <Text style={styles.ButtonText1}>
                             Mark as read
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
 
-                    <TouchableOpacity style={styles.Button2}>
+                    <TouchableOpacity style={styles.Button2} onPress={() => HandleDelete1()}>
                         <DeleteIcon width={14} height={14} color={"#BD0000"} />
                         <Text style={styles.ButtonText2}>
                             Delete
@@ -394,15 +526,8 @@ const InboxResume = () => {
                                 <View style={[styles.row, styles.listHeader]}>
                                     <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
                                         <CheckBox
-                                            value={isChecked}
+                                            value={selectedOption === 'All' || selectedOption === 'Read' && hasReadItems || selectedOption === 'Unread' && hasUnreadItems ? true : false}
                                             onChange={() => setDropdownVisible(true)}
-                                            onValueChange={(newValue) => {
-                                                if (selectedOption === 'All' || selectedOption === 'Unread') {
-                                                    setIsChecked(newValue);
-                                                } else {
-                                                    setIsChecked(false);
-                                                }
-                                            }}
                                             tintColors={{ true: '#20DDFE' }}
                                             style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], marginRight: 10 }}
                                         />
@@ -423,13 +548,12 @@ const InboxResume = () => {
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
                                             <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
-                                                <View style={[styles.cell, styles.sno, { alignItems: 'center' }]}>
-                                                    <CheckBox
-                                                        value={isCheckedForItem(item)}
-                                                        tintColors={{ true: '#20DDFE' }}
-                                                        style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], marginRight: 10 }}
-                                                    />
-                                                </View>
+                                                <CheckBox
+                                                    value={selectedIds.includes(item.id)}
+                                                    onValueChange={() => handleCheckboxChange(item.id)}
+                                                    tintColors={{ true: '#20DDFE' }}
+                                                    style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], marginRight: 10 }}
+                                                />
                                             </View>
                                             <Text style={[styles.cell, styles.DepartmentName]}>{item.designation}</Text>
                                             <Text style={[styles.cell, styles.EmployeeName]}>{item.candidate_name}</Text>
@@ -547,6 +671,45 @@ const InboxResume = () => {
 
                                 {
                                     DelData ?
+                                        <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                        <Text style={styles.modalDeleteButtonText}>Delete</Text>
+                                }
+
+
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible1}
+                onRequestClose={() => setModalVisible1(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTextHeading}>Are You Sure You Want To Delete All This !</Text>
+                        <Text style={styles.modalText}>Reason:</Text>
+                        <TextInput
+                            value={Reason1}
+                            onChangeText={(text) => setReason1(text)}
+                            style={styles.Reason}
+                        />
+                        <Text style={styles.errorTextDelete}>
+                            {ReasonError1}
+                        </Text>
+
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.modalCancelButton1} onPress={cancelDelete1}>
+                                <Text style={styles.modalCancelButtonText1}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalDeleteButton} onPress={confirmDelete1}>
+
+
+                                {
+                                    DelData1 ?
                                         <ActivityIndicator size={"small"} color={"#fff"} /> :
                                         <Text style={styles.modalDeleteButtonText}>Delete</Text>
                                 }

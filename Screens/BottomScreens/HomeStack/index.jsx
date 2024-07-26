@@ -121,6 +121,13 @@ import AddResume from "./Recruitement/AddResume";
 import EditResume from "./Recruitement/EditResume";
 import SearchResume from "./Recruitement/SearchResume";
 import InboxResume from "./Recruitement/InboxResume";
+import EnquiryList from "./SalesManagement/Lead/EnquiryList";
+import AddLead from "./SalesManagement/Lead/AddLead";
+import LeadList from "./SalesManagement/Lead/LeadList";
+import PreEnquiryList from "./SalesManagement/PreSales/PreEnquiryList";
+import PreAddLead from "./SalesManagement/PreSales/PreAddLead";
+import PreLeadList from "./SalesManagement/PreSales/PreLeadList";
+import SalesLeadList from "./SalesManagement/Sales/SalesLeadList";
 
 const Stack = createNativeStackNavigator();
 
@@ -333,6 +340,18 @@ const HomeStack = () => {
       <Stack.Screen name="Edit Resume" component={EditResume} />
       <Stack.Screen name="Search Resume" component={SearchResume} />
       <Stack.Screen name="Inbox Resume" component={InboxResume} />
+
+      {/*  */}
+
+      <Stack.Screen name="Enquiry List" component={EnquiryList} />
+      <Stack.Screen name="Add Lead" component={AddLead} />
+      <Stack.Screen name="Lead List" component={LeadList} />
+
+      <Stack.Screen name="Pre Enquiry List" component={PreEnquiryList} />
+      <Stack.Screen name="Pre Add Lead" component={PreAddLead} />
+      <Stack.Screen name="Pre Lead List" component={PreLeadList} />
+
+      <Stack.Screen name="Sales Lead List" component={SalesLeadList} />
 
     </Stack.Navigator>
   );
