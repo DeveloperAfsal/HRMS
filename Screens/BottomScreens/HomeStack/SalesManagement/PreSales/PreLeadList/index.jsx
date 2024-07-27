@@ -89,8 +89,8 @@ const PreLeadList = () => {
         try {
             const apiUrl = 'https://ocean21.in/api/public/api/view_leadlist';
             const response = await axios.post(apiUrl, {
-                e_id: "1",
-                role_id: "1"
+                e_id: data.userempid,
+                role_id: data.userrole
             }, {
                 headers: {
                     Authorization: `Bearer ${data.token}`

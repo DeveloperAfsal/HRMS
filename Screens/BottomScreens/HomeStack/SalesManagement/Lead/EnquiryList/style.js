@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     },
 
     listcontentButtonview: {
-        width: 100,
+        width: 120,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
