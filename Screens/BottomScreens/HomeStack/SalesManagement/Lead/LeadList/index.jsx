@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, ScrollView, Text, TextInput, View, TouchableOpacity, Alert, Linking } from "react-native";
 import SearchIcon from "../../../../../../Assets/Icons/Search.svg"
 import ArrowRightIcon from "../../../../../../Assets/Icons/ArrowRight.svg";
@@ -12,6 +12,7 @@ import RNFS from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { useFocusEffect } from "@react-navigation/native";
 
 const LeadList = () => {
 
@@ -106,9 +107,11 @@ const LeadList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     // Export-Excel 
 
