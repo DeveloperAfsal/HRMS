@@ -2,6 +2,24 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 
+    HeaderButtonActive: {
+        width: '25%',
+        height: 42,
+        borderRadius: 7,
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0A60F1',
+        borderColor: '#0A60F1',
+    },
+
+    HeaderButtonTextActive: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '700',
+        lineHeight: 18.62
+    },
+
     PolicyContainer: {
         alignItems: 'center',
         paddingBottom: '5%'
