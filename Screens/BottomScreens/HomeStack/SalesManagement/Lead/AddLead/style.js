@@ -4,6 +4,34 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
+    MDocFileName: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 21.28,
+        marginTop: '5%',
+        borderRadius: 5,
+        padding: '3%',
+        width: '100%',
+        backgroundColor: '#D4E7EB',
+    },
+
+    UploadButton1: {
+        backgroundColor: '#D4E7EB',
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        width: '100%',
+        marginVertical: '5%'
+    },
+
+    UploadButtonText1: {
+        color: '#3D3D3D',
+        fontWeight: '600',
+        fontSize: 13,
+        lineHeight: 17.92
+    },
+
     UploadButton: {
         backgroundColor: '#D4E7EB',
         height: 42,
@@ -423,6 +451,16 @@ const styles = StyleSheet.create({
     },
     Activeindicator: {
         marginTop: '50%'
+    },
+
+    StatDateText1: {
+        fontWeight: "600",
+        fontSize: 16,
+        lineHeight: 21.28,
+        paddingBottom: "3%",
+        marginVertical: '3%',
+        width: "90%",
+        color: '#2C2C2C',
     },
 
     StatDateText: {

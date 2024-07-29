@@ -6,7 +6,7 @@ import styles from "./style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const PreViewLead = ({ route }) => {
+const PreViewLead = ({ route, navigation }) => {
 
     // 
 
@@ -66,16 +66,12 @@ const PreViewLead = ({ route }) => {
 
     return (
         <>
-
-
-
-
             <ScrollView>
 
                 <View style={styles.PolicyContainer}>
 
                     <View style={{ marginTop: '10%', width: '90%', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={styles.HeaderButtonActive}>
+                        <TouchableOpacity style={styles.HeaderButtonActive} onPress={() => navigation.navigate('Pre Edit Lead', { SpecData: datalist, leadStatus: leadStatus })}>
                             <Text style={styles.HeaderButtonTextActive}>
                                 Edit
                             </Text>

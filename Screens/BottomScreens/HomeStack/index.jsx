@@ -130,6 +130,7 @@ import PreLeadList from "./SalesManagement/PreSales/PreLeadList";
 import SalesLeadList from "./SalesManagement/Sales/SalesLeadList";
 import ViewLead from "./SalesManagement/Lead/ViewLead";
 import PreViewLead from "./SalesManagement/PreSales/PreViewLead";
+import PreEditList from "./SalesManagement/PreSales/PreEditLead";
 
 const Stack = createNativeStackNavigator();
 
@@ -314,7 +315,6 @@ const HomeStack = () => {
       <Stack.Screen name="Assign Employee Salary" component={AssignEmpList} />
       <Stack.Screen name="Salary Calculation" component={SalaryCalculation} />
 
-
       {/*  */}
 
       <Stack.Screen name="Holiday" component={Holiday} />
@@ -352,12 +352,14 @@ const HomeStack = () => {
 
       <Stack.Screen name="Pre Enquiry List" component={PreEnquiryList} />
       <Stack.Screen name="Pre Add Lead" component={PreAddLead} />
+      <Stack.Screen name="Pre Edit Lead" component={PreEditList} />
       <Stack.Screen name="Pre Lead List" component={PreLeadList} />
       <Stack.Screen name="Pre View Lead" component={PreViewLead} />
 
       <Stack.Screen name="Sales Lead List" component={SalesLeadList} />
 
     </Stack.Navigator>
+    
   );
 
 }
