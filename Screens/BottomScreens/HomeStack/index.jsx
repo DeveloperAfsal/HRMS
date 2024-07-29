@@ -128,6 +128,8 @@ import PreEnquiryList from "./SalesManagement/PreSales/PreEnquiryList";
 import PreAddLead from "./SalesManagement/PreSales/PreAddLead";
 import PreLeadList from "./SalesManagement/PreSales/PreLeadList";
 import SalesLeadList from "./SalesManagement/Sales/SalesLeadList";
+import ViewLead from "./SalesManagement/Lead/ViewLead";
+import PreViewLead from "./SalesManagement/PreSales/PreViewLead";
 
 const Stack = createNativeStackNavigator();
 
@@ -346,10 +348,12 @@ const HomeStack = () => {
       <Stack.Screen name="Enquiry List" component={EnquiryList} />
       <Stack.Screen name="Add Lead" component={AddLead} />
       <Stack.Screen name="Lead List" component={LeadList} />
+      <Stack.Screen name="View Lead" component={ViewLead} />
 
       <Stack.Screen name="Pre Enquiry List" component={PreEnquiryList} />
       <Stack.Screen name="Pre Add Lead" component={PreAddLead} />
       <Stack.Screen name="Pre Lead List" component={PreLeadList} />
+      <Stack.Screen name="Pre View Lead" component={PreViewLead} />
 
       <Stack.Screen name="Sales Lead List" component={SalesLeadList} />
 

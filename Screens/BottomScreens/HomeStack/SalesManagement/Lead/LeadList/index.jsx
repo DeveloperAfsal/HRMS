@@ -14,7 +14,7 @@ import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { useFocusEffect } from "@react-navigation/native";
 
-const LeadList = () => {
+const LeadList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -228,17 +228,6 @@ const LeadList = () => {
         }
     };
 
-    const handlePreview = (UrlLink) => {
-        const baseUrl = 'https://ocean21.in/api/storage/app/';
-        const filePath = UrlLink;
-        const url = `${baseUrl}${filePath}`;
-        if (filePath && filePath !== "-") {
-            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
-        } else {
-            Alert.alert('No File Located')
-        }
-    }
-
     return (
         <ScrollView>
             <View style={styles.Container}>
@@ -315,7 +304,7 @@ const LeadList = () => {
                                             <Text style={[styles.cell, styles.EndDate]}>{item.updated_name}</Text>
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity
-                                                    onPress={() => handlePreview(item.consultfee_document)}
+                                                    onPress={() => navigation.navigate('View Lead', { Id: item })}
                                                     style={styles.listcontentviewbutton}>
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
