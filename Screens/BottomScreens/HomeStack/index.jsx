@@ -134,6 +134,7 @@ import PreEditList from "./SalesManagement/PreSales/PreEditLead";
 import SalesViewLead from "./SalesManagement/Sales/SalesViewLead";
 import SalesEditList from "./SalesManagement/Sales/SalesEditLead";
 import GoodService from "./Accounts/GoodService";
+import CompanyList from "./Accounts/CompanyList";
 
 const Stack = createNativeStackNavigator();
 
@@ -366,6 +367,7 @@ const HomeStack = () => {
       {/*  */}
 
       <Stack.Screen name="Good & Services" component={GoodService} />
+      <Stack.Screen name="Company List" component={CompanyList} />
 
     </Stack.Navigator>
     
