@@ -13,7 +13,7 @@ import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 import DocumentPicker from 'react-native-document-picker';
 
 
-const PreEditList = ({ navigation, route }) => {
+const SalesEditList = ({ navigation, route }) => {
 
     const SpecData = route.params.SpecData
     const leadStatus = route.params.leadStatus
@@ -418,7 +418,7 @@ const PreEditList = ({ navigation, route }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            navigation.navigate('Pre Lead List');
+            navigation.navigate('Sales Lead List');
         }, 2500);
     };
 
@@ -1366,4 +1366,4 @@ const PreEditList = ({ navigation, route }) => {
     )
 }
 
-export default PreEditList; 
+export default SalesEditList; 

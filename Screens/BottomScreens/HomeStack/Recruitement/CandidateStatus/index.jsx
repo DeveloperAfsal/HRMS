@@ -19,7 +19,7 @@ const CanStatus = ({ route, navigation }) => {
         { name: 'Joined' },
         { name: 'Offered' },
         { name: 'Shortlisted' },
-        { name: 'Reject' },
+        { name: 'Rejected' },
         { name: 'Not Suitable' }
     ];
 
@@ -134,7 +134,7 @@ const CanStatus = ({ route, navigation }) => {
                         navigation={navigation}
                     />}
 
-                    {activeComponent === 'Reject' && <Reject
+                    {activeComponent === 'Rejected' && <Reject
                         employeeData={employeeData}
                         loading={loading}
                         filteredData={filteredData}

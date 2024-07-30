@@ -535,7 +535,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.keySkills ? "key Skills Required" : null) : null}
+                        {validation ? (!Resume.keySkills ? "Key Skills Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -569,7 +569,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     </View>
 
                     <Text style={styles.errorText}>
-                    {validation ? (!docFile1 ? "Resume Reqquired" : null) : null}
+                    {validation ? (!docFile1 ? "Resume Required" : null) : null}
                     </Text>
 
                 </View>

@@ -82,6 +82,7 @@ const CustomDrawerContent = ({ navigation }) => {
         SalesManagementLead: false,
         PreSalesDropdown: false,
         SalesDropdown: false,
+        Account: false,
     });
 
     const [openDropdown, setOpenDropdown] = useState(null);
@@ -1109,7 +1110,7 @@ const CustomDrawerContent = ({ navigation }) => {
                         </>
                     )}
 
-                    {/*  */}
+                    {/* Recruitment */}
 
                     <>
                         <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Recruitment')}>
@@ -1161,7 +1162,7 @@ const CustomDrawerContent = ({ navigation }) => {
                         )}
                     </>
 
-                    {/*  */}
+                    {/* SalesManagement */}
 
                     <>
                         <TouchableOpacity
@@ -1269,6 +1270,39 @@ const CustomDrawerContent = ({ navigation }) => {
                         )}
                     </>
 
+                    {/*  */}
+
+                    <>
+                        <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Account')}>
+                            <View style={styles.Tab}>
+                                <LogsIcon width={20} height={20} color={'#000'} />
+                                <Text style={styles.dropdownText}>Account</Text>
+                            </View>
+                            {
+                                dropdowns.Account ? <DropupIcon width={15} height={15} color={'#000'} /> :
+                                    <DropdownIcon width={15} height={15} color={'#000'} />
+                            }
+                        </TouchableOpacity>
+
+                        {dropdowns.Account && (
+                            <>
+                                < DrawerItem
+                                    label="Good & Services"
+                                    onPress={() => navigation.navigate('Good & Services')}
+                                />
+
+                                < DrawerItem
+                                    label="Add Company"
+                                    onPress={() => navigation.navigate('Add Company')}
+                                />
+
+                                < DrawerItem
+                                    label="Company List"
+                                    onPress={() => navigation.navigate('Company List')}
+                                />
+                            </>
+                        )}
+                    </>
 
                     {/* Logout */}
 

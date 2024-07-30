@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Linking, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ViewIcon from "../../../../../../Assets/Icons/eyeopen.svg";
 import RadioGroup from 'react-native-radio-buttons-group';
-import styles from "./style";
+import styles from "../../PreSales/PreViewLead/style";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const PreViewLead = ({ route, navigation }) => {
+const SalesViewLead = ({ route, navigation }) => {
 
     // 
 
@@ -71,7 +71,7 @@ const PreViewLead = ({ route, navigation }) => {
                 <View style={styles.PolicyContainer}>
 
                     <View style={{ marginTop: '10%', width: '90%', alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={styles.HeaderButtonActive} onPress={() => navigation.navigate('Pre Edit Lead', { SpecData: datalist, leadStatus: leadStatus })}>
+                        <TouchableOpacity style={styles.HeaderButtonActive} onPress={() => navigation.navigate('Sales Edit Lead', { SpecData: datalist, leadStatus: leadStatus })}>
                             <Text style={styles.HeaderButtonTextActive}>
                                 Edit
                             </Text>
@@ -232,4 +232,4 @@ const PreViewLead = ({ route, navigation }) => {
 
 }
 
-export default PreViewLead;
+export default SalesViewLead;

@@ -414,7 +414,7 @@ const AddGeneral = ({
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.positionApplying ? "position Required" : null) : null}
+                        {validation ? (!Resume.positionApplying ? "Position Required" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -606,7 +606,7 @@ const AddGeneral = ({
                         <Text style={styles.StatusTouchableText}>
                             {selectededPrefCity.length > 0
                                 ? selectededPrefCity.join(', ')
-                                : 'Select Prefered City'}
+                                : 'Select Preferred City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -636,7 +636,7 @@ const AddGeneral = ({
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.languageKnown ? "language Required" : null) : null}
+                        {validation ? (!Resume.languageKnown ? "Language Required" : null) : null}
                     </Text>
 
                 </View>
