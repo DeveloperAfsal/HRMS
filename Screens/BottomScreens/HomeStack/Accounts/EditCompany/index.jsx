@@ -60,6 +60,10 @@ const EditCompany = ({ route, navigation }) => {
         setSelectedCountry(selectedCountry.name);
         setSelectedCountryId(selectedCountry.id);
         setDropdownVisible(false);
+        setSelectedCity([]);
+        setSelectedCityId([]);
+        setSelectedState([]);
+        setSelectedStateId([]);
     };
 
     const CountApi = async () => {
@@ -99,6 +103,8 @@ const EditCompany = ({ route, navigation }) => {
         setSelectedState(selectededState.name);
         setSelectedStateId(selectededState.id);
         setDropdownVisible1(false);
+        setSelectedCity([]);
+        setSelectedCityId([]);
     };
 
     const StateApi = async () => {
@@ -438,6 +444,9 @@ const EditCompany = ({ route, navigation }) => {
         setSelectedCountryId(datalist.country);
         setSelectedStateId(datalist.state);
         setSelectedCityId(datalist.city);
+        setSelectedCountry(datalist.countryname);
+        setSelectedState(datalist.statename);
+        setSelectedCity(datalist.cityname);
     }, [datalist])
 
     return (
@@ -500,7 +509,7 @@ const EditCompany = ({ route, navigation }) => {
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown}>
                         <Text style={styles.StatusTouchableText}>
-                            {selectedCountry.length > 0 ? selectedCountry : 'Select a country'}
+                            {selectedCountry && selectedCountry.length > 0 ? selectedCountry : 'Select a country'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -525,7 +534,7 @@ const EditCompany = ({ route, navigation }) => {
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown1}>
                         <Text style={styles.StatusTouchableText}>
-                            {selectededState.length > 0 ? selectededState : 'Select a State'}
+                            {selectededState && selectededState.length > 0 ? selectededState : 'Select a State'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>
@@ -550,7 +559,7 @@ const EditCompany = ({ route, navigation }) => {
 
                     <TouchableOpacity style={styles.StatusTouchable} onPress={toggleDropdown2}>
                         <Text style={styles.StatusTouchableText}>
-                            {selectededCity.length > 0 ? selectededCity : 'Select a City'}
+                            {selectededCity && selectededCity.length > 0 ? selectededCity : 'Select a City'}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
                     </TouchableOpacity>

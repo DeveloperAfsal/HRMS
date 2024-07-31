@@ -1300,6 +1300,11 @@ const CustomDrawerContent = ({ navigation }) => {
                                     label="Company List"
                                     onPress={() => navigation.navigate('Company List')}
                                 />
+
+                                < DrawerItem
+                                    label="Daily Account"
+                                    onPress={() => navigation.navigate('Daily Account')}
+                                />
                             </>
                         )}
                     </>
