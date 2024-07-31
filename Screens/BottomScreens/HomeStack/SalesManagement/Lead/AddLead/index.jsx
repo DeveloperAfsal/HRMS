@@ -168,8 +168,6 @@ const AddLead = ({ navigation }) => {
         CityApi();
     }, [selectededState])
 
-    // 
-
     // Select Gender
 
     const [showGender, setShowGender] = useState(false);

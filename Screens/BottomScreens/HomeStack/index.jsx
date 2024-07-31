@@ -135,6 +135,8 @@ import SalesViewLead from "./SalesManagement/Sales/SalesViewLead";
 import SalesEditList from "./SalesManagement/Sales/SalesEditLead";
 import GoodService from "./Accounts/GoodService";
 import CompanyList from "./Accounts/CompanyList";
+import EditCompany from "./Accounts/EditCompany";
+import AddCompany from "./Accounts/AddCompany";
 
 const Stack = createNativeStackNavigator();
 
@@ -368,9 +370,11 @@ const HomeStack = () => {
 
       <Stack.Screen name="Good & Services" component={GoodService} />
       <Stack.Screen name="Company List" component={CompanyList} />
+      <Stack.Screen name="Edit Company" component={EditCompany} />
+      <Stack.Screen name="Add Company" component={AddCompany} />
 
     </Stack.Navigator>
-    
+
   );
 
 }

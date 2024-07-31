@@ -293,7 +293,7 @@ const CompanyList = ({ navigation }) => {
     };
 
     return (
-        
+
         <ScrollView>
             <View style={styles.Container}>
 
@@ -362,7 +362,7 @@ const CompanyList = ({ navigation }) => {
 
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity style={styles.listcontenteditbutton}
-                                                // onPress={() => navigation.navigate('Edit Event', { Id: item })}
+                                                    onPress={() => navigation.navigate('Edit Company', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
@@ -479,6 +479,7 @@ const CompanyList = ({ navigation }) => {
 
             </View>
         </ScrollView>
+
     )
 }
 
