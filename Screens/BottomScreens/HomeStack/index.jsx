@@ -138,6 +138,9 @@ import CompanyList from "./Accounts/CompanyList";
 import EditCompany from "./Accounts/EditCompany";
 import AddCompany from "./Accounts/AddCompany";
 import DailyAcc from "./Accounts/DailyAccount";
+import OfferLetterList from "./Template/OfferLetter/OfferLetterList";
+import AppointmentLetterList from "./Template/AppointmentLetter/AppointmentLetterList";
+import RelievingLetterList from "./Template/ReleivingLetter/RelieivingLetterList";
 
 const Stack = createNativeStackNavigator();
 
@@ -374,6 +377,15 @@ const HomeStack = () => {
       <Stack.Screen name="Edit Company" component={EditCompany} />
       <Stack.Screen name="Add Company" component={AddCompany} />
       <Stack.Screen name="Daily Account" component={DailyAcc} />
+
+      {/*  */}
+
+      <Stack.Screen name="Offer Letter List" component={OfferLetterList} />
+
+      <Stack.Screen name="Appointment Letter List" component={AppointmentLetterList} />
+
+      <Stack.Screen name="Relieving Letter List" component={RelievingLetterList} />
+
 
     </Stack.Navigator>
 

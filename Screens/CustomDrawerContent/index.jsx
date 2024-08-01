@@ -82,10 +82,12 @@ const CustomDrawerContent = ({ navigation }) => {
         SalesManagementLead: false,
         PreSalesDropdown: false,
         SalesDropdown: false,
-        Account: false,
+        Template: false,
+        OfferLetter: false,
+        AppointmentLetter: false,
+        RelivingLetter: false,
+        Account: false
     });
-
-    const [openDropdown, setOpenDropdown] = useState(null);
 
     const toggleDropdown = (dropdown) => {
         setDropdowns((prevDropdowns) => ({
@@ -99,27 +101,19 @@ const CustomDrawerContent = ({ navigation }) => {
     };
 
     const toggleDropdown1 = (dropdown) => {
-
-        setOpenDropdown((prevDropdown) =>
-            prevDropdown === dropdown ? null : dropdown
-        );
-
-        setDropdowns((prevDropdowns) => {
-            // Create a copy of the previous state
+        setDropdowns(prevDropdowns => {
             const newDropdowns = { ...prevDropdowns };
 
-            // Handle top-level dropdowns
-            if (['SalesManagement', 'PreSalesDropdown', 'SalesDropdown'].includes(dropdown)) {
+            if (['SalesManagement', 'Template'].includes(dropdown)) {
+                // Toggle top-level dropdown and close others
                 newDropdowns[dropdown] = !prevDropdowns[dropdown];
-                // Close other top-level dropdowns
-                Object.keys(newDropdowns).forEach((key) => {
-                    if (key !== dropdown && !key.includes('SalesManagement') && !key.includes('PreSalesDropdown') && !key.includes('SalesDropdown')) {
+                Object.keys(newDropdowns).forEach(key => {
+                    if (key !== dropdown && (key.includes('SalesManagement') || key.includes('Template'))) {
                         newDropdowns[key] = false;
                     }
                 });
-            }
-            // Handle nested dropdowns
-            else if (['SalesManagementLead'].includes(dropdown)) {
+            } else if (['SalesManagementLead', 'PreSalesDropdown', 'SalesDropdown', 'OfferLetter', 'AppointmentLetter', 'RelivingLetter'].includes(dropdown)) {
+                // Toggle nested dropdown and keep parent open
                 newDropdowns[dropdown] = !prevDropdowns[dropdown];
             }
 
@@ -1189,14 +1183,14 @@ const CustomDrawerContent = ({ navigation }) => {
                                     <View style={styles.Tab}>
                                         <Text style={styles.dropdownText}>Lead</Text>
                                     </View>
-                                    {openDropdown === 'SalesManagementLead' ? (
+                                    {dropdowns.SalesManagementLead ? (
                                         <DropupIcon width={15} height={15} color={'#000'} />
                                     ) : (
                                         <DropdownIcon width={15} height={15} color={'#000'} />
                                     )}
                                 </TouchableOpacity>
 
-                                {openDropdown === 'SalesManagementLead' && (
+                                {dropdowns.SalesManagementLead && (
                                     <>
                                         <DrawerItem
                                             label="Enquiry List"
@@ -1220,14 +1214,14 @@ const CustomDrawerContent = ({ navigation }) => {
                                     <View style={styles.Tab}>
                                         <Text style={styles.dropdownText}>Pre Sales</Text>
                                     </View>
-                                    {openDropdown === 'PreSalesDropdown' ? (
+                                    {dropdowns.PreSalesDropdown ? (
                                         <DropupIcon width={15} height={15} color={'#000'} />
                                     ) : (
                                         <DropdownIcon width={15} height={15} color={'#000'} />
                                     )}
                                 </TouchableOpacity>
 
-                                {openDropdown === 'PreSalesDropdown' && (
+                                {dropdowns.PreSalesDropdown && (
                                     <>
                                         <DrawerItem
                                             label="Enquiry List"
@@ -1251,14 +1245,14 @@ const CustomDrawerContent = ({ navigation }) => {
                                     <View style={styles.Tab}>
                                         <Text style={styles.dropdownText}>Sales</Text>
                                     </View>
-                                    {openDropdown === 'SalesDropdown' ? (
+                                    {dropdowns.SalesDropdown ? (
                                         <DropupIcon width={15} height={15} color={'#000'} />
                                     ) : (
                                         <DropdownIcon width={15} height={15} color={'#000'} />
                                     )}
                                 </TouchableOpacity>
 
-                                {openDropdown === 'SalesDropdown' && (
+                                {dropdowns.SalesDropdown && (
                                     <>
                                         <DrawerItem
                                             label="Lead List"
@@ -1270,7 +1264,7 @@ const CustomDrawerContent = ({ navigation }) => {
                         )}
                     </>
 
-                    {/*  */}
+                    {/* Accounts */}
 
                     <>
                         <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Account')}>
@@ -1305,6 +1299,112 @@ const CustomDrawerContent = ({ navigation }) => {
                                     label="Daily Account"
                                     onPress={() => navigation.navigate('Daily Account')}
                                 />
+                            </>
+                        )}
+                    </>
+
+                    {/* Template */}
+
+                    <>
+                        <TouchableOpacity
+                            style={styles.dropdown}
+                            onPress={() => toggleDropdown('Template')}
+                        >
+                            <View style={styles.Tab}>
+                                <VistitorManageIcon width={20} height={20} color={'#000'} />
+                                <Text style={styles.dropdownText}>Template</Text>
+                            </View>
+                            {dropdowns.Template ? (
+                                <DropupIcon width={15} height={15} color={'#000'} />
+                            ) : (
+                                <DropdownIcon width={15} height={15} color={'#000'} />
+                            )}
+                        </TouchableOpacity>
+
+                        {dropdowns.Template && (
+                            <>
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('OfferLetter')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Offer Letter</Text>
+                                    </View>
+                                    {dropdowns.OfferLetter ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {dropdowns.OfferLetter && (
+                                    <>
+                                        <DrawerItem
+                                            label="Add Offer Letter"
+                                            onPress={() => navigation.navigate('Add Offer Letter')}
+                                        />
+                                        <DrawerItem
+                                            label="Offer Letter List"
+                                            onPress={() => navigation.navigate('Offer Letter List')}
+                                        />
+                                    </>
+                                )}
+
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('AppointmentLetter')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Appointment Letter</Text>
+                                    </View>
+                                    {dropdowns.AppointmentLetter ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {dropdowns.AppointmentLetter && (
+                                    <>
+                                        <DrawerItem
+                                            label="Add Appointment Letter"
+                                            onPress={() => navigation.navigate('Pre Add Appointment Letter')}
+                                        />
+
+                                        <DrawerItem
+                                            label="Appointment Letter List"
+                                            onPress={() => navigation.navigate('Appointment Letter List')}
+                                        />
+                                    </>
+                                )}
+
+                                <TouchableOpacity
+                                    style={styles.dropdown}
+                                    onPress={() => toggleDropdown1('RelivingLetter')}
+                                >
+                                    <View style={styles.Tab}>
+                                        <Text style={styles.dropdownText}>Reliving Letter</Text>
+                                    </View>
+                                    {dropdowns.RelivingLetter ? (
+                                        <DropupIcon width={15} height={15} color={'#000'} />
+                                    ) : (
+                                        <DropdownIcon width={15} height={15} color={'#000'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                {dropdowns.RelivingLetter && (
+                                    <>
+                                        <DrawerItem
+                                            label="Add Relieving Letter"
+                                            onPress={() => navigation.navigate('Add Relieving Letter')}
+                                        />
+
+                                        <DrawerItem
+                                            label="Relieving Letter List"
+                                            onPress={() => navigation.navigate('Relieving Letter List')}
+                                        />
+                                    </>
+                                )}
                             </>
                         )}
                     </>
