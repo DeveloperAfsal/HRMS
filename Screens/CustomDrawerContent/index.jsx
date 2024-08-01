@@ -1368,7 +1368,7 @@ const CustomDrawerContent = ({ navigation }) => {
                                     <>
                                         <DrawerItem
                                             label="Add Appointment Letter"
-                                            onPress={() => navigation.navigate('Pre Add Appointment Letter')}
+                                            onPress={() => navigation.navigate('Add Appointment Letter')}
                                         />
 
                                         <DrawerItem

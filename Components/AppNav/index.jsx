@@ -10,6 +10,7 @@ import ResetPassword from "../../Screens/Login/ResetPass/index.jsx";
 import Otp from "../../Screens/Login/OtpScreen/index.jsx";
 import { Alert } from "react-native";
 import LottieAlertSucess from "../../Assets/Alerts/Success";
+import AddRelievingLetter from "../../Screens/BottomScreens/HomeStack/Template/ReleivingLetter/AddRelievingLetter/index.jsx";
 
 
 const Stack = createNativeStackNavigator();
@@ -81,7 +82,7 @@ const AppNav = ({ navigation }) => {
                                 <Stack.Screen name="AppNavigator" component={AppNavigator} />
                             ) :
                                 (
-                                    <Stack.Screen name="Login Screen" component={LoginScreen} />
+                                    <Stack.Screen name="Login Screen" component={AddRelievingLetter} />
                                 )
                         ) : (
                             <Stack.Screen name="SplashScreen" component={SplashScreen} />
