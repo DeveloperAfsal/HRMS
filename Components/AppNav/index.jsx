@@ -11,6 +11,8 @@ import Otp from "../../Screens/Login/OtpScreen/index.jsx";
 import { Alert } from "react-native";
 import LottieAlertSucess from "../../Assets/Alerts/Success";
 import AddRelievingLetter from "../../Screens/BottomScreens/HomeStack/Template/ReleivingLetter/AddRelievingLetter/index.jsx";
+import AddAppoinmentLetter from "../../Screens/BottomScreens/HomeStack/Template/AppointmentLetter/AddAppoinmentLetter/index.jsx";
+import AddOfferLetter from "../../Screens/BottomScreens/HomeStack/Template/OfferLetter/AddOfferLetter/index.jsx";
 
 
 const Stack = createNativeStackNavigator();
@@ -82,7 +84,7 @@ const AppNav = ({ navigation }) => {
                                 <Stack.Screen name="AppNavigator" component={AppNavigator} />
                             ) :
                                 (
-                                    <Stack.Screen name="Login Screen" component={LoginScreen} />
+                                    <Stack.Screen name="Login Screen" component={AddOfferLetter} />
                                 )
                         ) : (
                             <Stack.Screen name="SplashScreen" component={SplashScreen} />
