@@ -851,7 +851,7 @@ const HomeScreen = ({ navigation }) => {
                                 <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
 
                                 <View style={styles.border}></View>
-                                
+
                                 <View style={styles.textview}>
                                     <Text style={styles.text}>What's your mood today? </Text>
                                 </View>
@@ -914,55 +914,55 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={styles.EmployeeModeBoardTitle}>Employee’s Mood Board</Text>
                         <View style={styles.border}></View>
 
-                            <View style={styles.EmoCheck}>
+                        <View style={styles.EmoCheck}>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'All' && styles.selectedOption]}
-                                    onPress={() => handleOptionClick('All')}>
-                                    <Text style={styles.MoodBoardText}>All ({moodList.total_count})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'All' && styles.selectedOption]}
+                                onPress={() => handleOptionClick('All')}>
+                                <Text style={styles.MoodBoardText}>All ({moodList.total_count})</Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'face_shy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                    onPress={() => handleOptionClick('face_shy')}
-                                >
-                                    <SmileIcon width={20} height={20} />
-                                    <Text>({moodList.mood_counts.face_shy})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'face_shy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('face_shy')}
+                            >
+                                <SmileIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.face_shy})</Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                    onPress={() => handleOptionClick('happy')}
-                                >
-                                    <LaughIcon width={20} height={20} />
-                                    <Text>({moodList.mood_counts.happy})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('happy')}
+                            >
+                                <LaughIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.happy})</Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'happy_positive' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                    onPress={() => handleOptionClick('happy_positive')}
-                                >
-                                    <DepressedIcon width={20} height={20} />
-                                    <Text>({moodList.mood_counts.happy_positive})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'happy_positive' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('happy_positive')}
+                            >
+                                <DepressedIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.happy_positive})</Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'love_happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                    onPress={() => handleOptionClick('love_happy')}
-                                >
-                                    <HeartFeelIcon width={20} height={20} />
-                                    <Text>({moodList.mood_counts.love_happy})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'love_happy' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('love_happy')}
+                            >
+                                <HeartFeelIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.love_happy})</Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={[styles.option, selectedOption === 'sad_smiley' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
-                                    onPress={() => handleOptionClick('sad_smiley')}
-                                >
-                                    <SadIcon width={20} height={20} />
-                                    <Text>({moodList.mood_counts.sad_smiley})</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.option, selectedOption === 'sad_smiley' && styles.selectedOption, { flexDirection: 'row', alignItems: 'center', gap: 5 }]}
+                                onPress={() => handleOptionClick('sad_smiley')}
+                            >
+                                <SadIcon width={20} height={20} />
+                                <Text>({moodList.mood_counts.sad_smiley})</Text>
+                            </TouchableOpacity>
 
-                            </View>
+                        </View>
 
                         <View>
                             {filteredData.slice(0, showAll ? transformedMoodboard.length : initialItemsToShow).map(item => (

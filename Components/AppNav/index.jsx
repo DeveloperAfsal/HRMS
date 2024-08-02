@@ -82,7 +82,7 @@ const AppNav = ({ navigation }) => {
                                 <Stack.Screen name="AppNavigator" component={AppNavigator} />
                             ) :
                                 (
-                                    <Stack.Screen name="Login Screen" component={AddRelievingLetter} />
+                                    <Stack.Screen name="Login Screen" component={LoginScreen} />
                                 )
                         ) : (
                             <Stack.Screen name="SplashScreen" component={SplashScreen} />

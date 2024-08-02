@@ -382,7 +382,7 @@ const HomeStack = () => {
       <Stack.Screen name="Daily Account" component={DailyAcc} />
 
       {/*  */}
-      
+
       <Stack.Screen name="Add Offer Letter" component={AddOfferLetter} />
       <Stack.Screen name="Offer Letter List" component={OfferLetterList} />
 
