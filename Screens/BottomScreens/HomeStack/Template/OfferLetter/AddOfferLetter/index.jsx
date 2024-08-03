@@ -6,8 +6,11 @@ import DocumentPicker from 'react-native-document-picker';
 import styles from "./style";
 import { useSelector } from "react-redux";
 import { format, parse } from 'date-fns';
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
-const AddOfferLetter = () => {
+const AddOfferLetter = ({navigation}) => {
 
     // data from redux store 
 
@@ -389,7 +392,7 @@ const AddOfferLetter = () => {
             formData.append('start_date', formattedStartDate1);
             formData.append('supervisor_name', supName);
             formData.append('authorised_person_name', aPName);
-            formData.append('authorised_person_designation', aPDesignation);
+            formData.append('authorised_designation', aPDesignation);
             formData.append('last_date_offer', formattedStartDate2);
             formData.append('created_by', data.userempid);
 
@@ -445,9 +448,85 @@ const AddOfferLetter = () => {
 
         } catch (error) {
             handleShowAlert2();
-            console.error('Error:', error.response.data);
             SetLoad(false);
         }
+    }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Offer Letter List')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
+
+    const Handlerefresh = () => {
+        setDocFile('');
+        setDocFile1('');
+        setDocFileErr('');
+        setDocFileErr1('');
+        setStartDate(null);
+        setStartDateErr('');
+        setStartDate1(null);
+        setStartDateErr1(null);
+        setStartDate2(null);
+        setStartDateErr2(null);
+        setEmpName('');
+        setEmpNameErr('');
+        setDesignation('');
+        setDesignationErr('');
+        setCName('');
+        setCNameErr('');
+        setAPName('');
+        setAPNameErr('');
+        setAPDesignation('');
+        setAPDesignationErr('');
+        setSupName('');
+        setSupNameErr('');
+        setBenefits('');
+        setBenefitsErr('');
+        setNotice('');
+        setNoticeErr('');
+        setProbation('');
+        setProbationErr('');
+        setWDays('');
+        setWDaysErr('');
+        setAnnual('');
+        setAnnualErr('');
+        setAddress('');
+        setAddress1('');
+        setAddress1Err('');
+        setAddressErr('');
+        setSelectedGender('');
+        setSelectedGenderErr('');
+        setSlotFromTime('00:00:00');
+        setSlotToTime('00:00:00');
+        setSlotFromTimeErr('');
+        setSlotToTimeErr('');
     }
 
     return (
@@ -741,6 +820,8 @@ const AddOfferLetter = () => {
                         value={benefits}
                         onChangeText={(txt) => setBenefits(txt)}
                         style={styles.inputs1}
+                        multiline={true}
+                        textAlignVertical="top"
                     />
 
                     <Text style={styles.errorText}>
@@ -850,12 +931,30 @@ const AddOfferLetter = () => {
                     }
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.HeaderButton} >
+                <TouchableOpacity style={styles.HeaderButton} onPress={Handlerefresh}>
                     <Text style={styles.HeaderButtonText}>
                         Cancel
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 

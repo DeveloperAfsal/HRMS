@@ -4,8 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DocumentPicker from 'react-native-document-picker';
 import styles from "./style";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
-const AddAppoinmentLetter = () => {
+const AddAppoinmentLetter = ({ navigation }) => {
 
     // data from redux store 
 
@@ -144,6 +147,38 @@ const AddAppoinmentLetter = () => {
         setShowDatePicker2(true);
     };
 
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Appointment Letter List')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
+
     // 
 
     const validateFields = () => {
@@ -164,27 +199,6 @@ const AddAppoinmentLetter = () => {
             setDocFileErr1('');
         }
 
-        if (!cName) {
-            setCNameErr('Enter Company Name');
-            isValid = false;
-        } else {
-            setCNameErr('');
-        }
-
-        if (!empName) {
-            setEmpNameErr('Enter Candidate Name');
-            isValid = false;
-        } else {
-            setEmpNameErr('');
-        }
-
-        if (!designation) {
-            setDesignationErr('Enter Designation');
-            isValid = false;
-        } else {
-            setDesignationErr('');
-        }
-
         if (!startDate) {
             setStartDateErr('Select Date');
             isValid = false;
@@ -192,32 +206,11 @@ const AddAppoinmentLetter = () => {
             setStartDateErr('');
         }
 
-        if (!startDate1) {
-            setStartDateErr1('Select Joining Date');
+        if (!empName) {
+            setEmpNameErr('Enter Candidate Name');
             isValid = false;
         } else {
-            setStartDateErr1('');
-        }
-
-        if (!startDate2) {
-            setStartDateErr2('Select Last Working Date');
-            isValid = false;
-        } else {
-            setStartDateErr2('');
-        }
-
-        if (!aPName) {
-            setAPNameErr('Enter Authorised Person Name');
-            isValid = false;
-        } else {
-            setAPNameErr('');
-        }
-
-        if (!aPDesignation) {
-            setAPDesignationErr('Enter Authorised Person Designation');
-            isValid = false;
-        } else {
-            setAPDesignationErr('');
+            setEmpNameErr('');
         }
 
         if (!address) {
@@ -234,13 +227,34 @@ const AddAppoinmentLetter = () => {
             setAddress1Err('');
         }
 
+        if (!designation) {
+            setDesignationErr('Enter Designation');
+            isValid = false;
+        } else {
+            setDesignationErr('');
+        }
+
+        if (!startDate1) {
+            setStartDateErr1('Select Joining Date');
+            isValid = false;
+        } else {
+            setStartDateErr1('');
+        }
+
+        if (!cName) {
+            setCNameErr('Enter Company Name');
+            isValid = false;
+        } else {
+            setCNameErr('');
+        }
+
         if (!grossSalary) {
             setGrossSalaryErr('Enter Gross Salary');
             isValid = false;
         } else {
             setGrossSalaryErr('');
         }
-
+        
         if (!probation) {
             setProbationErr('Enter Probation Period');
             isValid = false;
@@ -254,6 +268,20 @@ const AddAppoinmentLetter = () => {
         } else {
             setNoticeErr('');
         }
+
+        if (!aPName) {
+            setAPNameErr('Enter Authorised Person Name');
+            isValid = false;
+        } else {
+            setAPNameErr('');
+        }
+
+        if (!aPDesignation) {
+            setAPDesignationErr('Enter Authorised Person Designation');
+            isValid = false;
+        } else {
+            setAPDesignationErr('');
+        } 
 
         if (!empTC) {
             setEmpTCErr('Enter Employment Terms & Condition');
@@ -291,8 +319,8 @@ const AddAppoinmentLetter = () => {
             formData.append('probation_period', probation);
             formData.append('notice_period', "-");
             formData.append('noties_period_text', notice);
-            formData.append('authorised_person_name', aPName);
-            formData.append('authorised_person_designation', aPDesignation);
+            formData.append('authroised_person_name', aPName);
+            formData.append('authroised_designation', aPDesignation);
             formData.append('employment_tc', empTC);
             formData.append('created_by', data.userempid);
 
@@ -351,6 +379,39 @@ const AddAppoinmentLetter = () => {
             console.error('Error:', error.response.data);
             SetLoad(false);
         }
+    }
+
+    const Handlerefresh = () => {
+        setDocFile('');
+        setDocFile1('');
+        setDocFileErr('');
+        setDocFileErr1('');
+        setStartDate(null);
+        setStartDateErr('');
+        setStartDate1(null);
+        setStartDateErr1(null);
+        setEmpName('');
+        setEmpNameErr('');
+        setDesignation('');
+        setDesignationErr('');
+        setCName('');
+        setCNameErr('');
+        setAPName('');
+        setAPNameErr('');
+        setAPDesignation('');
+        setAPDesignationErr('');
+        setNotice('');
+        setNoticeErr('');
+        setProbation('');
+        setProbationErr('');
+        setAddress('');
+        setAddress1('');
+        setAddress1Err('');
+        setAddressErr('');
+        setGrossSalary('');
+        setGrossSalaryErr('');
+        setEmpTC('');
+        setEmpTCErr('');
     }
 
     return (
@@ -625,12 +686,30 @@ const AddAppoinmentLetter = () => {
                     }
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.HeaderButton} >
+                <TouchableOpacity style={styles.HeaderButton} onPress={Handlerefresh}>
                     <Text style={styles.HeaderButtonText}>
                         Cancel
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 

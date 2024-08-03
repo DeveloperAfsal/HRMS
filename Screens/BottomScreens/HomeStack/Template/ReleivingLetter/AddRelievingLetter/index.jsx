@@ -4,8 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DocumentPicker from 'react-native-document-picker';
 import styles from "./style";
 import { useSelector } from "react-redux";
+import LottieAlertSucess from "../../../../../../Assets/Alerts/Success";
+import LottieAlertError from "../../../../../../Assets/Alerts/Error";
+import LottieCatchError from "../../../../../../Assets/Alerts/Catch";
 
-const AddRelievingLetter = () => {
+const AddRelievingLetter = ({ navigation }) => {
 
     // data from redux store 
 
@@ -131,6 +134,31 @@ const AddRelievingLetter = () => {
     const showDatepicker2 = () => {
         setShowDatePicker2(true);
     };
+
+    // 
+
+    const Handlerefresh = () => {
+        setDocFile('');
+        setDocFile1('');
+        setDocFileErr('');
+        setDocFileErr1('');
+        setStartDate(null);
+        setStartDateErr('');
+        setStartDate1(null);
+        setStartDateErr(null);
+        setStartDate2(null);
+        setStartDateErr2(null);
+        setEmpName('');
+        setEmpNameErr('');
+        setDesignation('');
+        setDesignationErr('');
+        setCName('');
+        setCNameErr('');
+        setAPName('');
+        setAPNameErr('');
+        setAPDesignation('');
+        setAPDesignationErr('');
+    }
 
     // 
 
@@ -288,10 +316,41 @@ const AddRelievingLetter = () => {
 
         } catch (error) {
             handleShowAlert2();
-            console.error('Error:', error.response.data);
             SetLoad(false);
         }
     }
+
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [resMessage, setResMessage] = useState('');
+
+    const handleShowAlert = (res) => {
+        setAlertVisible(true);
+        setResMessage(res)
+        setTimeout(() => {
+            setAlertVisible(false);
+            navigation.navigate('Relieving Letter List')
+        }, 2500);
+    };
+
+    const [isAlertVisible1, setAlertVisible1] = useState(false);
+    const [resMessageFail, setResMessageFail] = useState('');
+
+    const handleShowAlert1 = (res) => {
+        setAlertVisible1(true);
+        setResMessageFail(res);
+        setTimeout(() => {
+            setAlertVisible1(false);
+        }, 2500);
+    };
+
+    const [isAlertVisible2, setAlertVisible2] = useState(false);
+
+    const handleShowAlert2 = () => {
+        setAlertVisible2(true);
+        setTimeout(() => {
+            setAlertVisible2(false);
+        }, 3000);
+    };
 
     return (
 
@@ -502,12 +561,30 @@ const AddRelievingLetter = () => {
                     }
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.HeaderButton} >
+                <TouchableOpacity style={styles.HeaderButton} onPress={Handlerefresh}>
                     <Text style={styles.HeaderButtonText}>
                         Cancel
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <LottieAlertSucess
+                visible={isAlertVisible}
+                animationSource={require('../../../../../../Assets/Alerts/tick.json')}
+                title={resMessage}
+            />
+
+            <LottieAlertError
+                visible={isAlertVisible1}
+                animationSource={require('../../../../../../Assets/Alerts/Close.json')}
+                title={resMessageFail}
+            />
+
+            <LottieCatchError
+                visible={isAlertVisible2}
+                animationSource={require('../../../../../../Assets/Alerts/Catch.json')}
+                title="Error While Fetching Data"
+            />
 
         </ScrollView>
 
