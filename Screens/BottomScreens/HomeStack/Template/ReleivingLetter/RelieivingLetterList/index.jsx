@@ -271,6 +271,7 @@ const RelievingLetterList = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.StartDate]}>{item.designation}</Text>
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity style={styles.listcontenteditbutton}
+                                                    onPress={() => navigation.navigate('Edit Relieving Letter', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
