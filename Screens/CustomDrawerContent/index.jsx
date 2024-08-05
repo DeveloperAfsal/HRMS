@@ -389,7 +389,6 @@ const CustomDrawerContent = ({ navigation }) => {
                     </LinearGradient>
                 </View>
 
-
             </TouchableOpacity>
 
             <DrawerContentScrollView style={styles.DrawerContentScrollView}>
@@ -677,7 +676,6 @@ const CustomDrawerContent = ({ navigation }) => {
                             )}
                         </>
                     )}
-
 
                     {/* TLapproval  */}
 
@@ -1270,7 +1268,7 @@ const CustomDrawerContent = ({ navigation }) => {
                         <TouchableOpacity style={styles.dropdown} onPress={() => toggleDropdown('Account')}>
                             <View style={styles.Tab}>
                                 <LogsIcon width={20} height={20} color={'#000'} />
-                                <Text style={styles.dropdownText}>Account</Text>
+                                <Text style={styles.dropdownText}>Accounts</Text>
                             </View>
                             {
                                 dropdowns.Account ? <DropupIcon width={15} height={15} color={'#000'} /> :
@@ -1298,6 +1296,16 @@ const CustomDrawerContent = ({ navigation }) => {
                                 < DrawerItem
                                     label="Daily Account"
                                     onPress={() => navigation.navigate('Daily Account')}
+                                />
+
+                                < DrawerItem
+                                    label="Add Sales Invoice"
+                                    onPress={() => navigation.navigate('Add Sales Invoice')}
+                                />
+
+                                < DrawerItem
+                                    label="Sales Invoice List"
+                                    onPress={() => navigation.navigate('Sales Invoice List')}
                                 />
                             </>
                         )}
