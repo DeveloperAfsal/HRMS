@@ -149,6 +149,8 @@ import EditOfferLetter from "./Template/OfferLetter/EditOfferLetter";
 import EditRelievingLetter from "./Template/ReleivingLetter/EditRelievingLetter";
 import AddSalesInvoice from "./Accounts/AddSalesInvoice";
 import SalesInvoiceList from "./Accounts/SalesInvoiceList";
+import PurchaseInvoiceList from "./Accounts/PurchaseInvoiceList";
+import AddPurchaseInvoice from "./Accounts/AddPurchaseInvoice";
 
 const Stack = createNativeStackNavigator();
 
@@ -386,7 +388,9 @@ const HomeStack = () => {
       <Stack.Screen name="Add Company" component={AddCompany} />
       <Stack.Screen name="Daily Account" component={DailyAcc} />
       <Stack.Screen name="Add Sales Invoice" component={AddSalesInvoice} />
+      <Stack.Screen name="Add Purchase Invoice" component={AddPurchaseInvoice} />
       <Stack.Screen name="Sales Invoice List" component={SalesInvoiceList} />
+      <Stack.Screen name="Purchase Invoice List" component={PurchaseInvoiceList} />
 
       {/*  */}
 

@@ -22,7 +22,7 @@ import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
-const SalesInvoiceList = ({ navigation }) => {
+const PurchaseInvoiceList = ({ navigation }) => {
 
     // data from redux store 
 
@@ -60,7 +60,7 @@ const SalesInvoiceList = ({ navigation }) => {
     const fetchData = async () => {
         setLoadData(true)
         try {
-            const apiUrl = 'https://ocean21.in/api/public/api/view_saleinvoice';
+            const apiUrl = 'https://ocean21.in/api/public/api/view_purchaseinvoice';
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -84,11 +84,11 @@ const SalesInvoiceList = ({ navigation }) => {
     // Export-Excel 
 
     const exportToExcel = async () => {
-        const tableHead = ['S.No', 'Date', 'Sales Invoice Number', 'Company Name', 'Overall Amount', 'Payment Method', 'Payment Status'];
+        const tableHead = ['S.No', 'Date', 'Purchase Invoice Number', 'Company Name', 'Overall Amount', 'Payment Method', 'Payment Status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.bill_date,
-            rowData.bill_number,
+            rowData.date,
+            rowData.sales_invoice_number,
             rowData.company_name,
             rowData.overall_amount,
             rowData.payment_method,
@@ -104,7 +104,7 @@ const SalesInvoiceList = ({ navigation }) => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/SalesInvoice_list.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/PurchaseInvoice_list.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -126,11 +126,11 @@ const SalesInvoiceList = ({ navigation }) => {
     // Export-PDF
 
     const exportToPDF = async () => {
-        const tableHead = ['S.No', 'Date', 'Sales Invoice Number', 'Company Name', 'Overall Amount', 'Payment Method', 'Payment Status'];
+        const tableHead = ['S.No', 'Date', 'Purchase Invoice Number', 'Company Name', 'Overall Amount', 'Payment Method', 'Payment Status'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.bill_date,
-            rowData.bill_number,
+            rowData.date,
+            rowData.sales_invoice_number,
             rowData.company_name,
             rowData.overall_amount,
             rowData.payment_method,
@@ -174,7 +174,7 @@ const SalesInvoiceList = ({ navigation }) => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'SalesInvoice_list',
+                fileName: 'PurchaseInvoice_list',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -226,7 +226,7 @@ const SalesInvoiceList = ({ navigation }) => {
                     setReason('');
                 }
 
-                const apiUrl = `https://ocean21.in/api/public/api/delete_saleinvoice`;
+                const apiUrl = `https://ocean21.in/api/public/api/delete_purchaseinvoice`;
 
                 const response = await axios.post(apiUrl, {
                     id: slotToDelete,
@@ -334,7 +334,7 @@ const SalesInvoiceList = ({ navigation }) => {
                                 <View style={[styles.row, styles.listHeader]}>
                                     <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Date</Text>
-                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Sales Invoice Number</Text>
+                                    <Text style={[styles.header, styles.cell, styles.StartDate]}>Purchase Invoice Number</Text>
                                     <Text style={[styles.header, styles.cell, styles.EndDate]}>Company Name</Text>
                                     <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Overall Amount</Text>
                                     <Text style={[styles.header, styles.cell, styles.WeekOff]}>Payment Method</Text>
@@ -348,8 +348,8 @@ const SalesInvoiceList = ({ navigation }) => {
                                     paginatedData.map((item, index) => (
                                         <View key={index} style={[styles.row, styles.listBody]}>
                                             <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.date}</Text>
-                                            <Text style={[styles.cell, styles.StartDate]}>{item.sales_invoice_number}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.bill_date}</Text>
+                                            <Text style={[styles.cell, styles.StartDate]}>{item.bill_number}</Text>
                                             <Text style={[styles.cell, styles.EndDate]}>{item.company_name}</Text>
                                             <Text style={[styles.cell, styles.ShiftSlot]}>{item.overall_amount}</Text>
                                             <Text style={[styles.cell, styles.WeekOff]}>{item.payment_method}</Text>
@@ -359,10 +359,6 @@ const SalesInvoiceList = ({ navigation }) => {
                                                 // onPress={() => navigation.navigate('Edit Event', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                    style={styles.listcontentviewbutton}>
-                                                    <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={styles.listcontentdelbutton}
                                                     onPress={() => HandleDelete(item.id)}
@@ -479,4 +475,4 @@ const SalesInvoiceList = ({ navigation }) => {
     )
 }
 
-export default SalesInvoiceList;
+export default PurchaseInvoiceList;

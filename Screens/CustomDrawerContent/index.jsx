@@ -1304,8 +1304,18 @@ const CustomDrawerContent = ({ navigation }) => {
                                 />
 
                                 < DrawerItem
+                                    label="Add Purchase Invoice"
+                                    onPress={() => navigation.navigate('Add Purchase Invoice')}
+                                />
+
+                                < DrawerItem
                                     label="Sales Invoice List"
                                     onPress={() => navigation.navigate('Sales Invoice List')}
+                                />
+
+                                < DrawerItem
+                                    label="Purchase Invoice List"
+                                    onPress={() => navigation.navigate('Purchase Invoice List')}
                                 />
                             </>
                         )}
