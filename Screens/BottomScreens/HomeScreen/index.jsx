@@ -22,8 +22,6 @@ import LottieAlertError from "../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../Assets/Alerts/Catch";
 import { check, request, PERMISSIONS } from 'react-native-permissions';
 
-
-
 const HomeScreen = ({ navigation }) => {
 
     // data from redux store 
@@ -355,32 +353,36 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const checkWiFiConnection = async () => {
-        try {
-            SetLoad(true);
-
-            const connectionInfo = await NetInfo.fetch();
-
-            if (connectionInfo.details) {
-                const ipAddress = connectionInfo.details.ipAddress;
-                setUseripaddress(ipAddress);
-
-                if (allowedipAddress.includes(ipAddress)) {
-                    if (userAlreadyLoggedIn == 1) {
-                        performCheckOut();
+        if (totalHours || totalHours === '00:00') {
+            Alert.alert('Oops','Working Hours Already Calculated')
+        } else {
+            try {
+                SetLoad(true);
+    
+                const connectionInfo = await NetInfo.fetch();
+    
+                if (connectionInfo.details) {
+                    const ipAddress = connectionInfo.details.ipAddress;
+                    setUseripaddress(ipAddress);
+    
+                    if (allowedipAddress.includes(ipAddress)) {
+                        if (userAlreadyLoggedIn == 1) {
+                            performCheckOut();
+                        } else {
+                            // handleFromGallery();
+                            // handleFromCamera();
+                            checkAndRequestCameraPermission();
+                        }
                     } else {
-                        // handleFromGallery();
-                        // handleFromCamera();
-                        checkAndRequestCameraPermission();
+                        console.log("Error: IP Address not allowed");
                     }
                 } else {
-                    console.log("Error: IP Address not allowed");
+                    console.log("Error: No connection details");
                 }
-            } else {
-                console.log("Error: No connection details");
+            } catch (error) {
+                console.error("Error in checkWiFiConnection:", error);
             }
-        } catch (error) {
-            console.error("Error in checkWiFiConnection:", error);
-        }
+        }   
 };
 
 // checkin function
@@ -499,6 +501,10 @@ const getInOutWorkingTime = async () => {
         Alert.alert('Error during login:', error);
     }
 };
+
+useEffect(()=>{
+    getInOutWorkingTime();
+},[])
 
 // 
 
