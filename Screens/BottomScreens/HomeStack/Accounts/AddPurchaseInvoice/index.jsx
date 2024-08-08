@@ -118,7 +118,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
 
     const [descriptional, setDescriptional] = useState([]);
     const [showDropdownDescriptional, setShowDropdownDescriptional] = useState(false);
-    const [selectedDescriptional, setSelectedDescriptional] = useState([]);
+    const [selectedDescriptional, setSelectedDescriptional] = useState('');
     const [selectedDescriptionalErr, setSelectedDescriptionalErr] = useState();
     const [selectedDescriptionalId, setSelectedDescriptionalId] = useState(null);
 
@@ -633,6 +633,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
         setReasonErr('');
         setStatusError(null);
         setSelectedStatus(null);
+        setSelectedDescriptionalErr('');
 
         setItems([{
             descriptionalGoodsId: '',
