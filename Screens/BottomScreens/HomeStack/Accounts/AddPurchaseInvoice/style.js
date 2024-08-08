@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     },
 
     HeaderButton: {
-        width: "25%",
+        width: "35%",
         height: 40,
         borderRadius: 7,
         borderWidth: 1,

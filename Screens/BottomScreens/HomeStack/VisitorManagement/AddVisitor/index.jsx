@@ -547,7 +547,7 @@ const AddVisitor = ({ navigation }) => {
                     <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
-                            {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Selected Document Type"}
+                            {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Select Document Type"}
                         </Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
 

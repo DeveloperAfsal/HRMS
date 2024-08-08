@@ -16,6 +16,39 @@ const AddPurchaseInvoice = ({ navigation }) => {
 
     // state
 
+    const [items, setItems] = useState([{
+        descriptionalGoodsId: '',
+        descriptionalGoods: '',
+        hsnSac: '',
+        hsnSacId: '',
+        quantity: '',
+        rate: '',
+        per: '',
+        amount: '',
+        editable: false
+    }]);
+
+    const addContainer = () => {
+
+        setItems([...items, {
+            descriptionalGoodsId: '',
+            descriptionalGoods: '',
+            hsnSac: '',
+            hsnSacId: '',
+            quantity: '',
+            rate: '',
+            per: '',
+            amount: '',
+            editable: false
+        }]);
+    };
+
+    const removeContainer = () => {
+        if (items.length > 1) {
+            setItems(items.slice(0, -1));
+        }
+    };
+
     const [invNumber, setInvNumber] = useState('');
     const [deliveryNote, setDeliveryNote] = useState('');
     const [paymentMode, setPaymentMode] = useState('');
@@ -27,22 +60,56 @@ const AddPurchaseInvoice = ({ navigation }) => {
     const [designation, setDesignation] = useState('');
     const [termsDelivery, setTermsDelivery] = useState('');
     const [otherDelivery, setOtherDelivery] = useState('');
-    const [CGST, setCGST] = useState('');
-    const [SGST, setSGST] = useState('');
-    const [IGST, setIGST] = useState('');
+    const [CGST, setCGST] = useState('0');
+    const [SGST, setSGST] = useState('0');
+    const [IGST, setIGST] = useState('0');
 
-    const [quality, setQuality] = useState('');
-    const [rate, setRate] = useState('');
-    const [per, setPer] = useState('');
-    const [amount, setAmount] = useState('');
+    const [GSTErr, setGSTErr] = useState('');
 
-    const [totalValueAmount, setTotalValueAmount] = useState('');
-    const [CGSTAmount, setCGSTAmount] = useState('');
-    const [SGSTAmount, setSGSTAmount] = useState('');
-    const [IGSTAmount, setIGSTAmount] = useState('');
-    const [totalInvoiceAmount, setTotalInvoiceAmount] = useState('');
-    const [roundOff, setRoundoff] = useState('');
+    const [totalValueAmount, setTotalValueAmount] = useState('0');
+    console.log(totalValueAmount,"totalValueAmount")
+    const [CGSTAmount, setCGSTAmount] = useState('0');
+    const [SGSTAmount, setSGSTAmount] = useState('0');
+    const [IGSTAmount, setIGSTAmount] = useState('0');
+    const [totalInvoiceAmount, setTotalInvoiceAmount] = useState('0');
+    const [roundOff, setRoundoff] = useState('0');
     const [reason, setReason] = useState('');
+
+    useEffect(() => {
+        const total = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+        setTotalValueAmount(total.toFixed(2)); 
+    }, [items]);
+
+    useEffect(() => {
+        const totalAmount = parseFloat(totalValueAmount) || 0;
+        const cgstPercentage = parseFloat(CGST) || 0;
+        const sgstPercentage = parseFloat(SGST) || 0;
+        const igstPercentage = parseFloat(IGST) || 0;
+
+        const cgstAmount = (totalAmount * cgstPercentage) / 100;
+        const sgstAmount = (totalAmount * sgstPercentage) / 100;
+        const igstAmount = (totalAmount * igstPercentage) / 100;
+
+        setCGSTAmount(cgstAmount.toFixed(2));
+        setSGSTAmount(sgstAmount.toFixed(2));
+        setIGSTAmount(igstAmount.toFixed(2));
+    }, [totalValueAmount, CGST, SGST, IGST]);
+
+    useEffect(() => {
+        const totalAmount = parseFloat(totalValueAmount) || 0;
+        const cgstAmount = parseFloat(CGSTAmount) || 0;
+        const sgstAmount = parseFloat(SGSTAmount) || 0;
+        const igstAmount = parseFloat(IGSTAmount) || 0;
+
+        const invoiceTotal = totalAmount + cgstAmount + sgstAmount + igstAmount;
+        setTotalInvoiceAmount(invoiceTotal.toFixed(2));
+    }, [totalValueAmount, CGSTAmount, SGSTAmount, IGSTAmount]);
+
+    useEffect(() => {
+        const roundedAmount = Math.round(parseFloat(totalInvoiceAmount) || 0);
+        setRoundoff(roundedAmount.toFixed(2)); 
+    }, [totalInvoiceAmount]);
+
 
     const [invNumberErr, setInvNumberErr] = useState('');
     const [reasonErr, setReasonErr] = useState('');
@@ -55,15 +122,25 @@ const AddPurchaseInvoice = ({ navigation }) => {
     const [selectedDescriptionalErr, setSelectedDescriptionalErr] = useState();
     const [selectedDescriptionalId, setSelectedDescriptionalId] = useState(null);
 
-    const selectDescriptional = (File) => {
-        setSelectedDescriptional(File.good_service_name);
-        setSelectedDescriptionalId(File.id);
-        setShowDropdownDescriptional(false);
-    };
-
     const toggleDropdownDescriptional = () => {
         setShowDropdownDescriptional(!showDropdownDescriptional);
     }
+
+    const selectDescriptional = (index, File) => {
+        setItems(prevItems => {
+            const updatedItems = [...prevItems];
+            if (updatedItems[index]) {
+                updatedItems[index].descriptionalGoods = File.good_service_name;
+                updatedItems[index].descriptionalGoodsId = File.id;
+                updatedItems[index].editable = true;
+                setShowDropdownDescriptional(false);
+
+            }
+            return updatedItems;
+        });
+        setSelectedDescriptional(File.good_service_name);
+    };
+
 
     const DescriptionalApi = async () => {
 
@@ -79,7 +156,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
             setDescriptional(responseData);
 
         } catch (error) {
-            console.error('Error fetching companyList data:', error);
+            console.error('Error fetching Descriptional data:', error);
         }
 
     }
@@ -88,13 +165,11 @@ const AddPurchaseInvoice = ({ navigation }) => {
         DescriptionalApi();
     }, [])
 
-    const [hsn, setHsn] = useState('');
-    const [hsnId, setHsnId] = useState('');
+    // 
 
-    const HsnApi = async () => {
-
+    const HsnApi = async (index, descriptionalGoodsId) => {
         try {
-            const apiUrl = `https://ocean21.in/api/public/api/sales_hsn_sac/${selectedDescriptionalId}`;
+            const apiUrl = `https://ocean21.in/api/public/api/sales_hsn_sac/${descriptionalGoodsId}`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${data.token}`
@@ -102,18 +177,56 @@ const AddPurchaseInvoice = ({ navigation }) => {
             });
 
             const responseData = response.data.data;
-            setHsn(responseData.hsn_sac);
-            setHsnId(responseData.id);
+            console.log(responseData, "responseData");
+
+            // Update the specific item in items state
+
+            if (responseData) {
+                setItems(prevItems => {
+                    const updatedItems = [...prevItems];
+                    if (updatedItems[index]) {
+                        updatedItems[index].hsnSac = responseData.hsn_sac;
+                    }
+                    return updatedItems;
+                });
+            }
+
 
         } catch (error) {
-            console.error('Error fetching companyList data:', error);
+            console.error('Error fetching HSN data:', error);
         }
+    };
 
-    }
+    const prevDescriptionalGoodsIdsRef = useRef([]);
 
     useEffect(() => {
-        HsnApi();
-    }, [selectedDescriptionalId])
+        const prevDescriptionalGoodsIds = prevDescriptionalGoodsIdsRef.current;
+        const currentDescriptionalGoodsIds = items.map(item => item.descriptionalGoodsId);
+
+        // Check for changes in descriptionalGoodsId
+        const hasChanged = currentDescriptionalGoodsIds.some((id, index) => id !== prevDescriptionalGoodsIds[index]);
+
+        if (hasChanged) {
+            items.forEach((item, index) => {
+                if (item.descriptionalGoodsId) {
+                    HsnApi(index, item.descriptionalGoodsId);
+                }
+            });
+        }
+
+        // Update the ref with the latest descriptionalGoodsId values
+        prevDescriptionalGoodsIdsRef.current = currentDescriptionalGoodsIds;
+    }, [items]);
+
+    const handleChange = (index, field, value) => {
+        const updatedItems = [...items];
+        if (updatedItems[index]) {
+            updatedItems[index][field] = value;
+            setItems(updatedItems);
+        } else {
+            console.error("Item at index not found");
+        }
+    };
 
     // 
 
@@ -307,35 +420,47 @@ const AddPurchaseInvoice = ({ navigation }) => {
 
         if (selectedDocument.length == 0) {
             setSelectedDocumentErr('Select Vendor Name')
+            isValid = false;
         } else {
             setSelectedDocumentErr('');
         }
 
         if (selectedDocument1.length == 0) {
-            setSelectedDocumentErr1('Select Ship To')
+            setSelectedDocumentErr1('Select Ship To');
+            isValid = false;
         } else {
             setSelectedDocumentErr1('');
         }
 
         if (selectedDocument2.length == 0) {
-            setSelectedDocumentErr2('Select Bill To')
+            setSelectedDocumentErr2('Select Bill To');
+            isValid = false;
         } else {
             setSelectedDocumentErr2('');
         }
 
         if (!invNumber) {
-            setInvNumberErr('Invoice Number Required')
+            setInvNumberErr('Invoice Number Required');
+            isValid = false;
         } else {
             setInvNumberErr('');
         }
 
         if (!startDate) {
             setStartDateErr('Date Required');
+            isValid = false;
         } else {
             setStartDateErr('');
         }
 
-        if (selectedDescriptional.length == 0) {
+        if (!CGST && !SGST && !IGST) {
+            setGSTErr('At least one of CGST, SGST, or IGST Percentage is required.')
+            isValid = false;
+        } else {
+            setGSTErr('');
+        }
+
+        if (!selectedDescriptional) {
             setSelectedDescriptionalErr('At least one Descriptional Goods is required.')
         } else {
             setSelectedDescriptionalErr('');
@@ -343,24 +468,28 @@ const AddPurchaseInvoice = ({ navigation }) => {
 
         if (!reason) {
             setReasonErr('Reason Required');
+            isValid = false;
         } else {
             setReasonErr('');
         }
 
         if (!selectedPayMethod) {
-            setPayMethodError('Payment Method required.')
+            setPayMethodError('Payment Method required.');
+            isValid = false;
         } else {
             setPayMethodError('');
         }
 
         if (!selectedPayStatus) {
-            setPayStatusError('Payment Status required.')
+            setPayStatusError('Payment Status required.');
+            isValid = false;
         } else {
             setPayStatusError('');
         }
 
         if (!selectedStatus) {
-            setStatusError('Status required.')
+            setStatusError('Status required.');
+            isValid = false;
         } else {
             setStatusError('');
         }
@@ -381,39 +510,141 @@ const AddPurchaseInvoice = ({ navigation }) => {
             return;
         }
 
-        // try {
+        const formData = new FormData();
 
-        //     const apiUrl = '';
+        try {
 
-        //     const response = await axios.post(apiUrl, {
-        //         created_by: data.userempid,
+            formData.append('vendor_id', selectedDocumentId);
+            formData.append('ship_to', selectedDocumentId1);
+            formData.append('bill_to', selectedDocumentId2);
+            formData.append('bill_number', invNumber);
+            formData.append('bill_date', formattedStartDate);
+            formData.append('delivery_note', deliveryNote || "-");
+            formData.append('delivery_date', formattedStartDate1);
 
-        //     }, {
-        //         headers: {
-        //             Authorization: `Bearer ${data.token}`
-        //         }
-        //     });
+            formData.append('mode_termsof_payment', paymentMode || "-");
 
-        //     const responseData = response.data;
+            formData.append('reference_no_date', referenceNo || 0);
+            formData.append('other_reference', otherReference || "-");
+            formData.append('buyers_order_no', orderNo || 0);
+            formData.append('order_date', formattedStartDate2);
+            formData.append('dispatch_doc_no', dispatchNo || 0);
 
-        //     if (responseData.status === "success") {
-        //         handleShowAlert(responseData.message);
-        //         SetLoad(false);
-        //         refresh();
-        //     } else {
-        //         handleShowAlert1(responseData.message);
-        //         SetLoad(false);
-        //     }
+            formData.append('dispatched_through', dispatchThrough || "-");
+            formData.append('destination', designation || "-");
+            formData.append('termsof_delivery', termsDelivery || "-");
+            formData.append('others_details', otherDelivery || "-");
+            formData.append('igst_percentage', IGST);
+            formData.append('cgst_percentage', CGST);
+            formData.append('sgst_percentage', SGST);
+            formData.append('roundedoff', roundOff);
+            formData.append('output_igst_amount', IGSTAmount);
+            formData.append('output_cgst_amount', CGSTAmount);
+            formData.append('output_sgst_amount', SGSTAmount);
+            formData.append('item_value_amount', totalValueAmount);
+            formData.append('overall_amount', totalInvoiceAmount);
+            formData.append('payment_method', selectedPayMethod);
+            formData.append('payment_status', selectedPayStatus);
+            formData.append('payment_reason', reason);
+            formData.append('status', selectedStatus);
 
-        // } catch (error) {
-        //     handleShowAlert2();
-        //     SetLoad(false);
-        // }
+            items.forEach((item, index) => {
+                formData.append('item_id[]', item.descriptionalGoodsId);
+                formData.append('quantity[]', item.quantity);
+                formData.append('rate[]', item.rate);
+                formData.append('per[]', item.per);
+                formData.append('amount[]', item.amount || 0);
+            });
+
+            formData.append('created_by', data.userrole);
+
+
+            const response = await fetch('https://ocean21.in/api/public/api/addpurchaseinvoice', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
+
+            const responseData = await response.json();
+
+            console.log(responseData, "appended")
+
+            if (responseData.status === "success") {
+                handleShowAlert(responseData.message);
+                SetLoad(false);
+                refresh();
+            } else {
+                handleShowAlert1(responseData.message);
+                SetLoad(false);
+            }
+
+        } catch (error) {
+            handleShowAlert2();
+            SetLoad(false);
+        }
 
     }
 
     const refresh = () => {
+        setSelectedDocument([]);
+        setSelectedDocumentErr('');
+        setSelectedDocumentId(null);
+        setSelectedDocument1([]);
+        setSelectedDocumentErr1('');
+        setSelectedDocumentId1(null);
+        setSelectedDocument2([]);
+        setSelectedDocumentErr2('');
+        setSelectedDocumentId2(null);
+        setInvNumber('');
+        setStartDate(null);
+        setStartDateErr(null);
+        setStartDate1(null);
+        setStartDateErr1(null);
+        setStartDate2(null);
+        setStartDateErr2(null);
+        setDeliveryNote('');
+        setPaymentMode('');
+        setReferenceNo('');
+        setOtherReference('');
+        setOrderNo('');
+        setDispatchNo('');
+        setDispatchThrough('');
+        setDesignation('');
+        setTermsDelivery('');
+        setOtherDelivery('');
+        setIGST(0);
+        setCGST(0);
+        setSGST(0);
+        setRoundoff(0);
+        setIGSTAmount(0);
+        setSGSTAmount(0);
+        setCGSTAmount(0);
+        setTotalValueAmount(0);
+        setTotalInvoiceAmount(0);
+        setSelectedPayMethod(null);
+        setPayMethodError(null);
+        setSelectedPayStatus(null);
+        setPayStatusError(null);
+        setReason('')
+        setReasonErr('');
+        setStatusError(null);
+        setSelectedStatus(null);
 
+        setItems([{
+            descriptionalGoodsId: '',
+            descriptionalGoods: '',
+            hsnSac: '',
+            hsnSacId: '',
+            quantity: '',
+            rate: '',
+            per: '',
+            amount: '',
+            editable: false
+        }]);
     }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
@@ -599,7 +830,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
                     </Text>
 
                     <View style={styles.inputs} >
-                        <Text onPress={showDatepicker}>
+                        <Text onPress={showDatepicker1}>
                             {startDate1 ? formatDate(startDate1) : "Select Date"} &nbsp;
                         </Text>
                         {showDatePicker1 && (
@@ -679,7 +910,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
                     </Text>
 
                     <View style={styles.inputs} >
-                        <Text onPress={showDatepicker}>
+                        <Text onPress={showDatepicker2}>
                             {startDate2 ? formatDate(startDate2) : "Select Date"} &nbsp;
                         </Text>
                         {showDatePicker2 && (
@@ -781,7 +1012,7 @@ const AddPurchaseInvoice = ({ navigation }) => {
                     />
 
                     <Text style={styles.errorText}>
-                        { }
+                        {GSTErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -821,119 +1052,110 @@ const AddPurchaseInvoice = ({ navigation }) => {
                     <Text style={styles.PolicyContainerTitleText}></Text>
                 </View>
 
-                <View style={styles.Inputcontainer}>
+                {items.map((item, index) => (
+                    <View key={index} style={[styles.Inputcontainer, { marginBottom: index === items.length - 1 ? 0 : '10%' }]}>
+                        <Text style={styles.StatDateText}>Descriptional Goods</Text>
 
-                    <Text style={styles.StatDateText}>
-                        Descriptional Goods
-                    </Text>
-
-                    <TouchableOpacity onPress={toggleDropdownDescriptional} style={styles.StatusTouchable}>
-
-                        <Text style={styles.StatusTouchableText}>
-                            {selectedDescriptional && selectedDescriptional.length > 0 ? selectedDescriptional : "Select Descriptional Goods"}
-                        </Text>
-                        <DropdownIcon width={14} height={14} color={"#000"} />
-
-                    </TouchableOpacity>
-
-                    {showDropdownDescriptional && (
-                        <View style={styles.dropdown}>
-                            {descriptional.map((File, index) => (
-                                <TouchableOpacity key={index} onPress={() => selectDescriptional(File)} style={styles.dropdownOption}>
-                                    <Text style={styles.dropdownOptionText}>{File.good_service_name}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
-
-                    <Text style={styles.errorText}>
-                        {selectedDescriptionalErr}
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        HSN / ASC
-                    </Text>
-
-                    <TextInput
-                        value={hsn}
-                        editable={false}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Quantity
-                    </Text>
-
-                    <TextInput
-                        value={quality}
-                        onChangeText={(txt) => setQuality(txt)}
-                        style={styles.inputs}
-                        keyboardType="number-pad"
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Rate
-                    </Text>
-
-                    <TextInput
-                        value={rate}
-                        onChangeText={(txt) => setRate(txt)}
-                        style={styles.inputs}
-                        keyboardType="number-pad"
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Per
-                    </Text>
-
-                    <TextInput
-                        value={per}
-                        onChangeText={(txt) => setPer(txt)}
-                        style={styles.inputs}
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <Text style={styles.StatDateText}>
-                        Amount
-                    </Text>
-
-                    <TextInput
-                        value={amount}
-                        onChangeText={(txt) => setAmount(txt)}
-                        style={styles.inputs}
-                        keyboardType="number-pad"
-                    />
-
-                    <Text style={styles.errorText}>
-                        { }
-                    </Text>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: '5%' }}>
-                        <TouchableOpacity style={styles.HeaderButtonActive} >
-                            <Text style={styles.HeaderButtonTextActive}>
-                                Add +
+                        <TouchableOpacity onPress={() => toggleDropdownDescriptional(index)} style={styles.StatusTouchable}>
+                            <Text style={styles.StatusTouchableText}>
+                                {item.descriptionalGoods || "Select Descriptional Goods"}
                             </Text>
+                            <DropdownIcon width={14} height={14} color={"#000"} />
                         </TouchableOpacity>
+
+                        {showDropdownDescriptional && (
+                            <View style={styles.dropdown}>
+                                {descriptional
+                                    .filter(option => !items.some(i => i.descriptionalGoodsId === option.id && items.indexOf(i) !== index))
+                                    .map((file, idx) => (
+                                        <TouchableOpacity
+                                            key={idx}
+                                            onPress={() => selectDescriptional(index, file)}
+                                            style={styles.dropdownOption}
+                                        >
+                                            <Text style={styles.dropdownOptionText}>{file.good_service_name}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                            </View>
+                        )}
+
+                        <Text style={styles.errorText}>
+                            {selectedDescriptionalErr}
+                        </Text>
+
+                        <Text style={styles.StatDateText}>HSN / ASC</Text>
+
+                        <TextInput
+                            value={item.hsnSac}
+                            editable={false}
+                            style={styles.inputs} />
+
+                        <Text style={styles.errorText}>{ }</Text>
+
+                        <Text style={styles.StatDateText}>Quantity</Text>
+
+                        <TextInput
+                            value={item.quantity}
+                            onChangeText={(txt) => handleChange(index, 'quantity', txt)}
+                            style={styles.inputs}
+                            keyboardType="number-pad"
+                            editable={item.editable} />
+
+                        <Text style={styles.errorText}>{ }</Text>
+
+                        <Text style={styles.StatDateText}>Rate</Text>
+
+                        <TextInput
+                            value={item.rate}
+                            onChangeText={(txt) => handleChange(index, 'rate', txt)}
+                            style={styles.inputs}
+                            keyboardType="number-pad"
+                            editable={item.editable} />
+
+
+                        <Text style={styles.errorText}>{ }</Text>
+
+                        <Text style={styles.StatDateText}>Per</Text>
+
+                        <TextInput
+                            value={item.per}
+                            onChangeText={(txt) => handleChange(index, 'per', txt)}
+                            style={styles.inputs}
+                            editable={item.editable} />
+
+
+                        <Text style={styles.errorText}>{ }</Text>
+
+                        <Text style={styles.StatDateText}>Amount</Text>
+
+                        <TextInput
+                            value={item.amount}
+                            onChangeText={(txt) => handleChange(index, 'amount', txt)}
+                            style={styles.inputs}
+                            keyboardType="number-pad"
+                            editable={item.editable} />
+
+
+                        <Text style={styles.errorText}>{ }</Text>
+
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: '5%' }}>
+
+                            {index === items.length - 1 && (
+                                <TouchableOpacity style={styles.HeaderButtonActive} onPress={addContainer}>
+                                    <Text style={styles.HeaderButtonTextActive}>Add +</Text>
+                                </TouchableOpacity>
+                            )}
+
+                            {index > 0 && (
+                                <TouchableOpacity style={styles.HeaderButton} onPress={removeContainer}>
+                                    <Text style={styles.HeaderButtonText}>Remove</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
                     </View>
+                ))}
 
-                </View>
-
-                <View style={styles.PolicyContainerTitleHeader}>
+                <View style={[styles.PolicyContainerTitleHeader]}>
                     <Text style={styles.PolicyContainerTitleText}></Text>
                 </View>
 
