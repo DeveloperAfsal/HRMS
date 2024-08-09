@@ -353,7 +353,7 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const checkWiFiConnection = async () => {
-        if (totalHours || totalHours === '00:00') {
+        if (totalHours !== "00:00:00") {
             Alert.alert('Oops','Working Hours Already Calculated')
         } else {
             try {
@@ -502,20 +502,41 @@ const getInOutWorkingTime = async () => {
     }
 };
 
+const getInOutWorkingTime1 = async () => {
+
+    try {
+
+        const apiUrl = 'https://ocean21.in/api/public/api/employeeIndexinouttime';
+
+        const response = await axios.post(apiUrl, {
+            emp_id: data.userempid
+        }, {
+            headers: {
+                Authorization: `Bearer ${data.token}`
+            }
+        });
+
+        console.log(response.data, "response")
+
+        if (response && response.data) {
+            const updatedata = response.data;
+            setLoggedInTime(updatedata.userempcheckintime);
+            setLoggedOutTime(updatedata.userempcheckouttime);
+            setTotalHours(updatedata.userempchecktotaltime);
+        }
+
+    } catch (error) {
+        Alert.alert('Error during login:', error);
+    }
+};
+
 useEffect(()=>{
-    getInOutWorkingTime();
+    getInOutWorkingTime1();
 },[])
 
 // 
 
 const [announcementList, setAnnouncementList] = useState([]);
-
-// const formatDate = (dateString) => {
-//     const today = new Date();
-//     const date = new Date(dateString);
-
-//     return date.toDateString() === today.toDateString() ? 'Today' : dateString;
-// };
 
 const Annlist = async () => {
 
