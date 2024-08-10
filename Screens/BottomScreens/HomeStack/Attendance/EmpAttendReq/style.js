@@ -415,11 +415,19 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         width: "90%"
     },
+
     errorText: {
         color: "red",
         paddingVertical: '3%',
         width: "90%"
     },
+
+    errorText1:{
+        color: "green",
+        paddingVertical: '3%',
+        width: "90%"
+    },
+
     Activeindicator: {
         marginTop: '50%'
     },

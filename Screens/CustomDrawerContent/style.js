@@ -76,7 +76,9 @@ const styles = StyleSheet.create({
     Tab: {
         display: 'flex',
         flexDirection: 'row',
-        gap: 30
+        alignItems:'center',
+        gap: 30,
+        height:50
     },
 
     shadowContainer: {

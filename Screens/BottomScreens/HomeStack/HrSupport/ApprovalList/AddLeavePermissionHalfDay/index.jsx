@@ -551,7 +551,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
         }, 3000);
     };
 
-    const filteredCategoryDropdown = CategoryDropdown.filter(item => item.leave_category_name !== "Absent");
+    // const filteredCategoryDropdown = CategoryDropdown.filter(item => item.leave_category_name !== "Absent");
 
     return (
 
@@ -682,7 +682,7 @@ const AddLeavePermissionHalfDay = ({ navigation }) => {
                 {showCategoryDropdown && (
                     <View style={styles.dropdown}>
                         <ScrollView>
-                            {filteredCategoryDropdown.map((item, index) => (
+                            {CategoryDropdown.map((item, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     style={styles.dropdownOption}

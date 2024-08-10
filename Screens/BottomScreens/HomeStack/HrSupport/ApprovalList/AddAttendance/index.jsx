@@ -362,14 +362,14 @@ const AddAttendance = ({ navigation }) => {
             const apiUrl = 'https://ocean21.in/api/public/api/add_attendancemenualentry';
 
             const response = await axios.post(apiUrl, {
-                emp_id: selectedMemberId,
-                hr_id: data.userempid,
+                emp_id: String(selectedMemberId),
+                hr_id: String(data.userempid),
                 request_date: formattedStartDate,
                 request_fromtime: slotfromTime,
                 request_totime: slotToTime,
-                request_type: selectedTypeId,
-                request_location: selectedLocationId,
-                shiftslot_id: selectedShiftId,
+                request_type: String(selectedTypeId),
+                request_location: String(selectedLocationId),
+                shiftslot_id: String(selectedShiftId),
                 request_reason: Reason
             }, {
                 headers: {

@@ -78,14 +78,14 @@ const MonthlyAttendance = () => {
         const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.first_name || '-',
+            rowData.days_present || '-',
+            rowData.days_leave || '-',
+            rowData.days_absent || '-',
+            rowData.days_halfday || '-',
+            rowData.days_late || '-',
+            rowData.days_permission || '-',
+            rowData.days_onduty || '-',
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -122,14 +122,14 @@ const MonthlyAttendance = () => {
         const tableHead = ['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.days_present,
-            rowData.days_leave,
-            rowData.days_absent,
-            rowData.days_halfday,
-            rowData.days_late,
-            rowData.days_permission,
-            rowData.days_onduty,
+            rowData.first_name || '-',
+            rowData.days_present || '-',
+            rowData.days_leave || '-',
+            rowData.days_absent || '-',
+            rowData.days_halfday || '-',
+            rowData.days_late || '-',
+            rowData.days_permission || '-',
+            rowData.days_onduty || '-',
         ]);
 
         const htmlContent = `

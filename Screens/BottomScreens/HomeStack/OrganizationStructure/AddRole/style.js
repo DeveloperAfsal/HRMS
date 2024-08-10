@@ -44,10 +44,15 @@ const styles = StyleSheet.create({
 
     checkView: {
         paddingTop: '5%',
-        paddingLeft: '5%',
+        // paddingLeft: '5%',
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10
+    },
+
+    checkView1:{
+        paddingTop: '5%',
+        gap: 10,
     },
 
     Header: {

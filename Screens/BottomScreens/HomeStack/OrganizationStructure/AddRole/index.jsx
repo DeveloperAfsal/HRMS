@@ -20,24 +20,254 @@ const AddRole = ({ navigation }) => {
     const [roleName, setRoleName] = useState('');
     const [nameError, setNameError] = useState('');
 
-    const initialFieldsState = [
-        { name: 'Dashboard', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
-        { name: 'ORGStructure', isChecked: false, subheadings: ['add_Role', 'roles_list', 'supervisor_list', 'empLevel_Category', 'emp_DocumentType', 'org_Chart'], checkboxes: Array(6).fill(false) },
-        { name: 'LeaveAndAttendancePolicy', isChecked: false, subheadings: ['addShiftSlot', 'assignEmployeeShift', 'attendancePolicy', 'attendanceType', 'attendanceLocation', 'leavePolicyType', 'leavePolicyCategory', '"leavePolicy"'], checkboxes: Array(7).fill(false) },
-        { name: 'Employee', isChecked: false, subheadings: ['Add_Employee', 'Emp_loyeeList', 'Employee_Confirmation'], checkboxes: Array(3).fill(false) },
-        { name: 'Attendance', isChecked: false, subheadings: ['DailyAttendance', 'Monthly_Attendance', 'Monthly_AttendanceCalendar', 'Monthly_List'], checkboxes: Array(4).fill(false) },
-        { name: 'HRSupport', isChecked: false, subheadings: ['Approval_List', 'Template', 'Job_Opening'], checkboxes: Array(3).fill(false) },
-        { name: 'TLApproval', isChecked: false, subheadings: ['Leave_Approval', 'OT_Approval'], checkboxes: Array(2).fill(false) },
-        { name: 'HelpDesk', isChecked: false, subheadings: ['Issue_Type', 'Raise_Ticket', 'Tickets_List', 'Assigned_List'], checkboxes: Array(0).fill(false) },
-        { name: 'Assets', isChecked: false, subheadings: ['Assets_Type', 'Assign_Asset', 'Asset_List'], checkboxes: Array(3).fill(false) },
-        { name: 'Events', isChecked: false, subheadings: ['Add_Event', 'Event_List'], checkboxes: Array(2).fill(false) },
-        { name: 'Meeting', isChecked: false, subheadings: ['Add_Meeting', 'Meeting_List'], checkboxes: Array(2).fill(false) },
-        { name: 'TeamTask', isChecked: false, subheadings: ['Add_Project', 'Project_List', 'Add_task', 'Task_List', 'Assigned_Task', 'TL_Assigned_Task'], checkboxes: Array(6).fill(false) },
-        { name: 'Payroll', isChecked: false, subheadings: ['OverTimeCalculation', 'Assign Employee Salary', 'Salarycalculation', 'Generate_payslip', 'Payslip_list'], checkboxes: Array(3).fill(false) },
-        { name: 'Holiday', isChecked: false, subheadings: [], checkboxes: Array(0).fill(false) },
-        { name: 'Visitiormanagement', isChecked: false, subheadings: ['Add_visitor', 'Visitor_log'], checkboxes: Array(2).fill(false) },
-        { name: 'Logs', isChecked: false, subheadings: ['Activity_Log', 'Employee_ActivityLog'], checkboxes: Array(2).fill(false) },
+    const [checkedNames, setCheckedNames] = useState({
+        'Dashboard': ['Dashboard'],
+        'EmployeeManagement': {
+            'ORGStructure': [],
+            'AttendancePolicy': [],
+            'CompanyPolicy': [],
+            'Employee': [],
+            'Template': {
+                'OfferLetter': [],
+                'AppointmentLetter': [],
+                'RelievingLetter': [],
+            }
+        },
+        'Attendance': [],
+        'HRSupport': [],
+        'TLApproval': [],
+        'HelpDesk': [],
+        'Assets': [],
+        'TeamManagement': {
+            'Events': {
+                'AddEvent': [],
+                'EventList': [],
+            },
+            'Meeting': {
+                'AddMeeting': [],
+                'MeetingList': [],
+            },
+            'TeamTask': {
+                'AddProject': [],
+                'ProjectList': [],
+                'AddTask': [],
+                'TaskList': [],
+                'AssignedTask': [],
+                'TLAssignedTask': [],
+            }
+        },
+        'Payroll': [],
+        'Holiday': [],
+        'Visitiormanagement': [],
+        'Logs': [],
+        'Recruitment': {
+            'PostJob': [],
+            'ListJob': [],
+            'InboxResume': [],
+            'CandidateTracker': {
+                'AddResume': [],
+                'CandidateStatus': [],
+            },
+            'SearchResume': [],
+        },
+        'Accounts': {
+            'GoodsandServices': [],
+            'CompanyDetails': {
+                'AddCompany': [],
+                'CompanyList': [],
+            },
+            'Purchase': {
+                'AddPurchase': [],
+                'PurchaseList': [],
+            },
+            'Sales': {
+                'AddSales': [],
+                'SalesList': [],
+            },
+            'DailyAccounts': [],
+        },
 
+        'SalesManagement': {
+            'Lead': {
+                'EnquiryList': [],
+                'AddLead': [],
+                'LeadList': [],
+            },
+            'PreSales': {
+                'EnquiryList': [],
+                'LeadList': [],
+                'AddLead': [],
+            },
+            'Sales': {
+                'LeadList': [],
+            }
+
+        },
+
+    });
+
+    const initializeCheckboxes = (subheadings) => {
+        const checkboxes = {};
+        for (const [key, value] of Object.entries(subheadings)) {
+            if (Array.isArray(value)) {
+                checkboxes[key] = value.map(() => false);
+            } else if (typeof value === 'object') {
+                checkboxes[key] = {};
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    checkboxes[key][subKey] = subValue.map(() => false);
+                }
+            }
+        }
+        return checkboxes;
+    };
+
+    const initialFieldsState = [
+
+        {
+            name: 'Dashboard',
+            isChecked: false,
+            subheadings: [],
+            checkboxes: []
+        },
+
+        {
+            name: 'EmployeeManagement',
+            isChecked: false,
+            subheadings: {
+                'ORGStructure': ['Add Role / Designation', 'Roles List', 'Supervisor List / Hierarchy', 'ORG chart'],
+                'AttendancePolicy': ['Attendance Slot', 'Leave Policy', 'Assign Employee Shift', 'Holiday'],
+                'CompanyPolicy': ['Company Policy'],
+                'Employee': ['Add Employee', 'Employee List', 'Probation Completion'],
+                'Template': {
+                    '':[],
+                    'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
+                    'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
+                    'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
+                },
+            },
+            checkboxes: initializeCheckboxes({
+                'ORGStructure': ['Add Role / Designation', 'Roles List', 'Supervisor List / Hierarchy', 'ORG chart'],
+                'AttendancePolicy': ['Attendance Slot', 'Leave Policy', 'Assign Employee Shift', 'Holiday'],
+                'CompanyPolicy': ['Company Policy'],
+                'Employee': ['Add Employee', 'Employee List', 'Probation Completion'],
+                'Template': {
+                    '':[],
+                    'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
+                    'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
+                    'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
+                },
+            })
+        },
+
+        {
+            name: 'AttendanceCalculation',
+            isChecked: false,
+            subheadings: ['DailyAttendance', 'Monthly_Attendance', 'Monthly_List', 'HR_Approval_List', 'TL_Approval_List'],
+            checkboxes: []
+        },
+
+        {
+            name: 'Recruitment',
+            isChecked: false,
+            subheadings: {
+                'Post Job': ['Post Job'],
+                'List Job': ['List Job'],
+                'Inbox Webmail': ['Inbox Webmail'],
+                'Candidate Tracker': ['Call Tracker', 'View Tracker'],
+                'Search Resume': ['Search Resume'],
+            },
+            checkboxes: initializeCheckboxes({
+                'Post Job': ['Post Job'],
+                'List Job': ['List Job'],
+                'Inbox Webmail': ['Inbox Webmail'],
+                'Candidate Tracker': ['Call Tracker', 'View Tracker'],
+                'Search Resume': ['Search Resume'],
+            })
+        },
+
+        {
+            name: 'Payroll',
+            isChecked: false,
+            subheadings: ['OverTimeCalculation', 'Assign Employee Salary', 'Salarycalculation', 'Generate_payslip', 'Payslip_list'],
+            checkboxes: []
+        },
+
+        {
+            name: 'Accounts',
+            isChecked: false,
+            subheadings: {
+                'Goods and Services': ['Goods and Services'],
+                'Company Details': ['Add Company', 'Company List'],
+                'Purchase': ['Add Purchase', 'Purchase List'],
+                'Sales': ['Add Sales', 'Sales List'],
+                'Daily Accounts': ['Daily Accounts'],
+            },
+            checkboxes: initializeCheckboxes({
+                'Goods and Services': ['Goods and Services'],
+                'Company Details': ['Add Company', 'Company List'],
+                'Purchase': ['Add Purchase', 'Purchase List'],
+                'Sales': ['Add Sales', 'Sales List'],
+                'Daily Accounts': ['Daily Accounts'],
+            })
+        },
+
+        {
+            name: 'SalesManagement',
+            isChecked: false,
+            subheadings: {
+                'Lead': ['Enquiry List', 'Add Lead', 'Lead List'],
+                'PreSales': ['Enquiry List', 'Add Lead', 'Lead List'],
+                'Sales': ['Lead List'],
+            },
+            checkboxes: initializeCheckboxes({
+                'Lead': ['Enquiry List', 'Add Lead', 'Lead List'],
+                'PreSales': ['Enquiry List', 'Add Lead', 'Lead List'],
+                'Sales': ['Lead List'],
+            })
+        },
+
+        {
+            name: 'VisitiorManagement',
+            isChecked: false,
+            subheadings: ['Add_visitor', 'Visitor_log'],
+            checkboxes: []
+        },
+
+        {
+            name: 'TeamManagement',
+            isChecked: false,
+            subheadings: {
+                'Events': ['Add Event', 'Event List'],
+                'Meeting': ['Add Meeting', 'Meeting List'],
+                'Team Task': ['Add Project', 'Project List', 'Add Task', 'Task List', 'Assigned Task']
+            },
+            checkboxes: initializeCheckboxes({
+                'Events': ['Add Event', 'Event List'],
+                'Meeting': ['Add Meeting', 'Meeting List'],
+                'Team Task': ['Add Project', 'Project List', 'Add Task', 'Task List', 'Assigned Task']
+            })
+        },
+
+        {
+            name: 'AssetManagement',
+            isChecked: false,
+            subheadings: ['Assets_Type', 'Assign_Asset', 'Asset_List'],
+            checkboxes: []
+        },
+
+        {
+            name: 'Helpdesk',
+            isChecked: false,
+            subheadings: ['Issue_Type', 'Raise_Ticket', 'Tickets_List', 'Assigned_List'],
+            checkboxes: []
+        },
+
+        {
+            name: 'Logs',
+            isChecked: false,
+            subheadings: ['Activity_Log', 'Employee_ActivityLog'],
+            checkboxes: []
+        },
     ];
 
     const [fields, setFields] = useState(initialFieldsState);
@@ -46,68 +276,88 @@ const AddRole = ({ navigation }) => {
 
     const toggleFieldCheckBox = (fieldIndex) => {
         const newFields = [...fields];
-        newFields[fieldIndex].isChecked = !newFields[fieldIndex].isChecked;
-        newFields[fieldIndex].checkboxes = newFields[fieldIndex].checkboxes.map(() => newFields[fieldIndex].isChecked);
-        setFields(newFields);
-        updateCheckedNames(fieldIndex, newFields[fieldIndex].isChecked);
-    };
+        const field = newFields[fieldIndex];
+        field.isChecked = !field.isChecked;
 
-    const toggleSubheadingCheckBox = (fieldIndex, subheadingIndex) => {
-        const newFields = [...fields];
-        newFields[fieldIndex].checkboxes[subheadingIndex] = !newFields[fieldIndex].checkboxes[subheadingIndex]; // Toggle the subheading checkbox state
-        setFields(newFields);
-        updateCheckedNames(fieldIndex, newFields[fieldIndex].checkboxes[subheadingIndex], subheadingIndex);
-    };
-
-    // checkbox Handler
-
-    const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null) => {
-        const newCheckedNames = { ...checkedNames };
-        const fieldName = fields[fieldIndex].name;
-        if (isChecked) {
-            if (subheadingIndex !== null) {
-                if (!newCheckedNames[fieldName]) {
-                    newCheckedNames[fieldName] = []; // Initialize as array if it doesn't exist
-                }
-                newCheckedNames[fieldName].push(fields[fieldIndex].subheadings[subheadingIndex]);
+        if (['EmployeeManagement', 'Recruitment', 'Accounts', 'SalesManagement', 'TeamManagement'].includes(field.name)) {
+            if (field.isChecked) {
+                field.checkboxes = initializeCheckboxes(field.subheadings);
             } else {
-                // Add the field name directly to the array if it has no subheadings
-                newCheckedNames[fieldName] = [fieldName];
+                field.checkboxes = Object.keys(field.subheadings).reduce((acc, key) => {
+                    acc[key] = Array.isArray(field.subheadings[key])
+                        ? field.subheadings[key].map(() => false)
+                        : Object.keys(field.subheadings[key]).reduce((subAcc, subKey) => {
+                            subAcc[subKey] = field.subheadings[key][subKey].map(() => false);
+                            return subAcc;
+                        }, {});
+                    return acc;
+                }, {});
             }
         } else {
-            if (subheadingIndex !== null) {
-                if (newCheckedNames[fieldName]) { // Check if the array exists
-                    const index = newCheckedNames[fieldName].indexOf(fields[fieldIndex].subheadings[subheadingIndex]);
-                    if (index !== -1) {
-                        newCheckedNames[fieldName].splice(index, 1);
+            field.checkboxes = field.subheadings.map(() => field.isChecked);
+        }
+
+        setFields(newFields);
+        updateCheckedNames(fieldIndex, field.isChecked);
+    };
+
+    const toggleSubheadingCheckBox = (fieldIndex, subheadingKey, subheadingIndex) => {
+        const newFields = [...fields];
+        const field = newFields[fieldIndex];
+
+        if (['EmployeeManagement', 'Recruitment', 'Accounts', 'SalesManagement', 'TeamManagement'].includes(field.name)) {
+            if (Array.isArray(field.checkboxes[subheadingKey])) {
+                field.checkboxes[subheadingKey][subheadingIndex] = !field.checkboxes[subheadingKey][subheadingIndex];
+            } else if (typeof field.checkboxes[subheadingKey] === 'object') {
+                const nestedSubheading = Object.keys(field.checkboxes[subheadingKey])[0];
+                field.checkboxes[subheadingKey][nestedSubheading][subheadingIndex] = !field.checkboxes[subheadingKey][nestedSubheading][subheadingIndex];
+            }
+        } else {
+            field.checkboxes[subheadingIndex] = !field.checkboxes[subheadingIndex];
+        }
+
+        setFields(newFields);
+        updateCheckedNames(fieldIndex, field.checkboxes[subheadingIndex], subheadingIndex, subheadingKey);
+    };
+
+
+    const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null, subheadingKey = null) => {
+        const newCheckedNames = { ...checkedNames };
+        const fieldName = fields[fieldIndex].name;
+
+        if (fieldName === 'EmployeeManagement') {
+            if (subheadingKey) {
+                if (isChecked) {
+                    if (!newCheckedNames[fieldName]) {
+                        newCheckedNames[fieldName] = {};
+                    }
+                    newCheckedNames[fieldName][subheadingKey] = fields[fieldIndex].subheadings[subheadingKey][subheadingIndex];
+                } else {
+                    if (newCheckedNames[fieldName] && newCheckedNames[fieldName][subheadingKey]) {
+                        delete newCheckedNames[fieldName][subheadingKey];
                     }
                 }
             } else {
-                // Remove the field name from the array if it has no subheadings
+                if (isChecked) {
+                    if (!newCheckedNames[fieldName]) {
+                        newCheckedNames[fieldName] = [];
+                    }
+                    newCheckedNames[fieldName].push(fieldName);
+                } else {
+                    delete newCheckedNames[fieldName];
+                }
+            }
+        } else {
+            if (isChecked) {
+                newCheckedNames[fieldName] = [fieldName];
+            } else {
                 delete newCheckedNames[fieldName];
             }
         }
+
         setCheckedNames(newCheckedNames);
     };
 
-    const [checkedNames, setCheckedNames] = useState({
-        'Dashboard': [],
-        'ORGStructure': [],
-        'LeaveAndAttendancePolicy': [],
-        'Employee': [],
-        'Attendance': [],
-        'HRSupport': [],
-        'TLApproval': [],
-        'HelpDesk': [],
-        'Assets': [],
-        'Events': [],
-        'Meeting': [],
-        'TeamTask': [],
-        'Payroll': [],
-        'Holiday': [],
-        'Visitiormanagement': [],
-        'Logs': [],
-    });
 
     // HandleSubmit
 
@@ -229,12 +479,10 @@ const AddRole = ({ navigation }) => {
                         </View>
                     </View>
 
-
-
                     {fields.map((field, fieldIndex) => (
                         <View key={fieldIndex}>
                             <View style={styles.checkView}>
-                                {['Dashboard', 'Holiday'].includes(field.name) && (
+                                {['Dashboard'].includes(field.name) && (
                                     <CheckBox
                                         disabled={false}
                                         value={field.isChecked}
@@ -246,20 +494,63 @@ const AddRole = ({ navigation }) => {
                                 <Text style={styles.FieldHeader}>{field.name}</Text>
                             </View>
 
-                            {field.subheadings.map((subheading, subheadingIndex) => (
-                                <View key={subheadingIndex} style={styles.checkView}>
-                                    <CheckBox
-                                        disabled={false}
-                                        value={field.checkboxes[subheadingIndex]}
-                                        onValueChange={() => toggleSubheadingCheckBox(fieldIndex, subheadingIndex)}
-                                        style={{ marginLeft: 20 }}
-                                        tintColors={{ true: '#20DDFE' }}
-                                    />
-                                    <Text style={styles.Subheading}>{subheading}</Text>
-                                </View>
-                            ))}
+                            <View style={styles.checkView1}>
+                                {['EmployeeManagement', 'Recruitment', 'Accounts', 'SalesManagement', 'TeamManagement'].includes(field.name) ? (
+                                    Object.keys(field.subheadings).map((subheadingKey) => (
+                                        <View key={subheadingKey}>
+                                            <Text style={styles.Subheading}>{subheadingKey}</Text>
+                                            {Array.isArray(field.subheadings[subheadingKey]) ? (
+                                                field.subheadings[subheadingKey].map((subheading, subheadingIndex) => (
+                                                    <View key={subheadingIndex} style={styles.checkView}>
+                                                        <CheckBox
+                                                            disabled={false}
+                                                            value={field.checkboxes[subheadingKey]?.[subheadingIndex] || false}
+                                                            onValueChange={() => toggleSubheadingCheckBox(fieldIndex, subheadingKey, subheadingIndex)}
+                                                            style={{ marginLeft: 20 }}
+                                                            tintColors={{ true: '#20DDFE' }}
+                                                        />
+                                                        <Text style={styles.Subheading}>{subheading}</Text>
+                                                    </View>
+                                                ))
+                                            ) : (
+                                                Object.keys(field.subheadings[subheadingKey]).map((nestedKey) => (
+                                                    <View key={nestedKey}>
+                                                        <Text style={styles.Subheading}>{nestedKey}</Text>
+                                                        {field.subheadings[subheadingKey][nestedKey].map((subheading, subheadingIndex) => (
+                                                            <View key={subheadingIndex} style={styles.checkView}>
+                                                                <CheckBox
+                                                                    disabled={false}
+                                                                    value={field.checkboxes[subheadingKey][nestedKey][subheadingIndex] || false}
+                                                                    onValueChange={() => toggleSubheadingCheckBox(fieldIndex, subheadingKey, subheadingIndex)}
+                                                                    style={{ marginLeft: 20 }}
+                                                                    tintColors={{ true: '#20DDFE' }}
+                                                                />
+                                                                <Text style={styles.Subheading}>{subheading}</Text>
+                                                            </View>
+                                                        ))}
+                                                    </View>
+                                                ))
+                                            )}
+                                        </View>
+                                    ))
+                                ) : (
+                                    field.subheadings.map((subheading, subheadingIndex) => (
+                                        <View key={subheadingIndex} style={styles.checkView}>
+                                            <CheckBox
+                                                disabled={false}
+                                                value={field.checkboxes[subheadingIndex]}
+                                                onValueChange={() => toggleSubheadingCheckBox(fieldIndex, null, subheadingIndex)}
+                                                style={{ marginLeft: 20 }}
+                                                tintColors={{ true: '#20DDFE' }}
+                                            />
+                                            <Text style={styles.Subheading}>{subheading}</Text>
+                                        </View>
+                                    ))
+                                )}
+                            </View>
                         </View>
                     ))}
+
 
                     <View style={styles.buttonview}>
 

@@ -232,7 +232,6 @@ const EmpLeaveReq = ({ navigation }) => {
                 setShiftName(ResData.shift_name);
                 setShiftErr('');
             } else if (ResData.status === "error") {
-                Alert.alert("Error", ResData.message);
                 setShiftErr(ResData.message)
                 setShiftName('');
             } else {
@@ -458,13 +457,7 @@ const EmpLeaveReq = ({ navigation }) => {
         setResMessage(res)
         setTimeout(() => {
             setAlertVisible(false);
-            // if (selectedCategory === "Permission") {
-            //     navigation.navigate('Permission Request');
-            // } else if (selectedCategory === "Leave") {
-            //     navigation.navigate('Leave Request');
-            // } else if (selectedCategory === "Half Day") {
-            //     navigation.navigate('HalfDay Request');
-            // }
+            navigation.navigate('Dashboard');
             Handlerefresh();
         }, 2500);
     };
@@ -632,11 +625,19 @@ const EmpLeaveReq = ({ navigation }) => {
                                 )}
                             </View>
 
-                            <Text style={styles.errorText}>
-                                {slotToTimeErr}
-                                {shiftErr}
-                                {shiftName}
-                            </Text>
+                            {
+                                shiftName ? <Text style={styles.errorText1}>
+                                    {shiftName}
+                                </Text> : null
+                            }
+                            {
+                                slotToTimeErr || shiftErr ?
+                                    <Text style={styles.errorText}>
+                                        {slotToTimeErr}
+                                        {shiftErr}
+                                    </Text> : null
+                            }
+
                         </> : null
                     }
 

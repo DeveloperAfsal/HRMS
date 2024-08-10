@@ -245,7 +245,7 @@ const LeaveCount = () => {
                                 <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Date</Text>
                                 <Text style={[styles.header, styles.cell, styles.StartDate]}>In-Time</Text>
                                 <Text style={[styles.header, styles.cell, styles.EndDate]}>Out-Time</Text>
-                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>p/A/L/HL</Text>
+                                <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>P/A/L/HL</Text>
                                 <Text style={[styles.header, styles.cell, styles.WeekOff]}>LA</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>PR</Text>
                                 <Text style={[styles.header, styles.cell, styles.Status]}>OT</Text>

@@ -102,15 +102,15 @@ const AttendanceRequest = () => {
         const tableHead = ['S.No', 'Employee Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.checkin_date,
-            rowData.checkin_time,
-            rowData.checkout_time,
-            rowData.emp_present,
-            rowData.emp_late,
-            rowData.emp_permission,
-            rowData.emp_onduty,
-            rowData.checkout_total_hours,
+            rowData.first_name || '-',
+            rowData.checkin_date || '-',
+            rowData.checkin_time || '-',
+            rowData.checkout_time || '-',
+            rowData.emp_present || '-',
+            rowData.emp_late || '-',
+            rowData.emp_permission || '-',
+            rowData.emp_onduty || '-',
+            rowData.checkout_total_hours || '-',
         ]);
 
         const csvString = tableHead.join(',') + '\n' +
@@ -147,15 +147,15 @@ const AttendanceRequest = () => {
         const tableHead = ['S.No', 'Employee Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours'];
         const tableData1 = datalist.map((rowData, index) => [
             index + 1,
-            rowData.first_name,
-            rowData.checkin_date,
-            rowData.checkin_time,
-            rowData.checkout_time,
-            rowData.emp_present,
-            rowData.emp_late,
-            rowData.emp_permission,
-            rowData.emp_onduty,
-            rowData.checkout_total_hours,
+            rowData.first_name || '-',
+            rowData.checkin_date || '-',
+            rowData.checkin_time || '-',
+            rowData.checkout_time || '-',
+            rowData.emp_present || '-',
+            rowData.emp_late || '-',
+            rowData.emp_permission || '-',
+            rowData.emp_onduty || '-',
+            rowData.checkout_total_hours || '-',
         ]);
 
         const htmlContent = `
