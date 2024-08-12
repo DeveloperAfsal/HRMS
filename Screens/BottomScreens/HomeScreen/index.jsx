@@ -353,7 +353,7 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const checkWiFiConnection = async () => {
-        if (totalHours === "00:00:00") {
+        if (totalHours === "00:00:00" || totalHours === "00:00") {
             try {
                 SetLoad(true);
     
