@@ -10,557 +10,553 @@ import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
-const EditSalesInvoice = ({ navigation }) => {
+const EditSalesInvoice = ({ route,navigation }) => {
+
+    // route
+
+    const SpecId = route.params.Id.id;
 
     const { data } = useSelector((state) => state.login);
 
+    // 
+
+    const [invoiceData, setInvoiceData] = useState('');
+    const [invoiceItem, setInvoiceItem] = useState([]);
+
+    const getApi = async () => {
+
+        try {
+            const apiUrl = `https://ocean21.in/api/public/api/editview_saleinvoice/${SpecId}`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setInvoiceData(responseData.involicedata || {});
+            setInvoiceItem(Array.isArray(responseData.invoiceitem) ? responseData.invoiceitem : []);
+
+        } catch (error) {
+            console.error('Error fetching Count data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        getApi();
+    }, [SpecId])
+
     // state
 
-    // const [items, setItems] = useState([{
-    //     descriptionalGoodsId: '',
-    //     descriptionalGoods: '',
-    //     hsnSac: '',
-    //     hsnSacId: '',
-    //     quantity: '',
-    //     rate: '',
-    //     per: '',
-    //     amount: '',
-    //     editable: false
-    // }]);
-
-    // const addContainer = () => {
-
-    //     setItems([...items, {
-    //         descriptionalGoodsId: '',
-    //         descriptionalGoods: '',
-    //         hsnSac: '',
-    //         hsnSacId: '',
-    //         quantity: '',
-    //         rate: '',
-    //         per: '',
-    //         amount: '',
-    //         editable: false
-    //     }]);
-    // };
-
-    // const removeContainer = () => {
-    //     if (items.length > 1) {
-    //         setItems(items.slice(0, -1));
-    //     }
-    // };
-
-    // // 
-
-    // const [CGST, setCGST] = useState('0');
-    // const [SGST, setSGST] = useState('0');
-    // const [IGST, setIGST] = useState('0');
-
-    // const [GSTErr, setGSTErr] = useState('');
-
-    // const [totalValueAmount, setTotalValueAmount] = useState('0');
-    // const [CGSTAmount, setCGSTAmount] = useState('0');
-    // const [SGSTAmount, setSGSTAmount] = useState('0');
-    // const [IGSTAmount, setIGSTAmount] = useState('0');
-    // const [totalInvoiceAmount, setTotalInvoiceAmount] = useState('0');
-    // const [roundOff, setRoundoff] = useState('0');
-    // const [reason, setReason] = useState('');
-
-    // useEffect(() => {
-    //     const total = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
-    //     setTotalValueAmount(total.toFixed(2));
-    // }, [items]);
-
-    // useEffect(() => {
-    //     const totalAmount = parseFloat(totalValueAmount) || 0;
-    //     const cgstPercentage = parseFloat(CGST) || 0;
-    //     const sgstPercentage = parseFloat(SGST) || 0;
-    //     const igstPercentage = parseFloat(IGST) || 0;
-
-    //     const cgstAmount = (totalAmount * cgstPercentage) / 100;
-    //     const sgstAmount = (totalAmount * sgstPercentage) / 100;
-    //     const igstAmount = (totalAmount * igstPercentage) / 100;
-
-    //     setCGSTAmount(cgstAmount.toFixed(2));
-    //     setSGSTAmount(sgstAmount.toFixed(2));
-    //     setIGSTAmount(igstAmount.toFixed(2));
-    // }, [totalValueAmount, CGST, SGST, IGST]);
-
-    // useEffect(() => {
-    //     const totalAmount = parseFloat(totalValueAmount) || 0;
-    //     const cgstAmount = parseFloat(CGSTAmount) || 0;
-    //     const sgstAmount = parseFloat(SGSTAmount) || 0;
-    //     const igstAmount = parseFloat(IGSTAmount) || 0;
-
-    //     const invoiceTotal = totalAmount + cgstAmount + sgstAmount + igstAmount;
-    //     setTotalInvoiceAmount(invoiceTotal.toFixed(2));
-    // }, [totalValueAmount, CGSTAmount, SGSTAmount, IGSTAmount]);
-
-    // useEffect(() => {
-    //     const roundedAmount = Math.round(parseFloat(totalInvoiceAmount) || 0);
-    //     setRoundoff(roundedAmount.toFixed(2));
-    // }, [totalInvoiceAmount]);
-
-
-    // const [invNumberErr, setInvNumberErr] = useState('');
-    // const [reasonErr, setReasonErr] = useState('');
-
-    // // 
-
-    // const [descriptional, setDescriptional] = useState([]);
-    // const [showDropdownDescriptional, setShowDropdownDescriptional] = useState(false);
-    // const [selectedDescriptional, setSelectedDescriptional] = useState('');
-    // const [selectedDescriptionalErr, setSelectedDescriptionalErr] = useState();
-    // const [selectedDescriptionalId, setSelectedDescriptionalId] = useState(null);
-
-    // const toggleDropdownDescriptional = () => {
-    //     setShowDropdownDescriptional(!showDropdownDescriptional);
-    // }
-
-    // const selectDescriptional = (index, File) => {
-    //     setItems(prevItems => {
-    //         const updatedItems = [...prevItems];
-    //         if (updatedItems[index]) {
-    //             updatedItems[index].descriptionalGoods = File.good_service_name;
-    //             updatedItems[index].descriptionalGoodsId = File.id;
-    //             updatedItems[index].editable = true;
-    //             setShowDropdownDescriptional(false);
-
-    //         }
-    //         return updatedItems;
-    //     });
-    //     setSelectedDescriptional(File.good_service_name);
-    // };
-
-
-    // const DescriptionalApi = async () => {
-
-    //     try {
-    //         const apiUrl = 'https://ocean21.in/api/public/api/sales_item_list';
-    //         const response = await axios.get(apiUrl, {
-    //             headers: {
-    //                 Authorization: `Bearer ${data.token}`
-    //             }
-    //         });
-
-    //         const responseData = response.data.data;
-    //         setDescriptional(responseData);
-
-    //     } catch (error) {
-    //         console.error('Error fetching Descriptional data:', error);
-    //     }
-
-    // }
-
-    // useEffect(() => {
-    //     DescriptionalApi();
-    // }, [])
-
-
-    // const HsnApi = async (index, descriptionalGoodsId) => {
-    //     try {
-    //         const apiUrl = `https://ocean21.in/api/public/api/sales_hsn_sac/${descriptionalGoodsId}`;
-    //         const response = await axios.get(apiUrl, {
-    //             headers: {
-    //                 Authorization: `Bearer ${data.token}`
-    //             }
-    //         });
-
-    //         const responseData = response.data.data;
-    //         console.log(responseData, "responseData");
-
-    //         // Update the specific item in items state
-
-    //         if (responseData) {
-    //             setItems(prevItems => {
-    //                 const updatedItems = [...prevItems];
-    //                 if (updatedItems[index]) {
-    //                     updatedItems[index].hsnSac = responseData.hsn_sac;
-    //                 }
-    //                 return updatedItems;
-    //             });
-    //         }
-
-
-    //     } catch (error) {
-    //         console.error('Error fetching HSN data:', error);
-    //     }
-    // };
-
-    // const prevDescriptionalGoodsIdsRef = useRef([]);
-
-    // useEffect(() => {
-    //     const prevDescriptionalGoodsIds = prevDescriptionalGoodsIdsRef.current;
-    //     const currentDescriptionalGoodsIds = items.map(item => item.descriptionalGoodsId);
-
-    //     // Check for changes in descriptionalGoodsId
-    //     const hasChanged = currentDescriptionalGoodsIds.some((id, index) => id !== prevDescriptionalGoodsIds[index]);
-
-    //     if (hasChanged) {
-    //         items.forEach((item, index) => {
-    //             if (item.descriptionalGoodsId) {
-    //                 HsnApi(index, item.descriptionalGoodsId);
-    //             }
-    //         });
-    //     }
-
-    //     // Update the ref with the latest descriptionalGoodsId values
-    //     prevDescriptionalGoodsIdsRef.current = currentDescriptionalGoodsIds;
-    // }, [items]);
-
-    // const handleChange = (index, field, value) => {
-    //     const updatedItems = [...items];
-    //     if (updatedItems[index]) {
-    //         updatedItems[index][field] = value;
-    //         setItems(updatedItems);
-    //     } else {
-    //         console.error("Item at index not found");
-    //     }
-    // };
-
-    // // 
-
-    // const [invoiceNumber, setInvoiceNumber] = useState('');
-
-    // const InvoiceNumberApi = async () => {
-
-    //     try {
-    //         const apiUrl = 'https://ocean21.in/api/public/api/autogeneratesaleinvoiceid';
-    //         const response = await axios.get(apiUrl, {
-    //             headers: {
-    //                 Authorization: `Bearer ${data.token}`
-    //             }
-    //         });
-
-    //         const responseData = response.data.data;
-    //         setInvoiceNumber(responseData);
-
-    //     } catch (error) {
-    //         console.error('Error fetching Invoice Number data:', error);
-    //     }
-
-    // }
-
-    // useEffect(() => {
-    //     InvoiceNumberApi();
-    // }, [])
-
-    // // 
-
-    // const [showDropdownStatus, setShowDropdownStatus] = useState(false);
-    // const [statusError, setStatusError] = useState('');
-    // const [selectedStatus, setSelectedStatus] = useState(null);
-
-    // const toggleDropdownStatus = () => {
-    //     setShowDropdownStatus(!showDropdownStatus);
-    // };
-
-    // const selectStatus = (status) => {
-    //     setSelectedStatus(status);
-    //     setShowDropdownStatus(false);
-    // };
-
-    // // 
-
-    // const [showDropdownPayStatus, setShowDropdownPayStatus] = useState(false);
-    // const [payStatusError, setPayStatusError] = useState('');
-    // const [selectedPayStatus, setSelectedPayStatus] = useState(null);
-
-    // const toggleDropdownPayStatus = () => {
-    //     setShowDropdownPayStatus(!showDropdownPayStatus);
-    // };
-
-    // const selectPayStatus = (status) => {
-    //     setSelectedPayStatus(status);
-    //     setShowDropdownPayStatus(false);
-    // };
-
-    // // 
-
-    // const [showDropdownPayMethod, setShowDropdownPayMethod] = useState(false);
-    // const [payMethodError, setPayMethodError] = useState('');
-    // const [selectedPayMethod, setSelectedPayMethod] = useState(null);
-
-    // const toggleDropdownPayMethod = () => {
-    //     setShowDropdownPayMethod(!showDropdownPayMethod);
-    // };
-
-    // const selectPayMethod = (status) => {
-    //     setSelectedPayMethod(status);
-    //     setShowDropdownPayMethod(false);
-    // };
-
-    // // 
-
-    // const [showDatePicker, setShowDatePicker] = useState(false);
-    // const [startDate, setStartDate] = useState(null);
-    // const [startDateErr, setStartDateErr] = useState(null);
-    // const formattedStartDate = startDate ?
-    //     `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
-    //     "";
-
-    // const formatDate = (date) => {
-    //     if (!date) return '';
-    //     const year = date.getFullYear();
-    //     const month = String(date.getMonth() + 1).padStart(2, '0');
-    //     const day = String(date.getDate()).padStart(2, '0');
-    //     return `${year}-${month}-${day}`;
-    // };
-
-    // const handleDateChange = (event, date) => {
-    //     if (event.type === "set" && date) {
-    //         setStartDate(date);
-    //     }
-    //     setShowDatePicker(false);
-    // };
-
-    // const showDatepicker = () => {
-    //     setShowDatePicker(true);
-    // };
-
-    // // company list
-
-    // const [showDropdown, setShowDropdown] = useState(false);
-    // const [documentList, setDocumentList] = useState([]);
-    // const [selectedDocument, setSelectedDocument] = useState([]);
-    // const [selectedDocumentErr, setSelectedDocumentErr] = useState();
-    // const [selectedDocumentId, setSelectedDocumentId] = useState(null);
-
-    // const [showDropdown1, setShowDropdown1] = useState(false);
-    // const [documentList1, setDocumentList1] = useState([]);
-    // const [selectedDocument1, setSelectedDocument1] = useState([]);
-    // const [selectedDocumentErr1, setSelectedDocumentErr1] = useState();
-    // const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
-
-    // const filteredDocumentList1 = documentList1.filter(File => File.id !== selectedDocumentId);
-
-    // const CompanyApi = async () => {
-
-    //     try {
-    //         const apiUrl = 'https://ocean21.in/api/public/api/sales_company_list';
-    //         const response = await axios.get(apiUrl, {
-    //             headers: {
-    //                 Authorization: `Bearer ${data.token}`
-    //             }
-    //         });
-
-    //         const responseData = response.data.data;
-    //         setDocumentList(responseData);
-    //         setDocumentList1(responseData);
-
-    //     } catch (error) {
-    //         console.error('Error fetching companyList data:', error);
-    //     }
-
-    // }
-
-    // const selectDocument = (File) => {
-    //     setSelectedDocument(File.company_name);
-    //     setSelectedDocumentId(File.id);
-    //     setShowDropdown(false);
-    // };
-
-    // const toggleDropdown = () => {
-    //     setShowDropdown(!showDropdown);
-    // }
-
-    // const selectDocument1 = (File) => {
-    //     setSelectedDocument1(File.company_name);
-    //     setSelectedDocumentId1(File.id);
-    //     setShowDropdown1(false);
-    // };
-
-    // const toggleDropdown1 = () => {
-    //     setShowDropdown1(!showDropdown1);
-    // }
-
-    // useEffect(() => {
-    //     CompanyApi();
-    // }, [])
-
-    // // 
-
-    // const validateFields = () => {
-    //     let isValid = true;
-
-    //     if (selectedDocument.length == 0) {
-    //         setSelectedDocumentErr('Select Vendor Name')
-    //         isValid = false;
-    //     } else {
-    //         setSelectedDocumentErr('');
-    //     }
-
-    //     if (selectedDocument1.length == 0) {
-    //         setSelectedDocumentErr1('Select Ship To');
-    //         isValid = false;
-    //     } else {
-    //         setSelectedDocumentErr1('');
-    //     }
-
-    //     if (!startDate) {
-    //         setStartDateErr('Date Required');
-    //         isValid = false;
-    //     } else {
-    //         setStartDateErr('');
-    //     }
-
-    //     if (!CGST && !SGST && !IGST) {
-    //         setGSTErr('At least one of CGST, SGST, or IGST Percentage is required.')
-    //         isValid = false;
-    //     } else {
-    //         setGSTErr('');
-    //     }
-
-    //     if (!selectedDescriptional) {
-    //         setSelectedDescriptionalErr('At least one Descriptional Goods is required.')
-    //     } else {
-    //         setSelectedDescriptionalErr('');
-    //     }
-
-    //     if (!reason) {
-    //         setReasonErr('Reason Required');
-    //         isValid = false;
-    //     } else {
-    //         setReasonErr('');
-    //     }
-
-    //     if (!selectedPayMethod) {
-    //         setPayMethodError('Payment Method required.');
-    //         isValid = false;
-    //     } else {
-    //         setPayMethodError('');
-    //     }
-
-    //     if (!selectedPayStatus) {
-    //         setPayStatusError('Payment Status required.');
-    //         isValid = false;
-    //     } else {
-    //         setPayStatusError('');
-    //     }
-
-    //     if (!selectedStatus) {
-    //         setStatusError('Status required.');
-    //         isValid = false;
-    //     } else {
-    //         setStatusError('');
-    //     }
-
-    //     return isValid;
-    // };
+    const [items, setItems] = useState([{
+        descriptionalGoodsId: '',
+        descriptionalGoods: '',
+        hsnSac: '',
+        hsnSacId: '',
+        quantity: '',
+        rate: '',
+        per: '',
+        amount: '',
+        editable: false
+    }]);
+
+    const addContainer = () => {
+
+        setItems([...items, {
+            descriptionalGoodsId: '',
+            descriptionalGoods: '',
+            hsnSac: '',
+            hsnSacId: '',
+            quantity: '',
+            rate: '',
+            per: '',
+            amount: '',
+            editable: false
+        }]);
+    };
+
+    const removeContainer = () => {
+        if (items.length > 1) {
+            setItems(items.slice(0, -1));
+        }
+    };
+
+    // 
+
+    const [CGST, setCGST] = useState('0');
+    const [SGST, setSGST] = useState('0');
+    const [IGST, setIGST] = useState('0');
+
+    const [GSTErr, setGSTErr] = useState('');
+
+    const [totalValueAmount, setTotalValueAmount] = useState('0');
+    const [CGSTAmount, setCGSTAmount] = useState('0');
+    const [SGSTAmount, setSGSTAmount] = useState('0');
+    const [IGSTAmount, setIGSTAmount] = useState('0');
+    const [totalInvoiceAmount, setTotalInvoiceAmount] = useState('0');
+    const [roundOff, setRoundoff] = useState('0');
+    const [reason, setReason] = useState('');
+
+    useEffect(() => {
+        const total = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+        setTotalValueAmount(total.toFixed(2));
+    }, [items]);
+
+    useEffect(() => {
+        const totalAmount = parseFloat(totalValueAmount) || 0;
+        const cgstPercentage = parseFloat(CGST) || 0;
+        const sgstPercentage = parseFloat(SGST) || 0;
+        const igstPercentage = parseFloat(IGST) || 0;
+
+        const cgstAmount = (totalAmount * cgstPercentage) / 100;
+        const sgstAmount = (totalAmount * sgstPercentage) / 100;
+        const igstAmount = (totalAmount * igstPercentage) / 100;
+
+        setCGSTAmount(cgstAmount.toFixed(2));
+        setSGSTAmount(sgstAmount.toFixed(2));
+        setIGSTAmount(igstAmount.toFixed(2));
+    }, [totalValueAmount, CGST, SGST, IGST]);
+
+    useEffect(() => {
+        const totalAmount = parseFloat(totalValueAmount) || 0;
+        const cgstAmount = parseFloat(CGSTAmount) || 0;
+        const sgstAmount = parseFloat(SGSTAmount) || 0;
+        const igstAmount = parseFloat(IGSTAmount) || 0;
+
+        const invoiceTotal = totalAmount + cgstAmount + sgstAmount + igstAmount;
+        setTotalInvoiceAmount(invoiceTotal.toFixed(2));
+    }, [totalValueAmount, CGSTAmount, SGSTAmount, IGSTAmount]);
+
+    useEffect(() => {
+        const roundedAmount = Math.round(parseFloat(totalInvoiceAmount) || 0);
+        setRoundoff(roundedAmount.toFixed(2));
+    }, [totalInvoiceAmount]);
+
+
+    const [invNumberErr, setInvNumberErr] = useState('');
+    const [reasonErr, setReasonErr] = useState('');
+
+    // 
+
+    const [descriptional, setDescriptional] = useState([]);
+    const [showDropdownDescriptional, setShowDropdownDescriptional] = useState(false);
+    const [selectedDescriptional, setSelectedDescriptional] = useState('');
+    const [selectedDescriptionalErr, setSelectedDescriptionalErr] = useState();
+    const [selectedDescriptionalId, setSelectedDescriptionalId] = useState(null);
+
+    const toggleDropdownDescriptional = () => {
+        setShowDropdownDescriptional(!showDropdownDescriptional);
+    }
+
+    const selectDescriptional = (index, File) => {
+        setItems(prevItems => {
+            const updatedItems = [...prevItems];
+            if (updatedItems[index]) {
+                updatedItems[index].descriptionalGoods = File.good_service_name;
+                updatedItems[index].descriptionalGoodsId = File.id;
+                updatedItems[index].editable = true;
+                setShowDropdownDescriptional(false);
+
+            }
+            return updatedItems;
+        });
+        setSelectedDescriptional(File.good_service_name);
+    };
+
+
+    const DescriptionalApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/sales_item_list';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setDescriptional(responseData);
+
+        } catch (error) {
+            console.error('Error fetching Descriptional data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        DescriptionalApi();
+    }, [])
+
+
+    const HsnApi = async (index, descriptionalGoodsId) => {
+        try {
+            const apiUrl = `https://ocean21.in/api/public/api/sales_hsn_sac/${descriptionalGoodsId}`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            console.log(responseData, "responseData");
+
+            // Update the specific item in items state
+
+            if (responseData) {
+                setItems(prevItems => {
+                    const updatedItems = [...prevItems];
+                    if (updatedItems[index]) {
+                        updatedItems[index].hsnSac = responseData.hsn_sac;
+                    }
+                    return updatedItems;
+                });
+            }
+
+
+        } catch (error) {
+            console.error('Error fetching HSN data:', error);
+        }
+    };
+
+    const prevDescriptionalGoodsIdsRef = useRef([]);
+
+    useEffect(() => {
+        const prevDescriptionalGoodsIds = prevDescriptionalGoodsIdsRef.current;
+        const currentDescriptionalGoodsIds = items.map(item => item.descriptionalGoodsId);
+
+        // Check for changes in descriptionalGoodsId
+        const hasChanged = currentDescriptionalGoodsIds.some((id, index) => id !== prevDescriptionalGoodsIds[index]);
+
+        if (hasChanged) {
+            items.forEach((item, index) => {
+                if (item.descriptionalGoodsId) {
+                    HsnApi(index, item.descriptionalGoodsId);
+                }
+            });
+        }
+
+        // Update the ref with the latest descriptionalGoodsId values
+        prevDescriptionalGoodsIdsRef.current = currentDescriptionalGoodsIds;
+    }, [items]);
+
+    const handleChange = (index, field, value) => {
+        const updatedItems = [...items];
+        if (updatedItems[index]) {
+            updatedItems[index][field] = value;
+            setItems(updatedItems);
+        } else {
+            console.error("Item at index not found");
+        }
+    };
+
+    // 
+
+    const [invoiceNumber, setInvoiceNumber] = useState('');
+
+    const InvoiceNumberApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/autogeneratesaleinvoiceid';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setInvoiceNumber(responseData);
+
+        } catch (error) {
+            console.error('Error fetching Invoice Number data:', error);
+        }
+
+    }
+
+    useEffect(() => {
+        InvoiceNumberApi();
+    }, [])
+
+    // 
+
+    const [showDropdownStatus, setShowDropdownStatus] = useState(false);
+    const [statusError, setStatusError] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState(null);
+
+    const toggleDropdownStatus = () => {
+        setShowDropdownStatus(!showDropdownStatus);
+    };
+
+    const selectStatus = (status) => {
+        setSelectedStatus(status);
+        setShowDropdownStatus(false);
+    };
+
+    //  
+
+    const [showDropdownPayStatus, setShowDropdownPayStatus] = useState(false);
+    const [payStatusError, setPayStatusError] = useState('');
+    const [selectedPayStatus, setSelectedPayStatus] = useState(null);
+
+    const toggleDropdownPayStatus = () => {
+        setShowDropdownPayStatus(!showDropdownPayStatus);
+    };
+
+    const selectPayStatus = (status) => {
+        setSelectedPayStatus(status);
+        setShowDropdownPayStatus(false);
+    };
+
+    //  
+
+    const [showDropdownPayMethod, setShowDropdownPayMethod] = useState(false);
+    const [payMethodError, setPayMethodError] = useState('');
+    const [selectedPayMethod, setSelectedPayMethod] = useState(null);
+
+    const toggleDropdownPayMethod = () => {
+        setShowDropdownPayMethod(!showDropdownPayMethod);
+    };
+
+    const selectPayMethod = (status) => {
+        setSelectedPayMethod(status);
+        setShowDropdownPayMethod(false);
+    };
+
+    //  
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [startDateErr, setStartDateErr] = useState(null);
+    const formattedStartDate = startDate ?
+        `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}` :
+        "";
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleDateChange = (event, date) => {
+        if (event.type === "set" && date) {
+            setStartDate(date);
+        }
+        setShowDatePicker(false);
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
+    // company list
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [documentList, setDocumentList] = useState([]);
+    const [selectedDocument, setSelectedDocument] = useState([]);
+    const [selectedDocumentErr, setSelectedDocumentErr] = useState();
+    const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+
+    const [showDropdown1, setShowDropdown1] = useState(false);
+    const [documentList1, setDocumentList1] = useState([]);
+    const [selectedDocument1, setSelectedDocument1] = useState([]);
+    const [selectedDocumentErr1, setSelectedDocumentErr1] = useState();
+    const [selectedDocumentId1, setSelectedDocumentId1] = useState(null);
+
+    const filteredDocumentList1 = documentList1.filter(File => File.id !== selectedDocumentId);
+
+    const CompanyApi = async () => {
+
+        try {
+            const apiUrl = 'https://ocean21.in/api/public/api/sales_company_list';
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            });
+
+            const responseData = response.data.data;
+            setDocumentList(responseData);
+            setDocumentList1(responseData);
+
+        } catch (error) {
+            console.error('Error fetching companyList data:', error);
+        }
+
+    }
+
+    const selectDocument = (File) => {
+        setSelectedDocument(File.company_name);
+        setSelectedDocumentId(File.id);
+        setShowDropdown(false);
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    }
+
+    const selectDocument1 = (File) => {
+        setSelectedDocument1(File.company_name);
+        setSelectedDocumentId1(File.id);
+        setShowDropdown1(false);
+    };
+
+    const toggleDropdown1 = () => {
+        setShowDropdown1(!showDropdown1);
+    }
+
+    useEffect(() => {
+        CompanyApi();
+    }, [])
+
+    // 
+
+    const validateFields = () => {
+        let isValid = true;
+
+        if (selectedDocument.length == 0) {
+            setSelectedDocumentErr('Select Vendor Name')
+            isValid = false;
+        } else {
+            setSelectedDocumentErr('');
+        }
+
+        if (selectedDocument1.length == 0) {
+            setSelectedDocumentErr1('Select Ship To');
+            isValid = false;
+        } else {
+            setSelectedDocumentErr1('');
+        }
+
+        if (!startDate) {
+            setStartDateErr('Date Required');
+            isValid = false;
+        } else {
+            setStartDateErr('');
+        }
+
+        if (!CGST && !SGST && !IGST) {
+            setGSTErr('At least one of CGST, SGST, or IGST Percentage is required.')
+            isValid = false;
+        } else {
+            setGSTErr('');
+        }
+
+        if (!selectedDescriptional) {
+            setSelectedDescriptionalErr('At least one Descriptional Goods is required.')
+        } else {
+            setSelectedDescriptionalErr('');
+        }
+
+        if (!reason) {
+            setReasonErr('Reason Required');
+            isValid = false;
+        } else {
+            setReasonErr('');
+        }
+
+        if (!selectedPayMethod) {
+            setPayMethodError('Payment Method required.');
+            isValid = false;
+        } else {
+            setPayMethodError('');
+        }
+
+        if (!selectedPayStatus) {
+            setPayStatusError('Payment Status required.');
+            isValid = false;
+        } else {
+            setPayStatusError('');
+        }
+
+        if (!selectedStatus) {
+            setStatusError('Status required.');
+            isValid = false;
+        } else {
+            setStatusError('');
+        }
+
+        return isValid;
+    };
 
     const [load, SetLoad] = useState(false);
 
-    // const HandleSubmit = async () => {
+    const HandleSubmit = async () => {
 
-    //     SetLoad(true);
+        SetLoad(true);
 
-    //     if (!validateFields()) {
-    //         Alert.alert('Invalid Fields', 'Enter all required fields')
-    //         SetLoad(false);
-    //         return;
-    //     }
+        if (!validateFields()) {
+            Alert.alert('Invalid Fields', 'Enter all required fields')
+            SetLoad(false);
+            return;
+        }
 
-    //     const formData = new FormData();
+        const formData = new FormData();
 
-    //     try {
+        try {
+            formData.append('id', SpecId);
+            formData.append('company_from', selectedDocumentId);
+            formData.append('company_to', selectedDocumentId1);
+            formData.append('date', formattedStartDate);
+            formData.append('igst_percentage', IGST);
+            formData.append('cgst_percentage', CGST);
+            formData.append('sgst_percentage', SGST);
+            formData.append('roundedoff', roundOff);
+            formData.append('output_igst_amount', IGSTAmount);
+            formData.append('output_cgst_amount', CGSTAmount);
+            formData.append('output_sgst_amount', SGSTAmount);
+            formData.append('item_value_amount', totalValueAmount);
+            formData.append('overall_amount', totalInvoiceAmount);
+            formData.append('payment_method', selectedPayMethod);
+            formData.append('payment_status', selectedPayStatus);
+            formData.append('payment_reason', reason);
+            formData.append('status', selectedStatus);
 
-    //         formData.append('company_from', selectedDocumentId);
-    //         formData.append('company_to', selectedDocumentId1);
-    //         formData.append('date', formattedStartDate);
-    //         formData.append('igst_percentage', IGST);
-    //         formData.append('cgst_percentage', CGST);
-    //         formData.append('sgst_percentage', SGST);
-    //         formData.append('roundedoff', roundOff);
-    //         formData.append('output_igst_amount', IGSTAmount);
-    //         formData.append('output_cgst_amount', CGSTAmount);
-    //         formData.append('output_sgst_amount', SGSTAmount);
-    //         formData.append('item_value_amount', totalValueAmount);
-    //         formData.append('overall_amount', totalInvoiceAmount);
-    //         formData.append('payment_method', selectedPayMethod);
-    //         formData.append('payment_status', selectedPayStatus);
-    //         formData.append('payment_reason', reason);
-    //         formData.append('status', selectedStatus);
+            items.forEach((item, index) => {
+                formData.append('item_id[]', item.descriptionalGoodsId);
+                formData.append('quantity[]', item.quantity);
+                formData.append('rate[]', item.rate);
+                formData.append('per[]', item.per);
+                formData.append('amount[]', item.amount || 0);
+            });
 
-    //         items.forEach((item, index) => {
-    //             formData.append('item_id[]', item.descriptionalGoodsId);
-    //             formData.append('quantity[]', item.quantity);
-    //             formData.append('rate[]', item.rate);
-    //             formData.append('per[]', item.per);
-    //             formData.append('amount[]', item.amount || 0);
-    //         });
-
-    //         formData.append('created_by', data.userrole);
+            formData.append('updated_by', data.userrole);
 
 
-    //         const response = await fetch('https://ocean21.in/api/public/api/addsaleinvoice', {
-    //             method: 'POST',
-    //             headers: {
-    //                 Accept: 'application/json',
-    //                 'Content-Type': 'multipart/form-data',
-    //                 Authorization: `Bearer ${data.token}`
-    //             },
-    //             body: formData,
-    //         });
+            const response = await fetch('https://ocean21.in/api/public/api/update_saleinvoice', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${data.token}`
+                },
+                body: formData,
+            });
 
-    //         const responseData = await response.json();
+            const responseData = await response.json();
 
-    //         console.log(responseData, "appended")
+            console.log(responseData, "appended")
 
-    //         if (responseData.status === "success") {
-    //             handleShowAlert(responseData.message);
-    //             SetLoad(false);
-    //             refresh();
-    //         } else {
-    //             handleShowAlert1(responseData.message);
-    //             SetLoad(false);
-    //         }
+            if (responseData.status === "success") {
+                handleShowAlert(responseData.message);
+                SetLoad(false);
+                refresh();
+            } else {
+                handleShowAlert1(responseData.message);
+                SetLoad(false);
+            }
 
-    //     } catch (error) {
-    //         handleShowAlert2();
-    //         SetLoad(false);
-    //     }
+        } catch (error) {
+            handleShowAlert2();
+            SetLoad(false);
+        }
 
-    // }
+    }
 
-    // const refresh = () => {
-    //     setSelectedDocument([]);
-    //     setSelectedDocumentErr('');
-    //     setSelectedDocumentId(null);
-    //     setSelectedDocument1([]);
-    //     setSelectedDocumentErr1('');
-    //     setSelectedDocumentId1(null);
-    //     setStartDate(null);
-    //     setStartDateErr(null);
-    //     setIGST(0);
-    //     setCGST(0);
-    //     setSGST(0);
-    //     setRoundoff(0);
-    //     setIGSTAmount(0);
-    //     setSGSTAmount(0);
-    //     setCGSTAmount(0);
-    //     setTotalValueAmount(0);
-    //     setTotalInvoiceAmount(0);
-    //     setSelectedPayMethod(null);
-    //     setPayMethodError(null);
-    //     setSelectedPayStatus(null);
-    //     setPayStatusError(null);
-    //     setReason('')
-    //     setReasonErr('');
-    //     setStatusError(null);
-    //     setSelectedStatus(null);
-    //     setSelectedDescriptionalErr('');
-
-    //     setItems([{
-    //         descriptionalGoodsId: '',
-    //         descriptionalGoods: '',
-    //         hsnSac: '',
-    //         hsnSacId: '',
-    //         quantity: '',
-    //         rate: '',
-    //         per: '',
-    //         amount: '',
-    //         editable: false
-    //     }]);
-    // }
+    const refresh = () => {
+        navigation.goBack();
+    }
 
     const [isAlertVisible, setAlertVisible] = useState(false);
     const [resMessage, setResMessage] = useState('');
@@ -594,6 +590,43 @@ const EditSalesInvoice = ({ navigation }) => {
         }, 3000);
     };
 
+    useEffect(() => {
+        setStartDate(new Date(invoiceData.date));
+        setCGST(invoiceData.cgst_percentage);
+        setSGST(invoiceData.sgst_percentage);
+        setIGST(invoiceData.igst_percentage);
+        setSelectedPayMethod(invoiceData.payment_method);
+        setSelectedPayStatus(invoiceData.payment_status);
+        setReason(invoiceData.payment_reason);
+        setSelectedStatus(invoiceData.status);
+        setRoundoff(invoiceData.roundedoff);
+        setTotalInvoiceAmount(invoiceData.overall_amount);
+        setSGSTAmount(invoiceData.output_sgst_amount);
+        setCGSTAmount(invoiceData.output_cgst_amount);
+        setIGSTAmount(invoiceData.output_igst_amount);
+        setTotalValueAmount(invoiceData.item_value_amount);
+    }, [invoiceData]);
+
+    useEffect(() => {
+        if (Array.isArray(invoiceItem)) {
+            const transformedItems = invoiceItem.map(item => ({
+                descriptionalGoodsId: item.item_id, 
+                descriptionalGoods: '', 
+                hsnSac: item.hsn_sac,
+                hsnSacId: '', 
+                quantity: item.quantity,
+                rate: item.rate,
+                per: item.per,
+                amount: item.amount,
+                editable: false
+            }));
+    
+            setItems(transformedItems);
+        } else {
+            console.error('invoiceItem is not an array:', invoiceItem);
+            setItems([]); 
+        }
+    }, [invoiceItem]);
 
     return (
 
@@ -611,7 +644,7 @@ const EditSalesInvoice = ({ navigation }) => {
                         From Company
                     </Text>
 
-                    {/* <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
+                    <TouchableOpacity onPress={toggleDropdown} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
                             {selectedDocument && selectedDocument.length > 0 ? selectedDocument : "Select Company"}
@@ -628,17 +661,17 @@ const EditSalesInvoice = ({ navigation }) => {
                                 </TouchableOpacity>
                             ))}
                         </View>
-                    )} */}
+                    )}
 
                     <Text style={styles.errorText}>
-                        {/* {selectedDocumentErr} */}
+                        {selectedDocumentErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         To Company
                     </Text>
 
-                    {/* <TouchableOpacity onPress={toggleDropdown1} style={styles.StatusTouchable}>
+                    <TouchableOpacity onPress={toggleDropdown1} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>
                             {selectedDocument1 && selectedDocument1.length > 0 ? selectedDocument1 : "Select Company"}
@@ -655,10 +688,10 @@ const EditSalesInvoice = ({ navigation }) => {
                                 </TouchableOpacity>
                             ))}
                         </View>
-                    )} */}
+                    )}
 
                     <Text style={styles.errorText}>
-                        {/* {selectedDocumentErr1} */}
+                        {selectedDocumentErr1}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -666,7 +699,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={invoiceNumber}
+                        value={invoiceNumber}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -679,7 +712,7 @@ const EditSalesInvoice = ({ navigation }) => {
                         Date
                     </Text>
 
-                    {/* <View style={styles.inputs} >
+                    <View style={styles.inputs} >
                         <Text onPress={showDatepicker}>
                             {startDate ? formatDate(startDate) : "Select Date"} &nbsp;
                         </Text>
@@ -691,10 +724,10 @@ const EditSalesInvoice = ({ navigation }) => {
                                 onChange={handleDateChange}
                             />
                         )}
-                    </View> */}
+                    </View>
 
                     <Text style={styles.errorText}>
-                        {/* {startDateErr} */}
+                        {startDateErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -702,14 +735,14 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={CGST}
-                        // onChangeText={(txt) => setCGST(txt)}
+                        value={CGST}
+                        onChangeText={(txt) => setCGST(txt)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
 
                     <Text style={styles.errorText}>
-                        {/* {GSTErr} */}
+                        {GSTErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -717,8 +750,8 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={SGST}
-                        // onChangeText={(txt) => setSGST(txt)}
+                        value={SGST}
+                        onChangeText={(txt) => setSGST(txt)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
@@ -732,8 +765,8 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={IGST}
-                        // onChangeText={(txt) => setIGST(txt)}
+                        value={IGST}
+                        onChangeText={(txt) => setIGST(txt)}
                         style={styles.inputs}
                         keyboardType="number-pad"
                     />
@@ -748,7 +781,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     <Text style={styles.PolicyContainerTitleText}></Text>
                 </View>
 
-                {/* {items.map((item, index) => (
+                {items.map((item, index) => (
                     <View key={index} style={[styles.Inputcontainer, { marginBottom: index === items.length - 1 ? 0 : '10%' }]}>
                         <Text style={styles.StatDateText}>Descriptional Goods</Text>
 
@@ -849,7 +882,7 @@ const EditSalesInvoice = ({ navigation }) => {
                             )}
                         </View>
                     </View>
-                ))} */}
+                ))}
 
                 <View style={styles.PolicyContainerTitleHeader}>
                     <Text style={styles.PolicyContainerTitleText}></Text>
@@ -862,7 +895,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={totalValueAmount}
+                        value={totalValueAmount}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -876,7 +909,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={IGSTAmount}
+                        value={IGSTAmount}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -890,7 +923,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={CGSTAmount}
+                        value={CGSTAmount}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -904,7 +937,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={SGSTAmount}
+                        value={SGSTAmount}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -918,7 +951,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={totalInvoiceAmount}
+                        value={totalInvoiceAmount}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -932,7 +965,7 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={roundOff}
+                        value={roundOff}
                         editable={false}
                         style={styles.inputs}
                     />
@@ -945,7 +978,7 @@ const EditSalesInvoice = ({ navigation }) => {
                         Payment Method
                     </Text>
 
-                    {/* <TouchableOpacity onPress={toggleDropdownPayMethod} style={styles.StatusTouchable}>
+                    <TouchableOpacity onPress={toggleDropdownPayMethod} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>{selectedPayMethod || "Select Payment Method"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
@@ -970,17 +1003,17 @@ const EditSalesInvoice = ({ navigation }) => {
 
                         </View>
 
-                    )} */}
+                    )}
 
                     <Text style={styles.errorText}>
-                        {/* {payMethodError} */}
+                        {payMethodError}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Payment Status
                     </Text>
 
-                    {/* <TouchableOpacity onPress={toggleDropdownPayStatus} style={styles.StatusTouchable}>
+                    <TouchableOpacity onPress={toggleDropdownPayStatus} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>{selectedPayStatus || "Select Payment Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
@@ -1005,10 +1038,10 @@ const EditSalesInvoice = ({ navigation }) => {
 
                         </View>
 
-                    )} */}
+                    )}
 
                     <Text style={styles.errorText}>
-                        {/* {payStatusError} */}
+                        {payStatusError}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -1016,22 +1049,22 @@ const EditSalesInvoice = ({ navigation }) => {
                     </Text>
 
                     <TextInput
-                        // value={reason}
-                        // onChangeText={(txt) => setReason(txt)}
+                        value={reason}
+                        onChangeText={(txt) => setReason(txt)}
                         style={styles.inputs1}
                         textAlignVertical="top"
                         multiline={true}
                     />
 
                     <Text style={styles.errorText}>
-                        {/* {reasonErr} */}
+                        {reasonErr}
                     </Text>
 
                     <Text style={styles.StatDateText}>
                         Status
                     </Text>
 
-                    {/* <TouchableOpacity onPress={toggleDropdownStatus} style={styles.StatusTouchable}>
+                    <TouchableOpacity onPress={toggleDropdownStatus} style={styles.StatusTouchable}>
 
                         <Text style={styles.StatusTouchableText}>{selectedStatus || "Select Status"}</Text>
                         <DropdownIcon width={14} height={14} color={"#000"} />
@@ -1052,10 +1085,10 @@ const EditSalesInvoice = ({ navigation }) => {
 
                         </View>
 
-                    )} */}
+                    )}
 
                     <Text style={styles.errorText}>
-                        {/* {statusError} */}
+                        {statusError}
                     </Text>
 
                 </View>
@@ -1063,8 +1096,8 @@ const EditSalesInvoice = ({ navigation }) => {
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20, marginBottom: '5%' }}>
-                <TouchableOpacity style={styles.HeaderButtonActive} 
-                // onPress={HandleSubmit}
+                <TouchableOpacity style={styles.HeaderButtonActive}
+                    onPress={HandleSubmit}
                 >
                     {
                         load ?
@@ -1075,8 +1108,8 @@ const EditSalesInvoice = ({ navigation }) => {
                     }
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.HeaderButton} 
-                // onPress={refresh}
+                <TouchableOpacity style={styles.HeaderButton}
+                    onPress={refresh}
                 >
                     <Text style={styles.HeaderButtonText}>
                         Cancel
@@ -1107,6 +1140,6 @@ const EditSalesInvoice = ({ navigation }) => {
     )
 }
 
-export default EditSalesInvoice; 
+export default EditSalesInvoice;
 
 

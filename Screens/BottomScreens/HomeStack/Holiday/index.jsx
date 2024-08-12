@@ -27,6 +27,7 @@ const AttendanceRequest = () => {
 
     const [loadData, setLoadData] = useState(false);
     const [datalist, setDatalist] = useState([]);
+    console.log(datalist,"datalist")
     const [currentPage, setCurrentPage] = useState(1);
     const [EditLoad, setEditLoad] = useState(false);
     const [holidayname, setHolidayname] = useState('');
@@ -637,11 +638,14 @@ const AttendanceRequest = () => {
                                     <Text style={{ textAlign: 'center', paddingVertical: 10 }}>No data available</Text>
                                 ) : (
                                     paginatedData.map((item, index) => (
-                                        <View key={index} style={[styles.row, styles.listBody]}>
-                                            <Text style={[styles.cell, styles.sno]}>{index + 1}</Text>
-                                            <Text style={[styles.cell, styles.DepartmentName]}>{item.h_name}</Text>
-                                            <Text style={[styles.cell, styles.EmployeeName]}>{item.h_date}</Text>
-                                            <Text style={[styles.cell, styles.StartDate]}>{item.h_day}</Text>
+                                        <View key={index} style={[
+                                            styles.row,
+                                            styles.listBody,
+                                        ]}>
+                                            <Text style={[styles.cell, styles.sno,,{ color: item.h_type === "Declared Holiday" ? "#0A62F1" : "" }]}>{index + 1}</Text>
+                                            <Text style={[styles.cell, styles.DepartmentName,{ color: item.h_type === "Declared Holiday" ? "#0A62F1" : "" }]}>{item.h_name}</Text>
+                                            <Text style={[styles.cell, styles.EmployeeName,{ color: item.h_type === "Declared Holiday" ? "#0A62F1" : "" }]}>{item.h_date}</Text>
+                                            <Text style={[styles.cell, styles.StartDate,{ color: item.h_type === "Declared Holiday" ? "#0A62F1" : "" }]}>{item.h_day}</Text>
                                             {(data.userrole == 1 || data.userrole == 2) ? <View style={[styles.listcontentButtonview, styles.EndDate]}>
                                                 <TouchableOpacity
                                                     onPress={() => openEditModal(item)}

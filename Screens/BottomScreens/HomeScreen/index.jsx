@@ -891,7 +891,7 @@ return (
                     </View> : null}
 
             {
-                (data.userrole == 1 || data.userrole == 2) ? null :
+                (data.userrole == 1) ? null :
                     <View style={styles.EmployeeModeBoardContainer}>
 
                         <View style={styles.EmployeeModeBoard}>
@@ -955,7 +955,7 @@ return (
                     </View>
             }
 
-            {(data.userrole == 1 || data.userrole == 2) ? <View style={styles.EmployeeModeBoardListContainer}>
+            {(data.userrole == 1) ? <View style={styles.EmployeeModeBoardListContainer}>
 
                 <View style={styles.EmployeeListModeBoard}>
 

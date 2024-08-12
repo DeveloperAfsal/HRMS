@@ -113,13 +113,11 @@ const LoginScreen = ({ navigation }) => {
 
             } else {
                 setLoad(false);
-                // Alert.alert("Login failed");
                 handleShowAlert1();
                 console.error('Login failed:', response.data.error);
             }
         } catch (error) {
             setLoad(false);
-            // Alert.alert("Error during login", "Check The Login Credentials");
             handleShowAlert2();
             console.error('Error during login:', error);
         }

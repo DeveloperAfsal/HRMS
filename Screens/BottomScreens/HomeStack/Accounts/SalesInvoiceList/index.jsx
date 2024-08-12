@@ -356,7 +356,7 @@ const SalesInvoiceList = ({ navigation }) => {
                                             <Text style={[styles.cell, styles.Status]}>{item.payment_status}</Text>
                                             <View style={styles.listcontentButtonview}>
                                                 <TouchableOpacity style={styles.listcontenteditbutton}
-                                                    onPress={() => navigation.navigate('Edit Sales Invoice')}
+                                                    onPress={() => navigation.navigate('Edit Sales Invoice', { Id: item })}
                                                 >
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

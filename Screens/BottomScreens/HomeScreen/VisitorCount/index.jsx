@@ -94,7 +94,7 @@ const VisitorCount = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Visitor_count.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -166,7 +166,7 @@ const VisitorCount = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Visitor_count',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -181,7 +181,7 @@ const VisitorCount = () => {
     };
 
     return (
-
+<ScrollView>
         <View style={styles.Container}>
 
             <View style={styles.ButtonContainer}>
@@ -289,7 +289,7 @@ const VisitorCount = () => {
             </View>
 
         </View>
-
+        </ScrollView>
     )
 }
 

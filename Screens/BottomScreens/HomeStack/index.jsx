@@ -270,7 +270,8 @@ const HomeStack = () => {
       <Stack.Screen name="HalfDay Request" component={HalfDayRequest} />
       <Stack.Screen name="OverTime Request" component={OverTimeRequest} />
 
-      <Stack.Screen name="Templates" component={Template} />
+      {/* <Stack.Screen name="Templates" component={Template} /> */}
+      <Stack.Screen name="Company Policy" component={Template} />
       <Stack.Screen name="Job Openings" component={JobOpenings} />
 
       <Stack.Screen name="View Job" component={ViewJob} />

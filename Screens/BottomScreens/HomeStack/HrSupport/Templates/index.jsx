@@ -565,7 +565,7 @@ const Template = ({ navigation }) => {
                 {(data.userrole == 1 || data.userrole == 2) ?
                     <>
                         <View style={styles.ShiftSlotContainerTitle}>
-                            <Text style={styles.ShiftSlotContainerTitleText}>Add Template</Text>
+                            <Text style={styles.ShiftSlotContainerTitleText}>Add Company Policy</Text>
                         </View>
 
                         <View style={styles.Inputcontainer}>

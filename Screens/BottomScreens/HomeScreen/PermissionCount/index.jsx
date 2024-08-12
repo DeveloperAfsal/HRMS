@@ -110,7 +110,7 @@ const PermissionCount = () => {
 
         try {
             const wbout = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-            const fileUri = RNFS.CachesDirectoryPath + '/Employee_Confirmation.xlsx';
+            const fileUri = RNFS.CachesDirectoryPath + '/Permission_count.xlsx';
 
             await RNFS.writeFile(fileUri, wbout, 'base64');
 
@@ -182,7 +182,7 @@ const PermissionCount = () => {
         try {
             const { filePath } = await RNHTMLtoPDF.convert({
                 html: htmlContent,
-                fileName: 'Employee_Confirmation',
+                fileName: 'Permission_count',
                 directory: RNFS.DocumentDirectoryPath,
             });
 
@@ -197,7 +197,7 @@ const PermissionCount = () => {
     };
 
     return (
-
+<ScrollView>
         <View style={styles.Container}>
 
             <View style={styles.ButtonContainer}>
@@ -313,7 +313,7 @@ const PermissionCount = () => {
             </View>
 
         </View>
-
+        </ScrollView>
     )
 }
 
