@@ -49,9 +49,9 @@ const HomeScreen = ({ navigation }) => {
 
     const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [loggedInTime, setLoggedInTime] = useState('00:00');
-    const [loggedOutTime, setLoggedOutTime] = useState('00:00');
-    const [totalHours, setTotalHours] = useState('00:00');
+    const [loggedInTime, setLoggedInTime] = useState('00:00:00');
+    const [loggedOutTime, setLoggedOutTime] = useState('00:00:00');
+    const [totalHours, setTotalHours] = useState('00:00:00');
     const [userAlreadyLoggedIn, setUserAlreadyLoggedIn] = useState('0');
     const [currentDate, setCurrentDate] = useState('');
     const [currentDay, setCurrentDay] = useState('');
@@ -353,9 +353,7 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const checkWiFiConnection = async () => {
-        if (totalHours !== "00:00:00") {
-            Alert.alert('Oops','Working Hours Already Calculated')
-        } else {
+        if (totalHours === "00:00:00") {
             try {
                 SetLoad(true);
     
@@ -382,6 +380,8 @@ const HomeScreen = ({ navigation }) => {
             } catch (error) {
                 console.error("Error in checkWiFiConnection:", error);
             }
+        } else {
+            Alert.alert('Oops','Working Hours Already Calculated')
         }   
 };
 

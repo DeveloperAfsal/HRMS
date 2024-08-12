@@ -23,103 +23,106 @@ const AddRole = ({ navigation }) => {
     const [checkedNames, setCheckedNames] = useState({
         'Dashboard': ['Dashboard'],
         'EmployeeManagement': {
-            'ORGStructure': [],
-            'AttendancePolicy': [],
-            'CompanyPolicy': [],
-            'Employee': [],
+            'ORGStructure': ['add_Role','roles_list','supervisor_list','org_Chart'],
+            'LeaveAndAttendancePolicy': ['attendancePolicy','assignEmployeeShift','leavePolicy','Holiday'],
+            'CompanyPolicy': ['companypolicy'],
+            'Employee': ['Add_Employee','Employee_Confirmation','Emp_loyeeList'],
             'Template': {
-                'OfferLetter': [],
-                'AppointmentLetter': [],
-                'RelievingLetter': [],
+                'OfferLetter': ['Add_OfferLetter','Offer_LetterList'],
+                'AppointmentLetter': ['Add_AppointmentLetter','Appoint_mentLetterList'],
+                'RelievingLetter': ['Add_RelievingLetter','Relieving_LetterList'],
             }
         },
-        'Attendance': [],
+        'Attendance': ['DailyAttendance','Monthly_Attendance','Monthly_List','Approval_List','Leave_Approval'],
         'HRSupport': [],
         'TLApproval': [],
-        'HelpDesk': [],
-        'Assets': [],
+        'HelpDesk': ['Issue_Type','Raise_Ticket','Tickets_List','Assigned_List'],
+        'Assets': ['Assets_Type','Assign_Asset','Asset_List'],
         'TeamManagement': {
             'Events': {
-                'AddEvent': [],
-                'EventList': [],
+                'AddEvent': ['addevent'],
+                'EventList': ['eventlist'],
             },
             'Meeting': {
-                'AddMeeting': [],
-                'MeetingList': [],
+                'AddMeeting': ['addmeeting'],
+                'MeetingList': ['meetinglist'],
             },
             'TeamTask': {
-                'AddProject': [],
-                'ProjectList': [],
-                'AddTask': [],
-                'TaskList': [],
-                'AssignedTask': [],
-                'TLAssignedTask': [],
+                'AddProject': ['addproject'],
+                'ProjectList': ['projectlist'],
+                'AddTask': ['addtask'],
+                'TaskList': ['tasklist'],
+                'AssignedTask': ['assignedtask'],
+                'TLAssignedTask': ['tlassignedtask'],
             }
         },
-        'Payroll': [],
+        'Payroll': ['OverTimeCalculation','Assign Employee Salary','Salarycalculation','Generate_payslip','Payslip_list'],
         'Holiday': [],
-        'Visitiormanagement': [],
-        'Logs': [],
+        'Visitiormanagement': ['Add_visitor','Visitor_log'],
+        'Logs': ['Activity_Log','Employee_ActivityLog',''],
         'Recruitment': {
-            'PostJob': [],
-            'ListJob': [],
-            'InboxResume': [],
+            'PostJob': ['Post_Job'],
+            'ListJob': ['List_Job'],
+            'InboxResume': ['Inbox_Resume'],
             'CandidateTracker': {
-                'AddResume': [],
-                'CandidateStatus': [],
+                'AddResume': ['Add_Resume'],
+                'CandidateStatus': ['Candidate_Status'],
             },
-            'SearchResume': [],
+            'SearchResume': ['Search_Resume'],
         },
         'Accounts': {
-            'GoodsandServices': [],
+            'GoodsandServices': ['goodsandservices'],
             'CompanyDetails': {
-                'AddCompany': [],
-                'CompanyList': [],
+                'AddCompany': ['addcompany'],
+                'CompanyList': ['companylist'],
             },
             'Purchase': {
-                'AddPurchase': [],
-                'PurchaseList': [],
+                'AddPurchase': ['addpurchase'],
+                'PurchaseList': ['purchaselist'],
             },
             'Sales': {
-                'AddSales': [],
-                'SalesList': [],
+                'AddSales': ['addsales'],
+                'SalesList': ['saleslist'],
             },
-            'DailyAccounts': [],
+            'DailyAccounts': ['dailyaccounts'],
         },
 
         'SalesManagement': {
             'Lead': {
-                'EnquiryList': [],
-                'AddLead': [],
-                'LeadList': [],
+                'EnquiryList': ['enquirylist'],
+                'AddLead': ['addlead'],
+                'LeadList': ['leadlist'],
             },
             'PreSales': {
-                'EnquiryList': [],
-                'LeadList': [],
-                'AddLead': [],
+                'EnquiryList': ['enquirylist'],
+                'LeadList': ['leadlist'],
+                'AddLead': ['addlead'],
             },
             'Sales': {
-                'LeadList': [],
+                'LeadList': ['leadlist'],
             }
 
         },
 
     });
 
+    console.log(checkedNames,"setCheckedNames")
+
     const initializeCheckboxes = (subheadings) => {
         const checkboxes = {};
-        for (const [key, value] of Object.entries(subheadings)) {
-            if (Array.isArray(value)) {
-                checkboxes[key] = value.map(() => false);
-            } else if (typeof value === 'object') {
+        for (const key in subheadings) {
+            if (Array.isArray(subheadings[key])) {
+                checkboxes[key] = subheadings[key].map(() => false);
+            } else {
                 checkboxes[key] = {};
-                for (const [subKey, subValue] of Object.entries(value)) {
-                    checkboxes[key][subKey] = subValue.map(() => false);
+                for (const nestedKey in subheadings[key]) {
+                    checkboxes[key][nestedKey] = subheadings[key][nestedKey].map(() => false);
                 }
             }
         }
         return checkboxes;
     };
+
 
     const initialFieldsState = [
 
@@ -138,24 +141,24 @@ const AddRole = ({ navigation }) => {
                 'AttendancePolicy': ['Attendance Slot', 'Leave Policy', 'Assign Employee Shift', 'Holiday'],
                 'CompanyPolicy': ['Company Policy'],
                 'Employee': ['Add Employee', 'Employee List', 'Probation Completion'],
-                'Template': {
-                    '':[],
-                    'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
-                    'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
-                    'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
-                },
+                // 'Template': {
+                //     'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
+                //     'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
+                //     'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
+                // },
+                'Template': ['Add Offer Letter', 'Offer Letter List', 'Add Appointment Letter', 'Appointment Letter List', 'Add Relieving Letter', 'Relieving Letter List']
             },
             checkboxes: initializeCheckboxes({
                 'ORGStructure': ['Add Role / Designation', 'Roles List', 'Supervisor List / Hierarchy', 'ORG chart'],
                 'AttendancePolicy': ['Attendance Slot', 'Leave Policy', 'Assign Employee Shift', 'Holiday'],
                 'CompanyPolicy': ['Company Policy'],
                 'Employee': ['Add Employee', 'Employee List', 'Probation Completion'],
-                'Template': {
-                    '':[],
-                    'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
-                    'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
-                    'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
-                },
+                // 'Template': {
+                //     'OfferLetter': ['Add Offer Letter', 'Offer Letter List'],
+                //     'AppointmentLetter': ['Add Appointment Letter', 'Appointment Letter List'],
+                //     'RelievingLetter': ['Add Relieving Letter', 'Relieving Letter List'],
+                // },
+                'Template': ['Add Offer Letter', 'Offer Letter List', 'Add Appointment Letter', 'Appointment Letter List', 'Add Relieving Letter', 'Relieving Letter List']
             })
         },
 
@@ -284,12 +287,14 @@ const AddRole = ({ navigation }) => {
                 field.checkboxes = initializeCheckboxes(field.subheadings);
             } else {
                 field.checkboxes = Object.keys(field.subheadings).reduce((acc, key) => {
-                    acc[key] = Array.isArray(field.subheadings[key])
-                        ? field.subheadings[key].map(() => false)
-                        : Object.keys(field.subheadings[key]).reduce((subAcc, subKey) => {
+                    if (Array.isArray(field.subheadings[key])) {
+                        acc[key] = field.subheadings[key].map(() => false);
+                    } else {
+                        acc[key] = Object.keys(field.subheadings[key]).reduce((subAcc, subKey) => {
                             subAcc[subKey] = field.subheadings[key][subKey].map(() => false);
                             return subAcc;
                         }, {});
+                    }
                     return acc;
                 }, {});
             }
@@ -298,8 +303,9 @@ const AddRole = ({ navigation }) => {
         }
 
         setFields(newFields);
-        updateCheckedNames(fieldIndex, field.isChecked);
+        // updateCheckedNames(fieldIndex, field.isChecked);
     };
+
 
     const toggleSubheadingCheckBox = (fieldIndex, subheadingKey, subheadingIndex) => {
         const newFields = [...fields];
@@ -309,54 +315,54 @@ const AddRole = ({ navigation }) => {
             if (Array.isArray(field.checkboxes[subheadingKey])) {
                 field.checkboxes[subheadingKey][subheadingIndex] = !field.checkboxes[subheadingKey][subheadingIndex];
             } else if (typeof field.checkboxes[subheadingKey] === 'object') {
-                const nestedSubheading = Object.keys(field.checkboxes[subheadingKey])[0];
-                field.checkboxes[subheadingKey][nestedSubheading][subheadingIndex] = !field.checkboxes[subheadingKey][nestedSubheading][subheadingIndex];
+                const nestedKey = Object.keys(field.checkboxes[subheadingKey])[0];
+                field.checkboxes[subheadingKey][nestedKey][subheadingIndex] = !field.checkboxes[subheadingKey][nestedKey][subheadingIndex];
             }
         } else {
             field.checkboxes[subheadingIndex] = !field.checkboxes[subheadingIndex];
         }
 
         setFields(newFields);
-        updateCheckedNames(fieldIndex, field.checkboxes[subheadingIndex], subheadingIndex, subheadingKey);
+        // updateCheckedNames(fieldIndex, field.checkboxes[subheadingKey]?.[subheadingIndex] || false, subheadingIndex, subheadingKey);
     };
 
 
-    const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null, subheadingKey = null) => {
-        const newCheckedNames = { ...checkedNames };
-        const fieldName = fields[fieldIndex].name;
+    // const updateCheckedNames = (fieldIndex, isChecked, subheadingIndex = null, subheadingKey = null) => {
+    //     const newCheckedNames = { ...checkedNames };
+    //     const fieldName = fields[fieldIndex].name;
 
-        if (fieldName === 'EmployeeManagement') {
-            if (subheadingKey) {
-                if (isChecked) {
-                    if (!newCheckedNames[fieldName]) {
-                        newCheckedNames[fieldName] = {};
-                    }
-                    newCheckedNames[fieldName][subheadingKey] = fields[fieldIndex].subheadings[subheadingKey][subheadingIndex];
-                } else {
-                    if (newCheckedNames[fieldName] && newCheckedNames[fieldName][subheadingKey]) {
-                        delete newCheckedNames[fieldName][subheadingKey];
-                    }
-                }
-            } else {
-                if (isChecked) {
-                    if (!newCheckedNames[fieldName]) {
-                        newCheckedNames[fieldName] = [];
-                    }
-                    newCheckedNames[fieldName].push(fieldName);
-                } else {
-                    delete newCheckedNames[fieldName];
-                }
-            }
-        } else {
-            if (isChecked) {
-                newCheckedNames[fieldName] = [fieldName];
-            } else {
-                delete newCheckedNames[fieldName];
-            }
-        }
+    //     if (fieldName === 'EmployeeManagement') {
+    //         if (subheadingKey) {
+    //             if (isChecked) {
+    //                 if (!newCheckedNames[fieldName]) {
+    //                     newCheckedNames[fieldName] = {};
+    //                 }
+    //                 newCheckedNames[fieldName][subheadingKey] = fields[fieldIndex].subheadings[subheadingKey][subheadingIndex];
+    //             } else {
+    //                 if (newCheckedNames[fieldName] && newCheckedNames[fieldName][subheadingKey]) {
+    //                     delete newCheckedNames[fieldName][subheadingKey];
+    //                 }
+    //             }
+    //         } else {
+    //             if (isChecked) {
+    //                 if (!newCheckedNames[fieldName]) {
+    //                     newCheckedNames[fieldName] = [];
+    //                 }
+    //                 newCheckedNames[fieldName].push(fieldName);
+    //             } else {
+    //                 delete newCheckedNames[fieldName];
+    //             }
+    //         }
+    //     } else {
+    //         if (isChecked) {
+    //             newCheckedNames[fieldName] = [fieldName];
+    //         } else {
+    //             delete newCheckedNames[fieldName];
+    //         }
+    //     }
 
-        setCheckedNames(newCheckedNames);
-    };
+    //     setCheckedNames(newCheckedNames);
+    // };
 
 
     // HandleSubmit
@@ -377,6 +383,7 @@ const AddRole = ({ navigation }) => {
             }
 
             const apiUrl = 'https://ocean21.in/api/public/api/addroleinsert';
+
             const response = await axios.post(apiUrl, {
                 role_name: roleName,
                 permission: checkedNames,
@@ -391,19 +398,15 @@ const AddRole = ({ navigation }) => {
 
             if (response.data.status === "success") {
                 setLoad(false);
-                // navigation.navigate('Roles List');
-                // Alert.alert("SuccessFull", response.data.message);
                 handleShowAlert(response.data);
                 setFields(initialFieldsState);
                 setRoleName('');
             } else if (response.data.status === "error") {
                 setNameError(response.data.message);
-                // Alert.alert("Failed", response.data.message);
                 handleShowAlert1(response.data);
                 setLoad(false);
             } else {
                 setLoad(false);
-                // Alert.alert("Failed To Add");
                 handleShowAlert1(response.data);
                 console.error('Failed To Add:', response.data.error);
             }
@@ -411,7 +414,6 @@ const AddRole = ({ navigation }) => {
         } catch (error) {
             setLoad(false);
             handleShowAlert2();
-            // Alert.alert("Error during submit", "Check The Input Credentials.");
             console.error('Error during submit:', error);
         }
     }
@@ -550,6 +552,8 @@ const AddRole = ({ navigation }) => {
                             </View>
                         </View>
                     ))}
+
+
 
 
                     <View style={styles.buttonview}>

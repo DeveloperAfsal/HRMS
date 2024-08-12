@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 
     checkView1:{
         paddingTop: '5%',
+        paddingLeft:'10%',
         gap: 10,
     },
 
@@ -122,13 +123,13 @@ const styles = StyleSheet.create({
     },
 
     FieldHeader: {
-        fontWeight: '600',
-        fontSize: 16,
+        fontWeight: '500',
+        fontSize: 18,
         lineHeight: 21.28,
         color: '#000000',
     },
     Subheading: {
-        fontWeight: '400',
+        fontWeight: '500',
         fontSize: 16,
         lineHeight: 21.28,
         color: '#000000',
