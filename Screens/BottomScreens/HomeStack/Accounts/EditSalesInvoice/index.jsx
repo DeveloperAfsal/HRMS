@@ -591,6 +591,8 @@ const EditSalesInvoice = ({ route,navigation }) => {
     };
 
     useEffect(() => {
+        setSelectedDocument(invoiceData.from_companyname);
+        setSelectedDocument1(invoiceData.to_companyname);
         setStartDate(new Date(invoiceData.date));
         setCGST(invoiceData.cgst_percentage);
         setSGST(invoiceData.sgst_percentage);
@@ -611,7 +613,7 @@ const EditSalesInvoice = ({ route,navigation }) => {
         if (Array.isArray(invoiceItem)) {
             const transformedItems = invoiceItem.map(item => ({
                 descriptionalGoodsId: item.item_id, 
-                descriptionalGoods: '', 
+                descriptionalGoods: item.good_service_name, 
                 hsnSac: item.hsn_sac,
                 hsnSacId: '', 
                 quantity: item.quantity,

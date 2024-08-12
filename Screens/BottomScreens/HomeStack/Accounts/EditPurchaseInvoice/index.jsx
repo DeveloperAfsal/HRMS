@@ -662,6 +662,9 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
     };
 
     useEffect(() => {
+        setSelectedDocument(invoiceData.vendor_companyname);
+        setSelectedDocument1(invoiceData.ship_companyname);
+        setSelectedDocument2(invoiceData.bill_companyname)
         setInvNumber(invoiceData.bill_number);
         setStartDate(new Date(invoiceData.bill_date));
         setDeliveryNote(invoiceData.delivery_note);
@@ -695,7 +698,7 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
         if (Array.isArray(invoiceItem)) {
             const transformedItems = invoiceItem.map(item => ({
                 descriptionalGoodsId: item.item_id, 
-                descriptionalGoods: '', 
+                descriptionalGoods: item.good_service_name, 
                 hsnSac: item.hsn_sac,
                 hsnSacId: '', 
                 quantity: item.quantity,
