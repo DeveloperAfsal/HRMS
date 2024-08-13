@@ -105,7 +105,6 @@ const AddVisitor = ({ navigation }) => {
                 } else {
                     const compressedUri = await compressImage(image);
                     setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
-                    performCheckIn();
                 }
             }
         }
@@ -119,7 +118,6 @@ const AddVisitor = ({ navigation }) => {
                 height: 1024,
                 cropping: true,
                 compressImageQuality: 0.8,
-                cropperCircleOverlay: true,
                 includeBase64: true,
                 cropperToolbarTitle: 'Edit Image',
             });
