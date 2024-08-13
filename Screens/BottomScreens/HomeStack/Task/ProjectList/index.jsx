@@ -344,7 +344,7 @@ const ProjectList = ({ navigation }) => {
                                 <View style={[styles.row, styles.listHeader]}>
                                     <Text style={[styles.header, styles.cell, styles.sno]}>S.No</Text>
                                     <Text style={[styles.header, styles.cell, styles.DepartmentName]}>Project Name</Text>
-                                    <Text style={[styles.header, styles.cell, styles.EmployeeName]}>Project Type</Text>
+                                    <Text style={[styles.header, styles.cell, styles.EmployeeName, { textAlign: 'left' }]}>Project Type</Text>
                                     <Text style={[styles.header, styles.cell, styles.StartDate]}>Project Category</Text>
                                     <Text style={[styles.header, styles.cell, styles.EndDate]}>Project Work Type</Text>
                                     <Text style={[styles.header, styles.cell, styles.ShiftSlot]}>Client Company</Text>
