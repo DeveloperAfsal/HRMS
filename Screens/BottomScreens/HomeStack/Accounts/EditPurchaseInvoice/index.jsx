@@ -62,8 +62,6 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
         editable: false
     }]);
 
-    console.log(items)
-
     const addContainer = () => {
 
         setItems([...items, {
@@ -212,7 +210,6 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
             });
 
             const responseData = response.data.data;
-            console.log(responseData, "responseData");
 
             // Update the specific item in items state
 
@@ -664,7 +661,10 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
     useEffect(() => {
         setSelectedDocument(invoiceData.vendor_companyname);
         setSelectedDocument1(invoiceData.ship_companyname);
-        setSelectedDocument2(invoiceData.bill_companyname)
+        setSelectedDocument2(invoiceData.bill_companyname);
+        setSelectedDocumentId(invoiceData.vendor_id);
+        setSelectedDocumentId1(invoiceData.ship_to);
+        setSelectedDocumentId2(invoiceData.bill_to);
         setInvNumber(invoiceData.bill_number);
         setStartDate(new Date(invoiceData.bill_date));
         setDeliveryNote(invoiceData.delivery_note);
@@ -1411,7 +1411,7 @@ const EditPurchaseInvoice = ({ route, navigation }) => {
                         load ?
                             <ActivityIndicator size={"small"} color={"#fff"} /> :
                             <Text style={styles.HeaderButtonTextActive}>
-                                Update Purchase Invoice
+                                Update
                             </Text>
                     }
                 </TouchableOpacity>

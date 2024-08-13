@@ -34,8 +34,6 @@ const LoginScreen = ({ navigation }) => {
 
     // handle login
 
-    // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
     const handleLogin = async () => {
 
         setLoad(true)
@@ -65,51 +63,13 @@ const LoginScreen = ({ navigation }) => {
                 password: password
             });
 
-            if (response && response.data && response.data.token) {
+            if (response && response.data) {
 
                 setLoad(false);
 
-                // handleShowAlert();
-                // await delay(1500);
-
                 const data = response.data;
 
-                const val = {
-                    token: data.token,
-                    usercheckincurrentdate: data.usercheckincurrentdate,
-                    userdepartment: data.userdepartment,
-                    userdepartmentname: data.userdepartmentname,
-                    useremail: data.useremail,
-                    userempcheckintime: data.userempcheckintime,
-                    userempcheckouttime: data.userempcheckouttime,
-                    userempchecktotaltime: data.userempchecktotaltime,
-                    userempid: data.userempid,
-                    userepkempid: data.userepkempid,
-                    userimage: data.userimage,
-                    userlogin: data.userlogin,
-                    usermobile: data.usermobile,
-                    username: data.username,
-                    userrole: data.userrole,
-                    supervisor: data.supervisor,
-                    user_loginid: data.user_loginid,
-                };
-
-                const mail = {
-                    useremail: data.useremail,
-                }
-
-                // Convert val to a string before storing it in localStorage
-
-                const valString = JSON.stringify(val);
-                const mailString = JSON.stringify(mail);
-
-                // Set the stringified val in localStorage
-
-                AsyncStorage.setItem('userData', valString);
-                dispatch({ type: 'SET_USER_DATA', payload: val })
-
-                AsyncStorage.setItem('userMail', mailString);
-                dispatch({ type: 'SET_EMAIL', payload: mail })
+                handleShowAlert(data);
 
             } else {
                 setLoad(false);
@@ -124,10 +84,52 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const [isAlertVisible, setAlertVisible] = useState(false);
-    const handleShowAlert = (res) => {
+
+    const handleShowAlert = (data) => {
+
         setAlertVisible(true);
+
         setTimeout(() => {
+
             setAlertVisible(false);
+
+            const val = {
+                token: data.token,
+                usercheckincurrentdate: data.usercheckincurrentdate,
+                userdepartment: data.userdepartment,
+                userdepartmentname: data.userdepartmentname,
+                useremail: data.useremail,
+                userempcheckintime: data.userempcheckintime,
+                userempcheckouttime: data.userempcheckouttime,
+                userempchecktotaltime: data.userempchecktotaltime,
+                userempid: data.userempid,
+                userepkempid: data.userepkempid,
+                userimage: data.userimage,
+                userlogin: data.userlogin,
+                usermobile: data.usermobile,
+                username: data.username,
+                userrole: data.userrole,
+                supervisor: data.supervisor,
+                user_loginid: data.user_loginid,
+            };
+
+            const mail = {
+                useremail: data.useremail,
+            }
+
+            // Convert val to a string before storing it in localStorage
+
+            const valString = JSON.stringify(val);
+            const mailString = JSON.stringify(mail);
+
+            // Set the stringified val in localStorage
+
+            AsyncStorage.setItem('userData', valString);
+            dispatch({ type: 'SET_USER_DATA', payload: val })
+
+            AsyncStorage.setItem('userMail', mailString);
+            dispatch({ type: 'SET_EMAIL', payload: mail })
+
         }, 2500);
     };
 
@@ -222,14 +224,6 @@ const LoginScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* <View style={styles.powerby}>
-                    <Text style={styles.powerbyText}>Powered by</Text>
-                </View>
-
-                <View style={styles.powerdebyContent}>
-                    <View style={styles.powerdebyContentIcon}></View>
-                    <Text style={styles.powerdebyContentName}>ABCD</Text>
-                </View> */}
             </View>
 
             <View style={styles.endContainer}>

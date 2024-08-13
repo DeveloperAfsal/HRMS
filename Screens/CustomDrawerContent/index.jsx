@@ -258,38 +258,38 @@ const CustomDrawerContent = ({ navigation }) => {
 
     // Log out
 
-    // const signout = async () => {
-
-    //     await AsyncStorage.removeItem('userData');
-    //     const val = {};
-    //     dispatch({ type: 'REMOVE_USER_DATA', payload: val });
-
-    // }
-
     const signout = async () => {
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/logout';
+
+        await AsyncStorage.removeItem('userData');
+        const val = {};
+        dispatch({ type: 'REMOVE_USER_DATA', payload: val });
+
+    }
+
+    // const signout = async () => {
+    //     try {
+    //         const apiUrl = 'https://ocean21.in/api/public/api/logout';
             
-            const response = await axios.post(apiUrl, {}, { 
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
+    //         const response = await axios.post(apiUrl, {}, { 
+    //             headers: {
+    //                 Authorization: `Bearer ${data.token}`
+    //             }
+    //         });
     
-            const ResData = response.data;
+    //         const ResData = response.data;
     
-            if (ResData.status === "success") {
-                Alert.alert("Successful", ResData.message);
-                await AsyncStorage.removeItem('userData');
-                dispatch({ type: 'REMOVE_USER_DATA', payload: {} });
-            } else {
-                Alert.alert("Failed", ResData.message);
-            }
+    //         if (ResData.status === "success") {
+    //             Alert.alert("Successful", ResData.message);
+    //             await AsyncStorage.removeItem('userData');
+    //             dispatch({ type: 'REMOVE_USER_DATA', payload: {} });
+    //         } else {
+    //             Alert.alert("Failed", ResData.message);
+    //         }
     
-        } catch (error) {
-            console.error('Error signing out:', error);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Error signing out:', error);
+    //     }
+    // };
     
 
     // Image URL  

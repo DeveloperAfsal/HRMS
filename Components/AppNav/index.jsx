@@ -59,13 +59,13 @@ const AppNav = ({ navigation }) => {
         }, 2500);
     };
 
-    useEffect(() => {
-        if (data != null) {
-            handleShowAlert();
-        } else {
-            // Alert.alert("Oops", "Your Session Has Expired");
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (data != null) {
+    //         handleShowAlert();
+    //     } else {
+    //         // Alert.alert("Oops", "Your Session Has Expired");
+    //     }
+    // }, [data]);
 
 
 

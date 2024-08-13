@@ -10,7 +10,7 @@ import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
 
-const EditSalesInvoice = ({ route,navigation }) => {
+const EditSalesInvoice = ({ route, navigation }) => {
 
     // route
 
@@ -254,28 +254,28 @@ const EditSalesInvoice = ({ route,navigation }) => {
 
     const [invoiceNumber, setInvoiceNumber] = useState('');
 
-    const InvoiceNumberApi = async () => {
+    // const InvoiceNumberApi = async () => {
 
-        try {
-            const apiUrl = 'https://ocean21.in/api/public/api/autogeneratesaleinvoiceid';
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${data.token}`
-                }
-            });
+    //     try {
+    //         const apiUrl = 'https://ocean21.in/api/public/api/autogeneratesaleinvoiceid';
+    //         const response = await axios.get(apiUrl, {
+    //             headers: {
+    //                 Authorization: `Bearer ${data.token}`
+    //             }
+    //         });
 
-            const responseData = response.data.data;
-            setInvoiceNumber(responseData);
+    //         const responseData = response.data.data;
+    //         setInvoiceNumber(responseData);
 
-        } catch (error) {
-            console.error('Error fetching Invoice Number data:', error);
-        }
+    //     } catch (error) {
+    //         console.error('Error fetching Invoice Number data:', error);
+    //     }
 
-    }
+    // }
 
-    useEffect(() => {
-        InvoiceNumberApi();
-    }, [])
+    // useEffect(() => {
+    //     InvoiceNumberApi();
+    // }, [])
 
     // 
 
@@ -593,6 +593,9 @@ const EditSalesInvoice = ({ route,navigation }) => {
     useEffect(() => {
         setSelectedDocument(invoiceData.from_companyname);
         setSelectedDocument1(invoiceData.to_companyname);
+        setSelectedDocumentId(invoiceData.company_from);
+        setSelectedDocumentId1(invoiceData.company_to);
+        setInvoiceNumber(invoiceData.sales_invoice_number);
         setStartDate(new Date(invoiceData.date));
         setCGST(invoiceData.cgst_percentage);
         setSGST(invoiceData.sgst_percentage);
@@ -612,21 +615,21 @@ const EditSalesInvoice = ({ route,navigation }) => {
     useEffect(() => {
         if (Array.isArray(invoiceItem)) {
             const transformedItems = invoiceItem.map(item => ({
-                descriptionalGoodsId: item.item_id, 
-                descriptionalGoods: item.good_service_name, 
+                descriptionalGoodsId: item.item_id,
+                descriptionalGoods: item.good_service_name,
                 hsnSac: item.hsn_sac,
-                hsnSacId: '', 
+                hsnSacId: '',
                 quantity: item.quantity,
                 rate: item.rate,
                 per: item.per,
                 amount: item.amount,
                 editable: false
             }));
-    
+
             setItems(transformedItems);
         } else {
             console.error('invoiceItem is not an array:', invoiceItem);
-            setItems([]); 
+            setItems([]);
         }
     }, [invoiceItem]);
 
@@ -1105,7 +1108,7 @@ const EditSalesInvoice = ({ route,navigation }) => {
                         load ?
                             <ActivityIndicator size={"small"} color={"#fff"} /> :
                             <Text style={styles.HeaderButtonTextActive}>
-                                Add Invoice
+                                Update
                             </Text>
                     }
                 </TouchableOpacity>
