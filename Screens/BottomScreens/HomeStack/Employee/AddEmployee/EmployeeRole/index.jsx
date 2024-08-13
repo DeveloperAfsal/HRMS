@@ -125,6 +125,8 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
         setShowOvertime(false);
     };
 
+    const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 
     return (
 
@@ -222,7 +224,7 @@ const EmployeeRole = ({ onBankDetails, onprevEmpDetails, validation }) => {
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.officialEmail ? "Official Email Required" : null) : null}
+                {validation ? (!Employee.officialEmail ? "Official Email Required": !emailRegex.test(Employee.officialEmail) ? "Enter Valid E-mail" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>

@@ -4,7 +4,7 @@ import styles from "./style";
 import DeleteIcon from "../../../../../Assets/Icons/Delete.svg";
 import DropdownIcon from "../../../../../Assets/Icons/Dropdowndownarrow.svg";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { format, parse } from 'date-fns';
 import axios from "axios";
@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import LottieAlertSucess from "../../../../../Assets/Alerts/Success";
 import LottieAlertError from "../../../../../Assets/Alerts/Error";
 import LottieCatchError from "../../../../../Assets/Alerts/Catch";
+import { check, request, PERMISSIONS } from 'react-native-permissions';
 
 const AddVisitor = ({ navigation }) => {
 
@@ -39,7 +40,7 @@ const AddVisitor = ({ navigation }) => {
     const [load, SetLoad] = useState(false);
 
     // 
-    const [selectedImage, setSelectedImage] = useState([]);
+    
     const [selectedImageErr, setSelectedImageErr] = useState([]);
 
     const renderSelectedImage = () => {
@@ -70,7 +71,44 @@ const AddVisitor = ({ navigation }) => {
     };
 
     const handleFromGallery = () => {
-        launchImageLibrary({ mediaType: 'photo', selectionLimit: 1 }, handleImagePickerResult);
+        checkAndRequestCameraPermission();
+    };
+
+    const checkAndRequestCameraPermission = async () => {
+        const status = await check(PERMISSIONS.ANDROID.CAMERA);
+    
+        if (status !== 'granted') {
+            const result = await request(PERMISSIONS.ANDROID.CAMERA);
+            if (result !== 'granted') {
+                console.log('Camera permission is not granted');
+                return;
+            }
+        }
+    
+        handleFromCamera(); 
+    };
+
+    const [selectedImage, setSelectedImage] = useState([]);
+
+    const handleFromCamera = () => {
+        launchCamera({ mediaType: 'photo', cameraType: 'front' }, handleImagePickerResult);
+    };
+
+    const handleImagePickerResult = async (result) => {
+        if (!result.didCancel) {
+            const images = result.assets ? result.assets : [result];
+            for (const image of images) {
+                const response = await fetch(image.uri);
+                const blob = await response.blob();
+                if (blob.size > 3 * 1024 * 1024) {
+                    Alert.alert("File size should be less than 1MB");
+                } else {
+                    const compressedUri = await compressImage(image);
+                    setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
+                    performCheckIn();
+                }
+            }
+        }
     };
 
     const compressImage = async (image) => {
@@ -81,7 +119,7 @@ const AddVisitor = ({ navigation }) => {
                 height: 1024,
                 cropping: true,
                 compressImageQuality: 0.8,
-                cropperCircleOverlay: false,
+                cropperCircleOverlay: true,
                 includeBase64: true,
                 cropperToolbarTitle: 'Edit Image',
             });
@@ -89,23 +127,6 @@ const AddVisitor = ({ navigation }) => {
         } catch (error) {
             console.error('Error compressing image:', error);
             return null;
-        }
-    };
-
-    const handleImagePickerResult = async (result) => {
-        if (!result.didCancel) {
-            const images = result.assets ? result.assets : [result];
-            for (const image of images) {
-                const response = await fetch(image.uri);
-                const blob = await response.blob();
-                if (blob.size > 1024 * 1024) {
-                    Alert.alert("File size should be less than 1MB");
-                } else {
-                    const compressedUri = await compressImage(image);
-                    console.log(compressedUri, "compressedUri")
-                    setSelectedImage(prevImages => [...prevImages, compressedUri.path]);
-                }
-            }
         }
     };
 

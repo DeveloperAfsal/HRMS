@@ -254,6 +254,7 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
 
     const todayFormatted = getFormattedTodayDate();
 
+    const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     return (
 
@@ -446,32 +447,15 @@ const BasicDetails = ({ onEmpDetails, selectedImage, setSelectedImage, selectedI
             />
 
             <Text style={styles.errorText}>
-                {validation ? (!Employee.email ? "Email Required" : null) : null}
+                {validation ? (!Employee.email ? "Email Required" : !emailRegex.test(Employee.email) ? "Enter Valid E-mail": null) : null}
             </Text>
 
             <Text style={styles.subHeading}>
                 Date Of Birth
             </Text>
 
-            {/* <View style={styles.inputs}>
-                <Text onPress={showDatepicker}>
-                    {formattedDOB}
-                </Text>
-                {showDatePicker && (
-                    <DateTimePicker
-                        value={selectedDate}
-                        mode="date"
-                        display="default"
-                        onChange={handleDateChange}
-                        maximumDate={new Date()}
-                    />
-                )}
-            </View> */}
-
             <View style={styles.inputs} >
                 <Text onPress={showDatepicker}>
-                    {/* {startDate.toDateString()} &nbsp; */}
-                    {/* {startDate ? startDate.toDateString() : "Select Date Of Birth"} &nbsp; */}
                     {startDate ? formatDate(startDate) : Employee.dob ? Employee.dob : "Select Date Of Birth"} &nbsp;
                 </Text>
                 {showDatePicker && (
