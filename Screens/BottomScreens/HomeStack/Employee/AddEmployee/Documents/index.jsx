@@ -171,6 +171,8 @@ const Documents = ({
 
     // Handle Submit
 
+    console.log(Employee.employeeJobTypeId,"Employee.employeeJobTypeId")
+
     const HandleSubmit = async () => {
 
         setLoad(true);
@@ -272,6 +274,8 @@ const Documents = ({
 
         formData.append('aadhar_no', Employee.aadharNumber);
         formData.append('pan_no', Employee.panNumber);
+
+        formData.append('job_type', Employee.employeeJobTypeId);
 
         formData.append('employee_category', Employee.selectedemployeeCategory);
 

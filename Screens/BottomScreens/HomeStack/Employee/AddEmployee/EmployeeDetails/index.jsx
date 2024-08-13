@@ -62,6 +62,41 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
         setShowDropdown(!showDropdown);
     }
 
+    // Job type
+
+    const [showDropdownJobType, setShowDropdownJobType] = useState(false);
+    const [jobTypeList, setJobTypeList] = useState([]);
+
+    // Api call for Category
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const apiUrl = 'https://ocean21.in/api/public/api/getjobtype';
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`
+                    }
+                });
+                const responseData = response.data.data;
+                setJobTypeList(responseData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const selectJobtype = (File) => {
+        handleFieldsChange('employeeJobType', File.job_name);
+        handleFieldsChange('employeeJobTypeId', File.id);
+        setShowDropdownJobType(false);
+    };
+
+    const toggleDropdownType = () => {
+        setShowDropdownJobType(!showDropdownJobType);
+    }
+
     // 
 
     const [showPF, setShowPF] = useState(false);
@@ -263,6 +298,33 @@ const EmployeeDetails = ({ onEmpRole, onprevBasicDetails, validation, setDoj }) 
 
             <Text style={styles.Heading}>
                 Employee Details
+            </Text>
+
+            <Text style={styles.subHeading}>
+                Employee Job Type
+            </Text>
+
+            <TouchableOpacity onPress={toggleDropdownType} style={styles.StatusTouchable}>
+
+                <Text style={styles.StatusTouchableText}>
+                    {Employee.employeeJobType && Employee.employeeJobType.length > 0 ? Employee.employeeJobType : "Select Job Type"}
+                </Text>
+                <DropdownIcon width={14} height={14} color={"#000"} />
+
+            </TouchableOpacity>
+
+            {showDropdownJobType && (
+                <View style={styles.dropdown}>
+                    {jobTypeList.map((File, index) => (
+                        <TouchableOpacity key={index} onPress={() => selectJobtype(File)} style={styles.dropdownOption}>
+                            <Text style={styles.dropdownOptionText}>{File.job_name}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+
+            <Text style={styles.errorText}>
+                {validation ? (Employee.employeeJobType.length == "0" ? "Select Job Type" : null) : null}
             </Text>
 
             <Text style={styles.subHeading}>

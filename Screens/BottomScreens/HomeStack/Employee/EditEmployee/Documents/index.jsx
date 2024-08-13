@@ -423,10 +423,22 @@ const Documents = ({
         formData.append('aadhar_no', employee.aadhar_number);
         formData.append('pan_no', employee.pan_number);
 
+        if (!employee.job_type) {
+            formData.append('job_type', "-");
+        } else {
+            formData.append('job_type', employee.job_type);
+        }
+
+        if (!employee.job_type_name) {
+            formData.append('job_type_name', "-");
+        } else {
+            formData.append('job_type_name', employee.job_type_name);
+        }
+
         if (!employee.employee_category) {
             formData.append('employee_category', "-");
         } else {
-            formData.append('employee_category', employee.employee_category);
+            formData.append('employee_category', employee.category_id);
         }
 
         if (!employee.doj) {

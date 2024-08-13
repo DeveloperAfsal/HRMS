@@ -244,7 +244,6 @@ const Template = ({ navigation }) => {
 
             if (responsedata.status === "success") {
                 setLoad(false);
-                // Alert.alert("success", responsedata.message);
                 handleShowAlert(responsedata.message);
                 setTitle('');
                 setSelectedStatus(null);
@@ -252,12 +251,10 @@ const Template = ({ navigation }) => {
                 fetchData();
             } else {
                 setLoad(false);
-                // Alert.alert("Error", responsedata.message)
                 handleShowAlert1(responsedata.message);
             }
 
         } catch (error) {
-            // console.log(error, "error");
             handleShowAlert2();
             setLoad(false);
         }
@@ -778,7 +775,7 @@ const Template = ({ navigation }) => {
 
                             <View style={styles.modalContent}>
 
-                                <Text style={styles.Heading}>Edit Template</Text>
+                                <Text style={styles.Heading}>Edit Company Policy</Text>
                                 <Text style={styles.modalLabelText}>Title</Text>
 
                                 <TextInput
@@ -849,7 +846,7 @@ const Template = ({ navigation }) => {
                                         {
                                             EditLoad ?
                                                 <ActivityIndicator size={"small"} color={"#fff"} /> :
-                                                <Text style={styles.modalSubmitButtonText}>Submit</Text>
+                                                <Text style={styles.modalSubmitButtonText}>Update</Text>
                                         }
                                     </TouchableOpacity>
 

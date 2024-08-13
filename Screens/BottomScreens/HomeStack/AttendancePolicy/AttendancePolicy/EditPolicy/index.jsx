@@ -516,7 +516,7 @@ const EditPolicy = ({ route, navigation }) => {
             <View style={styles.PolicyContainer}>
 
                 <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Edit Attendance Policy Form</Text>
+                    <Text style={styles.PolicyContainerTitleText}>Edit Attendance Slot</Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>

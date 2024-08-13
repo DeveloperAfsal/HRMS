@@ -786,7 +786,7 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                                 {checkedNames.EmployeeManagement.ORGStructure.includes('add_Role') && (
                                                     <DrawerItem
-                                                        label="Add Role / designation"
+                                                        label="Add Role / Designation"
                                                         onPress={() => navigation.navigate('Add Role')}
                                                     />
                                                 )}
@@ -800,14 +800,14 @@ const CustomDrawerContent = ({ navigation }) => {
 
                                                 {checkedNames.EmployeeManagement.ORGStructure.includes('supervisor_list') && (
                                                     <DrawerItem
-                                                        label="Supervisor List"
+                                                        label="Supervisor List / Hierarchy"
                                                         onPress={() => navigation.navigate('Supervisor List')}
                                                     />
                                                 )}
 
                                                 {checkedNames.EmployeeManagement.ORGStructure.includes('org_Chart') && (
                                                     <DrawerItem
-                                                        label="Org chart"
+                                                        label="ORG Chart"
                                                         onPress={() => navigation.navigate('ORG chart')}
                                                     />
                                                 )}

@@ -578,7 +578,7 @@ const AttendancePolicy = ({ navigation }) => {
             <View style={styles.PolicyContainer}>
 
                 <View style={styles.PolicyContainerTitleHeader}>
-                    <Text style={styles.PolicyContainerTitleText}>Attendance Policy Form</Text>
+                    <Text style={styles.PolicyContainerTitleText}>Attendance Slot</Text>
                 </View>
 
                 <View style={styles.Inputcontainer}>
@@ -913,6 +913,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Late"
                         value={late1}
                         onChangeText={(val) => setLate1(val)}
                     />
@@ -928,6 +929,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Day Deduction"
                         value={lateDeduction1}
                         onChangeText={(val) => setLateDeduction1(val)}
                     />
@@ -943,6 +945,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Late"
                         value={late2}
                         onChangeText={(val) => setLate2(val)}
                     />
@@ -958,6 +961,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Day Deduction"
                         value={lateDeduction2}
                         onChangeText={(val) => setLateDeduction2(val)}
                     />
@@ -974,6 +978,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Late"
                         value={late3}
                         onChangeText={(val) => setLate3(val)}
                     />
@@ -989,6 +994,7 @@ const AttendancePolicy = ({ navigation }) => {
                     <TextInput
                         style={styles.inputs}
                         keyboardType="number-pad"
+                        placeholder="No of Day Deduction"
                         value={lateDeduction3}
                         onChangeText={(val) => setLateDeduction3(val)}
                     />

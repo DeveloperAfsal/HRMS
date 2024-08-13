@@ -18,6 +18,8 @@ const initialState = {
         aadharNumber: '',
         panNumber: '',
 
+        employeeJobType: [],
+        employeeJobTypeId:'',
         employeeCategory: [],
         selectedemployeeCategory: '',
         dateOfJoining: '',
@@ -56,7 +58,7 @@ const initialState = {
         bankBranch: '',
         ifscCode: '',
         accountType: '',
-        
+
     }
 };
 
