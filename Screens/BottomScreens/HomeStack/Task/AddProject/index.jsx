@@ -40,7 +40,7 @@ const AddProject = ({ navigation }) => {
     const handleEmailChange = (txt) => {
         setCemail(txt);
         // Email validation regular expression
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         setIsValidEmail(emailRegex.test(txt));
     };
 
@@ -309,7 +309,7 @@ const AddProject = ({ navigation }) => {
             setCemailErr('');
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (cemail && !emailRegex.test(cemail)) {
             setCemailErr('Invalid email format');
             isValid = false;

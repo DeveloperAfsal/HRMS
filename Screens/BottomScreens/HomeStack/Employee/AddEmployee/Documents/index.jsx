@@ -192,7 +192,8 @@ const Documents = ({
             Employee.checkinCheckoutId && Employee.bankAccountNumber && Employee.bankName && Employee.bankBranch &&
             Employee.ifscCode && Employee.accountType
         ) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
             const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
             if (!emailRegex.test(Employee.email)) {

@@ -137,7 +137,7 @@ const EditResume = ({ route, navigation }) => {
             resume[0].expected_ctc && resume[0].notice_period && resume[0].status && resume[0].date_of_join &&
             resume[0].key_skills && EdocFile1
         ) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             const mobileNoPattern = /^\d{10}$/;
 
             if (!emailRegex.test(resume[0].email)) {

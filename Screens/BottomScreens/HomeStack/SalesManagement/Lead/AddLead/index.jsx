@@ -301,9 +301,11 @@ const AddLead = ({ navigation }) => {
             setMailErr('Enter Email');
             isValid = false;
         } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
             if (!emailRegex.test(mail)) {
-                setMailErr("Please enter a valid email address");
+                setMailErr('Please enter a valid email address');
                 isValid = false;
             } else {
                 setMailErr('');

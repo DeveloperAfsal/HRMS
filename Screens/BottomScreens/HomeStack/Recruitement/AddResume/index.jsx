@@ -97,7 +97,7 @@ const AddResume = ({ route, navigation }) => {
             Resume.expectedCTC && Resume.noticePeriod && Resume.candidateStatus && Resume.doj &&
             Resume.keySkills && docFile1
         ) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
             if (!emailRegex.test(Resume.email)) {
                 Alert.alert('Invalid Email ID', "Please enter a valid email address");
