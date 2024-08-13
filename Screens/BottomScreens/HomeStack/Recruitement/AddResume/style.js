@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
 
     Row: {
         flexDirection: 'row',
-        paddingVertical: '5%',
+        // paddingVertical: '5%',
     },
 
     Left: {

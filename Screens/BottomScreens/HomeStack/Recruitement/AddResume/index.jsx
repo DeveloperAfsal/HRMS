@@ -332,8 +332,8 @@ const AddResume = ({ route, navigation }) => {
                         />
                     }
 
-                    <View style={styles.HeaderButtonView}>
-
+                    {/* <View style={styles.HeaderButtonView}> */}
+                        {/* 
                         {activeComponent === 'Career' ? <TouchableOpacity
                             style={
 
@@ -349,9 +349,9 @@ const AddResume = ({ route, navigation }) => {
                             >
                                 Previous
                             </Text>
-                        </TouchableOpacity> : null}
+                        </TouchableOpacity> : null} */}
 
-                        {activeComponent === 'General' ? <TouchableOpacity
+                        {/* {activeComponent === 'General' ? <TouchableOpacity
                             style={
 
                                 styles.HeaderButtonActive
@@ -366,9 +366,9 @@ const AddResume = ({ route, navigation }) => {
                             >
                                 Next
                             </Text>
-                        </TouchableOpacity> : null}
+                        </TouchableOpacity> : null} */}
 
-                        {activeComponent === 'Career' ? <TouchableOpacity style={
+                        {/* {activeComponent === 'Career' ? <TouchableOpacity style={
                             styles.HeaderButtonActive
                         } onPress={HandleSubmit}>
                             {load ?
@@ -380,9 +380,9 @@ const AddResume = ({ route, navigation }) => {
                                 >
                                     Submit
                                 </Text>}
-                        </TouchableOpacity> : null}
+                        </TouchableOpacity> : null} */}
 
-                        {activeComponent === 'Career' ? <TouchableOpacity style={
+                        {/* {activeComponent === 'Career' ? <TouchableOpacity style={
                             styles.HeaderButton
                         } onPress={HandleCancel}>
                             <Text
@@ -392,8 +392,37 @@ const AddResume = ({ route, navigation }) => {
                             >
                                 Cancel
                             </Text>
+                        </TouchableOpacity> : null} */}
+
+                    {/* </View> */}
+
+                    <View style={[styles.fullWidth, styles.Row, styles.Left]}>
+                        {activeComponent === 'Career' ? <TouchableOpacity style={styles.PrevButton} onPress={() => renderComponent('General')}>
+                            <Text style={styles.PrevButtonText}>
+                                Previous
+                            </Text>
                         </TouchableOpacity> : null}
 
+                        {activeComponent === 'General' ? <TouchableOpacity style={styles.NextButton} onPress={() => renderComponent('Career')}>
+                            <Text style={styles.NextButtonText}>
+                                Next
+                            </Text>
+                        </TouchableOpacity> : null}
+
+                        {activeComponent === 'Career' ? <TouchableOpacity style={styles.NextButton} onPress={HandleSubmit}>
+                            {
+                                load ? <ActivityIndicator size={"small"} color={"#fff"} /> :
+                                    <Text style={styles.NextButtonText}>
+                                        Submit
+                                    </Text>
+                            }
+                        </TouchableOpacity> : null}
+
+                        {activeComponent === 'Career' ? <TouchableOpacity style={styles.PrevButton} onPress={HandleCancel}>
+                            <Text style={styles.PrevButtonText}>
+                                Cancel
+                            </Text>
+                        </TouchableOpacity> : null}
                     </View>
 
                 </View>
