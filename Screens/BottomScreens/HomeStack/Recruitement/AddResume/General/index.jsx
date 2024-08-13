@@ -473,6 +473,7 @@ const AddGeneral = ({
                     <TextInput
                         value={Resume.mobileNo}
                         onChangeText={(text) => handleFieldsChange('mobileNo', text)}
+                        keyboardType="number-pad"
                         style={styles.inputs}
                     />
 
@@ -494,6 +495,7 @@ const AddGeneral = ({
                     <TextInput
                         value={Resume.alternativeMobileNo}
                         onChangeText={(text) => handleFieldsChange('alternativeMobileNo', text)}
+                        keyboardType="number-pad"
                         style={styles.inputs}
                     />
 
