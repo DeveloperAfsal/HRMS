@@ -361,8 +361,8 @@ const styles = StyleSheet.create({
     },
 
     NextButton: {
-        // width: "30%",
-        width: 110,
+        width: "30%",
+        // width: 110,
         height: 40,
         borderRadius: 5,
         backgroundColor: '#0A62F1',
@@ -380,8 +380,8 @@ const styles = StyleSheet.create({
     },
 
     PrevButton: {
-        // width: "30%",
-        width: 110,
+        width: "30%",
+        // width: 110,
         height: 40,
         borderRadius: 5,
         borderColor: '#0A62F1',
