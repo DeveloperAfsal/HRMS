@@ -334,6 +334,8 @@ const AddGeneral = ({
         PrefCityApi();
     }, [])
 
+    const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     return (
 
         <ScrollView>
@@ -463,7 +465,7 @@ const AddGeneral = ({
                     />
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.email ? "Email Required" : null) : null}
+                        {validation ? (!Resume.email ? "Email Required" : !emailRegex.test(Resume.email) ? "Please enter a valid email address" : null) : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -500,7 +502,7 @@ const AddGeneral = ({
                     />
 
                     <Text style={styles.errorText}>
-                        {}
+                        { }
                     </Text>
 
                     <Text style={styles.StatDateText}>

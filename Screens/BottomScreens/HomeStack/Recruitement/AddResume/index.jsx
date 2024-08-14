@@ -256,10 +256,13 @@ const AddResume = ({ route, navigation }) => {
 
     const HandleCancel = () => {
         dispatch(removeFields());
+        setSelectedPrefCity([]);
+        setSelectedPrefCityId([]);
         setDocFileErr1('');
         setDocFileErr('');
         setDocFile1('');
         setDocFile('');
+        setValidation(false);
     }
 
     // 

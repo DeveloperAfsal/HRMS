@@ -208,9 +208,12 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
     };
 
     const showDatepicker = () => {
-        setShowDatePicker(true);
+        if (isDOJEditable) {
+            setShowDatePicker(true);
+        }
     };
 
+    const isDOJEditable = Resume.candidateStatus === "Offered" || Resume.candidateStatus === "Joined";
 
     return (
 
@@ -521,7 +524,9 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     </View>
 
                     <Text style={styles.errorText}>
-                        {validation ? (!Resume.doj ? "Date Of Joining Required" : null) : null}
+                        {Resume.candidateStatus === "Offered" || Resume.candidateStatus === "Joined"
+                            ? (validation ? (!startDate ? "Date Of Joining Required" : null) : null)
+                            : null}
                     </Text>
 
                     <Text style={styles.StatDateText}>
@@ -569,7 +574,7 @@ const AddCareer = ({ navigation, handleDocumentSelection1, docFile1, docFileErr1
                     </View>
 
                     <Text style={styles.errorText}>
-                    {validation ? (!docFile1 ? "Resume Required" : null) : null}
+                        {validation ? (!docFile1 ? "Resume Required" : null) : null}
                     </Text>
 
                 </View>
