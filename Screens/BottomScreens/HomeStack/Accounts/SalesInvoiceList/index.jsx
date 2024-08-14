@@ -361,6 +361,7 @@ const SalesInvoiceList = ({ navigation }) => {
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
+                                                    onPress={() => navigation.navigate('View Sales Invoice', { Id: item })}
                                                     style={styles.listcontentviewbutton}>
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

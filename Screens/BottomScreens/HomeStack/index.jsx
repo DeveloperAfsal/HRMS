@@ -153,6 +153,7 @@ import PurchaseInvoiceList from "./Accounts/PurchaseInvoiceList";
 import AddPurchaseInvoice from "./Accounts/AddPurchaseInvoice";
 import EditPurchaseInvoice from "./Accounts/EditPurchaseInvoice";
 import EditSalesInvoice from "./Accounts/EditSalesInvoice";
+import SalesInvoiceView from "./Accounts/ViewSalesInvoice";
 
 const Stack = createNativeStackNavigator();
 
@@ -396,7 +397,7 @@ const HomeStack = () => {
       <Stack.Screen name="Purchase Invoice List" component={PurchaseInvoiceList} />
       <Stack.Screen name="Edit Purchase Invoice" component={EditPurchaseInvoice} />
       <Stack.Screen name="Edit Sales Invoice" component={EditSalesInvoice} />
-
+      <Stack.Screen name="View Sales Invoice" component={SalesInvoiceView} />
 
       {/*  */}
 
