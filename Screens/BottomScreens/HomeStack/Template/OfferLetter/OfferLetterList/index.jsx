@@ -276,6 +276,7 @@ const OfferLetterList = ({ navigation }) => {
                                                     <EditIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
+                                                 onPress={() => navigation.navigate('View Offer Letter', { Id: item })}
                                                     style={styles.listcontentviewbutton}>
                                                     <ViewIcon width={14} height={14} color={"#000"} />
                                                 </TouchableOpacity>

@@ -154,6 +154,9 @@ import AddPurchaseInvoice from "./Accounts/AddPurchaseInvoice";
 import EditPurchaseInvoice from "./Accounts/EditPurchaseInvoice";
 import EditSalesInvoice from "./Accounts/EditSalesInvoice";
 import SalesInvoiceView from "./Accounts/ViewSalesInvoice";
+import ViewOfferLetter from "./Template/OfferLetter/ViewOfferLetter";
+import ViewAppointmentLetter from "./Template/AppointmentLetter/ViewAppointmentLetter";
+import ViewReliveingLetter from "./Template/ReleivingLetter/ViewRelivingLetter";
 
 const Stack = createNativeStackNavigator();
 
@@ -403,14 +406,17 @@ const HomeStack = () => {
 
       <Stack.Screen name="Add Offer Letter" component={AddOfferLetter} />
       <Stack.Screen name="Edit Offer Letter" component={EditOfferLetter} />
+      <Stack.Screen name="View Offer Letter" component={ViewOfferLetter} />
       <Stack.Screen name="Offer Letter List" component={OfferLetterList} />
 
       <Stack.Screen name="Add Appointment Letter" component={AddAppoinmentLetter} />
       <Stack.Screen name="Edit Appointment Letter" component={EditAppointmentLetter} />
+      <Stack.Screen name="View Appointment Letter" component={ViewAppointmentLetter} />
       <Stack.Screen name="Appointment Letter List" component={AppointmentLetterList} />
 
       <Stack.Screen name="Add Relieving Letter" component={AddRelievingLetter} />
       <Stack.Screen name="Edit Relieving Letter" component={EditRelievingLetter} />
+      <Stack.Screen name="View Relieving Letter" component={ViewReliveingLetter} />
       <Stack.Screen name="Relieving Letter List" component={RelievingLetterList} />
 
     </Stack.Navigator>

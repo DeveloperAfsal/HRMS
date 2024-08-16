@@ -75,20 +75,44 @@ const SalesInvoiceView = ({ route, navigation }) => {
         }
 
         .container {
-            width: 100%;
+            width: 90%;
             margin: auto;
+            padding-top: 90px; /* Space for header */
+            padding-bottom: 30px;
+            page-break-inside: always;
         }
 
         .header,
         .footer {
             text-align: center;
             font-weight: bold;
+            position: fixed;
+            left: 0;
+        right: 0;
+        background: #fff;
+        z-index: 10;
+        }
+
+          .header {
+                    top: 0;
+        padding-bottom: 10px;
+
+        }
+
+        .footer {
+         bottom: 0;
+        padding-top: 10px;
         }
 
         .row {
             display: flex;
             margin: 0;
             padding: 0;
+             page-break-inside: avoid;
+        }
+
+        .page-break {
+            page-break-inside: always;
         }
 
         .c {
@@ -189,13 +213,18 @@ const SalesInvoiceView = ({ route, navigation }) => {
         }
 
         p {
-         margin: 0;
-         padding: 0;
-        }
+        margin: 0;
+        padding: 0;
+    }
 
-        .top{
+    .top {
         margin-top: 10px;
-        }
+    }
+
+    @page {
+        margin: 20px 0;
+    }
+
     </style>
 </head>
 
@@ -204,6 +233,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
         <div class="header">
             <h1>INVOICE</h1>
         </div>
+
         <div class="row">
             <div class="col-2">
                 <strong>${invoiceData.from_companyname}</strong><br />
@@ -220,6 +250,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
             </div>
          
         </div>
+
         <div class="row">
             <div class="col-2">
                 <strong>Buyer (Bill to)</strong><br />
@@ -232,6 +263,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 
             </div>
         </div>
+
         <div class="row">
             <div class="row one">
                 <p class="sno">S.no</p>
@@ -245,8 +277,9 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 <p class="Amount">Amount</p>
             </div>
         </div>
+
         ${invoiceItem.map((item, index) => `
-        <div class="row">
+        <div class="row page-break">
             <div class="row one">
                 <p class="sno">${index + 1}.</p>
                 <p class="Descriptional">${item.good_service_name}<br />
@@ -261,6 +294,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
             </div>
         </div>
         `).join('')}
+
         <div class="row">
             <div class="row one">
                 <p class="sno"></p>
@@ -278,6 +312,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 <p class="Amount"></p>
             </div>
         </div>
+
         <div class="row">
              <div class="col">
                 <strong>Total</strong>
@@ -286,6 +321,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 <strong>${invoiceData.overall_amount}</strong>
             </div>
         </div>
+
         <div class="row">
             <div class="col-5">
                 <strong>Amount Chargeable (in words)</strong><br />
@@ -299,6 +335,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 Branch & IFS Code : ${invoiceData.from_branch_name}, ${invoiceData.from_ifsccode}
             </div>
         </div>
+
         <div class="row">
             <div class="col-5">
                 <strong>Declaration</strong><br />
@@ -310,6 +347,7 @@ const SalesInvoiceView = ({ route, navigation }) => {
                 Authorised Signatory
             </div>
         </div>
+        
         <div class="footer">
             <h3>This is Computer Generated Invoice</h3>
         </div>
