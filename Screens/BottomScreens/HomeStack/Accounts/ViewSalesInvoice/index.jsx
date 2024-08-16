@@ -63,312 +63,167 @@ const SalesInvoiceView = ({ route, navigation }) => {
 
 
     const exportToPDF = async () => {
-
         const htmlContent = `
-    <!DOCTYPE html>
-<html>
-
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            padding-top: 90px; /* Space for header */
-            padding-bottom: 30px;
-            page-break-inside: always;
-        }
-
-        .header,
-        .footer {
-            text-align: center;
-            font-weight: bold;
-            position: fixed;
-            left: 0;
-        right: 0;
-        background: #fff;
-        z-index: 10;
-        }
-
-          .header {
-                    top: 0;
-        padding-bottom: 10px;
-
-        }
-
-        .footer {
-         bottom: 0;
-        padding-top: 10px;
-        }
-
-        .row {
-            display: flex;
-            margin: 0;
-            padding: 0;
-             page-break-inside: avoid;
-        }
-
-        .page-break {
-            page-break-inside: always;
-        }
-
-        .c {
-        display: flex;
-        flex-direction: 'column';
-        }
-
-        .col {
-            width: 50%;
-            border: 1px solid #000;
-            text-align: right;
-            padding: 5px;
-        }
-
-        .col-1 {
-            width: 20%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .col-2 {
-            width: 50%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .col-3 {
-            width: 30%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .col-4 {
-            width: 25%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .col-5 {
-            width: 75%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .one{
-            width:50%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sno {
-            width:20%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .Descriptional{
-            width:50%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .Descriptionals{
-            width:50%;
-            padding: 5px;
-            border: 1px solid #000;
-            text-align: right;
-        }
-
-        .HSC {
-            width:30%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .quantity{
-            width:25%;
-            padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .rate {
-        width:25%;
-        padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .per {
-        width:25%;
-        padding: 5px;
-            border: 1px solid #000;
-        }
-
-        .Amount{
-        width:25%;
-        padding: 5px;
-            border: 1px solid #000;
-        }
-
-        p {
-        margin: 0;
-        padding: 0;
-    }
-
-    .top {
-        margin-top: 10px;
-    }
-
-    @page {
-        margin: 20px 0;
-    }
-
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>INVOICE</h1>
-        </div>
-
-        <div class="row">
-            <div class="col-2">
-                <strong>${invoiceData.from_companyname}</strong><br />
-                ${invoiceData.from_companyaddress}<br />
-                GSTIN/UIN : ${invoiceData.from_companygstin_uin}<br />
-                State Name : ${invoiceData.from_statename}
-            </div>
-            <div class="col-2">
-                <strong>Invoice No.</strong><br />
-                ${invoiceData.sales_invoice_number}<br/>
-                <br/>
-                  <strong>Dated</strong><br />
-                ${invoiceData.date}
-            </div>
-         
-        </div>
-
-        <div class="row">
-            <div class="col-2">
-                <strong>Buyer (Bill to)</strong><br />
-                <strong>${invoiceData.to_companyname}</strong><br />
-                ${invoiceData.to_companyaddress}<br />
-                GSTIN/UIN : ${invoiceData.to_companygstin_uin}<br />
-                State Name : ${invoiceData.to_statename}
-            </div>
-            <div class="col-2">
-                
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row one">
-                <p class="sno">S.no</p>
-                <p class="Descriptional">Description Of Goods</p>
-                <p class="HSC">HSN/SAC</p>
-            </div>
-            <div class="row one">
-                <p class="quantity">Quantity</p>
-                <p class="rate">Rate</p>
-                <p class="per">Per</p>
-                <p class="Amount">Amount</p>
-            </div>
-        </div>
-
-        ${invoiceItem.map((item, index) => `
-        <div class="row page-break">
-            <div class="row one">
-                <p class="sno">${index + 1}.</p>
-                <p class="Descriptional">${item.good_service_name}<br />
-                ${item.description}<br /><p/>
-                <p class="HSC">${item.hsn_sac}</p>
-            </div>
-            <div class="row one">
-                <p class="quantity">${item.quantity}</p>
-                <p class="rate">${item.rate}</p>
-                <p class="per">${item.per}</p>
-                <p class="Amount">${item.amount}</p>
-            </div>
-        </div>
-        `).join('')}
-
-        <div class="row">
-            <div class="row one">
-                <p class="sno"></p>
-                <p class="Descriptionals">
-                <strong>Output IGST ${invoiceData.igst_percentage}%<br /></strong>
-                <strong>Output CGST ${invoiceData.cgst_percentage}%<br /></strong>
-                <strong>Output SGST ${invoiceData.sgst_percentage}%</strong>
-                <p/>
-                <p class="HSC"></p>
-            </div>
-            <div class="row one">
-                <p class="quantity"></p>
-                <p class="rate"></p>
-                <p class="per"></p>
-                <p class="Amount"></p>
-            </div>
-        </div>
-
-        <div class="row">
-             <div class="col">
-                <strong>Total</strong>
-            </div>
-            <div class="col">
-                <strong>${invoiceData.overall_amount}</strong>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-5">
-                <strong>Amount Chargeable (in words)</strong><br />
-                ${numberWords}
-            </div>
-            <div class="col-5">
-                <strong>Company’s Bank Details</strong><br />
-                A/c Holder’s Name : ${invoiceData.from_accountholdername}<br />
-                Bank Name : ${invoiceData.from_bank_name}<br />
-                A/c No : ${invoiceData.from_account_number}<br />
-                Branch & IFS Code : ${invoiceData.from_branch_name}, ${invoiceData.from_ifsccode}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-5">
-                <strong>Declaration</strong><br />
-                We declare that this invoice shows the actual price of the goods described and that all particulars are
-                true and correct.
-            </div>
-            <div class="col-5">
-                for ${invoiceData.to_companyname}<br />
-                Authorised Signatory
-            </div>
-        </div>
-        
-        <div class="footer">
-            <h3>This is Computer Generated Invoice</h3>
-        </div>
-    </div>
-</body>
-
-</html>
-    `;
-
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                    }
+    
+                    .header, .footer {
+                        text-align: center;
+                        font-weight: bold;
+                    }
+    
+                    .header {
+                        top: 0;
+                        margin-bottom: 50px;
+                    }
+    
+                    .footer {
+                        bottom: 0;
+                        margin-top: 50px;
+                    }
+    
+                    .container {
+                        width: 90%;
+                        margin: auto;
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                    }
+    
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                    }
+    
+                    th, td {
+                        border: 1px solid #000;
+                        padding: 8px;
+                        text-align: left;
+                    }
+    
+                    th {
+                        background-color: #f2f2f2;
+                    }
+    
+                    .page-break {
+                        page-break-after: always;
+                    }
+    
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>INVOICE</h1>
+                </div>
+    
+                <div class="container">
+                    <div class="row">
+                        <table>
+                            <tr>
+                                <td><strong>${invoiceData.from_companyname}</strong><br />
+                                ${invoiceData.from_companyaddress}<br />
+                                GSTIN/UIN: ${invoiceData.from_companygstin_uin}<br />
+                                State Name: ${invoiceData.from_statename}</td>
+                                <td><strong>Invoice No.</strong><br />
+                                ${invoiceData.sales_invoice_number}<br/><br/>
+                                <strong>Dated</strong><br />
+                                ${invoiceData.date}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Buyer (Bill to)</strong><br />
+                                <strong>${invoiceData.to_companyname}</strong><br />
+                                ${invoiceData.to_companyaddress}<br />
+                                GSTIN/UIN: ${invoiceData.to_companygstin_uin}<br />
+                                State Name: ${invoiceData.to_statename}</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.no</th>
+                                <th>Description Of Goods</th>
+                                <th>HSN/SAC</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                                <th>Per</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${invoiceItem.map((item, index) => `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${item.good_service_name}<br />${item.description}</td>
+                                    <td>${item.hsn_sac}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.rate}</td>
+                                    <td>${item.per}</td>
+                                    <td>${item.amount}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+    
+                    <table>
+                        <tr>
+                            <td><strong>Output IGST ${invoiceData.igst_percentage}%</strong><br />
+                                <strong>Output CGST ${invoiceData.cgst_percentage}%</strong><br />
+                                <strong>Output SGST ${invoiceData.sgst_percentage}%</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>${invoiceData.overall_amount}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Amount Chargeable (in words)</strong><br />
+                                ${numberWords}</td>
+                            <td><strong>Company’s Bank Details</strong><br />
+                                A/c Holder’s Name: ${invoiceData.from_accountholdername}<br />
+                                Bank Name: ${invoiceData.from_bank_name}<br />
+                                A/c No: ${invoiceData.from_account_number}<br />
+                                Branch & IFS Code: ${invoiceData.from_branch_name}, ${invoiceData.from_ifsccode}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Declaration</strong><br />
+                                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</td>
+                            <td>for ${invoiceData.to_companyname}<br />
+                                Authorised Signatory</td>
+                        </tr>
+                    </table>
+                </div>
+    
+                <div class="footer">
+                    <h3>This is a Computer Generated Invoice</h3>
+                </div>
+            </body>
+            </html>
+        `;
+    
         const { filePath } = await RNHTMLtoPDF.convert({
             html: htmlContent,
             fileName: 'Sales_Invoice',
             directory: RNFS.DocumentDirectoryPath,
         });
-
+    
         Share.open({
             url: `file://${filePath}`,
             type: 'application/pdf',
             title: 'Export to PDF',
         });
     };
+    
+
 
 
     return (
